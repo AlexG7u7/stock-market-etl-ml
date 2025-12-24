@@ -13,11 +13,11 @@ El notebook `00_populate_ticker_catalog.ipynb` ahora está **listo para ejecutar
 
 ## 📋 Orden de Ejecución (Primera Vez)
 
-### **Paso 0: Setup Inicial** ⚙️
+### **Paso 1: Poblar Catálogo** 📋
 
 ```bash
 # En Databricks UI:
-1. Repos → Tu repo → notebooks/setup/00_populate_ticker_catalog.ipynb
+1. Repos → Tu repo → notebooks/setup/01_populate_ticker_catalog.ipynb
 2. Attach a cluster (Runtime 14.3 LTS recomendado)
 3. Run All (Ctrl+Shift+Enter)
 ```
@@ -35,7 +35,7 @@ SELECT COUNT(*) FROM silver.tickers;
 
 ---
 
-### **Paso 1: Ingesta Bronze** 📥
+### **Paso 2: Ingesta Bronze** 📥
 
 ```bash
 # Multi-ticker (producción)
@@ -52,7 +52,7 @@ notebooks/bronze/01_ingest_single_ticker.ipynb
 
 ---
 
-### **Paso 2: Normalización Silver** 🔄
+### **Paso 3: Normalización Silver** 🔄
 
 ```bash
 notebooks/silver/02_normalize_to_silver.ipynb
@@ -65,7 +65,7 @@ notebooks/silver/02_normalize_to_silver.ipynb
 
 ---
 
-### **Paso 3: Features Gold** ⭐
+### **Paso 4: Features Gold** ⭐
 
 ```bash
 notebooks/gold/03_feature_engineering.ipynb
@@ -98,23 +98,25 @@ print(f"Token: {token[:10]}...")  # Debe mostrar: 763d9cdce4...
 
 ---
 
-## 📊 DDL Scripts (Prerequisito)
+## 📊 Crear Schemas y Tablas (Prerequisito)
 
-**ANTES del Paso 0**, ejecuta los DDL scripts:
+**PASO 0: Setup Inicial** ⚙️
 
-```sql
--- En Databricks SQL Editor o notebook
+Ejecuta PRIMERO este notebook para crear todas las databases y tablas:
 
--- 1. Crear databases
-CREATE DATABASE IF NOT EXISTS bronze;
-CREATE DATABASE IF NOT EXISTS silver;
-CREATE DATABASE IF NOT EXISTS gold;
-
--- 2. Ejecutar DDL scripts
-%run /Repos/<tu-usuario>/stock-market/sql/ddl/01_bronze_schema.sql
-%run /Repos/<tu-usuario>/stock-market/sql/ddl/02_silver_schema.sql
-%run /Repos/<tu-usuario>/stock-market/sql/ddl/03_gold_schema.sql
 ```
+notebooks/setup/00_create_schemas_and_tables.ipynb
+→ Run All
+→ Crea: bronze, silver, gold databases + todas las tablas Delta
+```
+
+**Lo que hace:**
+- ✅ Crea databases: bronze, silver, gold
+- ✅ Crea tabla bronze.api_responses
+- ✅ Crea tablas silver.tickers y silver.market_ohlcv
+- ✅ Crea tablas gold.runs, features_daily, predictions, portfolio_holdings
+
+**Duración:** ~2 minutos
 
 ---
 
@@ -177,22 +179,26 @@ with open("output/ticker_catalog.json", "w") as f:
 
 ## ✅ Checklist de Primera Ejecución
 
-- [ ] DDL scripts ejecutados (3 databases creadas)
 - [ ] Secret scope `databursatil` creado
 - [ ] API token guardado en secrets
 - [ ] Cluster de Databricks iniciado (Runtime 14.3+ LTS)
-- [ ] **Paso 0**: `00_populate_ticker_catalog.ipynb` ✅
+- [ ] **Paso 0**: `00_create_schemas_and_tables.ipynb` ✅
+- [ ] Verificación: `SHOW DATABASES` muestra bronze, silver, gold
+- [ ] **Paso 1**: `01_populate_ticker_catalog.ipynb` ✅
 - [ ] Verificación: `SELECT COUNT(*) FROM silver.tickers` → ~4,864
-- [ ] **Paso 1**: `01_ingest_databursatil.ipynb`
-- [ ] **Paso 2**: `02_normalize_to_silver.ipynb`
-- [ ] **Paso 3**: `03_feature_engineering.ipynb`
+- [ ] **Paso 2**: `01_ingest_databursatil.ipynb`
+- [ ] **Paso 3**: `02_normalize_to_silver.ipynb`
+- [ ] **Paso 4**: `03_feature_engineering.ipynb`
 
 ---
 
 ## 🆘 Troubleshooting
 
 ### Error: "Table silver.tickers not found"
-**Solución:** Ejecuta `sql/ddl/02_silver_schema.sql` primero
+**Solución:** Ejecuta `00_create_schemas_and_tables.ipynb` primero
+
+### Error: "DELTA_MISSING_DELTA_TABLE"
+**Solución:** Las tablas no existen, ejecuta `00_create_schemas_and_tables.ipynb`
 
 ### Error: "Secret scope databursatil does not exist"
 **Solución:** Crea el secret scope con Databricks CLI
