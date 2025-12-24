@@ -1,0 +1,78 @@
+# Databricks ETL Configuration
+# This file contains all configuration for the Medallion architecture
+
+# Azure Data Lake Storage Gen2
+storage:
+  adls_account: "your_adls_account_name"
+  container: "stock-market-data"
+  mount_point: "/mnt/stock-market"
+  
+# Delta Lake paths (Medallion Architecture)
+delta:
+  bronze:
+    api_responses: "dbfs:/mnt/stock-market/bronze/api_responses"
+  silver:
+    tickers: "dbfs:/mnt/stock-market/silver/tickers"
+    market_ohlcv: "dbfs:/mnt/stock-market/silver/market_ohlcv"
+  gold:
+    features_daily: "dbfs:/mnt/stock-market/gold/features_daily"
+    runs: "dbfs:/mnt/stock-market/gold/runs"
+    predictions: "dbfs:/mnt/stock-market/gold/predictions"
+    portfolio_holdings: "dbfs:/mnt/stock-market/gold/portfolio_holdings"
+
+# Database names
+databases:
+  bronze: "bronze"
+  silver: "silver"
+  gold: "gold"
+
+# DataBursátil API Configuration (v2)
+databursatil:
+  base_url: "https://api.databursatil.com/v2"
+  # Token should be stored in Databricks Secrets
+  # dbutils.secrets.get(scope="databursatil", key="api_token")
+  secret_scope: "databursatil"
+  secret_key: "api_token"
+  endpoints:
+    historicos: "/historicos"      # Precio de cierre + importe
+    intradia: "/intradia"          # OHLC completo (usar intervalo=1d)
+    emisoras: "/emisoras"          # Catálogo de emisoras
+    cotizaciones: "/cotizaciones"  # Tiempo real
+    creditos: "/creditos"          # Créditos disponibles
+  default_params:
+    mercado: "local"  # local=BMV nacional, global=SIC internacional
+    bolsa: "BMV"      # BMV o BIVA
+    intervalo: "1d"   # Para intradia: 1m, 5m, 1h, 1d
+    
+# Feature Engineering
+features:
+  version: "v1"
+  lookback_periods:
+    - 5
+    - 10
+    - 20
+    - 50
+  technical_indicators:
+    - "sma"
+    - "ema"
+    - "rsi"
+    - "macd"
+    - "bollinger_bands"
+    - "volume_ratio"
+
+# MLflow
+mlflow:
+  experiment_name: "/Shared/stock-market-predictions"
+  model_registry_name: "stock_market_lstm"
+
+# Workflow settings
+workflow:
+  ingest_schedule: "0 0 * * *"  # Daily at midnight
+  max_retries: 3
+  timeout_minutes: 60
+  
+# Versionado
+versioning:
+  enable_git_tracking: true
+  track_data_versions: true
+  track_feature_versions: true

@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Databricks
+.databricks/
+*.dbc
+.ipynb_checkpoints/
+
+# Secrets and credentials
+*.env
+.env.local
+secrets/
+config/secrets.yaml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data (local testing only)
+data/
+*.parquet
+*.csv
+*.json
+
+# MLflow
+mlruns/
+mlartifacts/

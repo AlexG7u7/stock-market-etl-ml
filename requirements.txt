@@ -1,0 +1,32 @@
+# Python dependencies for Databricks ETL
+# Install in Databricks cluster or use %pip install in notebooks
+
+# Data manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Delta Lake (usually pre-installed in Databricks)
+delta-spark>=2.4.0
+
+# MLflow (pre-installed in Databricks)
+mlflow>=2.8.0
+
+# API and HTTP
+requests>=2.31.0
+httpx>=0.24.0
+
+# Technical indicators
+ta>=0.11.0
+pandas-ta>=0.3.14b
+
+# Optimization (for portfolio)
+scipy>=1.11.0
+cvxpy>=1.4.0
+
+# Utilities
+python-dateutil>=2.8.2
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Logging and monitoring
+structlog>=23.1.0
