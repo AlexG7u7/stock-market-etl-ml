@@ -105,8 +105,23 @@ class DataBursatilAPI:
         logger.info("📊 Obteniendo catálogo de emisoras...")
         data = self._make_request("/v2/emisoras")
         
-        emisoras = data.get("results", [])
+        # Debug: mostrar estructura de respuesta
+        logger.info(f"Respuesta de API: {type(data)}")
+        logger.info(f"Keys en respuesta: {list(data.keys()) if isinstance(data, dict) else 'No es dict'}")
+        
+        # La API puede devolver directamente una lista o tener un campo 'results'
+        if isinstance(data, list):
+            emisoras = data
+        elif isinstance(data, dict):
+            # Intentar diferentes posibles campos
+            emisoras = data.get("results", data.get("data", data.get("emisoras", [])))
+        else:
+            emisoras = []
+        
         logger.info(f"✅ Obtenidas {len(emisoras)} emisoras")
+        
+        if len(emisoras) > 0:
+            logger.info(f"Ejemplo de emisora: {emisoras[0]}")
         
         return emisoras
     
