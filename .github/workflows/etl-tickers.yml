@@ -17,7 +17,7 @@ jobs:
       - name: Diagnóstico de variables de entorno
         run: |
           cd C:\Projects\stock-market
-          Write-Host "🔍 Ejecutando diagnóstico de variables..." -ForegroundColor Cyan
+          Write-Host "Ejecutando diagnostico de variables..." -ForegroundColor Cyan
           python test_env.py
         shell: powershell
         env:
@@ -31,11 +31,11 @@ jobs:
       - name: Cargar tickers desde API
         run: |
           cd C:\Projects\stock-market
-          Write-Host "🚀 Ejecutando carga de tickers..." -ForegroundColor Green
+          Write-Host "Ejecutando carga de tickers..." -ForegroundColor Green
           python src\etl\cargar_tickers.py
           
           if ($LASTEXITCODE -ne 0) {
-            Write-Host "❌ Error en carga de tickers" -ForegroundColor Red
+            Write-Host "Error en carga de tickers" -ForegroundColor Red
             exit 1
           }
         shell: powershell
@@ -49,8 +49,8 @@ jobs:
       
       - name: Mostrar resumen
         run: |
-          Write-Host "`n✅ Workflow completado exitosamente" -ForegroundColor Green
-          Write-Host "📊 Consultando resumen de tickers..." -ForegroundColor Cyan
+          Write-Host "`nWorkflow completado exitosamente" -ForegroundColor Green
+          Write-Host "Consultando resumen de tickers..." -ForegroundColor Cyan
           
           # Query para mostrar resumen
           sqlcmd -S localhost -d MercadoBursatil -U $env:SQL_USER -P $env:SQL_PASSWORD -Q "SELECT COUNT(*) as total_tickers FROM stage.cat_tickers WHERE activo = 1"
