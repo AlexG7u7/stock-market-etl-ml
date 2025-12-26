@@ -122,7 +122,7 @@ CREATE TABLE stage.cat_tickers (
     emisora_serie NVARCHAR(30) NOT NULL UNIQUE,
     razon_social NVARCHAR(500),
     isin NVARCHAR(20),
-    bolsa NVARCHAR(10),
+    bolsa NVARCHAR(100),
     tipo_valor NVARCHAR(200),
     sector NVARCHAR(100),
     subsector NVARCHAR(100),
