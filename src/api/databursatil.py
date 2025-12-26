@@ -91,35 +91,48 @@ class DataBursatilAPI:
         
         Returns:
             Lista de diccionarios con información de emisoras
+            
+        La API devuelve estructura anidada:
+        {
+            "EMISORA": {
+                "SERIE": {
+                    "razon_social": "...",
+                    "isin": "...",
+                    ...
+                }
+            }
+        }
         """
         logger.info("📊 Obteniendo catálogo de emisoras...")
         data = self._make_request("/v2/emisoras")
         
-        # Debug: mostrar estructura de respuesta
         logger.info(f"Respuesta de API: {type(data)}")
         
-        # La API devuelve un dict donde las keys son los símbolos
-        # Necesitamos convertirlo a lista
+        # Parsear estructura anidada: EMISORA -> SERIE -> datos
         emisoras = []
         
         if isinstance(data, dict):
-            for symbol, info in data.items():
-                if symbol != 'null' and info:  # Filtrar null y valores vacíos
-                    # Agregar el símbolo al diccionario de información
-                    if isinstance(info, dict):
-                        info['ticker'] = symbol  # Ticker completo (emisora + serie)
-                        emisoras.append(info)
-                    else:
-                        # Si solo es el símbolo, crear dict básico
-                        emisoras.append({'ticker': symbol})
-        elif isinstance(data, list):
-            emisoras = data
+            for emisora_code, series_dict in data.items():
+                if emisora_code == 'null' or not series_dict:
+                    continue
+                
+                # series_dict es un dict con las series como keys (ej: {"*": {...}, "A": {...}})
+                if isinstance(series_dict, dict):
+                    for serie_code, info in series_dict.items():
+                        if isinstance(info, dict):
+                            # Crear registro con emisora, serie y datos
+                            registro = {
+                                'emisora': emisora_code,
+                                'serie': serie_code,
+                                'emisora_serie': f"{emisora_code}{serie_code}" if serie_code != '*' else emisora_code,
+                                **info  # Desempaquetar el resto de los campos
+                            }
+                            emisoras.append(registro)
         
-        logger.info(f"✅ Obtenidas {len(emisoras)} emisoras")
+        logger.info(f"✅ Obtenidas {len(emisoras)} emisoras/series")
         
         if len(emisoras) > 0:
-            logger.info(f"Ejemplo de emisora (primeros 3 campos): {dict(list(emisoras[0].items())[:3])}")
-            logger.info(f"Campos disponibles: {list(emisoras[0].keys())}")
+            logger.info(f"Ejemplo de emisora: {emisoras[0]}")
         
         return emisoras
     

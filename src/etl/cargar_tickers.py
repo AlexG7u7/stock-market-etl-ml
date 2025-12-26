@@ -63,7 +63,7 @@ def cargar_tickers():
         logger.error("❌ DATABURSATIL_API_TOKEN no configurado")
         logger.error("   Configura la variable de entorno o crea un archivo .env en la raíz del proyecto")
         return False
-    
+
     try:
         # Capturar fecha de inicio
         from datetime import datetime
@@ -111,26 +111,14 @@ def cargar_tickers():
                 if idx % 10 == 0:
                     logger.info(f"   Procesando {idx}/{len(emisoras)}...")
                 
-                # Según la API, la clave es el ticker completo (ALFAA)
-                # Y trae campos: [Emisora], [Serie], razon_social, isin, bolsa, tipo_valor_descripcion, etc.
-                ticker_completo = emisora.get('ticker', '')
+                # La API ya devuelve emisora, serie y emisora_serie separados
+                emisora_code = emisora.get('emisora', '')
+                serie_code = emisora.get('serie', '')
+                emisora_serie = emisora.get('emisora_serie', '')
                 
-                # La API debería traer emisora y serie separados en los campos [Emisora] y [Serie]
-                # Si no vienen, intentamos separar del ticker
-                emisora_code = emisora.get('Emisora', emisora.get('emisora', ''))
-                serie_code = emisora.get('Serie', emisora.get('serie', ''))
-                
-                # Si no vienen separados, intentar extraer del ticker
-                if not emisora_code and len(ticker_completo) > 1:
-                    # Asumir que la última letra es la serie
-                    if ticker_completo[-1].isalpha():
-                        emisora_code = ticker_completo[:-1]
-                        serie_code = ticker_completo[-1]
-                    else:
-                        emisora_code = ticker_completo
-                        serie_code = '*'
-                
-                emisora_serie = ticker_completo
+                if not emisora_serie:
+                    logger.warning(f"⚠️  Emisora sin ticker completo, saltando: {emisora}")
+                    continue
                 
                 # Verificar si existe
                 cursor.execute("""
@@ -141,7 +129,7 @@ def cargar_tickers():
                 existe = cursor.fetchone()
                 
                 if existe:
-                    # Actualizar - usar nombres de campos de la API
+                    # Actualizar
                     cursor.execute("""
                         UPDATE stage.cat_tickers
                         SET razon_social = ?,
@@ -160,7 +148,7 @@ def cargar_tickers():
                     ))
                     actualizados += 1
                 else:
-                    # Insertar - usar nombres de campos de la API
+                    # Insertar
                     cursor.execute("""
                         INSERT INTO stage.cat_tickers 
                         (emisora, serie, emisora_serie, razon_social, isin, bolsa, tipo_valor, es_activa)
