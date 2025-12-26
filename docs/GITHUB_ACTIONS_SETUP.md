@@ -32,11 +32,37 @@ rodri
 
 ---
 
-#### `SSH_PASSWORD`
-**Descripción:** Contraseña SSH para autenticación  
-**Valor:** Tu contraseña SSH del servidor
+#### `SSH_PRIVATE_KEY`
+**Descripción:** Tu clave SSH privada (sin passphrase)  
+**Valor:** Contenido completo de `~/.ssh/id_rsa`
 
-⚠️ **IMPORTANTE:** El servidor debe tener Git instalado y el repositorio ya clonado en `C:\Projects\stock-market`
+**Cómo obtenerlo:**
+```bash
+cat ~/.ssh/id_rsa
+```
+
+Copia TODO el contenido (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----` y `-----END OPENSSH PRIVATE KEY-----`)
+
+⚠️ **IMPORTANTE:** 
+- La clave SSH NO debe tener passphrase (o usa una clave dedicada sin passphrase)
+- Asegúrate de que la clave pública esté en el servidor: `~/.ssh/authorized_keys`
+- Para crear una clave sin passphrase: `ssh-keygen -t rsa -b 4096 -f ~/.ssh/github_actions_deploy -N ""`
+
+---
+
+#### `GH_PAT`
+**Descripción:** GitHub Personal Access Token para que el servidor pueda hacer `git pull`  
+**Valor:** Token de GitHub con permisos de repositorio
+
+**Cómo crearlo:**
+1. Ve a: https://github.com/settings/tokens/new
+2. Nombre: `GitHub Actions Deploy`
+3. Expiration: `No expiration` (o según tu política de seguridad)
+4. Scopes: Marca `repo` (Full control of private repositories)
+5. Click en **Generate token**
+6. Copia el token (empieza con `ghp_...`)
+
+⚠️ **IMPORTANTE:** Este token permite que el servidor Windows haga `git pull` sin pedir passphrase
 
 ---
 

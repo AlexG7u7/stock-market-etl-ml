@@ -16,11 +16,23 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd C:\Projects\stock-market
+            git remote set-url origin https://${{ secrets.GH_PAT }}@github.com/stock-market-bot/stock-market-etl-ml.git
             git pull origin main
             echo "✅ Código actualizado desde GitHub"
+      
+      - name: Execute SQL Schema (if changed)
+        uses: appleboy/ssh-action@v1.0.3
+        if: contains(github.event.head_commit.message, '[sql]') || contains(github.event.head_commit.message, '[schema]')
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sqlcmd -S localhost -U ${{ secrets.SQL_USER }} -P ${{ secrets.SQL_PASSWORD }} -i C:\Projects\stock-market\sql\01_create_schema.sql
+            echo "✅ Schema SQL ejecutado"
       
       - name: Deployment Summary
         run: |
