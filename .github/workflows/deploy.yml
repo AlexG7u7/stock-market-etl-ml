@@ -3,38 +3,32 @@ name: Deploy to Windows Server
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # Permite ejecución manual desde GitHub
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy to Production
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     
     steps:
-      - name: Deploy via Git Pull on Server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd C:\Projects\stock-market
-            git remote set-url origin https://${{ secrets.GH_PAT }}@github.com/stock-market-bot/stock-market-etl-ml.git
-            git pull origin main
-            echo "✅ Código actualizado desde GitHub"
+      - name: Pull latest changes
+        run: |
+          cd C:\Projects\stock-market
+          git pull origin main
+          Write-Host "✅ Código actualizado desde GitHub" -ForegroundColor Green
+        shell: pwsh
       
       - name: Execute SQL Schema (if changed)
-        uses: appleboy/ssh-action@v1.0.3
         if: contains(github.event.head_commit.message, '[sql]') || contains(github.event.head_commit.message, '[schema]')
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            sqlcmd -S localhost -U ${{ secrets.SQL_USER }} -P ${{ secrets.SQL_PASSWORD }} -i C:\Projects\stock-market\sql\01_create_schema.sql
-            echo "✅ Schema SQL ejecutado"
+        run: |
+          Write-Host "🗄️ Ejecutando schema SQL..." -ForegroundColor Yellow
+          sqlcmd -S localhost -U rodrigo -P rodrigo -i C:\Projects\stock-market\sql\01_create_schema.sql
+          Write-Host "✅ Schema SQL ejecutado correctamente" -ForegroundColor Green
+        shell: pwsh
       
       - name: Deployment Summary
         run: |
-          echo "✅ Deployment completed successfully!"
-          echo "📦 Changes pulled from GitHub to C:/Projects/stock-market/"
+          Write-Host "`n✅ Deployment completado!" -ForegroundColor Green
+          Write-Host "📦 Proyecto actualizado en: C:\Projects\stock-market" -ForegroundColor Cyan
+          git log -1 --oneline
+        shell: pwsh
