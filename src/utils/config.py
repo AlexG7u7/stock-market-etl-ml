@@ -15,12 +15,17 @@ CONFIG_DIR = BASE_DIR / "config"
 DATA_DIR = BASE_DIR / "data"
 LOGS_DIR = BASE_DIR / "logs"
 
-# Cargar variables de entorno
-env_path = CONFIG_DIR / ".env"
+# Cargar variables de entorno desde la raíz del proyecto
+env_path = BASE_DIR / ".env"
 if env_path.exists():
     load_dotenv(env_path)
 else:
-    print(f"⚠️  Warning: {env_path} no encontrado. Usando .env.example como referencia.")
+    # Fallback a config/.env si existe
+    config_env_path = CONFIG_DIR / ".env"
+    if config_env_path.exists():
+        load_dotenv(config_env_path)
+    else:
+        print(f"⚠️  Warning: {env_path} no encontrado. Usando .env.example como referencia.")
 
 
 class Config:
