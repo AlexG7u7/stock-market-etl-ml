@@ -91,32 +91,29 @@ class DataBursatilAPI:
         
         Returns:
             Lista de diccionarios con información de emisoras
-            Ejemplo: [
-                {
-                    "symbol": "ALFAA",
-                    "name": "Alfa S.A.B. de C.V.",
-                    "sector": "Industrial",
-                    "isin": "MX01AL0A0004",
-                    "tipo_valor": "Capital"
-                },
-                ...
-            ]
         """
         logger.info("📊 Obteniendo catálogo de emisoras...")
         data = self._make_request("/v2/emisoras")
         
         # Debug: mostrar estructura de respuesta
         logger.info(f"Respuesta de API: {type(data)}")
-        logger.info(f"Keys en respuesta: {list(data.keys()) if isinstance(data, dict) else 'No es dict'}")
         
-        # La API puede devolver directamente una lista o tener un campo 'results'
-        if isinstance(data, list):
+        # La API devuelve un dict donde las keys son los símbolos
+        # Necesitamos convertirlo a lista
+        emisoras = []
+        
+        if isinstance(data, dict):
+            for symbol, info in data.items():
+                if symbol != 'null' and info:  # Filtrar null y valores vacíos
+                    # Agregar el símbolo al diccionario de información
+                    if isinstance(info, dict):
+                        info['symbol'] = symbol
+                        emisoras.append(info)
+                    else:
+                        # Si solo es el símbolo, crear dict básico
+                        emisoras.append({'symbol': symbol})
+        elif isinstance(data, list):
             emisoras = data
-        elif isinstance(data, dict):
-            # Intentar diferentes posibles campos
-            emisoras = data.get("results", data.get("data", data.get("emisoras", [])))
-        else:
-            emisoras = []
         
         logger.info(f"✅ Obtenidas {len(emisoras)} emisoras")
         
