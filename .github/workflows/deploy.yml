@@ -20,19 +20,12 @@ jobs:
       - name: Crear/Actualizar archivo .env
         run: |
           cd C:\Projects\stock-market
-          Write-Host "🔐 Actualizando archivo .env con secretos..." -ForegroundColor Cyan
+          Write-Host "Actualizando archivo .env con secretos..." -ForegroundColor Cyan
           
-          @"
-          DATABURSATIL_API_TOKEN=$env:API_TOKEN
-          SQL_SERVER=localhost
-          SQL_DATABASE=MercadoBursatil
-          SQL_USER=$env:SQL_USER
-          SQL_PASSWORD=$env:SQL_PASSWORD
-          SQL_DRIVER=ODBC Driver 17 for SQL Server
-          LOG_LEVEL=INFO
-          "@ | Out-File -FilePath ".env" -Encoding UTF8
+          $content = "DATABURSATIL_API_TOKEN=$env:API_TOKEN`nSQL_SERVER=localhost`nSQL_DATABASE=MercadoBursatil`nSQL_USER=$env:SQL_USER`nSQL_PASSWORD=$env:SQL_PASSWORD`nSQL_DRIVER=ODBC Driver 17 for SQL Server`nLOG_LEVEL=INFO"
+          $content | Out-File -FilePath ".env" -Encoding UTF8 -NoNewline
           
-          Write-Host "✅ Archivo .env actualizado" -ForegroundColor Green
+          Write-Host "Archivo .env actualizado correctamente" -ForegroundColor Green
         shell: powershell
         env:
           API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
