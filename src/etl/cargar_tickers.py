@@ -84,88 +84,91 @@ def cargar_tickers():
         # Conectar a base de datos
         logger.info("-"*60)
         logger.info("💾 Conectando a base de datos...")
-        conn = get_connection()
-        cursor = conn.cursor()
-        logger.info("✅ Conexión a BD establecida")
         
-        # Registrar llamada a API
-        logger.info("📝 Registrando llamada en control.api_calls...")
-        cursor.execute("""
-            INSERT INTO control.api_calls (endpoint, status_code, records_returned)
-            VALUES (?, ?, ?)
-        """, ('/v2/emisoras', 200, len(emisoras)))
-        logger.info("✅ Llamada API registrada")
-        
-        # Insertar/actualizar tickers
-        logger.info("-"*60)
-        logger.info("💾 Procesando emisoras...")
-        insertados = 0
-        actualizados = 0
-        
-        for idx, emisora in enumerate(emisoras, 1):
-            if idx % 10 == 0:
-                logger.info(f"   Procesando {idx}/{len(emisoras)}...")
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            logger.info("✅ Conexión a BD establecida")
             
-            # Verificar si existe
+            # Registrar llamada a API
+            logger.info("📝 Registrando llamada en control.api_calls...")
             cursor.execute("""
-                SELECT ticker_id FROM stage.cat_tickers 
-                WHERE simbolo = ?
-            """, (emisora['symbol'],))
+                INSERT INTO control.api_calls (endpoint, status_code, records_returned)
+                VALUES (?, ?, ?)
+            """, ('/v2/emisoras', 200, len(emisoras)))
+            logger.info("✅ Llamada API registrada")
             
-            existe = cursor.fetchone()
+            # Insertar/actualizar tickers
+            logger.info("-"*60)
+            logger.info("💾 Procesando emisoras...")
+            insertados = 0
+            actualizados = 0
             
-            if existe:
-                # Actualizar
+            for idx, emisora in enumerate(emisoras, 1):
+                if idx % 10 == 0:
+                    logger.info(f"   Procesando {idx}/{len(emisoras)}...")
+                
+                # Verificar si existe
                 cursor.execute("""
-                    UPDATE stage.cat_tickers
-                    SET nombre_empresa = ?,
-                        sector = ?,
-                        isin = ?,
-                        tipo_valor = ?,
-                        activo = 1,
-                        fecha_actualizacion = GETDATE()
+                    SELECT ticker_id FROM stage.cat_tickers 
                     WHERE simbolo = ?
-                """, (
-                    emisora.get('name'),
-                    emisora.get('sector'),
-                    emisora.get('isin'),
-                    emisora.get('tipo_valor'),
-                    emisora['symbol']
-                ))
-                actualizados += 1
-            else:
-                # Insertar
-                cursor.execute("""
-                    INSERT INTO stage.cat_tickers 
-                    (simbolo, nombre_empresa, sector, isin, tipo_valor, activo)
-                    VALUES (?, ?, ?, ?, ?, 1)
-                """, (
-                    emisora['symbol'],
-                    emisora.get('name'),
-                    emisora.get('sector'),
-                    emisora.get('isin'),
-                    emisora.get('tipo_valor')
-                ))
-                insertados += 1
-        
-        # Commit
-        logger.info("-"*60)
-        logger.info("💾 Guardando cambios en base de datos...")
-        conn.commit()
-        logger.info("✅ Commit exitoso")
-        
-        # Registrar en log de ETL
-        cursor.execute("""
-            INSERT INTO control.etl_log 
-            (etl_process, status, records_processed, mensaje)
-            VALUES (?, ?, ?, ?)
-        """, (
-            'cargar_tickers',
-            'SUCCESS',
-            insertados + actualizados,
-            f'{insertados} nuevos, {actualizados} actualizados'
-        ))
-        conn.commit()
+                """, (emisora['symbol'],))
+                
+                existe = cursor.fetchone()
+                
+                if existe:
+                    # Actualizar
+                    cursor.execute("""
+                        UPDATE stage.cat_tickers
+                        SET nombre_empresa = ?,
+                            sector = ?,
+                            isin = ?,
+                            tipo_valor = ?,
+                            activo = 1,
+                            fecha_actualizacion = GETDATE()
+                        WHERE simbolo = ?
+                    """, (
+                        emisora.get('name'),
+                        emisora.get('sector'),
+                        emisora.get('isin'),
+                        emisora.get('tipo_valor'),
+                        emisora['symbol']
+                    ))
+                    actualizados += 1
+                else:
+                    # Insertar
+                    cursor.execute("""
+                        INSERT INTO stage.cat_tickers 
+                        (simbolo, nombre_empresa, sector, isin, tipo_valor, activo)
+                        VALUES (?, ?, ?, ?, ?, 1)
+                    """, (
+                        emisora['symbol'],
+                        emisora.get('name'),
+                        emisora.get('sector'),
+                        emisora.get('isin'),
+                        emisora.get('tipo_valor')
+                    ))
+                    insertados += 1
+            
+            # Commit
+            logger.info("-"*60)
+            logger.info("💾 Guardando cambios en base de datos...")
+            conn.commit()
+            logger.info("✅ Commit exitoso")
+            
+            # Registrar en log de ETL
+            cursor.execute("""
+                INSERT INTO control.etl_log 
+                (etl_process, status, records_processed, mensaje)
+                VALUES (?, ?, ?, ?)
+            """, (
+                'cargar_tickers',
+                'SUCCESS',
+                insertados + actualizados,
+                f'{insertados} nuevos, {actualizados} actualizados'
+            ))
+            conn.commit()
+            
+            cursor.close()
         
         logger.info("="*60)
         logger.info(f"✅ CARGA COMPLETADA EXITOSAMENTE")
@@ -173,9 +176,6 @@ def cargar_tickers():
         logger.info(f"   🔄 {actualizados} tickers actualizados")
         logger.info(f"   📊 Total procesado: {insertados + actualizados}")
         logger.info("="*60)
-        
-        cursor.close()
-        conn.close()
         
         return True
         
@@ -193,21 +193,20 @@ def cargar_tickers():
         
         # Intentar registrar el error en BD
         try:
-            conn = get_connection()
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO control.etl_log 
-                (etl_process, status, records_processed, mensaje)
-                VALUES (?, ?, ?, ?)
-            """, (
-                'cargar_tickers',
-                'ERROR',
-                0,
-                str(e)[:500]  # Limitar mensaje a 500 chars
-            ))
-            conn.commit()
-            cursor.close()
-            conn.close()
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO control.etl_log 
+                    (etl_process, status, records_processed, mensaje)
+                    VALUES (?, ?, ?, ?)
+                """, (
+                    'cargar_tickers',
+                    'ERROR',
+                    0,
+                    str(e)[:500]  # Limitar mensaje a 500 chars
+                ))
+                conn.commit()
+                cursor.close()
         except:
             logger.error("No se pudo registrar el error en control.etl_log")
         
