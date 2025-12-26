@@ -9,11 +9,12 @@ from datetime import datetime, timedelta
 import logging
 import argparse
 
-# Agregar src/ al path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Agregar el directorio raíz del proyecto al path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from api.databursatil import DataBursatilAPI
-from db.connection import get_connection
+from src.api.databursatil import DataBursatilAPI
+from src.db.connection import get_connection
 from dotenv import load_dotenv
 
 # Configurar logging
