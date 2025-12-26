@@ -49,6 +49,12 @@ jobs:
       
       - name: Mostrar resumen
         run: |
-          Write-Host "✅ Workflow completado" -ForegroundColor Green
-          Write-Host "📊 Revisa los logs para ver el resultado de la carga" -ForegroundColor Cyan
+          Write-Host "`n✅ Workflow completado exitosamente" -ForegroundColor Green
+          Write-Host "📊 Consultando resumen de tickers..." -ForegroundColor Cyan
+          
+          # Query para mostrar resumen
+          sqlcmd -S localhost -d MercadoBursatil -U $env:SQL_USER -P $env:SQL_PASSWORD -Q "SELECT COUNT(*) as total_tickers FROM stage.cat_tickers WHERE activo = 1"
         shell: powershell
+        env:
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
