@@ -8,18 +8,18 @@ import sys
 from pathlib import Path
 
 print("="*60)
-print("🔍 DIAGNÓSTICO DE VARIABLES DE ENTORNO")
+print("DIAGNOSTICO DE VARIABLES DE ENTORNO")
 print("="*60)
 
 # Información del sistema
-print(f"\n📍 Directorio actual: {os.getcwd()}")
-print(f"📍 Script ubicado en: {Path(__file__).parent}")
-print(f"🐍 Python: {sys.version}")
-print(f"🐍 Ejecutable: {sys.executable}")
+print(f"\nDirectorio actual: {os.getcwd()}")
+print(f"Script ubicado en: {Path(__file__).parent}")
+print(f"Python: {sys.version}")
+print(f"Ejecutable: {sys.executable}")
 
 # Variables de entorno
 print("\n" + "="*60)
-print("🔑 VARIABLES DE ENTORNO")
+print("VARIABLES DE ENTORNO")
 print("="*60)
 
 variables = [
@@ -40,25 +40,25 @@ for var in variables:
             display = f"{valor[:10]}..." if len(valor) > 10 else "***"
         else:
             display = valor
-        print(f"✅ {var:30s} = {display}")
+        print(f"[OK] {var:30s} = {display}")
     else:
-        print(f"❌ {var:30s} = NO CONFIGURADO")
+        print(f"[NO] {var:30s} = NO CONFIGURADO")
 
 # Verificar archivo .env
 print("\n" + "="*60)
-print("📄 VERIFICACIÓN DE ARCHIVO .env")
+print("VERIFICACION DE ARCHIVO .env")
 print("="*60)
 
 project_root = Path(__file__).parent
 env_file = project_root / '.env'
 
-print(f"📁 Ruta del proyecto: {project_root}")
-print(f"📄 Buscando .env en: {env_file}")
+print(f"Ruta del proyecto: {project_root}")
+print(f"Buscando .env en: {env_file}")
 
 if env_file.exists():
-    print(f"✅ Archivo .env EXISTE")
-    print(f"📏 Tamaño: {env_file.stat().st_size} bytes")
-    print("\n📋 Contenido:")
+    print(f"[OK] Archivo .env EXISTE")
+    print(f"Tamano: {env_file.stat().st_size} bytes")
+    print("\nContenido:")
     print("-"*60)
     with open(env_file, 'r') as f:
         for line in f:
@@ -73,24 +73,24 @@ if env_file.exists():
                         print(line)
     print("-"*60)
 else:
-    print(f"❌ Archivo .env NO EXISTE")
+    print(f"[NO] Archivo .env NO EXISTE")
 
 # Test de carga con python-dotenv
 print("\n" + "="*60)
-print("🧪 TEST DE CARGA CON python-dotenv")
+print("TEST DE CARGA CON python-dotenv")
 print("="*60)
 
 try:
     from dotenv import load_dotenv
-    print("✅ Módulo dotenv importado correctamente")
+    print("[OK] Modulo dotenv importado correctamente")
     
     if env_file.exists():
-        print(f"⏳ Cargando {env_file}...")
+        print(f"Cargando {env_file}...")
         result = load_dotenv(env_file)
-        print(f"{'✅' if result else '❌'} load_dotenv() retornó: {result}")
+        print(f"{'[OK]' if result else '[NO]'} load_dotenv() retorno: {result}")
         
         # Re-verificar variables después de cargar
-        print("\n📋 Variables DESPUÉS de load_dotenv():")
+        print("\nVariables DESPUES de load_dotenv():")
         for var in variables:
             valor = os.getenv(var)
             if valor:
@@ -98,15 +98,15 @@ try:
                     display = f"{valor[:10]}..."
                 else:
                     display = valor
-                print(f"✅ {var:30s} = {display}")
+                print(f"[OK] {var:30s} = {display}")
             else:
-                print(f"❌ {var:30s} = NO CONFIGURADO")
+                print(f"[NO] {var:30s} = NO CONFIGURADO")
     
 except ImportError:
-    print("❌ Módulo python-dotenv NO instalado")
+    print("[ERROR] Modulo python-dotenv NO instalado")
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f"[ERROR] Error: {e}")
 
 print("\n" + "="*60)
-print("✅ DIAGNÓSTICO COMPLETADO")
+print("DIAGNOSTICO COMPLETADO")
 print("="*60)
