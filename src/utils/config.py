@@ -37,11 +37,11 @@ class Config:
     DATABURSATIL_BASE_URL = os.getenv("DATABURSATIL_BASE_URL", "https://api.databursatil.com/v2")
     
     # SQL Server
-    SQL_SERVER_HOST = os.getenv("SQL_SERVER_HOST", "localhost")
+    SQL_SERVER_HOST = os.getenv("SQL_SERVER", os.getenv("SQL_SERVER_HOST", "localhost"))
     SQL_SERVER_PORT = int(os.getenv("SQL_SERVER_PORT", "1433"))
-    SQL_SERVER_DATABASE = os.getenv("SQL_SERVER_DATABASE", "MercadoBursatil")
-    SQL_SERVER_USER = os.getenv("SQL_SERVER_USER", "sa")
-    SQL_SERVER_PASSWORD = os.getenv("SQL_SERVER_PASSWORD", "")
+    SQL_SERVER_DATABASE = os.getenv("SQL_DATABASE", os.getenv("SQL_SERVER_DATABASE", "MercadoBursatil"))
+    SQL_SERVER_USER = os.getenv("SQL_USER", os.getenv("SQL_SERVER_USER", "sa"))
+    SQL_SERVER_PASSWORD = os.getenv("SQL_PASSWORD", os.getenv("SQL_SERVER_PASSWORD", ""))
     SQL_SERVER_DRIVER = os.getenv("SQL_SERVER_DRIVER", "ODBC Driver 17 for SQL Server")
     
     # SSH Tunnel
