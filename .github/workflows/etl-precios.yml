@@ -1,0 +1,58 @@
+name: ETL - Cargar Precios Históricos
+
+on:
+  # Ejecución manual con parámetros
+  workflow_dispatch:
+    inputs:
+      ticker:
+        description: 'Ticker específico (opcional, deja vacío para todos)'
+        required: false
+        type: string
+      fecha_inicio:
+        description: 'Fecha inicio (YYYY-MM-DD)'
+        required: true
+        type: string
+      fecha_fin:
+        description: 'Fecha fin (YYYY-MM-DD)'
+        required: true
+        type: string
+  
+  # Programado: lunes a viernes a las 9:00 PM (después del cierre del mercado)
+  schedule:
+    - cron: '0 21 * * 1-5'
+
+jobs:
+  cargar-precios:
+    name: Cargar precios históricos
+    runs-on: self-hosted
+    
+    steps:
+      - name: Cargar precios desde API
+        run: |
+          cd C:\Projects\stock-market
+          
+          # Preparar argumentos
+          $args = @()
+          if ("${{ github.event.inputs.ticker }}" -ne "") {
+            $args += "--ticker", "${{ github.event.inputs.ticker }}"
+          }
+          if ("${{ github.event.inputs.fecha_inicio }}" -ne "") {
+            $args += "--fecha-inicio", "${{ github.event.inputs.fecha_inicio }}"
+            $args += "--fecha-fin", "${{ github.event.inputs.fecha_fin }}"
+          }
+          
+          # Ejecutar script
+          python src\etl\cargar_precios.py @args
+        shell: powershell
+        env:
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          SQL_SERVER: localhost
+          SQL_DATABASE: MercadoBursatil
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_DRIVER: ODBC Driver 17 for SQL Server
+      
+      - name: Mostrar resumen
+        run: |
+          Write-Host "✅ Workflow completado" -ForegroundColor Green
+        shell: powershell

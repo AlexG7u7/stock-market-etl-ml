@@ -1,0 +1,34 @@
+name: ETL - Cargar Tickers
+
+on:
+  # Ejecución manual
+  workflow_dispatch:
+  
+  # Programado: todos los días a las 8:00 AM (hora servidor)
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  cargar-tickers:
+    name: Cargar catálogo de tickers
+    runs-on: self-hosted
+    
+    steps:
+      - name: Cargar tickers desde API
+        run: |
+          cd C:\Projects\stock-market
+          python src\etl\cargar_tickers.py
+        shell: powershell
+        env:
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          SQL_SERVER: localhost
+          SQL_DATABASE: MercadoBursatil
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_DRIVER: ODBC Driver 17 for SQL Server
+      
+      - name: Mostrar resumen
+        run: |
+          Write-Host "✅ Workflow completado" -ForegroundColor Green
+          Write-Host "📊 Revisa los logs para ver el resultado de la carga" -ForegroundColor Cyan
+        shell: powershell

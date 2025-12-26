@@ -86,6 +86,14 @@ rodrigo
 
 ---
 
+### 🔌 Secretos de API
+
+#### `DATABURSATIL_API_TOKEN`
+**Descripción:** Token de acceso a la API de DataBursátil  
+**Valor:** Tu token de API (obtenerlo en https://databursatilmexico.com)
+
+---
+
 ## 🎯 Cómo Funciona el Deploy
 
 ### Método: Git Pull en el Servidor
