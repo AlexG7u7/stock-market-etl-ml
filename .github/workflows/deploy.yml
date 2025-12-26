@@ -15,25 +15,5 @@ jobs:
         run: |
           cd C:\Projects\stock-market
           git pull origin main
+          Write-Host "✅ Código actualizado desde GitHub" -ForegroundColor Green
         shell: powershell
-      
-      - name: Crear/Actualizar archivo .env
-        run: |
-          cd C:\Projects\stock-market
-          Write-Host "Actualizando archivo .env con secretos..." -ForegroundColor Cyan
-          
-          "DATABURSATIL_API_TOKEN=$env:API_TOKEN" | Out-File -FilePath ".env" -Encoding UTF8
-          "SQL_SERVER=localhost" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          "SQL_DATABASE=MercadoBursatil" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          "SQL_USER=$env:SQL_USER" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          "SQL_PASSWORD=$env:SQL_PASSWORD" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          "SQL_DRIVER=ODBC Driver 17 for SQL Server" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          "LOG_LEVEL=INFO" | Out-File -FilePath ".env" -Encoding UTF8 -Append
-          
-          Write-Host "Archivo .env actualizado correctamente" -ForegroundColor Green
-          Get-Content ".env"
-        shell: powershell
-        env:
-          API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}

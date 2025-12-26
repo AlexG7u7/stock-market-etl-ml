@@ -27,12 +27,17 @@ logger = logging.getLogger(__name__)
 def cargar_tickers():
     """Cargar catálogo de tickers desde API a base de datos"""
     
-    # Cargar variables de entorno
-    load_dotenv()
+    # Cargar variables de entorno desde .env si existe (útil para desarrollo local)
+    # En producción, los workflows de GitHub Actions pasan las variables directamente
+    env_file = project_root / '.env'
+    if env_file.exists():
+        load_dotenv(env_file)
+    
     api_token = os.getenv('DATABURSATIL_API_TOKEN')
     
     if not api_token:
-        logger.error("❌ DATABURSATIL_API_TOKEN no configurado en .env")
+        logger.error("❌ DATABURSATIL_API_TOKEN no configurado")
+        logger.error("   Configura la variable de entorno o crea un archivo .env en la raíz del proyecto")
         return False
     
     try:

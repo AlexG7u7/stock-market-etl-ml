@@ -128,12 +128,17 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None):
         fecha_inicio: Fecha inicial (opcional, default = hace 30 días)
         fecha_fin: Fecha final (opcional, default = hoy)
     """
-    # Cargar variables de entorno
-    load_dotenv()
+    # Cargar variables de entorno desde .env si existe (útil para desarrollo local)
+    # En producción, los workflows de GitHub Actions pasan las variables directamente
+    env_file = project_root / '.env'
+    if env_file.exists():
+        load_dotenv(env_file)
+    
     api_token = os.getenv('DATABURSATIL_API_TOKEN')
     
     if not api_token:
-        logger.error("❌ DATABURSATIL_API_TOKEN no configurado en .env")
+        logger.error("❌ DATABURSATIL_API_TOKEN no configurado")
+        logger.error("   Configura la variable de entorno o crea un archivo .env en la raíz del proyecto")
         return False
     
     # Fechas por defecto

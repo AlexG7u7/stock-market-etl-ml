@@ -2,7 +2,7 @@
 
 ## 📋 Secretos Requeridos en GitHub
 
-Debes crear los siguientes **GitHub Secrets** en tu repositorio:
+Debes crear los siguientes **GitHub Secrets** en tu repositorio para que los workflows pasen las variables de entorno a los scripts.
 
 ### Cómo crear secretos:
 1. Ve a tu repositorio: `https://github.com/stock-market-bot/stock-market-etl-ml`
@@ -12,57 +12,11 @@ Debes crear los siguientes **GitHub Secrets** en tu repositorio:
 
 ---
 
-### 🔑 Secretos de SSH (Conexión al Servidor)
+### � Secretos de API
 
-#### `SSH_HOST`
-**Descripción:** Hostname del servidor Windows  
-**Valor:** 
-```
-ssh.rod-b-op.com
-```
-
----
-
-#### `SSH_USER`
-**Descripción:** Usuario SSH del servidor  
-**Valor:** 
-```
-rodri
-```
-
----
-
-#### `SSH_PRIVATE_KEY`
-**Descripción:** Tu clave SSH privada (sin passphrase)  
-**Valor:** Contenido completo de `~/.ssh/id_rsa`
-
-**Cómo obtenerlo:**
-```bash
-cat ~/.ssh/id_rsa
-```
-
-Copia TODO el contenido (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----` y `-----END OPENSSH PRIVATE KEY-----`)
-
-⚠️ **IMPORTANTE:** 
-- La clave SSH NO debe tener passphrase (o usa una clave dedicada sin passphrase)
-- Asegúrate de que la clave pública esté en el servidor: `~/.ssh/authorized_keys`
-- Para crear una clave sin passphrase: `ssh-keygen -t rsa -b 4096 -f ~/.ssh/github_actions_deploy -N ""`
-
----
-
-#### `GH_PAT`
-**Descripción:** GitHub Personal Access Token para que el servidor pueda hacer `git pull`  
-**Valor:** Token de GitHub con permisos de repositorio
-
-**Cómo crearlo:**
-1. Ve a: https://github.com/settings/tokens/new
-2. Nombre: `GitHub Actions Deploy`
-3. Expiration: `No expiration` (o según tu política de seguridad)
-4. Scopes: Marca `repo` (Full control of private repositories)
-5. Click en **Generate token**
-6. Copia el token (empieza con `ghp_...`)
-
-⚠️ **IMPORTANTE:** Este token permite que el servidor Windows haga `git pull` sin pedir passphrase
+#### `DATABURSATIL_API_TOKEN`
+**Descripción:** Token de acceso a la API de DataBursátil  
+**Valor:** Tu token de API (obtenerlo en https://databursatilmexico.com)
 
 ---
 
@@ -86,17 +40,29 @@ rodrigo
 
 ---
 
-### 🔌 Secretos de API
+## ⚙️ Variables de Entorno vs Archivo .env
 
-#### `DATABURSATIL_API_TOKEN`
-**Descripción:** Token de acceso a la API de DataBursátil  
-**Valor:** Tu token de API (obtenerlo en https://databursatilmexico.com)
+Este proyecto usa **variables de entorno** pasadas directamente por GitHub Actions (no archivo `.env`).
 
----
+### En Producción (GitHub Actions):
+Los workflows pasan las credenciales como variables de entorno:
+```yaml
+env:
+  DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+  SQL_SERVER: localhost
+  SQL_DATABASE: MercadoBursatil
+  SQL_USER: ${{ secrets.SQL_USER }}
+  SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+```
 
-## 🎯 Cómo Funciona el Deploy
+### En Desarrollo Local (Opcional):
+Puedes crear un archivo `.env` en la raíz del proyecto para testing local:
+```bash
+cp .env.example .env
+# Editar .env con tus credenciales
+```
 
-### Método: Git Pull en el Servidor
+Los scripts ETL detectan automáticamente si existe `.env` y lo cargan, pero priorizan las variables de entorno del sistema.
 
 En lugar de transferir archivos vía SCP, el servidor hace `git pull`:
 
