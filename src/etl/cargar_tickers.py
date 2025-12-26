@@ -111,21 +111,26 @@ def cargar_tickers():
                 if idx % 10 == 0:
                     logger.info(f"   Procesando {idx}/{len(emisoras)}...")
                 
-                # El símbolo puede venir como "ALFAA" (emisora_serie completa)
-                # o necesitamos parsearlo en emisora + serie
-                symbol = emisora.get('symbol', '')
+                # Según la API, la clave es el ticker completo (ALFAA)
+                # Y trae campos: [Emisora], [Serie], razon_social, isin, bolsa, tipo_valor_descripcion, etc.
+                ticker_completo = emisora.get('ticker', '')
                 
-                # Intentar separar emisora y serie (ej: "ALFAA" -> "ALFA" + "A")
-                # Por ahora usamos el símbolo completo como emisora_serie
-                # y extraemos la última letra como serie si es letra
-                if len(symbol) > 1 and symbol[-1].isalpha():
-                    emisora_code = symbol[:-1]
-                    serie_code = symbol[-1]
-                else:
-                    emisora_code = symbol
-                    serie_code = '*'
+                # La API debería traer emisora y serie separados en los campos [Emisora] y [Serie]
+                # Si no vienen, intentamos separar del ticker
+                emisora_code = emisora.get('Emisora', emisora.get('emisora', ''))
+                serie_code = emisora.get('Serie', emisora.get('serie', ''))
                 
-                emisora_serie = symbol
+                # Si no vienen separados, intentar extraer del ticker
+                if not emisora_code and len(ticker_completo) > 1:
+                    # Asumir que la última letra es la serie
+                    if ticker_completo[-1].isalpha():
+                        emisora_code = ticker_completo[:-1]
+                        serie_code = ticker_completo[-1]
+                    else:
+                        emisora_code = ticker_completo
+                        serie_code = '*'
+                
+                emisora_serie = ticker_completo
                 
                 # Verificar si existe
                 cursor.execute("""
@@ -136,41 +141,38 @@ def cargar_tickers():
                 existe = cursor.fetchone()
                 
                 if existe:
-                    # Actualizar
+                    # Actualizar - usar nombres de campos de la API
                     cursor.execute("""
                         UPDATE stage.cat_tickers
                         SET razon_social = ?,
-                            sector = ?,
-                            subsector = ?,
                             isin = ?,
+                            bolsa = ?,
                             tipo_valor = ?,
                             es_activa = 1,
                             fecha_baja = NULL
                         WHERE emisora_serie = ?
                     """, (
-                        emisora.get('name', emisora.get('razon_social')),
-                        emisora.get('sector'),
-                        emisora.get('subsector'),
+                        emisora.get('razon_social'),
                         emisora.get('isin'),
-                        emisora.get('tipo_valor', emisora.get('type')),
+                        emisora.get('bolsa'),
+                        emisora.get('tipo_valor_descripcion'),
                         emisora_serie
                     ))
                     actualizados += 1
                 else:
-                    # Insertar
+                    # Insertar - usar nombres de campos de la API
                     cursor.execute("""
                         INSERT INTO stage.cat_tickers 
-                        (emisora, serie, emisora_serie, razon_social, sector, subsector, isin, tipo_valor, es_activa)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+                        (emisora, serie, emisora_serie, razon_social, isin, bolsa, tipo_valor, es_activa)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 1)
                     """, (
                         emisora_code,
                         serie_code,
                         emisora_serie,
-                        emisora.get('name', emisora.get('razon_social')),
-                        emisora.get('sector'),
-                        emisora.get('subsector'),
+                        emisora.get('razon_social'),
                         emisora.get('isin'),
-                        emisora.get('tipo_valor', emisora.get('type'))
+                        emisora.get('bolsa'),
+                        emisora.get('tipo_valor_descripcion')
                     ))
                     insertados += 1
             

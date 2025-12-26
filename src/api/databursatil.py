@@ -107,18 +107,19 @@ class DataBursatilAPI:
                 if symbol != 'null' and info:  # Filtrar null y valores vacíos
                     # Agregar el símbolo al diccionario de información
                     if isinstance(info, dict):
-                        info['symbol'] = symbol
+                        info['ticker'] = symbol  # Ticker completo (emisora + serie)
                         emisoras.append(info)
                     else:
                         # Si solo es el símbolo, crear dict básico
-                        emisoras.append({'symbol': symbol})
+                        emisoras.append({'ticker': symbol})
         elif isinstance(data, list):
             emisoras = data
         
         logger.info(f"✅ Obtenidas {len(emisoras)} emisoras")
         
         if len(emisoras) > 0:
-            logger.info(f"Ejemplo de emisora: {emisoras[0]}")
+            logger.info(f"Ejemplo de emisora (primeros 3 campos): {dict(list(emisoras[0].items())[:3])}")
+            logger.info(f"Campos disponibles: {list(emisoras[0].keys())}")
         
         return emisoras
     
