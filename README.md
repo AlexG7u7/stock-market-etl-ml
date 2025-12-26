@@ -1,219 +1,216 @@
-# Stock Market ETL Pipeline
-## Azure Databricks Medallion Architecture
+# 📊 ETL - Datos Bursátiles México
 
-[![Azure Databricks](https://img.shields.io/badge/Azure-Databricks-FF6C37?logo=databricks)](https://databricks.com)
-[![Delta Lake](https://img.shields.io/badge/Delta-Lake-00ADD8?logo=delta)](https://delta.io)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://python.org)
+![Deploy Status](https://github.com/stock-market-bot/stock-market-etl-ml/actions/workflows/deploy.yml/badge.svg)
+![CI Status](https://github.com/stock-market-bot/stock-market-etl-ml/actions/workflows/ci.yml/badge.svg)
+![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red.svg)
 
-**Plataforma ticker-agnostic, versionable y reproducible** para ingesta, procesamiento y feature engineering de datos de mercado bursátil usando arquitectura Medallion en Azure Databricks.
-
----
+Sistema ETL modular para extracción, transformación y carga de datos del mercado bursátil mexicano usando la API de DataBursatil.com y almacenamiento en SQL Server.
 
 ## 🎯 Objetivo
 
-Construir un pipeline ETL robusto que:
-- ✅ Ingesta datos de mercado desde API DataBursátil
-- ✅ Normaliza y limpia datos en formato largo (ticker-agnostic)
-- ✅ Calcula features técnicas para ML (LSTM, portfolio optimization)
-- ✅ Versiona datos, código y features para reproducibilidad total
-- ✅ Usa Delta Lake como source of truth
+Construir un pipeline de datos robusto y escalable para:
+- Descarga histórica de precios OHLCV de emisoras mexicanas (BMV/BIVA)
+- Actualización diaria automática de cotizaciones
+- Almacenamiento estructurado en SQL Server para análisis y ML
+- Base de datos extensible para agregar features de Machine Learning
 
-## 🏗️ Arquitectura Medallion
+## 🏗️ Arquitectura
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  BRONZE: Raw Data                                           │
-│  • bronze.api_responses - Raw JSON from DataBursátil API   │
-│  • Audit trail completo                                     │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│  SILVER: Cleaned Data                                       │
-│  • silver.tickers - Catálogo maestro (ticker-agnostic)     │
-│  • silver.market_ohlcv - OHLCV normalizado (long format)   │
-│  • MERGE idempotente, PK: (ticker, date)                   │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│  GOLD: Business Layer                                       │
-│  • gold.features_daily - Features versionadas (MAP format) │
-│  • gold.runs - Versionado central (reproducibilidad)       │
-│  • gold.predictions - Predicciones LSTM                     │
-│  • gold.portfolio_holdings - Portafolios optimizados       │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────┐      ┌──────────────┐      ┌─────────────────┐
+│  DataBursatil   │─────▶│  ETL Python  │─────▶│  SQL Server     │
+│  API (JSON)     │      │  (Notebooks) │      │  (Remoto SSH)   │
+└─────────────────┘      └──────────────┘      └─────────────────┘
+                              │
+                              ▼
+                         ┌──────────────┐
+                         │  Features ML │
+                         │  (Extensible)│
+                         └──────────────┘
 ```
 
-## 📂 Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 stock-market/
-├── config/
-│   └── config.yaml              # Configuración centralizada
-├── notebooks/
-│   ├── setup/
-│   │   └── 00_populate_ticker_catalog.ipynb  # ⚙️ Setup inicial: Catálogo de tickers
-│   ├── bronze/
-│   │   ├── 01_ingest_databursatil.ipynb      # Ingesta multi-ticker API → Bronze
-│   │   └── 01_ingest_single_ticker.ipynb     # Ingesta single-ticker (testing)
-│   ├── silver/
-│   │   └── 02_normalize_to_silver.ipynb      # Bronze → Silver
-│   └── gold/
-│       └── 03_feature_engineering.ipynb      # Silver → Gold
-├── sql/
-│   └── ddl/
-│       ├── 01_bronze_schema.sql            # DDL Bronze layer
-│       ├── 02_silver_schema.sql            # DDL Silver layer
-│       └── 03_gold_schema.sql              # DDL Gold layer
-├── utils/
-│   └── databricks_utils.py                 # Utilities compartidas
-├── docs/
-│   ├── SETUP.md                            # Setup en Databricks
-│   ├── API_DATABURSATIL.md                 # Integración API
-│   └── EXPLICACION_CODIGO.md               # Explicación arquitectura
-├── requirements.txt                        # Dependencias Python
-└── README.md                               # Este archivo
+├── notebooks/              # Jupyter notebooks para ETL
+│   ├── 01_etl_historico.ipynb
+│   ├── 02_etl_cotidiano.ipynb
+│   ├── 03_exploracion_datos.ipynb
+│   ├── 04_gestion_tickers.ipynb
+│   └── 05_validacion_calidad.ipynb
+│
+├── src/                    # Módulos Python reutilizables
+│   ├── api/               # Wrapper API DataBursatil
+│   ├── etl/               # Lógica ETL (Extract, Transform, Load)
+│   ├── db/                # Conexión y modelos SQL Server
+│   └── utils/             # Utilidades (config, logs, validación)
+│
+├── sql/                    # Scripts SQL Server
+│   ├── 01_create_schema.sql
+│   ├── 02_create_indexes.sql
+│   └── 03_stored_procedures.sql
+│
+├── config/                 # Configuración
+│   ├── config.yaml
+│   ├── tickers.yaml
+│   └── .env.example
+│
+├── data/                   # Datos locales (gitignore)
+├── logs/                   # Logs de ejecución
+└── scripts/               # Scripts ejecutables
 ```
 
-## 🚀 Quick Start
+## 🚀 Instalación
 
-### 1. Setup en Databricks
+### 1. Requisitos Previos
+
+- Python 3.9+
+- SQL Server en máquina remota (Windows)
+- Cloudflare Tunnel configurado para SSH
+- Cuenta en DataBursatil.com (API token)
+
+### 2. Instalación de Dependencias
 
 ```bash
-# 1. Clonar repo en Databricks Repos
-# En Databricks UI: Repos → Add Repo → https://github.com/stock-market-bot/ETL.git
+# Clonar repositorio
+cd ~/Projects/stock-market
 
-# 2. Crear bases de datos (ejecutar DDL)
-%sql
--- Ejecutar scripts en orden:
--- sql/ddl/01_bronze_schema.sql
--- sql/ddl/02_silver_schema.sql
--- sql/ddl/03_gold_schema.sql
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # macOS/Linux
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Instalar cloudflared (macOS)
+brew install cloudflare/cloudflare/cloudflared
 ```
 
-### 2. Configurar Secrets
+### 3. Configuración
 
 ```bash
-# Crear secret scope para API token
-databricks secrets create-scope --scope databursatil
+# Copiar template de configuración
+cp config/.env.example config/.env
 
-# Guardar API token
-databricks secrets put --scope databursatil --key api_token
+# Editar credenciales
+nano config/.env
 ```
 
-### 3. Poblar Catálogo de Tickers (Primera vez)
+Variables requeridas en `.env`:
+```env
+# API DataBursatil
+DATABURSATIL_API_TOKEN=tu_token_aqui
 
+# SQL Server
+SQL_SERVER_HOST=localhost  # Via SSH tunnel
+SQL_SERVER_PORT=1433
+SQL_SERVER_DATABASE=MercadoBursatil
+SQL_SERVER_USER=sa
+SQL_SERVER_PASSWORD=tu_password
+
+# SSH Tunnel (Cloudflare)
+SSH_HOSTNAME=ssh.rod-b-op.com
+SSH_USER=rodri
+SSH_LOCAL_PORT=1433
+SSH_REMOTE_PORT=1433
+CLOUDFLARE_TUNNEL_ID=5a5dd112-9705-4f62-b97f-c7723daf5afc
+```
+
+### 4. Inicializar Base de Datos
+
+```bash
+# Conectar vía SSH (Cloudflare Tunnel)
+cloudflared access ssh --hostname ssh.rod-b-op.com --user rodri
+
+# Ejecutar scripts SQL
+python scripts/setup_database.py
+```
+
+## 📊 Uso
+
+### ETL Histórico (Carga Inicial)
+
+```bash
+# Desde Jupyter Notebook
+jupyter notebook notebooks/01_etl_historico.ipynb
+
+# O desde script
+python scripts/run_etl_historico.py --tickers WALMEX*,AMXB,CEMEXCPO --start-date 2020-01-01
+```
+
+### ETL Cotidiano (Actualización Diaria)
+
+```bash
+# Ejecutar manualmente
+python scripts/run_etl_cotidiano.py
+
+# O configurar cron job (lunes-viernes 7pm)
+crontab -e
+0 19 * * 1-5 cd ~/Projects/stock-market && python scripts/run_etl_cotidiano.py
+```
+
+## 🗄️ Esquema de Base de Datos
+
+### Tablas Principales
+
+1. **`emisoras`** - Catálogo de emisoras y series
+2. **`precios_historicos`** - Precios OHLCV diarios
+3. **`features_ml`** - Features extensibles para ML
+4. **`etl_log`** - Registro de ejecuciones ETL
+
+Ver detalles completos en `sql/01_create_schema.sql`
+
+## 🔧 Módulos Principales
+
+### API Client
 ```python
-# Ejecutar notebooks/setup/00_populate_ticker_catalog.ipynb
-# Esto llena silver.tickers con todas las emisoras disponibles
+from src.api.databursatil import DataBursatilAPI
+
+api = DataBursatilAPI(token='tu_token')
+historicos = api.get_historicos('WALMEX*', '2024-01-01', '2024-12-31')
 ```
 
-### 4. Ejecutar Pipeline
-
+### Database Connection
 ```python
-# Orden de ejecución:
-0. notebooks/setup/00_populate_ticker_catalog.ipynb  # ⚙️ Setup inicial (1 vez)
-1. notebooks/bronze/01_ingest_databursatil.ipynb     # Ingesta (multi-ticker)
-   # O: notebooks/bronze/01_ingest_single_ticker.ipynb (testing)
-2. notebooks/silver/02_normalize_to_silver.ipynb     # Normalización
-3. notebooks/gold/03_feature_engineering.ipynb       # Features
+from src.db.connection import SQLServerConnection
+
+with SQLServerConnection() as conn:
+    df.to_sql('precios_historicos', conn, if_exists='append')
 ```
 
-## 📊 Esquema de Datos
-
-### Bronze Layer
-```sql
-bronze.api_responses
-  - response_id (PK)
-  - ticker, endpoint, data_date
-  - response_body (JSON)
-  - ingestion_timestamp
-```
-
-### Silver Layer
-```sql
-silver.tickers
-  - ticker (PK)
-  - ticker_name, market, sector
-  - is_active (boolean)
-
-silver.market_ohlcv
-  - ticker, date (PK)
-  - open, high, low, close, volume
-  - adjusted_close
-  - Long format (ticker-agnostic)
-```
-
-### Gold Layer
-```sql
-gold.features_daily
-  - ticker, date, features_version (PK)
-  - features (MAP<STRING, DOUBLE>)
-  - Extensible schema
-
-gold.runs
-  - run_id (PK)
-  - run_type, features_version
-  - data_ref, code_version
-  - params_json, metrics_json
-  - Central versioning table
-```
-
-## 🔄 Versionado y Reproducibilidad
-
-Cada corrida es 100% reproducible usando:
-
-| Campo | Descripción |
-|-------|-------------|
-| `run_id` | UUID único por ejecución |
-| `data_ref` | Delta version o timestamp |
-| `features_version` | Versión de lógica de features |
-| `code_version` | Git commit SHA |
-| `model_version` | MLflow model URI |
-
-**Ejemplo:**
+### ETL Orchestrator
 ```python
-# Reproducir una corrida específica
-run = spark.table("gold.runs").filter("run_id = 'abc-123'").first()
-features = spark.table("gold.features_daily") \
-    .filter(f"features_version = '{run.features_version}'")
+from src.etl.orchestrator import ETLOrchestrator
+
+etl = ETLOrchestrator(mode='historico')
+etl.run(tickers=['WALMEX*', 'AMXB'], start_date='2024-01-01')
 ```
 
-## 🛠️ Stack Tecnológico
+## 📈 Roadmap
 
-- **Azure Databricks** - Plataforma de procesamiento
-- **Delta Lake** - Storage layer con ACID
-- **ADLS Gen2** - Data lake storage
-- **MLflow** - Tracking y registro de modelos (futuro)
-- **Python 3.10+** - Lenguaje principal
-- **PySpark** - Procesamiento distribuido
-- **pandas-ta** - Indicadores técnicos
+- [x] Diseño arquitectura SQL Server
+- [x] Estructura modular del proyecto
+- [ ] Conexión SQL Server vía SSH tunnel
+- [ ] Wrapper API DataBursatil
+- [ ] ETL Histórico (notebooks + módulos)
+- [ ] ETL Cotidiano (incremental)
+- [ ] Sistema gestión de tickers
+- [ ] Testing y validación
+- [ ] Documentación completa
 
-## 🎯 Reglas de Diseño
+## 🤝 Contribución
 
-✅ **SI:**
-- Formato largo (una fila por ticker-date)
-- Delta Lake como source of truth
-- JSON/Map para extensibilidad
-- Nuevos tickers via `INSERT INTO silver.tickers`
-- Idempotencia en todos los notebooks
-
-❌ **NO:**
-- Columnas por ticker (anti-patrón)
-- SQL Server como source (solo Delta)
-- Hard-coding de tickers en código
-
-## 📈 Próximos Pasos
-
-1. **ML Training** - Implementar modelo LSTM
-2. **Portfolio Optimization** - Algoritmo de optimización
-3. **Databricks Workflows** - Automatización con Jobs
-4. **Alerting** - Monitoreo y notificaciones
-5. **Unity Catalog** - Governance y permisos
+Este es un proyecto personal para análisis de mercado bursátil mexicano.
 
 ## 📝 Licencia
 
-MIT License - Ver archivo LICENSE para detalles
+MIT
 
-## 👥 Contribuidores
+## 📧 Contacto
 
-Stock Market ETL Team - 2025
+Desarrollado para análisis de datos bursátiles y modelos LSTM/AG.
+
+---
+**Nota:** Nunca commitear archivos con credenciales (`.env`, tokens API, passwords SQL Server)

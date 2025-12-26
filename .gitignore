@@ -4,46 +4,69 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 venv/
+env/
 ENV/
 .venv
 *.egg-info/
 dist/
 build/
+*.egg
 
-# Databricks
-.databricks/
-*.dbc
+# Jupyter Notebook
 .ipynb_checkpoints/
+*.ipynb_checkpoints
 
-# Secrets and credentials
-*.env
-.env.local
-secrets/
-config/secrets.yaml
+# Environment variables
+.env
+config/.env
+*.env.local
+
+# Credentials
+*credentials*
+*token*
+*password*
+
+# Data files
+data/raw/*
+data/processed/*
+data/backups/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/backups/.gitkeep
+
+# Logs
+logs/*
+*.log
+!logs/.gitkeep
+
+# SQL Server
+*.bak
+*.mdf
+*.ldf
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+*.code-workspace
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Logs
-*.log
-logs/
-
-# Data (local testing only)
-data/
-*.parquet
-*.csv
-*.json
-
-# MLflow
-mlruns/
-mlartifacts/
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
