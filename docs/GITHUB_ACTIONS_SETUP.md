@@ -14,21 +14,6 @@ Debes crear los siguientes **GitHub Secrets** en tu repositorio:
 
 ### 🔑 Secretos de SSH (Conexión al Servidor)
 
-#### `SSH_PRIVATE_KEY`
-**Descripción:** Tu clave SSH privada para conectarte al servidor Windows  
-**Valor:** El contenido completo de tu archivo `~/.ssh/id_rsa`
-
-**Cómo obtenerlo:**
-```bash
-cat ~/.ssh/id_rsa
-```
-
-Copia TODO el contenido (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----` y `-----END OPENSSH PRIVATE KEY-----`)
-
-⚠️ **IMPORTANTE:** Asegúrate de que el servidor tenga tu clave pública en `~/.ssh/authorized_keys`
-
----
-
 #### `SSH_HOST`
 **Descripción:** Hostname del servidor Windows  
 **Valor:** 
@@ -44,6 +29,14 @@ ssh.rod-b-op.com
 ```
 rodri
 ```
+
+---
+
+#### `SSH_PASSWORD`
+**Descripción:** Contraseña SSH para autenticación  
+**Valor:** Tu contraseña SSH del servidor
+
+⚠️ **IMPORTANTE:** El servidor debe tener Git instalado y el repositorio ya clonado en `C:\Projects\stock-market`
 
 ---
 
@@ -67,23 +60,46 @@ rodrigo
 
 ---
 
+## 🎯 Cómo Funciona el Deploy
+
+### Método: Git Pull en el Servidor
+
+En lugar de transferir archivos vía SCP, el servidor hace `git pull`:
+
+1. GitHub Actions se conecta al servidor vía SSH
+2. Ejecuta `git pull origin main` en `C:\Projects\stock-market`
+3. Si el commit tiene `[sql]` o `[schema]` en el mensaje, ejecuta el schema SQL
+
+### Ventajas de este método:
+- ✅ **Simple**: No requiere claves SSH privadas
+- ✅ **Rápido**: Solo descarga cambios (no todos los archivos)
+- ✅ **Seguro**: Usa autenticación por contraseña
+- ✅ **Eficiente**: Git maneja los cambios incrementales
+
+---
+
 ## 🎯 Workflows Configurados
 
 ### 1. **Deploy to Windows Server** (`deploy.yml`)
 - **Trigger:** Cada `git push` a la rama `main`
 - **Acciones:**
-  - ✅ Descarga el código del repositorio
-  - ✅ Configura la conexión SSH
-  - ✅ Copia archivos al servidor vía SCP
-  - ✅ Ejecuta el script SQL si hay cambios en `/sql/`
-  - ✅ Notifica el resultado
+  1. Conecta al servidor vía SSH
+  2. Ejecuta `git pull origin main` en `C:\Projects\stock-market`
+  3. Si el commit contiene `[sql]` o `[schema]`, ejecuta el schema SQL
+  4. Notifica el resultado
 
 **Uso:**
 ```bash
-git add .
-git commit -m "Update schema"
+# Deploy normal
+git commit -m "feat: nueva función"
 git push origin main
-# 🚀 Se desplegará automáticamente!
+
+# Deploy con actualización SQL
+git commit -m "feat: nueva tabla [sql]"
+git push origin main
+# Deploy con actualización SQL
+git commit -m "feat: nueva tabla [sql]"
+git push origin main
 ```
 
 ---
@@ -130,6 +146,30 @@ Después de cada push, puedes ver el progreso:
 ---
 
 ## 🛠️ Troubleshooting
+
+### Error: "Permission denied"
+- Verifica que `SSH_PASSWORD` esté correctamente configurado
+- Asegúrate de que el usuario `rodri` tenga permisos en el servidor
+
+### Error: "Repository not found"
+- Verifica que Git esté instalado en el servidor Windows
+- Asegúrate de que el repositorio esté clonado en `C:\Projects\stock-market`
+
+### Error: "SQL command failed"
+- Verifica que SQL Server esté ejecutándose
+- Confirma que `SQL_USER` y `SQL_PASSWORD` sean correctos
+- Asegúrate de que el usuario tenga permisos de `db_owner`
+
+---
+
+## ✅ Checklist de Configuración
+
+- [ ] Crear los 5 secretos en GitHub
+- [ ] Verificar que Git esté instalado en el servidor
+- [ ] Confirmar que el repositorio esté clonado en `C:\Projects\stock-market`
+- [ ] Probar conexión SSH al servidor
+- [ ] Hacer un commit de prueba con `[sql]` en el mensaje
+- [ ] Verificar que el workflow se ejecute correctamente en Actions
 
 ### Error: "Permission denied (publickey)"
 - Verifica que `SSH_PRIVATE_KEY` esté completo

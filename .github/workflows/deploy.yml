@@ -11,32 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Deploy via Git Pull on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd C:\Projects\stock-market
+            git pull origin main
+            echo "✅ Código actualizado desde GitHub"
       
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      
-      - name: Deploy files to server
-        run: |
-          scp -r sql/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:C:/Projects/stock-market/
-          scp -r src/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:C:/Projects/stock-market/
-          scp -r config/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:C:/Projects/stock-market/
-          scp -r scripts/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:C:/Projects/stock-market/
-          scp requirements.txt ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:C:/Projects/stock-market/
-      
-      - name: Execute SQL Schema (if changed)
-        if: contains(github.event.head_commit.modified, 'sql/')
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "sqlcmd -S localhost -U ${{ secrets.SQL_USER }} -P ${{ secrets.SQL_PASSWORD }} \
-             -i C:\\Projects\\stock-market\\sql\\01_create_schema.sql"
-      
-      - name: Deployment successful
+      - name: Deployment Summary
         run: |
           echo "✅ Deployment completed successfully!"
-          echo "📦 Files deployed to C:/Projects/stock-market/"
+          echo "📦 Changes pulled from GitHub to C:/Projects/stock-market/"

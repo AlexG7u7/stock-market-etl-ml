@@ -5,7 +5,7 @@
 ### GitHub Actions Workflows
 ```
 .github/workflows/
-├── deploy.yml          # Despliegue automático a producción
+├── deploy.yml          # Despliegue automático a producción (git pull)
 └── ci.yml             # Tests y validación (PR y develop)
 ```
 
@@ -23,30 +23,51 @@ Ve a: `https://github.com/stock-market-bot/stock-market-etl-ml/settings/secrets/
 
 | Nombre | Valor | Descripción |
 |--------|-------|-------------|
-| `SSH_PRIVATE_KEY` | Contenido de `~/.ssh/id_rsa` | Clave SSH privada |
 | `SSH_HOST` | `ssh.rod-b-op.com` | Hostname del servidor |
 | `SSH_USER` | `rodri` | Usuario SSH |
+| `SSH_PASSWORD` | `tu-contraseña-ssh` | Contraseña SSH |
 | `SQL_USER` | `rodrigo` | Usuario SQL Server |
 | `SQL_PASSWORD` | `rodrigo` | Password SQL Server |
 
 ---
 
+## 🎯 Método de Despliegue
+
+### Git Pull Strategy (Mejorado)
+
+En lugar de transferir archivos vía SCP, el servidor hace `git pull`:
+
+1. **GitHub Actions** se conecta al servidor vía SSH
+2. Ejecuta `git pull origin main` en `C:\Projects\stock-market`
+3. Si el commit contiene `[sql]` o `[schema]`, ejecuta el schema SQL
+
+### Ventajas:
+- ✅ **Simple**: No requiere claves SSH privadas
+- ✅ **Rápido**: Solo descarga cambios
+- ✅ **Seguro**: Autenticación por contraseña
+- ✅ **Eficiente**: Git maneja cambios incrementales
+
+---
+
 ## 📋 Pasos para Activar CI/CD
 
-### 1. Obtener tu clave SSH privada
+### 1. Configurar secretos en GitHub
+Ve a Settings → Secrets → Actions y crea los 5 secretos
+
+### 2. Verificar pre-requisitos en el servidor
 ```bash
-cat ~/.ssh/id_rsa
+# Conectarse al servidor
+ssh rodri@ssh.rod-b-op.com
+
+# Verificar que Git esté instalado
+git --version
+
+# Verificar que el repo esté clonado
+cd C:\Projects\stock-market
+git status
 ```
 
-Copia TODO el contenido (incluye BEGIN y END)
-
-### 2. Configurar Git
-```bash
-cd /Users/rod/Projects/stock-market
-./scripts/init_git.sh
-```
-
-O manualmente:
+### 3. Hacer un commit de prueba
 ```bash
 git init
 git remote add origin git@github.com:stock-market-bot/stock-market-etl-ml.git
