@@ -65,9 +65,13 @@ def cargar_tickers():
         return False
     
     try:
+        # Capturar fecha de inicio
+        from datetime import datetime
+        inicio = datetime.now()
+        
         # Inicializar API
         logger.info("-"*60)
-        logger.info("� Inicializando cliente API...")
+        logger.info("🔧 Inicializando cliente API...")
         api = DataBursatilAPI(api_token)
         
         # Obtener emisoras de la API
@@ -179,12 +183,15 @@ def cargar_tickers():
             # Registrar en log de ETL
             cursor.execute("""
                 INSERT INTO control.etl_log 
-                (etl_process, status, records_processed, mensaje)
-                VALUES (?, ?, ?, ?)
+                (proceso, fecha_inicio, fecha_fin, estado, registros_procesados, registros_insertados, registros_actualizados, mensaje)
+                VALUES (?, ?, GETDATE(), ?, ?, ?, ?, ?)
             """, (
                 'cargar_tickers',
+                inicio,
                 'SUCCESS',
                 insertados + actualizados,
+                insertados,
+                actualizados,
                 f'{insertados} nuevos, {actualizados} actualizados'
             ))
             conn.commit()
@@ -214,14 +221,16 @@ def cargar_tickers():
         
         # Intentar registrar el error en BD
         try:
+            from datetime import datetime
             with get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute("""
                     INSERT INTO control.etl_log 
-                    (etl_process, status, records_processed, mensaje)
-                    VALUES (?, ?, ?, ?)
+                    (proceso, fecha_inicio, fecha_fin, estado, registros_procesados, mensaje)
+                    VALUES (?, ?, GETDATE(), ?, ?, ?)
                 """, (
                     'cargar_tickers',
+                    inicio if 'inicio' in locals() else datetime.now(),
                     'ERROR',
                     0,
                     str(e)[:500]  # Limitar mensaje a 500 chars
