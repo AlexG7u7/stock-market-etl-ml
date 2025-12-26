@@ -15,20 +15,4 @@ jobs:
         run: |
           cd C:\Projects\stock-market
           git pull origin main
-          Write-Host "✅ Código actualizado desde GitHub" -ForegroundColor Green
-        shell: pwsh
-      
-      - name: Execute SQL Schema (if changed)
-        if: contains(github.event.head_commit.message, '[sql]') || contains(github.event.head_commit.message, '[schema]')
-        run: |
-          Write-Host "🗄️ Ejecutando schema SQL..." -ForegroundColor Yellow
-          sqlcmd -S localhost -U rodrigo -P rodrigo -i C:\Projects\stock-market\sql\01_create_schema.sql
-          Write-Host "✅ Schema SQL ejecutado correctamente" -ForegroundColor Green
-        shell: pwsh
-      
-      - name: Deployment Summary
-        run: |
-          Write-Host "`n✅ Deployment completado!" -ForegroundColor Green
-          Write-Host "📦 Proyecto actualizado en: C:\Projects\stock-market" -ForegroundColor Cyan
-          git log -1 --oneline
         shell: pwsh
