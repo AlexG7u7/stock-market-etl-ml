@@ -92,9 +92,9 @@ def cargar_tickers():
             # Registrar llamada a API
             logger.info("📝 Registrando llamada en control.api_calls...")
             cursor.execute("""
-                INSERT INTO control.api_calls (endpoint, status_code, records_returned)
-                VALUES (?, ?, ?)
-            """, ('/v2/emisoras', 200, len(emisoras)))
+                INSERT INTO control.api_calls (endpoint, request_url, status_code, registros_insertados)
+                VALUES (?, ?, ?, ?)
+            """, ('/v2/emisoras', 'https://api.databursatil.com/v2/emisoras', 200, len(emisoras)))
             logger.info("✅ Llamada API registrada")
             
             # Insertar/actualizar tickers
