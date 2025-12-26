@@ -138,7 +138,7 @@ class DataBursatilAPI:
     
     def get_historicos(
         self, 
-        ticker: str, 
+        emisora_serie: str, 
         fecha_inicio: str, 
         fecha_fin: str
     ) -> List[Dict]:
@@ -146,7 +146,7 @@ class DataBursatilAPI:
         Obtener precios históricos de un ticker
         
         Args:
-            ticker: Símbolo del ticker (ej: 'ALFAA')
+            emisora_serie: Símbolo del ticker con serie (ej: 'ALFAA', 'ALSEA*')
             fecha_inicio: Fecha inicial en formato 'YYYY-MM-DD'
             fecha_fin: Fecha final en formato 'YYYY-MM-DD'
             
@@ -154,28 +154,45 @@ class DataBursatilAPI:
             Lista de diccionarios con precios históricos
             Ejemplo: [
                 {
-                    "fecha": "2024-01-15",
-                    "open": 15.50,
-                    "high": 15.80,
-                    "low": 15.40,
-                    "close": 15.75,
-                    "volume": 1000000
+                    "fecha": "2024-12-01",
+                    "precio": 15.50,
+                    "importe": 1234567.89
                 },
                 ...
             ]
+            
+        Nota: La API solo devuelve precio de cierre e importe, no OHLCV completo
         """
-        logger.info(f"📈 Obteniendo históricos de {ticker} ({fecha_inicio} a {fecha_fin})")
+        logger.info(f"📈 Obteniendo históricos de {emisora_serie} ({fecha_inicio} a {fecha_fin})")
         
+        # Parámetros correctos según documentación
         params = {
-            "ticker": ticker,
-            "fecha_inicio": fecha_inicio,
-            "fecha_fin": fecha_fin
+            "emisora_serie": emisora_serie,
+            "inicio": fecha_inicio,
+            "final": fecha_fin
         }
         
         data = self._make_request("/v2/historicos", params=params)
-        historicos = data.get("results", [])
         
-        logger.info(f"✅ Obtenidos {len(historicos)} registros históricos para {ticker}")
+        # Verificar si hay error
+        if 'Error' in data:
+            logger.error(f"❌ Error en API: {data.get('Error')}")
+            return []
+        
+        # La respuesta es un dict donde las keys son las fechas
+        # Necesitamos convertirlo a lista
+        historicos = []
+        
+        if isinstance(data, dict):
+            for fecha, info in data.items():
+                if isinstance(info, dict):
+                    registro = {
+                        'fecha': fecha,
+                        **info
+                    }
+                    historicos.append(registro)
+        
+        logger.info(f"✅ Obtenidos {len(historicos)} registros históricos para {emisora_serie}")
         
         return historicos
     
