@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class DataBursatilAPI:
     """Cliente para la API de DataBursátil México"""
     
-    BASE_URL = "https://api.databursatilmexico.com"
+    BASE_URL = "https://api.databursatil.com"
     
     def __init__(self, api_token: str):
         """
@@ -26,8 +26,8 @@ class DataBursatilAPI:
         """
         self.api_token = api_token
         self.session = requests.Session()
+        # No usar headers de autorización, el token va en query params
         self.session.headers.update({
-            "Authorization": f"Token {api_token}",
             "Content-Type": "application/json"
         })
         self.last_request_time = 0
@@ -58,6 +58,11 @@ class DataBursatilAPI:
         self._wait_rate_limit()
         
         url = f"{self.BASE_URL}{endpoint}"
+        
+        # Agregar token a los parámetros
+        if params is None:
+            params = {}
+        params['token'] = self.api_token
         
         for attempt in range(max_retries):
             try:
