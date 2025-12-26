@@ -1,0 +1,31 @@
+name: Actualizar Dependencias
+
+on:
+  # Ejecución manual
+  workflow_dispatch:
+
+jobs:
+  update-deps:
+    name: Instalar/Actualizar dependencias Python
+    runs-on: self-hosted
+    
+    steps:
+      - name: Actualizar pip
+        run: |
+          Write-Host "⬆️  Actualizando pip..." -ForegroundColor Cyan
+          python -m pip install --upgrade pip
+        shell: powershell
+      
+      - name: Instalar/Actualizar dependencias
+        run: |
+          cd C:\Projects\stock-market
+          Write-Host "📦 Instalando dependencias desde requirements.txt..." -ForegroundColor Cyan
+          pip install -r requirements.txt --upgrade
+        shell: powershell
+      
+      - name: Mostrar paquetes instalados
+        run: |
+          Write-Host "`n✅ Dependencias actualizadas:" -ForegroundColor Green
+          pip list | Select-String -Pattern "pandas|numpy|requests|pyodbc|pymssql|sqlalchemy|python-dotenv|httpx|jsonschema|cerberus|pyyaml"
+          Write-Host "`n🎉 ¡Actualización completada!" -ForegroundColor Green
+        shell: powershell

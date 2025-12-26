@@ -9,7 +9,18 @@ Este proyecto usa GitHub Actions con self-hosted runner para ejecutar tareas ETL
 - **Función:** Actualiza el código en el servidor (`git pull`)
 - **Uso:** Transparente, se ejecuta automáticamente
 
-### 2. **ETL - Cargar Tickers** (`etl-tickers.yml`)
+### 2. **Actualizar Dependencias** (`update-deps.yml`)
+- **Trigger:**
+  - Automático cuando cambia `requirements.txt` en `main`
+  - Manual desde GitHub Actions
+- **Función:** Instala/actualiza paquetes Python en el servidor
+- **Uso manual:**
+  1. Ve a: https://github.com/stock-market-bot/stock-market-etl-ml/actions/workflows/update-deps.yml
+  2. Click en "Run workflow"
+  3. Selecciona rama `main`
+  4. Click "Run workflow"
+
+### 3. **ETL - Cargar Tickers** (`etl-tickers.yml`)
 - **Trigger:** 
   - Manual desde GitHub Actions
   - Programado: Diario a las 8:00 AM
@@ -20,7 +31,7 @@ Este proyecto usa GitHub Actions con self-hosted runner para ejecutar tareas ETL
   3. Selecciona rama `main`
   4. Click "Run workflow"
 
-### 3. **ETL - Cargar Precios Históricos** (`etl-precios.yml`)
+### 4. **ETL - Cargar Precios Históricos** (`etl-precios.yml`)
 - **Trigger:**
   - Manual con parámetros
   - Programado: Lunes a Viernes a las 9:00 PM
@@ -57,6 +68,8 @@ Los workflows ETL se ejecutan automáticamente según este calendario:
 
 | Workflow | Frecuencia | Hora | Días |
 |----------|-----------|------|------|
+| Deploy | Automático | - | Al push a main |
+| Update Deps | Automático | - | Al cambiar requirements.txt |
 | Cargar Tickers | Diario | 8:00 AM | Todos |
 | Cargar Precios | Diario | 9:00 PM | Lunes-Viernes |
 
