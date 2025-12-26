@@ -107,11 +107,27 @@ def cargar_tickers():
                 if idx % 10 == 0:
                     logger.info(f"   Procesando {idx}/{len(emisoras)}...")
                 
+                # El símbolo puede venir como "ALFAA" (emisora_serie completa)
+                # o necesitamos parsearlo en emisora + serie
+                symbol = emisora.get('symbol', '')
+                
+                # Intentar separar emisora y serie (ej: "ALFAA" -> "ALFA" + "A")
+                # Por ahora usamos el símbolo completo como emisora_serie
+                # y extraemos la última letra como serie si es letra
+                if len(symbol) > 1 and symbol[-1].isalpha():
+                    emisora_code = symbol[:-1]
+                    serie_code = symbol[-1]
+                else:
+                    emisora_code = symbol
+                    serie_code = '*'
+                
+                emisora_serie = symbol
+                
                 # Verificar si existe
                 cursor.execute("""
                     SELECT ticker_id FROM stage.cat_tickers 
-                    WHERE simbolo = ?
-                """, (emisora['symbol'],))
+                    WHERE emisora_serie = ?
+                """, (emisora_serie,))
                 
                 existe = cursor.fetchone()
                 
@@ -119,33 +135,38 @@ def cargar_tickers():
                     # Actualizar
                     cursor.execute("""
                         UPDATE stage.cat_tickers
-                        SET nombre_empresa = ?,
+                        SET razon_social = ?,
                             sector = ?,
+                            subsector = ?,
                             isin = ?,
                             tipo_valor = ?,
-                            activo = 1,
-                            fecha_actualizacion = GETDATE()
-                        WHERE simbolo = ?
+                            es_activa = 1,
+                            fecha_baja = NULL
+                        WHERE emisora_serie = ?
                     """, (
-                        emisora.get('name'),
+                        emisora.get('name', emisora.get('razon_social')),
                         emisora.get('sector'),
+                        emisora.get('subsector'),
                         emisora.get('isin'),
-                        emisora.get('tipo_valor'),
-                        emisora['symbol']
+                        emisora.get('tipo_valor', emisora.get('type')),
+                        emisora_serie
                     ))
                     actualizados += 1
                 else:
                     # Insertar
                     cursor.execute("""
                         INSERT INTO stage.cat_tickers 
-                        (simbolo, nombre_empresa, sector, isin, tipo_valor, activo)
-                        VALUES (?, ?, ?, ?, ?, 1)
+                        (emisora, serie, emisora_serie, razon_social, sector, subsector, isin, tipo_valor, es_activa)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
                     """, (
-                        emisora['symbol'],
-                        emisora.get('name'),
+                        emisora_code,
+                        serie_code,
+                        emisora_serie,
+                        emisora.get('name', emisora.get('razon_social')),
                         emisora.get('sector'),
+                        emisora.get('subsector'),
                         emisora.get('isin'),
-                        emisora.get('tipo_valor')
+                        emisora.get('tipo_valor', emisora.get('type'))
                     ))
                     insertados += 1
             
