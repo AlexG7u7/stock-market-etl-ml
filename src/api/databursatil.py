@@ -198,7 +198,7 @@ class DataBursatilAPI:
     
     def get_cotizaciones(self, emisora_serie: str, bolsa: str = "BMV") -> Dict:
         """
-        Obtener cotización más reciente de un ticker (intradía)
+        Obtener cotización más reciente de un ticker
         
         Args:
             emisora_serie: Símbolo del ticker con serie (ej: 'ALFAA')
@@ -208,22 +208,23 @@ class DataBursatilAPI:
             Diccionario con cotización actual
             Ejemplo: {
                 "ALFAA": {
-                    "bolsa": "BMV",
-                    "u": 15.50,      # último
-                    "p": 15.45,      # ppp
-                    "a": 15.40,      # anterior
-                    "x": 15.60,      # máximo
-                    "n": 15.30,      # mínimo
-                    "c": 0.65,       # cambio %
-                    "m": 0.10,       # cambio $
-                    "v": 1234567,    # volumen
-                    "o": 500,        # operaciones
-                    "i": 19123456.78,# importe
-                    "f": "2025-12-26"# fecha
+                    "bmv": {
+                        "u": 15.43,      # último
+                        "p": 15.37,      # ppp
+                        "a": 15.69,      # anterior
+                        "x": 15.64,      # máximo
+                        "n": 15.24,      # mínimo
+                        "c": -2.04,      # cambio %
+                        "m": -0.32,      # cambio $
+                        "v": 3633227.0,  # volumen
+                        "o": 8604.0,     # operaciones
+                        "i": 55895169.41,# importe
+                        "f": "2025-12-16 15:00:00" # fecha
+                    }
                 }
             }
         """
-        logger.info(f"💹 Obteniendo cotización intradía de {emisora_serie} en {bolsa}")
+        logger.info(f"💹 Obteniendo cotización de {emisora_serie} en {bolsa}")
         
         params = {
             "emisora_serie": emisora_serie,
@@ -231,6 +232,6 @@ class DataBursatilAPI:
             "bolsa": bolsa.lower()
         }
         
-        data = self._make_request("/v2/intradia", params=params)
+        data = self._make_request("/v2/cotizaciones", params=params)
         
         return data

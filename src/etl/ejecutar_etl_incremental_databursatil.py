@@ -73,39 +73,44 @@ def cargar_precios_ticker_databursatil(
         # La API de cotizaciones devuelve solo el dato más reciente
         data = api.get_cotizaciones(emisora_serie=emisora_serie, bolsa="BMV")
         
-        # DEBUG: Ver respuesta completa
-        logger.info(f"  🔍 Respuesta API: {data}")
-        
         # Verificar si hay error
         if 'Error' in data:
             logger.warning(f"⚠️  Error en API: {data.get('Error')}")
             return 0, 0, 1
         
-        # La respuesta es: {"ALFAA": {"bolsa": "BMV", "u": 15.50, ...}}
+        # La respuesta es: {"ALFAA": {"bmv": {"u": 15.50, "p": 15.37, ...}}}
         ticker_data = data.get(emisora_serie)
         
         if not ticker_data:
             logger.warning(f"⚠️  No hay datos para {emisora_serie}")
-            logger.info(f"  🔍 Keys en respuesta: {list(data.keys())}")
             return 0, 0, 0
         
-        # DEBUG: Ver datos del ticker
-        logger.info(f"  🔍 Datos del ticker: {ticker_data}")
+        # Extraer datos de la bolsa específica (bmv o biva)
+        bolsa_key = 'bmv'  # La respuesta usa minúsculas
+        bolsa_data = ticker_data.get(bolsa_key)
+        
+        if not bolsa_data:
+            logger.warning(f"⚠️  No hay datos de {bolsa_key} para {emisora_serie}")
+            return 0, 0, 0
         
         # Extraer datos de la cotización
-        fecha = ticker_data.get('f')  # fecha
+        # Formato fecha: "2025-12-16 15:00:00" -> extraer solo fecha
+        fecha_str = bolsa_data.get('f')  # fecha
         
-        if not fecha:
+        if not fecha_str:
             logger.warning(f"⚠️  No hay fecha en la respuesta para {emisora_serie}")
             return 0, 0, 0
         
+        # Convertir "2025-12-16 15:00:00" a "2025-12-16"
+        fecha = fecha_str.split(' ')[0] if ' ' in fecha_str else fecha_str
+        
         # Mapear campos según documentación DataBursátil
-        precio_ultimo = ticker_data.get('u')      # último
-        precio_anterior = ticker_data.get('a')    # anterior
-        precio_maximo = ticker_data.get('x')      # máximo
-        precio_minimo = ticker_data.get('n')      # mínimo
-        volumen = ticker_data.get('v')            # volumen
-        importe = ticker_data.get('i')            # importe
+        precio_ultimo = bolsa_data.get('u')      # último
+        precio_anterior = bolsa_data.get('a')    # anterior
+        precio_maximo = bolsa_data.get('x')      # máximo
+        precio_minimo = bolsa_data.get('n')      # mínimo
+        volumen = bolsa_data.get('v')            # volumen
+        importe = bolsa_data.get('i')            # importe
         
         if precio_ultimo is None:
             logger.warning(f"⚠️  No hay precio último para {emisora_serie}")
