@@ -1,6 +1,8 @@
 # 🚀 Guía Rápida de Despliegue - Scheduled Task
 
-## Pasos para configurar la tarea programada en Windows Server
+## ⚡ Opción 1: Python Script (RECOMENDADO para SSH)
+
+La forma más confiable cuando te conectas via SSH:
 
 ### 1️⃣ Conectarse al servidor
 ```bash
@@ -13,33 +15,45 @@ cd C:\Projects\stock-market
 git pull
 ```
 
-Deberías ver:
-```
-Updating f0233e6..0d62f18
- scripts/setup_scheduled_task.ps1     | xxx ++++++
- scripts/etl-incremental-task.xml     | xxx ++++++
+### 3️⃣ Ejecutar el script Python
+```powershell
+python scripts\setup_task.py
 ```
 
-### 3️⃣ Ejecutar PowerShell como Administrador
-1. Click derecho en el botón de Windows
-2. Seleccionar "Windows PowerShell (Admin)"
-3. Click "Sí" en el UAC prompt
+**¡Eso es todo!** El script hará todo automáticamente.
 
-### 4️⃣ Configurar el Scheduled Task
+---
+
+## 🖥️ Opción 2: Script Batch (para Windows GUI)
+
+Si prefieres usar la interfaz gráfica de Windows:
+
+### 1️⃣ En el servidor, navegar al proyecto
+```powershell
+cd C:\Projects\stock-market
+git pull
+```
+
+### 2️⃣ Ejecutar el batch
+1. Click derecho en `scripts\setup_task.bat`
+2. Seleccionar "Ejecutar como administrador"
+3. Seguir las instrucciones
+
+---
+
+## 🔧 Opción 3: PowerShell (avanzado)
+
+Si prefieres PowerShell y tienes GUI:
 ```powershell
 cd C:\Projects\stock-market
 .\scripts\setup_scheduled_task.ps1
 ```
 
-El script te preguntará:
-```
-¿Deseas ejecutar la tarea ahora para probarla? (S/N)
-```
-Responde **S** para probar inmediatamente.
+---
 
-### 5️⃣ Verificar que funciona
+## ✅ Verificación
 
-**Opción A - Ver en Task Scheduler GUI:**
+Después de configurar con cualquier método, verifica:
 ```powershell
 taskschd.msc
 ```
