@@ -95,7 +95,7 @@ jobs:
               $args += $fecha_fin
             }
             
-            python src/etl/ejecutar_etl_incremental_databursatil.py @args
+            python src/etl/ejecutar_etl_incremental.py @args
             
             if ($LASTEXITCODE -ne 0) {
               Write-Error "❌ Error en ETL incremental"

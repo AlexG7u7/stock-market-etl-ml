@@ -1,56 +1,44 @@
-# ETL Incremental - DataBursátil vs Yahoo Finance
+# ETL Incremental - Yahoo Finance
 
 ## 📋 Resumen
 
-Este proyecto tiene **dos estrategias** para cargar datos históricos de precios:
+**Estrategia actual: Yahoo Finance para cargas incrementales diarias**
 
-### 1. **ETL Incremental DataBursátil** ⭐ (Recomendado para datos diarios)
+### ✅ **Yahoo Finance** (Incremental diario)
+- **Script**: `src/etl/ejecutar_etl_incremental.py`
+- **Fuente**: Yahoo Finance (yfinance library)
+- **Uso**: Carga incremental diaria automática
+- **Ventajas**: 
+  - OHLCV completo (apertura, máximo, mínimo, cierre, volumen ajustado)
+  - Gratuito, sin API key
+  - Datos actualizados diariamente
+  - Sin límites de consultas
+- **Ideal para**: Mantenimiento diario de datos históricos
+
+### 📊 **DataBursátil** (Opcional - para validación)
 - **Script**: `src/etl/ejecutar_etl_incremental_databursatil.py`
 - **Fuente**: API de DataBursátil México
-- **Uso**: Carga incremental diaria (datos del día actual)
+- **Uso**: Validación o datos históricos oficiales
 - **Ventajas**: 
   - Datos oficiales de la BMV
-  - Más confiables para el mercado mexicano
-  - Actualizaciones en tiempo real
 - **Limitaciones**: 
-  - Solo precio de cierre + importe (no OHLCV completo)
-  - Requiere API token de DataBursátil
-
-### 2. **ETL Histórico Yahoo Finance** (Para cargas masivas)
-- **Script**: `src/etl/ejecutar_etl_incremental.py` (nombre confuso, pronto se renombrará)
-- **Fuente**: Yahoo Finance
-- **Uso**: Cargas históricas masivas (años de datos)
-- **Ventajas**:
-  - OHLCV completo (apertura, máximo, mínimo, cierre, volumen)
-  - Gratuito, sin API key
-  - Buen rango histórico
-- **Limitaciones**:
-  - Puede tener datos faltantes para tickers mexicanos
-  - Menor confiabilidad que DataBursátil
+  - `/v2/cotizaciones` puede tener retraso en actualización
+  - Requiere API token
+  - Límites de créditos
 
 ---
 
 ## 🚀 Uso
 
-### Ejecutar Incremental DataBursátil (Diario)
+### Ejecutar Incremental Yahoo Finance (Diario) ⭐
 
 ```bash
-# Cargar datos de hoy para tickers configurados
+# Cargar datos de ayer para tickers configurados
 cd C:\Projects\stock-market
-python src\etl\ejecutar_etl_incremental_databursatil.py
-
-# Especificar rango de fechas
-python src\etl\ejecutar_etl_incremental_databursatil.py --fecha-inicio 2024-12-20 --fecha-fin 2024-12-26
-```
-
-### Ejecutar Histórico Yahoo Finance (Bulk)
-
-```bash
-# Cargar rango histórico
 python src\etl\ejecutar_etl_incremental.py
 
-# O usar cargar_precios.py directamente
-python src\etl\cargar_precios.py --ticker ALFAA --fecha-inicio 2024-01-01 --fecha-fin 2024-12-26
+# Especificar rango de fechas
+python src\etl\ejecutar_etl_incremental.py --fecha-inicio 2024-12-20 --fecha-fin 2024-12-26
 ```
 
 ---

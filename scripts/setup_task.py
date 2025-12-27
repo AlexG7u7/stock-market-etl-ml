@@ -131,7 +131,7 @@ def main():
     TASK_NAME = "ETL-Incremental-StockMarket"
     HORA = "16:00"
     PROJECT_PATH = Path("C:/Projects/stock-market")
-    PYTHON_SCRIPT = PROJECT_PATH / "src" / "etl" / "ejecutar_etl_incremental_databursatil.py"
+    PYTHON_SCRIPT = PROJECT_PATH / "src" / "etl" / "ejecutar_etl_incremental.py"
     
     # Obtener usuario actual
     import getpass
