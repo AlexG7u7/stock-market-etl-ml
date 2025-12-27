@@ -63,7 +63,7 @@ def cargar_precios_ticker(
     try:
         # Obtener datos históricos de Yahoo Finance
         historicos = api.get_historicos(
-            ticker=emisora_serie,
+            emisora_serie=emisora_serie,
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin
         )
@@ -166,6 +166,7 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None, limite=None, 
     logger.info(f"📅 Período: {fecha_inicio} a {fecha_fin}")
     
     proceso_inicio = datetime.now()
+    log_id = None
     
     try:
         # Inicializar API de Yahoo Finance
@@ -181,7 +182,7 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None, limite=None, 
                 (proceso, estado, fecha_inicio)
                 VALUES (?, ?, ?)
             """, ('cargar_precios', 'EN PROCESO', proceso_inicio))
-            etl_log_id = cursor.execute("SELECT @@IDENTITY").fetchval()
+            log_id = cursor.execute("SELECT @@IDENTITY").fetchval()
             conn.commit()
             
             # Obtener tickers a procesar
@@ -215,8 +216,8 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None, limite=None, 
                 cursor.execute("""
                     UPDATE control.etl_log
                     SET estado = ?, fecha_fin = ?, registros_procesados = 0
-                    WHERE etl_log_id = ?
-                """, ('COMPLETADO', datetime.now(), etl_log_id))
+                    WHERE log_id = ?
+                """, ('COMPLETADO', datetime.now(), log_id))
                 conn.commit()
                 return False
             
@@ -270,8 +271,8 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None, limite=None, 
                 SET estado = ?,
                     fecha_fin = ?,
                     registros_procesados = ?
-                WHERE etl_log_id = ?
-            """, ('COMPLETADO', proceso_fin, total_registros, etl_log_id))
+                WHERE log_id = ?
+            """, ('COMPLETADO', proceso_fin, total_registros, log_id))
             
             conn.commit()
             
@@ -298,14 +299,15 @@ def cargar_precios(ticker=None, fecha_inicio=None, fecha_fin=None, limite=None, 
         
         # Actualizar log como error
         try:
-            with get_connection() as conn:
-                cursor = conn.cursor()
-                cursor.execute("""
-                    UPDATE control.etl_log
-                    SET estado = ?, fecha_fin = ?
-                    WHERE etl_log_id = ?
-                """, ('ERROR', datetime.now(), etl_log_id))
-                conn.commit()
+            if log_id:
+                with get_connection() as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("""
+                        UPDATE control.etl_log
+                        SET estado = ?, fecha_fin = ?
+                        WHERE log_id = ?
+                    """, ('ERROR', datetime.now(), log_id))
+                    conn.commit()
         except:
             pass
         
