@@ -63,22 +63,48 @@ def delete_task(task_name):
         capture_output=True
     )
 
-def create_task(task_name, python_script, hora="16:00", usuario="rodrigo"):
+def create_task(task_name, python_script, hora="16:00", usuario=None):
     """Crear scheduled task"""
-    cmd = [
-        "schtasks",
-        "/Create",
-        "/TN", task_name,
-        "/TR", f'python "{python_script}"',
-        "/SC", "DAILY",
-        "/ST", hora,
-        "/RU", usuario,
-        "/IT",  # Interactive token (permite ejecutar sin login)
-        "/F"    # Force (sobrescribe si existe)
+    
+    # Si no se especifica usuario, usar el actual
+    if usuario is None:
+        import getpass
+        usuario = getpass.getuser()
+    
+    # Verificar si necesitamos dominio
+    import platform
+    hostname = platform.node()
+    
+    # Intentar con usuario local primero
+    usuarios_a_probar = [
+        usuario,                    # Usuario actual
+        f"{hostname}\\{usuario}",  # Hostname\Usuario
+        "SYSTEM",                   # Sistema
     ]
     
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    return result.returncode == 0, result.stdout, result.stderr
+    for user in usuarios_a_probar:
+        cmd = [
+            "schtasks",
+            "/Create",
+            "/TN", task_name,
+            "/TR", f'python "{python_script}"',
+            "/SC", "DAILY",
+            "/ST", hora,
+            "/RU", user,
+            "/F"    # Force (sobrescribe si existe)
+        ]
+        
+        # Solo agregar /IT si no es SYSTEM
+        if user != "SYSTEM":
+            cmd.insert(-1, "/IT")  # Interactive token
+        
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            return True, result.stdout, result.stderr, user
+    
+    # Si todos fallaron, retornar el último error
+    return False, result.stdout, result.stderr, None
 
 def query_task(task_name):
     """Obtener información de la tarea"""
@@ -104,9 +130,12 @@ def main():
     # Configuración
     TASK_NAME = "ETL-Incremental-StockMarket"
     HORA = "16:00"
-    USUARIO = "rodrigo"
     PROJECT_PATH = Path("C:/Projects/stock-market")
     PYTHON_SCRIPT = PROJECT_PATH / "src" / "etl" / "ejecutar_etl_incremental.py"
+    
+    # Obtener usuario actual
+    import getpass
+    USUARIO = getpass.getuser()
     
     # Paso 1: Verificar admin
     print_step(1, 5, "Verificando permisos de administrador...")
@@ -140,23 +169,25 @@ def main():
     print_step(4, 5, "Creando nueva tarea...")
     print(f"   {Colors.GRAY}Nombre: {TASK_NAME}{Colors.RESET}")
     print(f"   {Colors.GRAY}Horario: Diario a las {HORA}{Colors.RESET}")
-    print(f"   {Colors.GRAY}Usuario: {USUARIO}{Colors.RESET}")
+    print(f"   {Colors.GRAY}Usuario detectado: {USUARIO}{Colors.RESET}")
     print()
     
-    success, stdout, stderr = create_task(
+    success, stdout, stderr, usuario_usado = create_task(
         TASK_NAME, 
         str(PYTHON_SCRIPT), 
-        HORA, 
-        USUARIO
+        HORA
     )
     
     if not success:
         print_error("No se pudo crear la tarea")
         print(f"\n{Colors.RED}Error:{Colors.RESET}")
         print(stderr)
+        print(f"\n{Colors.YELLOW}💡 Sugerencia:{Colors.RESET}")
+        print(f"   Intenta ejecutar con el usuario SYSTEM:")
+        print(f"   {Colors.GRAY}schtasks /Create /TN \"{TASK_NAME}\" /TR \"python \\\"{PYTHON_SCRIPT}\\\"\" /SC DAILY /ST {HORA} /RU SYSTEM /F{Colors.RESET}")
         return 1
     
-    print_success("Tarea creada exitosamente\n")
+    print_success(f"Tarea creada exitosamente con usuario: {usuario_usado}\n")
     
     # Paso 5: Verificar configuración
     print_step(5, 5, "Verificando configuración...")
