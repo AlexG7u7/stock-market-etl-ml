@@ -1,0 +1,49 @@
+# Configuración de Tickers Activos
+# Este archivo define qué tickers se procesan en el ETL incremental diario
+
+# Lista de tickers activos para carga incremental
+# Formato: EMISORA_SERIE (debe coincidir exactamente con stage.cat_tickers)
+tickers_activos:
+  # Alfa - ticker_id: 14912
+  - ALFAA
+  
+  # Puedes agregar más tickers aquí descomentándolos:
+  # - WALMEX*
+  # - ALSEA*
+  # - AMXL
+  # - GFNORTEO
+  # - CEMEXCPO
+
+# Configuración de horarios
+schedule:
+  # Hora de ejecución diaria (en UTC)
+  # 22:00 UTC = 4:00 PM CDMX (horario estándar)
+  # 21:00 UTC = 4:00 PM CDMX (horario de verano)
+  incremental_hour_utc: 22
+  
+  # Días de la semana (1-5 = Lunes a Viernes)
+  days_of_week: "1-5"
+
+# Configuración de fechas para carga incremental
+incremental:
+  # Días hacia atrás para cargar (por defecto: 1 día = solo el día anterior)
+  lookback_days: 1
+  
+  # Si es True, carga desde el último dato disponible en BD
+  auto_resume: true
+
+# Configuración de carga histórica
+historical:
+  # Fecha de inicio por defecto para carga histórica completa
+  default_start_date: "2024-01-01"
+  
+  # Límite de tickers en modo testing
+  test_limit: 10
+  
+  # Pausa entre tickers (segundos) para evitar rate limiting
+  sleep_between_tickers: 1
+
+# Logging
+logging:
+  level: INFO
+  format: '%(asctime)s | %(name)s | %(levelname)s | %(message)s'

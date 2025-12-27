@@ -1,0 +1,186 @@
+name: ETL Histórico
+
+on:
+  # Solo ejecución manual
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: 'Lista de tickers separados por coma (ej: ALFAA,WALMEX*,ALSEA*) o "TODOS" para todos los tickers'
+        required: true
+        default: 'ALFAA'
+      fecha_inicio:
+        description: 'Fecha inicio (YYYY-MM-DD)'
+        required: true
+        default: '2024-01-01'
+      fecha_fin:
+        description: 'Fecha fin (YYYY-MM-DD)'
+        required: true
+      limite:
+        description: 'Límite de tickers a procesar (solo si tickers="TODOS")'
+        required: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  etl-historico:
+    name: Carga Histórica de Precios
+    runs-on: windows-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: 📦 Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: 📊 Ejecutar ETL Histórico
+        env:
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: |
+          $tickers = "${{ github.event.inputs.tickers }}"
+          $fecha_inicio = "${{ github.event.inputs.fecha_inicio }}"
+          $fecha_fin = "${{ github.event.inputs.fecha_fin }}"
+          $limite = "${{ github.event.inputs.limite }}"
+          
+          Write-Host "============================================"
+          Write-Host "📊 ETL HISTÓRICO"
+          Write-Host "============================================"
+          Write-Host "Tickers: $tickers"
+          Write-Host "Rango: $fecha_inicio a $fecha_fin"
+          if (![string]::IsNullOrEmpty($limite)) {
+            Write-Host "Límite: $limite tickers"
+          }
+          Write-Host "============================================`n"
+          
+          # Si se especificó "TODOS", usar el flag --todos
+          if ($tickers -eq "TODOS") {
+            Write-Host "🌐 Procesando TODOS los tickers de la base de datos"
+            
+            if (![string]::IsNullOrEmpty($limite)) {
+              python src/etl/cargar_precios.py --todos --fecha-inicio $fecha_inicio --fecha-fin $fecha_fin --limite $limite
+            } else {
+              python src/etl/cargar_precios.py --todos --fecha-inicio $fecha_inicio --fecha-fin $fecha_fin
+            }
+            
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "❌ Error en carga histórica masiva"
+              exit 1
+            }
+          } else {
+            # Procesar lista específica de tickers
+            $ticker_list = $tickers -split ','
+            $total = $ticker_list.Count
+            $exitoso = 0
+            $fallido = 0
+            
+            for ($i = 0; $i -lt $total; $i++) {
+              $ticker = $ticker_list[$i].Trim()
+              $num = $i + 1
+              
+              Write-Host "`n[$num/$total] 📊 Procesando ticker: $ticker"
+              Write-Host "   Rango: $fecha_inicio a $fecha_fin"
+              
+              python src/etl/cargar_precios.py --ticker $ticker --fecha-inicio $fecha_inicio --fecha-fin $fecha_fin
+              
+              if ($LASTEXITCODE -eq 0) {
+                $exitoso++
+                Write-Host "   ✅ Completado"
+              } else {
+                $fallido++
+                Write-Host "   ❌ Error"
+              }
+            }
+            
+            Write-Host "`n============================================"
+            Write-Host "📊 RESUMEN FINAL"
+            Write-Host "============================================"
+            Write-Host "Total tickers: $total"
+            Write-Host "Exitosos: $exitoso"
+            Write-Host "Fallidos: $fallido"
+            Write-Host "============================================"
+            
+            if ($fallido -gt 0) {
+              Write-Warning "⚠️  Algunos tickers fallaron"
+            }
+          }
+          
+          Write-Host "`n✅ ETL Histórico completado"
+      
+      - name: 📈 Verificar datos cargados
+        if: success()
+        env:
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: |
+          Write-Host "`n🔍 Verificando datos en la base de datos..."
+          
+          python -c @"
+          import os
+          import pyodbc
+          
+          conn_str = (
+              f\"DRIVER={{ODBC Driver 17 for SQL Server}};"
+              f\"SERVER={os.getenv('SQL_SERVER')};"
+              f\"DATABASE={os.getenv('SQL_DATABASE')};"
+              f\"UID={os.getenv('SQL_USER')};"
+              f\"PWD={os.getenv('SQL_PASSWORD')};\"
+          )
+          
+          conn = pyodbc.connect(conn_str)
+          cursor = conn.cursor()
+          
+          # Contar registros totales
+          cursor.execute(\"\"\"
+              SELECT COUNT(*) FROM stage.precios_historicos
+          \"\"\")
+          total = cursor.fetchone()[0]
+          print(f\"📊 Total registros en precios_historicos: {total:,}\")
+          
+          # Últimas cargas
+          cursor.execute(\"\"\"
+              SELECT TOP 5
+                  t.emisora_serie,
+                  COUNT(*) as registros,
+                  MIN(p.fecha) as desde,
+                  MAX(p.fecha) as hasta
+              FROM stage.precios_historicos p
+              JOIN stage.cat_tickers t ON p.ticker_id = t.ticker_id
+              GROUP BY t.emisora_serie
+              ORDER BY MAX(p.fecha) DESC
+          \"\"\")
+          
+          print(\"\\n📈 Últimos tickers cargados:\")
+          print(\"-\" * 70)
+          for row in cursor.fetchall():
+              print(f\"{row[0]:12} | {row[1]:6} registros | {row[2]} a {row[3]}\")
+          
+          conn.close()
+          "@
+      
+      - name: 📝 Resumen de ejecución
+        if: always()
+        run: |
+          Write-Host "`n============================================"
+          Write-Host "📊 RESUMEN DE EJECUCIÓN"
+          Write-Host "============================================"
+          Write-Host "Workflow: ETL Histórico"
+          Write-Host "Fecha ejecución: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+          Write-Host "Tickers: ${{ github.event.inputs.tickers }}"
+          Write-Host "Rango: ${{ github.event.inputs.fecha_inicio }} a ${{ github.event.inputs.fecha_fin }}"
+          Write-Host "Estado: ${{ job.status }}"
+          Write-Host "============================================"

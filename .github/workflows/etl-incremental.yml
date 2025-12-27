@@ -1,0 +1,118 @@
+name: ETL Incremental Diario
+
+on:
+  # Ejecutar todos los días a las 7:40 PM hora CDMX (1:40 AM UTC del día siguiente)
+  schedule:
+    - cron: '40 1 * * *'  # Todos los días a las 1:40 AM UTC (7:40 PM CDMX del día anterior)
+  
+  # Permitir ejecución manual
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: 'Lista de tickers separados por coma (ej: ALFAA,WALMEX*,ALSEA*)'
+        required: false
+        default: 'ALFAA'
+      fecha_inicio:
+        description: 'Fecha inicio (YYYY-MM-DD). Si no se especifica, usa el día anterior'
+        required: false
+      fecha_fin:
+        description: 'Fecha fin (YYYY-MM-DD). Si no se especifica, usa hoy'
+        required: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  etl-incremental:
+    name: Carga Incremental de Precios
+    runs-on: windows-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: 📦 Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: 📊 Ejecutar ETL Incremental
+        env:
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: |
+          # Si se especificaron tickers manualmente, procesarlos
+          $tickers = "${{ github.event.inputs.tickers }}"
+          $fecha_inicio = "${{ github.event.inputs.fecha_inicio }}"
+          $fecha_fin = "${{ github.event.inputs.fecha_fin }}"
+          
+          if (![string]::IsNullOrEmpty($tickers)) {
+            # Modo manual: procesar tickers específicos
+            Write-Host "🎯 Modo manual: Procesando tickers especificados"
+            
+            if ([string]::IsNullOrEmpty($fecha_inicio)) {
+              $fecha_inicio = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
+            }
+            
+            if ([string]::IsNullOrEmpty($fecha_fin)) {
+              $fecha_fin = (Get-Date).ToString("yyyy-MM-dd")
+            }
+            
+            Write-Host "📅 Rango: $fecha_inicio a $fecha_fin"
+            
+            # Ejecutar ETL para cada ticker
+            $ticker_list = $tickers -split ','
+            foreach ($ticker in $ticker_list) {
+              $ticker = $ticker.Trim()
+              Write-Host "`n📊 Procesando ticker: $ticker"
+              python src/etl/cargar_precios.py --ticker $ticker --fecha-inicio $fecha_inicio --fecha-fin $fecha_fin
+              
+              if ($LASTEXITCODE -ne 0) {
+                Write-Error "❌ Error procesando $ticker"
+                exit 1
+              }
+            }
+          } else {
+            # Modo automático: usar configuración de tickers_config.yml
+            Write-Host "🤖 Modo automático: Usando tickers de configuración"
+            
+            $args = @()
+            if (![string]::IsNullOrEmpty($fecha_inicio)) {
+              $args += "--fecha-inicio"
+              $args += $fecha_inicio
+            }
+            if (![string]::IsNullOrEmpty($fecha_fin)) {
+              $args += "--fecha-fin"
+              $args += $fecha_fin
+            }
+            
+            python src/etl/ejecutar_etl_incremental.py @args
+            
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "❌ Error en ETL incremental"
+              exit 1
+            }
+          }
+          
+          Write-Host "`n✅ ETL Incremental completado exitosamente"
+      
+      - name: 📈 Resumen de ejecución
+        if: always()
+        run: |
+          Write-Host "============================================"
+          Write-Host "📊 RESUMEN DE EJECUCIÓN"
+          Write-Host "============================================"
+          Write-Host "Workflow: ETL Incremental"
+          Write-Host "Fecha: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+          Write-Host "Tickers: ${{ github.event.inputs.tickers || 'ALFAA (default)' }}"
+          Write-Host "Estado: ${{ job.status }}"
+          Write-Host "============================================"
