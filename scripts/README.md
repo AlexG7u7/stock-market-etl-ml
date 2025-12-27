@@ -4,6 +4,35 @@ Scripts de PowerShell para facilitar el mantenimiento del proyecto en Windows.
 
 ## 📋 Scripts Disponibles
 
+### `setup_scheduled_task.ps1` - ⭐ Configurar Tarea Programada ETL
+
+**NUEVO**: Configura Windows Scheduled Task para ejecutar el ETL incremental automáticamente todos los días.
+
+**Qué hace:**
+- ✅ Crea Scheduled Task en Windows
+- ✅ Configura ejecución diaria a la hora especificada
+- ✅ Ejecuta ETL para tickers configurados en `config/tickers_config.yml`
+- ✅ Logging automático de todas las ejecuciones
+
+**Uso:**
+```powershell
+# Ejecutar como Administrador
+.\scripts\setup_scheduled_task.ps1
+
+# Personalizar horario (4 PM por defecto)
+.\scripts\setup_scheduled_task.ps1 -Hora "16:00"
+
+# Probar ejecución inmediata
+Start-ScheduledTask -TaskName "ETL-Incremental-StockMarket"
+```
+
+**Ver estado:**
+```powershell
+Get-ScheduledTask -TaskName "ETL-Incremental-StockMarket" | Get-ScheduledTaskInfo
+```
+
+---
+
 ### `setup_env.ps1` - Setup Inicial del Entorno
 
 Configura el entorno completo desde cero. Ejecutar después de clonar el proyecto.
