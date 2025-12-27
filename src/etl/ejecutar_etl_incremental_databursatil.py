@@ -73,6 +73,9 @@ def cargar_precios_ticker_databursatil(
         # La API de cotizaciones devuelve solo el dato más reciente
         data = api.get_cotizaciones(emisora_serie=emisora_serie, bolsa="BMV")
         
+        # DEBUG: Ver respuesta completa
+        logger.info(f"  🔍 Respuesta API: {data}")
+        
         # Verificar si hay error
         if 'Error' in data:
             logger.warning(f"⚠️  Error en API: {data.get('Error')}")
@@ -83,7 +86,11 @@ def cargar_precios_ticker_databursatil(
         
         if not ticker_data:
             logger.warning(f"⚠️  No hay datos para {emisora_serie}")
+            logger.info(f"  🔍 Keys en respuesta: {list(data.keys())}")
             return 0, 0, 0
+        
+        # DEBUG: Ver datos del ticker
+        logger.info(f"  🔍 Datos del ticker: {ticker_data}")
         
         # Extraer datos de la cotización
         fecha = ticker_data.get('f')  # fecha

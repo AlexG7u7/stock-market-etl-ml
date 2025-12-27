@@ -198,7 +198,7 @@ class DataBursatilAPI:
     
     def get_cotizaciones(self, emisora_serie: str, bolsa: str = "BMV") -> Dict:
         """
-        Obtener cotización más reciente de un ticker
+        Obtener cotización más reciente de un ticker (intradía)
         
         Args:
             emisora_serie: Símbolo del ticker con serie (ej: 'ALFAA')
@@ -223,7 +223,7 @@ class DataBursatilAPI:
                 }
             }
         """
-        logger.info(f"💹 Obteniendo cotización actual de {emisora_serie} en {bolsa}")
+        logger.info(f"💹 Obteniendo cotización intradía de {emisora_serie} en {bolsa}")
         
         params = {
             "emisora_serie": emisora_serie,
@@ -231,6 +231,6 @@ class DataBursatilAPI:
             "bolsa": bolsa.lower()
         }
         
-        data = self._make_request("/v2/cotizaciones", params=params)
+        data = self._make_request("/v2/intradia", params=params)
         
         return data
