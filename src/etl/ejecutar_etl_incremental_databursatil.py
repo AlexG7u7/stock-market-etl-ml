@@ -1,6 +1,7 @@
 """
 Script para ejecutar ETL incremental usando API de DataBursátil
-Carga datos del día actual de los tickers configurados
+Carga cotizaciones del día actual (datos más recientes) de los tickers configurados
+Usa el endpoint /v2/cotizaciones para obtener precios actuales
 """
 
 import os
@@ -58,8 +59,8 @@ def cargar_precios_ticker_databursatil(
     Args:
         ticker_id: ID del ticker en la base de datos
         emisora_serie: Código del ticker (ej: 'ALFAA')
-        fecha_inicio: Fecha inicial (YYYY-MM-DD)
-        fecha_fin: Fecha final (YYYY-MM-DD)
+        fecha_inicio: Fecha inicial (YYYY-MM-DD) - no usado en cotizaciones
+        fecha_fin: Fecha final (YYYY-MM-DD) - no usado en cotizaciones
         api: Instancia de DataBursatilAPI
         cursor: Cursor de base de datos
         log_id: ID del log de ETL
@@ -68,64 +69,79 @@ def cargar_precios_ticker_databursatil(
         (registros_insertados, registros_actualizados, errores)
     """
     try:
-        # Obtener históricos desde DataBursátil
-        historicos = api.get_historicos(
-            emisora_serie=emisora_serie,
-            fecha_inicio=fecha_inicio,
-            fecha_fin=fecha_fin
-        )
+        # Obtener cotización actual desde DataBursátil
+        # La API de cotizaciones devuelve solo el dato más reciente
+        data = api.get_cotizaciones(emisora_serie=emisora_serie, bolsa="BMV")
         
-        if not historicos:
+        # Verificar si hay error
+        if 'Error' in data:
+            logger.warning(f"⚠️  Error en API: {data.get('Error')}")
+            return 0, 0, 1
+        
+        # La respuesta es: {"ALFAA": {"bolsa": "BMV", "u": 15.50, ...}}
+        ticker_data = data.get(emisora_serie)
+        
+        if not ticker_data:
             logger.warning(f"⚠️  No hay datos para {emisora_serie}")
             return 0, 0, 0
         
-        insertados = 0
-        actualizados = 0
+        # Extraer datos de la cotización
+        fecha = ticker_data.get('f')  # fecha
         
-        # Procesar cada registro
-        for registro in historicos:
-            fecha = registro.get('fecha')
-            precio = registro.get('precio')  # Precio de cierre
-            importe = registro.get('importe')
-            
-            if not fecha or precio is None:
-                continue
-            
-            # Verificar si ya existe el registro
+        if not fecha:
+            logger.warning(f"⚠️  No hay fecha en la respuesta para {emisora_serie}")
+            return 0, 0, 0
+        
+        # Mapear campos según documentación DataBursátil
+        precio_ultimo = ticker_data.get('u')      # último
+        precio_anterior = ticker_data.get('a')    # anterior
+        precio_maximo = ticker_data.get('x')      # máximo
+        precio_minimo = ticker_data.get('n')      # mínimo
+        volumen = ticker_data.get('v')            # volumen
+        importe = ticker_data.get('i')            # importe
+        
+        if precio_ultimo is None:
+            logger.warning(f"⚠️  No hay precio último para {emisora_serie}")
+            return 0, 0, 0
+        
+        # Verificar si ya existe el registro
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM stage.precios_historicos
+            WHERE ticker_id = ? AND fecha = ?
+        """, (ticker_id, fecha))
+        
+        existe = cursor.fetchval() > 0
+        
+        if existe:
+            # Actualizar registro existente
             cursor.execute("""
-                SELECT COUNT(*) 
-                FROM stage.precios_historicos
+                UPDATE stage.precios_historicos
+                SET 
+                    [open] = ?,
+                    [high] = ?,
+                    [low] = ?,
+                    [close] = ?,
+                    volume = ?,
+                    importe = ?,
+                    fecha_carga = GETDATE()
                 WHERE ticker_id = ? AND fecha = ?
-            """, (ticker_id, fecha))
+            """, (precio_anterior, precio_maximo, precio_minimo, precio_ultimo, 
+                  volumen, importe, ticker_id, fecha))
             
-            existe = cursor.fetchval() > 0
+            logger.info(f"  🔄 Actualizado: {emisora_serie} - {fecha} - Cierre: ${precio_ultimo}")
+            return 0, 1, 0
+        else:
+            # Insertar nuevo registro
+            cursor.execute("""
+                INSERT INTO stage.precios_historicos
+                (ticker_id, fecha, [open], [high], [low], [close], volume, importe)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (ticker_id, fecha, precio_anterior, precio_maximo, precio_minimo, 
+                  precio_ultimo, volumen, importe))
             
-            if existe:
-                # Actualizar registro existente
-                cursor.execute("""
-                    UPDATE stage.precios_historicos
-                    SET 
-                        precio_cierre = ?,
-                        volumen = ?,
-                        fecha_actualizacion = GETDATE(),
-                        fuente = 'databursatil',
-                        log_id = ?
-                    WHERE ticker_id = ? AND fecha = ?
-                """, (precio, importe, log_id, ticker_id, fecha))
-                actualizados += 1
-            else:
-                # Insertar nuevo registro
-                # DataBursátil solo da precio de cierre, usamos el mismo para apertura/alto/bajo
-                cursor.execute("""
-                    INSERT INTO stage.precios_historicos
-                    (ticker_id, fecha, precio_apertura, precio_maximo, precio_minimo, 
-                     precio_cierre, volumen, fuente, log_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, 'databursatil', ?)
-                """, (ticker_id, fecha, precio, precio, precio, precio, importe, log_id))
-                insertados += 1
-        
-        logger.info(f"  📊 Insertados: {insertados} | Actualizados: {actualizados}")
-        return insertados, actualizados, 0
+            logger.info(f"  � Insertado: {emisora_serie} - {fecha} - Cierre: ${precio_ultimo}")
+            return 1, 0, 0
         
     except Exception as e:
         logger.error(f"  ❌ Error procesando {emisora_serie}: {e}")
@@ -257,7 +273,7 @@ def ejecutar_etl_incremental_databursatil(config, fecha_inicio=None, fecha_fin=N
                     mensaje = ?
                 WHERE log_id = ?
             """, (
-                'COMPLETADO' if fallidos == 0 else 'COMPLETADO_CON_ERRORES',
+                'COMPLETADO' if fallidos == 0 else 'ERROR',
                 datetime.now(),
                 total_insertados + total_actualizados,
                 f"Insertados: {total_insertados}, Actualizados: {total_actualizados}, Exitosos: {exitosos}, Fallidos: {fallidos}",
