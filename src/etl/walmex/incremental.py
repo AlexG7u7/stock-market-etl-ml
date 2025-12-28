@@ -19,6 +19,8 @@ from src.etl.shared.loaders import SQLServerLoader
 
 # Configuración de WALMEX
 TICKER_SYMBOL = "WALMEX*"
+EMISORA = "WALMEX"
+SERIE = "*"
 TICKER_ID = None  # Se obtendrá de la BD
 
 
@@ -29,15 +31,15 @@ def get_ticker_id(loader: SQLServerLoader) -> int:
     
     try:
         cursor.execute(
-            "SELECT ticker_id FROM stage.cat_tickers WHERE emisora_serie = ?",
-            (TICKER_SYMBOL,)
+            "SELECT ticker_id FROM stage.cat_tickers WHERE emisora = ? AND serie = ?",
+            (EMISORA, SERIE)
         )
         result = cursor.fetchone()
         
         if result:
             return result[0]
         else:
-            raise ValueError(f"Ticker {TICKER_SYMBOL} no encontrado en stage.cat_tickers")
+            raise ValueError(f"Ticker {EMISORA}{SERIE} no encontrado en stage.cat_tickers. Ejecuta: python scripts\\setup_tickers.py")
     
     finally:
         cursor.close()
