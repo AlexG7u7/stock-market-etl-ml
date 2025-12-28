@@ -7,9 +7,13 @@ tickers_activos:
   # Alfa - ticker_id: 14912
   - ALFAA
   
+  # Walmart de México - ticker_id: TBD
+  - WALMEX*
+  
+  # Alsea - ticker_id: TBD
+  - ALSEA*
+  
   # Puedes agregar más tickers aquí descomentándolos:
-  # - WALMEX*
-  # - ALSEA*
   # - AMXL
   # - GFNORTEO
   # - CEMEXCPO

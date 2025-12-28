@@ -196,42 +196,19 @@ class DataBursatilAPI:
         
         return historicos
     
-    def get_cotizaciones(self, emisora_serie: str, bolsa: str = "BMV") -> Dict:
+    def get_cotizaciones(self, ticker: str) -> Dict:
         """
         Obtener cotización más reciente de un ticker
         
         Args:
-            emisora_serie: Símbolo del ticker con serie (ej: 'ALFAA')
-            bolsa: Bolsa de valores ('BMV' o 'BIVA'). Default: 'BMV'
+            ticker: Símbolo del ticker (ej: 'ALFAA')
             
         Returns:
             Diccionario con cotización actual
-            Ejemplo: {
-                "ALFAA": {
-                    "bmv": {
-                        "u": 15.43,      # último
-                        "p": 15.37,      # ppp
-                        "a": 15.69,      # anterior
-                        "x": 15.64,      # máximo
-                        "n": 15.24,      # mínimo
-                        "c": -2.04,      # cambio %
-                        "m": -0.32,      # cambio $
-                        "v": 3633227.0,  # volumen
-                        "o": 8604.0,     # operaciones
-                        "i": 55895169.41,# importe
-                        "f": "2025-12-16 15:00:00" # fecha
-                    }
-                }
-            }
         """
-        logger.info(f"💹 Obteniendo cotización de {emisora_serie} en {bolsa}")
+        logger.info(f"💹 Obteniendo cotización actual de {ticker}")
         
-        params = {
-            "emisora_serie": emisora_serie,
-            "concepto": "u,p,a,x,n,c,m,v,o,i",  # todos los conceptos
-            "bolsa": bolsa.lower()
-        }
-        
+        params = {"ticker": ticker}
         data = self._make_request("/v2/cotizaciones", params=params)
         
-        return data
+        return data.get("result", {})
