@@ -32,16 +32,29 @@ class YahooFinanceExtractor:
     
     def extract_incremental(self, lookback_days: int = 1) -> List[PrecioHistorico]:
         """
-        Extrae datos incrementales (últimos N días)
+        Extrae datos incrementales (últimos N días hábiles)
         
         Args:
-            lookback_days: Días hacia atrás a consultar (default: 1 = ayer)
+            lookback_days: Días hacia atrás a consultar (default: 1 = último día hábil)
             
         Returns:
             Lista de PrecioHistorico
         """
-        fecha_inicio = (datetime.now() - timedelta(days=lookback_days)).date()
-        fecha_fin = datetime.now().date()
+        # Calcular fecha de inicio considerando fines de semana
+        hoy = datetime.now()
+        dia_semana = hoy.weekday()  # 0=Lunes, 6=Domingo
+        
+        if dia_semana == 0:  # Lunes
+            # Saltar sábado y domingo: traer viernes (3 días atrás)
+            fecha_inicio = (hoy - timedelta(days=3)).date()
+        elif dia_semana == 6:  # Domingo
+            # Traer viernes (2 días atrás)
+            fecha_inicio = (hoy - timedelta(days=2)).date()
+        else:  # Martes a Sábado
+            # Traer día anterior
+            fecha_inicio = (hoy - timedelta(days=lookback_days)).date()
+        
+        fecha_fin = hoy.date()
         
         logger.info(f"Extrayendo datos incrementales de {self.ticker_symbol}: {fecha_inicio} a {fecha_fin}")
         
