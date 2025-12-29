@@ -64,7 +64,7 @@ echo ========================================
     # Crear nueva tarea
     print(f"\n⚙️  Creando Scheduled Task: {TASK_NAME}")
     print(f"   Hora: {HORA} (4 PM)")
-    print(f"   Días: Lunes a Sábado")
+    print(f"   Días: Lunes a Viernes")
     print(f"   Script: {batch_path}")
     
     # Comando para crear la tarea
@@ -73,7 +73,7 @@ echo ========================================
         "/TN", TASK_NAME,
         "/TR", str(batch_path),
         "/SC", "WEEKLY",
-        "/D", "MON,TUE,WED,THU,FRI,SAT",  # Lunes a Sábado
+        "/D", "MON,TUE,WED,THU,FRI",  # Lunes a Viernes
         "/ST", HORA,
         "/F"  # Force (sobrescribe si existe)
     ]
@@ -117,8 +117,8 @@ echo ========================================
         print("✅ CONFIGURACIÓN COMPLETADA")
         print("="*50)
         print("\n💡 La tarea se ejecutará automáticamente:")
-        print("   - Lunes a Sábado a las 4:00 PM")
-        print("   - Carga datos del día anterior")
+        print("   - Lunes a Viernes a las 4:00 PM")
+        print("   - Carga datos del día actual")
         print("   - WALMEX y ALSEA")
         print("\n📝 Para ver logs en tiempo real:")
         print(f"   schtasks /Run /TN {TASK_NAME}")
