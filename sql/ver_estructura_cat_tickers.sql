@@ -1,0 +1,10 @@
+-- Query para ver la estructura de cat_tickers
+SELECT 
+    COLUMN_NAME,
+    DATA_TYPE,
+    CHARACTER_MAXIMUM_LENGTH,
+    IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_SCHEMA = 'stage' 
+  AND TABLE_NAME = 'cat_tickers'
+ORDER BY ORDINAL_POSITION;

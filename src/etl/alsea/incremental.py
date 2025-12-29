@@ -45,12 +45,12 @@ def get_ticker_id(loader: SQLServerLoader) -> int:
         cursor.close()
 
 
-def run(lookback_days: int = 1):
+def run(lookback_days: int = 0):
     """
     Ejecuta el ETL incremental de ALSEA
     
     Args:
-        lookback_days: Días hacia atrás a cargar (default: 1 = ayer)
+        lookback_days: Días hacia atrás a cargar (default: 0 = hoy)
     """
     logger.info("=" * 80)
     logger.info(f"ETL INCREMENTAL - ALSEA - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
