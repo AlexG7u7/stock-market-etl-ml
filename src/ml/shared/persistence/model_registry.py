@@ -185,7 +185,15 @@ class ModelRegistry:
             
             # Cargar modelo de archivo
             from tensorflow import keras
-            model = keras.models.load_model(model_path)
+            # Cargar sin compilar para evitar problemas de compatibilidad
+            model = keras.models.load_model(model_path, compile=False)
+            
+            # Recompilar con la métrica correcta
+            model.compile(
+                optimizer='adam',
+                loss='mse',
+                metrics=['mae']
+            )
             
             # Reconstruir config
             hyperparameters = json.loads(hyperparameters_json)
