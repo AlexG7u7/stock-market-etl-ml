@@ -262,7 +262,7 @@ class TrainingPipeline:
         
         self.sequence_generator = SequenceGenerator(
             sequence_length=sequence_length,
-            horizon=horizon_days
+            prediction_horizon=horizon_days  # Parámetro correcto
         )
         
         X_sequences, y_sequences = self.sequence_generator.create_sequences(
