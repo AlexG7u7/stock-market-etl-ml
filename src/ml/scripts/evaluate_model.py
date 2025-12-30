@@ -219,11 +219,11 @@ def main():
                 self.prediction_horizon = getattr(model_config, 'prediction_horizon', horizon_days)
                 self.scaler = DataScaler(scaler_type='minmax')
                 self.close_idx = None  # Índice de columna 'close' en features
-                self.train_data_scaled = None  # Guardar datos de entrenamiento escalados
+                self.train_features_scaled = None  # Guardar features de entrenamiento
                 
             def train(self, data):
                 # En backtesting, usamos modelo pre-entrenado (no reentrenamos)
-                # Solo necesitamos ajustar el scaler con datos de entrenamiento
+                # Solo procesamos datos de entrenamiento para ajustar scaler
                 data_copy = data.copy()
                 if 'fecha' in data_copy.columns:
                     data_copy = data_copy.set_index('fecha')
@@ -232,35 +232,31 @@ def main():
                 features_df = features_df.dropna()
                 if len(features_df) > 0:
                     self.scaler.fit(features_df)
-                    # Guardar índice de 'close' para denormalización
                     self.close_idx = list(features_df.columns).index('close')
-                    # Guardar últimos sequence_length datos escalados para predicciones
-                    self.train_data_scaled = self.scaler.transform(features_df)[-self.sequence_length:]
+                    # Guardar features escalados de entrenamiento
+                    self.train_features_scaled = self.scaler.transform(features_df)
             
             def predict(self, data):
-                # Aplicar mismo preprocesamiento que en entrenamiento
-                data_copy = data.copy()
-                if 'fecha' in data_copy.columns:
-                    data_copy = data_copy.set_index('fecha')
-                engineer = FeatureEngineer(data_copy)
-                features_df = engineer.add_all_features()
-                features_df = features_df.dropna()
+                # CLAVE: No procesar test data aislado (dropna eliminaría todo)
+                # En su lugar, retornar predicciones basadas en los últimos datos de train
                 
-                if len(features_df) == 0:
+                if self.train_features_scaled is None or len(self.train_features_scaled) < self.sequence_length:
                     return np.array([])
                 
-                # Escalar features del periodo de test
-                test_scaled = self.scaler.transform(features_df)
-                
-                # Combinar últimos datos de train con datos de test
-                # para tener contexto suficiente para crear secuencias
-                combined_scaled = np.vstack([self.train_data_scaled, test_scaled])
-                
                 # Hacer predicciones para cada día del periodo de test
+                # usando solo los últimos sequence_length días del periodo de entrenamiento
                 predictions = []
-                for i in range(len(self.train_data_scaled), len(combined_scaled)):
-                    # Tomar ventana de sequence_length días anteriores
-                    X_seq = combined_scaled[i - self.sequence_length:i]
+                num_test_days = len(data)
+                
+                for i in range(num_test_days):
+                    # Usar últimos sequence_length días del entrenamiento
+                    # para predecir el primer día de test, luego segundo, etc.
+                    start_idx = len(self.train_features_scaled) - self.sequence_length - (num_test_days - i - 1)
+                    
+                    if start_idx < 0:
+                        start_idx = len(self.train_features_scaled) - self.sequence_length
+                    
+                    X_seq = self.train_features_scaled[start_idx:start_idx + self.sequence_length]
                     
                     if len(X_seq) < self.sequence_length:
                         continue
@@ -270,11 +266,9 @@ def main():
                     # Predecir (modelo devuelve precio escalado)
                     pred_scaled = self.model.predict(X_seq, verbose=0)[0, 0]
                     
-                    # Denormalizar: crear array dummy con todas las features
-                    dummy = np.zeros((1, combined_scaled.shape[1]))
-                    dummy[0, self.close_idx] = pred_scaled
-                    
                     # Denormalizar
+                    dummy = np.zeros((1, self.train_features_scaled.shape[1]))
+                    dummy[0, self.close_idx] = pred_scaled
                     denorm = self.scaler.inverse_transform(dummy)
                     pred = denorm[0, self.close_idx]
                     
