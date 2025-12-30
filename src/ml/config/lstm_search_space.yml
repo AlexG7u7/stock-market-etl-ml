@@ -61,8 +61,8 @@ data:
   # Ventana de lookback (días históricos)
   sequence_length:
     type: categorical
-    values: [20, 30, 60]
-    description: "Número de días históricos para predecir siguiente día"
+    values: [15, 20, 30, 45, 60, 90]
+    description: "Número de días históricos para predecir siguiente día (3 sem - 4.5 meses)"
   
   # Train/val split
   validation_split:
