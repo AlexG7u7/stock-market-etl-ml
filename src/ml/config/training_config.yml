@@ -32,8 +32,8 @@ tickers:
 # Configuración de datos
 data:
   min_history_days: 365            # Mínimo de días históricos requeridos
-  test_size_days: 90               # Últimos 90 días para test
-  val_size_days: 60                # 60 días anteriores para validación
+  test_size_days: 30               # Últimos 30 días para test (reducido para pocos datos)
+  val_size_days: 30                # 30 días anteriores para validación (reducido)
   
   # Normalización
   scaler_type: "minmax"            # 'minmax', 'standard', 'robust'
