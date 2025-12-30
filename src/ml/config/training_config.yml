@@ -1,0 +1,133 @@
+# Configuración general del framework ML
+
+# Base de datos
+database:
+  server: ${SQL_SERVER}
+  database: ${SQL_DATABASE}
+  username: ${SQL_USER}
+  password: ${SQL_PASSWORD}
+
+# Directorios
+paths:
+  models: "models/"                # Modelos entrenados (.h5, .keras)
+  scalers: "scalers/"              # Scalers guardados (.pkl)
+  logs: "logs/"                    # Logs de entrenamiento
+  experiments: "experiments/"      # Experimentos de GA
+  predictions: "predictions/"      # Predicciones generadas
+
+# Tickers disponibles para entrenamiento
+tickers:
+  - ticker_symbol: "WALMEX*"
+    emisora: "WALMEX"
+    serie: "*"
+    enabled: true
+    priority: 1
+  
+  - ticker_symbol: "ALSEA*"
+    emisora: "ALSEA"
+    serie: "*"
+    enabled: true
+    priority: 2
+
+# Configuración de datos
+data:
+  min_history_days: 365            # Mínimo de días históricos requeridos
+  test_size_days: 90               # Últimos 90 días para test
+  val_size_days: 60                # 60 días anteriores para validación
+  
+  # Normalización
+  scaler_type: "minmax"            # 'minmax', 'standard', 'robust'
+  feature_range: [0, 1]            # Rango para MinMaxScaler
+  
+  # Manejo de datos faltantes
+  fill_method: "ffill"             # 'ffill', 'bfill', 'interpolate'
+  drop_na: true
+
+# Configuración de entrenamiento
+training:
+  random_seed: 42
+  verbose: 1                       # 0=silent, 1=progress bar, 2=one line per epoch
+  
+  # Callbacks
+  tensorboard:
+    enabled: true
+    log_dir: "logs/tensorboard/"
+  
+  model_checkpoint:
+    enabled: true
+    save_best_only: true
+    monitor: "val_loss"
+    mode: "min"
+  
+  reduce_lr:
+    enabled: true
+    monitor: "val_loss"
+    factor: 0.5
+    patience: 10
+    min_lr: 0.00001
+
+# A/B Testing
+ab_testing:
+  min_test_days: 30                # Mínimo de días para evaluar
+  significance_level: 0.05         # Nivel de significancia estadística
+  
+  # Criterios para considerar un modelo "mejor"
+  improvement_threshold:
+    rmse: 0.05                     # 5% mejor RMSE
+    mae: 0.05                      # 5% mejor MAE
+    win_rate: 0.02                 # 2% mejor win rate
+    sharpe: 0.10                   # 10% mejor Sharpe ratio
+  
+  # Auto-deploy si cumple todos los criterios
+  auto_deploy: false               # Manual approval required
+
+# Backtesting
+backtesting:
+  strategy: "walk_forward"         # 'walk_forward', 'expanding_window'
+  retraining_frequency: 30         # Reentrenar cada 30 días
+  
+  # Walk-forward configuration
+  initial_train_days: 365
+  test_window_days: 30
+  step_days: 5
+
+# Monitoreo de modelos en producción
+monitoring:
+  drift_detection:
+    enabled: true
+    window_days: 30
+    threshold: 0.15                # Alerta si error aumenta >15%
+  
+  performance_degradation:
+    check_frequency_days: 7
+    alert_threshold: 0.10          # Alerta si performance cae >10%
+  
+  # Reentrenamiento automático
+  auto_retrain:
+    enabled: false
+    trigger_on_drift: true
+    trigger_on_degradation: true
+
+# Logging
+logging:
+  level: "INFO"                    # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s | %(name)s | %(levelname)s | %(message)s"
+  file: "logs/ml_framework.log"
+  max_bytes: 10485760              # 10 MB
+  backup_count: 5
+
+# Notificaciones (opcional)
+notifications:
+  enabled: false
+  channels:
+    email:
+      enabled: false
+      smtp_server: "smtp.gmail.com"
+      smtp_port: 587
+      from_email: "ml-alerts@example.com"
+      to_emails:
+        - "admin@example.com"
+    
+    slack:
+      enabled: false
+      webhook_url: "${SLACK_WEBHOOK_URL}"

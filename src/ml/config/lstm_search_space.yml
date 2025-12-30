@@ -1,0 +1,140 @@
+# Espacio de búsqueda para optimización de hiperparámetros con Algoritmo Genético
+# Cada parámetro define el rango que explorará el GA
+
+model_architecture:
+  # Número de capas LSTM
+  num_layers:
+    type: int
+    min: 1
+    max: 4
+    description: "Número de capas LSTM apiladas"
+  
+  # Unidades ocultas por capa
+  hidden_units:
+    type: categorical
+    values: [32, 64, 128, 256, 512]
+    description: "Número de unidades LSTM en cada capa"
+  
+  # Dropout para regularización
+  dropout_rate:
+    type: float
+    min: 0.0
+    max: 0.5
+    step: 0.05
+    description: "Tasa de dropout entre capas"
+  
+  # Activación en capas densas
+  dense_activation:
+    type: categorical
+    values: ['relu', 'tanh', 'linear']
+    description: "Función de activación en capa densa final"
+
+training:
+  # Learning rate
+  learning_rate:
+    type: float
+    min: 0.00001
+    max: 0.01
+    scale: log
+    description: "Tasa de aprendizaje para Adam optimizer"
+  
+  # Batch size
+  batch_size:
+    type: categorical
+    values: [16, 32, 64, 128]
+    description: "Tamaño del batch para entrenamiento"
+  
+  # Épocas máximas
+  epochs:
+    type: int
+    min: 50
+    max: 300
+    description: "Número máximo de épocas (con early stopping)"
+  
+  # Optimizador
+  optimizer:
+    type: categorical
+    values: ['adam', 'rmsprop', 'sgd']
+    description: "Algoritmo de optimización"
+
+data:
+  # Ventana de lookback (días históricos)
+  sequence_length:
+    type: categorical
+    values: [10, 20, 30, 60, 90]
+    description: "Número de días históricos para predecir siguiente día"
+  
+  # Train/val split
+  validation_split:
+    type: float
+    min: 0.15
+    max: 0.25
+    step: 0.05
+    description: "Proporción de datos para validación"
+
+# Algoritmo Genético - Configuración
+genetic_algorithm:
+  population_size: 20              # Individuos por generación
+  num_generations: 10              # Número de generaciones
+  mutation_rate: 0.15              # Probabilidad de mutación
+  crossover_rate: 0.7              # Probabilidad de crossover
+  elitism_count: 2                 # Mejores individuos que pasan directo
+  tournament_size: 3               # Tamaño del torneo para selección
+  
+  # Función de fitness (métrica a MINIMIZAR)
+  fitness_metric: 'val_rmse'       # 'val_rmse', 'val_mae', 'val_mape'
+  
+  # Pesos para fitness multiobjetivo (opcional)
+  fitness_weights:
+    val_rmse: 0.4
+    val_mae: 0.3
+    sharpe_ratio: 0.2              # Maximizar (invertir en GA)
+    win_rate: 0.1
+
+# Early Stopping
+early_stopping:
+  patience: 20                     # Épocas sin mejora antes de parar
+  min_delta: 0.0001                # Mejora mínima considerada significativa
+  restore_best_weights: true
+
+# Regularización
+regularization:
+  l1: 0.0
+  l2: 0.01
+  recurrent_dropout: 0.0           # Dropout en conexiones recurrentes
+
+# Features a utilizar
+features:
+  price_features:
+    - close
+    - open
+    - high
+    - low
+    - volume
+  
+  technical_indicators:
+    - rsi_14
+    - macd
+    - macd_signal
+    - bb_upper
+    - bb_middle
+    - bb_lower
+    - sma_20
+    - sma_50
+    - ema_12
+    - ema_26
+  
+  derived_features:
+    - returns_1d
+    - returns_5d
+    - volatility_21d
+    - volume_ma_20
+
+# Targets (predicciones a generar)
+prediction_targets:
+  - horizon: 5                     # 5 días adelante
+    enabled: true
+  - horizon: 10                    # 10 días adelante
+    enabled: true
+  - horizon: 15                    # 15 días adelante
+    enabled: true
