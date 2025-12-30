@@ -219,6 +219,7 @@ def main():
                 self.prediction_horizon = getattr(model_config, 'prediction_horizon', horizon_days)
                 self.scaler = DataScaler(scaler_type='minmax')
                 self.close_idx = None  # Índice de columna 'close' en features
+                self.train_data_scaled = None  # Guardar datos de entrenamiento escalados
                 
             def train(self, data):
                 # En backtesting, usamos modelo pre-entrenado (no reentrenamos)
@@ -233,6 +234,8 @@ def main():
                     self.scaler.fit(features_df)
                     # Guardar índice de 'close' para denormalización
                     self.close_idx = list(features_df.columns).index('close')
+                    # Guardar últimos sequence_length datos escalados para predicciones
+                    self.train_data_scaled = self.scaler.transform(features_df)[-self.sequence_length:]
             
             def predict(self, data):
                 # Aplicar mismo preprocesamiento que en entrenamiento
@@ -243,25 +246,32 @@ def main():
                 features_df = engineer.add_all_features()
                 features_df = features_df.dropna()
                 
-                if len(features_df) < self.sequence_length:
-                    # No hay suficientes datos para crear secuencia
-                    return np.full(len(data), np.nan)
+                if len(features_df) == 0:
+                    return np.array([])
                 
-                # Escalar features
-                scaled_data = self.scaler.transform(features_df)
+                # Escalar features del periodo de test
+                test_scaled = self.scaler.transform(features_df)
                 
-                # Para predicción, usamos ventanas deslizantes
+                # Combinar últimos datos de train con datos de test
+                # para tener contexto suficiente para crear secuencias
+                combined_scaled = np.vstack([self.train_data_scaled, test_scaled])
+                
+                # Hacer predicciones para cada día del periodo de test
                 predictions = []
-                for i in range(len(scaled_data) - self.sequence_length + 1):
-                    X_seq = scaled_data[i:i + self.sequence_length]
+                for i in range(len(self.train_data_scaled), len(combined_scaled)):
+                    # Tomar ventana de sequence_length días anteriores
+                    X_seq = combined_scaled[i - self.sequence_length:i]
+                    
+                    if len(X_seq) < self.sequence_length:
+                        continue
+                    
                     X_seq = X_seq.reshape(1, self.sequence_length, -1)
                     
                     # Predecir (modelo devuelve precio escalado)
                     pred_scaled = self.model.predict(X_seq, verbose=0)[0, 0]
                     
                     # Denormalizar: crear array dummy con todas las features
-                    # solo para usar inverse_transform correctamente
-                    dummy = np.zeros((1, scaled_data.shape[1]))
+                    dummy = np.zeros((1, combined_scaled.shape[1]))
                     dummy[0, self.close_idx] = pred_scaled
                     
                     # Denormalizar
@@ -270,13 +280,7 @@ def main():
                     
                     predictions.append(pred)
                 
-                # Alinear predicciones con datos originales
-                # Las primeras sequence_length-1 posiciones no tienen predicción
-                full_predictions = np.full(len(data), np.nan)
-                if len(predictions) > 0:
-                    full_predictions[self.sequence_length-1:self.sequence_length-1+len(predictions)] = predictions
-                
-                return full_predictions[~np.isnan(full_predictions)][:len(data)]
+                return np.array(predictions)
         
         # Usar configuración del modelo cargado
         trainer = ModelTrainer(model, model_config)
