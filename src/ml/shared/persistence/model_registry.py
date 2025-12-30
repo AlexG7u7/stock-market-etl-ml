@@ -79,43 +79,63 @@ class ModelRegistry:
             with pyodbc.connect(self.conn_str) as conn:
                 cursor = conn.cursor()
                 
+                # Generar model_name y version
+                from datetime import datetime
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                model_name = f"LSTM_{ticker_id}_{horizon_days}d_{timestamp}"
+                version = "v1.0"
+                
                 query = """
                 INSERT INTO ml.model_registry (
                     ticker_id,
-                    horizon_days,
+                    model_name,
                     model_type,
+                    version,
+                    prediction_horizon,
                     hyperparameters,
-                    model_path,
+                    model_file_path,
                     train_rmse,
                     train_mae,
+                    train_r2,
                     val_rmse,
                     val_mae,
-                    r2_score,
+                    val_r2,
+                    test_rmse,
+                    test_mae,
+                    test_r2,
                     sharpe_ratio,
                     win_rate,
                     max_drawdown,
-                    experiment_id,
+                    train_start_date,
+                    train_end_date,
                     status
                 )
                 OUTPUT INSERTED.model_id
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
                 
                 cursor.execute(query, (
                     ticker_id,
-                    horizon_days,
+                    model_name,
                     'LSTM',
+                    version,
+                    horizon_days,
                     hyperparameters_json,
                     str(model_path),
                     metrics.get('train_rmse'),
                     metrics.get('train_mae'),
+                    metrics.get('train_r2'),
                     metrics.get('val_rmse'),
                     metrics.get('val_mae'),
-                    metrics.get('r2'),
+                    metrics.get('val_r2'),
+                    metrics.get('test_rmse'),
+                    metrics.get('test_mae'),
+                    metrics.get('test_r2'),
                     metrics.get('sharpe_ratio'),
                     metrics.get('win_rate'),
                     metrics.get('max_drawdown'),
-                    experiment_id,
+                    metrics.get('train_start_date'),
+                    metrics.get('train_end_date'),
                     status
                 ))
                 

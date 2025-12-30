@@ -127,6 +127,10 @@ class TrainingPipeline:
         logger.info("\n📈 PASO 6: Evaluación...")
         metrics = self._evaluate(splits)
         
+        # Agregar fechas de entrenamiento a metrics
+        metrics['train_start_date'] = self.train_start_date
+        metrics['train_end_date'] = self.train_end_date
+        
         Metrics.print_metrics(metrics)
         
         # 7. Guardar modelo
@@ -232,6 +236,11 @@ class TrainingPipeline:
         data = self.data_loader.load_data(start_date=start_date, end_date=end_date)
         
         logger.info(f"✅ Datos cargados: {len(data)} registros")
+        
+        # Guardar fechas para metadata del modelo
+        self.train_start_date = start_date
+        self.train_end_date = end_date
+        
         return data
     
     def _add_features(self, data):
