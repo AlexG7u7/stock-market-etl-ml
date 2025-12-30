@@ -88,20 +88,35 @@ def main():
     logger.info("")
     
     try:
-        # Cargar configuración
-        import yaml
-        with open(args.config, 'r') as f:
-            config = yaml.safe_load(f)
+        # Cargar variables de entorno
+        import os
+        from dotenv import load_dotenv
         
-        db_config = config['database']
+        load_dotenv()
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
         
         # 1. Validar que ambos modelos existen y son del mismo ticker/horizon
         logger.info("🔍 Validando modelos...")
@@ -233,9 +248,14 @@ def main():
             # Ejecutar deployment
             logger.info("\n🚀 Ejecutando deployment...")
             
+            # Cargar configuración solo para obtener models_path
+            import yaml
+            with open(args.config, 'r') as f:
+                config = yaml.safe_load(f)
+            
             model_registry = ModelRegistry(
                 conn_str=conn_str,
-                models_path=config['paths']['models_dir']
+                models_path=config['paths']['models']
             )
             
             # Cambiar status: Actual a DEPRECATED, Challenger a PRODUCTION

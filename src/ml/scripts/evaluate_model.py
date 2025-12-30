@@ -78,20 +78,35 @@ def main():
     logger.info("")
     
     try:
-        # Cargar configuración
-        import yaml
-        with open(args.config, 'r') as f:
-            config = yaml.safe_load(f)
+        # Cargar variables de entorno
+        import os
+        from dotenv import load_dotenv
         
-        db_config = config['database']
+        load_dotenv()
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
         
         # 1. Cargar información del modelo
         logger.info("📦 Cargando información del modelo...")
@@ -118,9 +133,14 @@ def main():
         # 2. Cargar modelo
         logger.info("\n📂 Cargando modelo...")
         
+        # Cargar configuración solo para obtener models_path
+        import yaml
+        with open(args.config, 'r') as f:
+            config = yaml.safe_load(f)
+        
         model_registry = ModelRegistry(
             conn_str=conn_str,
-            models_path=config['paths']['models_dir']
+            models_path=config['paths']['models']
         )
         
         model, model_config = model_registry.load_model(args.model_id)
@@ -147,10 +167,12 @@ def main():
         logger.info(f"\n📊 Cargando datos históricos para {ticker_symbol}...")
         
         data_loader = OHLCVLoader(
-            server=db_config['server'],
-            database=db_config['database'],
-            username=db_config['username'],
-            password=db_config['password']
+            ticker_id=ticker_id,
+            ticker_symbol=ticker_symbol,
+            server=server,
+            database=database,
+            username=username,
+            password=password
         )
         
         start_date = datetime.strptime(args.start_date, '%Y-%m-%d').date() if args.start_date else None
