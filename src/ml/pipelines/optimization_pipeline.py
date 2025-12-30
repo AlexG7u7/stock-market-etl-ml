@@ -49,6 +49,45 @@ class OptimizationPipeline:
         with open(path, 'r') as f:
             return yaml.safe_load(f)
     
+    def _flatten_search_space(self) -> Dict:
+        """
+        Aplanar search_space desde estructura anidada a diccionario plano
+        
+        Convierte:
+            {
+                'model_architecture': {
+                    'num_layers': {'type': 'int', 'min': 1, 'max': 4},
+                    ...
+                },
+                'training': {...}
+            }
+        
+        A:
+            {
+                'num_layers': {'type': 'int', 'min': 1, 'max': 4},
+                'hidden_units': {...},
+                ...
+            }
+        """
+        flattened = {}
+        
+        # Categorías a procesar
+        categories = ['model_architecture', 'training', 'data']
+        
+        for category in categories:
+            if category in self.search_space_config:
+                category_params = self.search_space_config[category]
+                
+                for param_name, param_config in category_params.items():
+                    # Solo agregar si tiene 'type' (es un parámetro, no metadata)
+                    if isinstance(param_config, dict) and 'type' in param_config:
+                        flattened[param_name] = param_config
+        
+        logger.debug(f"Search space aplanado: {len(flattened)} parámetros")
+        logger.debug(f"Parámetros: {list(flattened.keys())}")
+        
+        return flattened
+    
     def run(
         self,
         ticker: str,
@@ -97,8 +136,12 @@ class OptimizationPipeline:
         
         # 2. Inicializar GA
         logger.info("\n🧬 PASO 2: Inicializar Genetic Algorithm...")
+        
+        # Aplanar search_space (extraer solo parámetros de model_architecture, training, data)
+        search_space = self._flatten_search_space()
+        
         ga = GeneticAlgorithm(
-            search_space=self.search_space_config,
+            search_space=search_space,
             population_size=ga_config['population_size'],
             num_generations=ga_config['num_generations'],
             mutation_rate=ga_config['mutation_rate'],
