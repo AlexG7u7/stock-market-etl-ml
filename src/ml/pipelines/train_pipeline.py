@@ -250,8 +250,8 @@ class TrainingPipeline:
         feature_cols = [col for col in data.columns if col not in ['fecha', 'ticker_id']]
         target_col = 'close'
         
-        # Escalar
-        self.scaler = DataScaler(method='minmax')
+        # Escalar (parámetro correcto es scaler_type, no method)
+        self.scaler = DataScaler(scaler_type='minmax')
         X_scaled = self.scaler.fit_transform(data[feature_cols])
         
         # Target (solo close)
