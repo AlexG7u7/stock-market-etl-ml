@@ -293,13 +293,21 @@ class TrainingPipeline:
     def _split_data(self, X, y):
         """Split temporal"""
         self.splitter = TemporalSplitter(
-            test_size=90,  # 3 meses
-            val_size=60    # 2 meses
+            test_size=30,  # Reducido para pocos datos
+            val_size=30    # Reducido para pocos datos
         )
         
-        splits = self.splitter.split_arrays(X, y)
+        X_train, X_val, X_test, y_train, y_val, y_test = self.splitter.split_arrays(X, y)
         
-        return splits
+        # Devolver como diccionario para facilitar acceso
+        return {
+            'X_train': X_train,
+            'X_val': X_val,
+            'X_test': X_test,
+            'y_train': y_train,
+            'y_val': y_val,
+            'y_test': y_test
+        }
     
     def _evaluate(self, splits) -> Dict:
         """Evaluar modelo en todos los sets"""
