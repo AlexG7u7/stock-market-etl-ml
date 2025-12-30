@@ -217,14 +217,14 @@ def main():
                 # LSTMConfig is a dataclass, use direct attribute access
                 self.sequence_length = getattr(model_config, 'sequence_length', 60)
                 self.prediction_horizon = getattr(model_config, 'prediction_horizon', horizon_days)
-                self.feature_engineer = FeatureEngineer()
                 self.scaler = DataScaler(scaler_type='minmax')
                 self.close_idx = None  # Índice de columna 'close' en features
                 
             def train(self, data):
                 # En backtesting, usamos modelo pre-entrenado (no reentrenamos)
                 # Solo necesitamos ajustar el scaler con datos de entrenamiento
-                features_df = self.feature_engineer.create_features(data.copy())
+                engineer = FeatureEngineer(data.copy())
+                features_df = engineer.add_all_features()
                 features_df = features_df.dropna()
                 if len(features_df) > 0:
                     self.scaler.fit(features_df)
@@ -233,7 +233,8 @@ def main():
             
             def predict(self, data):
                 # Aplicar mismo preprocesamiento que en entrenamiento
-                features_df = self.feature_engineer.create_features(data.copy())
+                engineer = FeatureEngineer(data.copy())
+                features_df = engineer.add_all_features()
                 features_df = features_df.dropna()
                 
                 if len(features_df) < self.sequence_length:
