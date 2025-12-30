@@ -14,6 +14,8 @@ jobs:
       - name: Pull latest changes
         run: |
           cd C:\Projects\stock-market
-          git pull origin main
-          Write-Host "Codigo actualizado desde GitHub" -ForegroundColor Green
+          git fetch origin
+          git reset --hard origin/main
+          Write-Host "✅ Codigo actualizado desde GitHub" -ForegroundColor Green
+          git log --oneline -1
         shell: powershell
