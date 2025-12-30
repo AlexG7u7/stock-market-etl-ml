@@ -125,7 +125,7 @@ def main():
             cursor = conn.cursor()
             
             query = """
-            SELECT ticker_id, horizon_days, status
+            SELECT ticker_id, prediction_horizon, status
             FROM ml.model_registry
             WHERE model_id IN (?, ?)
             """
