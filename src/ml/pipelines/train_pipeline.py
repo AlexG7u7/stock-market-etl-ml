@@ -360,7 +360,7 @@ class TrainingPipeline:
         
         self.model_registry = ModelRegistry(
             conn_str=conn_str,
-            models_path=self.config['paths']['models_dir']
+            models_path=self.config['paths']['models']  # Key correcto del YAML
         )
         
         # Obtener ticker_id
