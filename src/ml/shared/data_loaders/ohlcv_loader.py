@@ -57,13 +57,24 @@ class OHLCVLoader(BaseDataLoader):
             return
         
         try:
-            conn_str = (
-                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-                f"SERVER={self.server};"
-                f"DATABASE={self.database};"
-                f"UID={self.username};"
-                f"PWD={self.password}"
-            )
+            # Autenticación SQL Server o Windows
+            if self.username and self.password:
+                conn_str = (
+                    f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                    f"SERVER={self.server};"
+                    f"DATABASE={self.database};"
+                    f"UID={self.username};"
+                    f"PWD={self.password}"
+                )
+            else:
+                # Autenticación de Windows (Trusted Connection)
+                conn_str = (
+                    f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                    f"SERVER={self.server};"
+                    f"DATABASE={self.database};"
+                    f"Trusted_Connection=yes;"
+                )
+            
             self._connection = pyodbc.connect(conn_str)
             logger.info(f"✅ Conectado a {self.server}/{self.database}")
         except Exception as e:

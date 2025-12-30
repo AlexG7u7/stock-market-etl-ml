@@ -167,14 +167,26 @@ class TrainingPipeline:
         
         logger.info(f"🔗 Conectando a SQL Server: {server}/{database}")
         
+        # Construir connection string
+        if username and password:
+            # Autenticación SQL Server
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows (Trusted Connection)
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
+        
         # Primero obtener ticker_id desde la base de datos
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={server};"
-            f"DATABASE={database};"
-            f"UID={username};"
-            f"PWD={password}"
-        )
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
         
