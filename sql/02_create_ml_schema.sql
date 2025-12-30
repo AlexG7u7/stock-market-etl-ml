@@ -373,6 +373,9 @@ BEGIN
     SET NOCOUNT ON;
     
     DECLARE @ticker_id INT, @prediction_horizon INT;
+    DECLARE @error_message NVARCHAR(4000);
+    DECLARE @error_severity INT;
+    DECLARE @error_state INT;
     
     -- Obtener ticker y horizonte del modelo
     SELECT @ticker_id = ticker_id, @prediction_horizon = prediction_horizon
@@ -381,7 +384,7 @@ BEGIN
     
     BEGIN TRANSACTION;
     
-    TRY
+    BEGIN TRY
         -- Archivar modelos anteriores en producción para este ticker/horizonte
         UPDATE ml.model_registry
         SET is_production = 0,
@@ -403,8 +406,14 @@ BEGIN
         PRINT '✅ Modelo ' + CAST(@model_id AS VARCHAR) + ' desplegado a producción';
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        
+        SELECT @error_message = ERROR_MESSAGE(),
+               @error_severity = ERROR_SEVERITY(),
+               @error_state = ERROR_STATE();
+        
+        RAISERROR(@error_message, @error_severity, @error_state);
     END CATCH
 END
 GO
