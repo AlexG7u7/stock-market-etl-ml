@@ -12,7 +12,7 @@ model_architecture:
   # Unidades ocultas por capa
   hidden_units:
     type: categorical
-    values: [32, 64, 128, 256, 512]
+    values: [64, 128, 256]
     description: "Número de unidades LSTM en cada capa"
   
   # Dropout para regularización
@@ -47,8 +47,8 @@ training:
   # Épocas máximas
   epochs:
     type: int
-    min: 50
-    max: 300
+    min: 30
+    max: 150
     description: "Número máximo de épocas (con early stopping)"
   
   # Optimizador
@@ -61,7 +61,7 @@ data:
   # Ventana de lookback (días históricos)
   sequence_length:
     type: categorical
-    values: [10, 20, 30, 60, 90]
+    values: [20, 30, 60]
     description: "Número de días históricos para predecir siguiente día"
   
   # Train/val split
@@ -74,8 +74,8 @@ data:
 
 # Algoritmo Genético - Configuración
 genetic_algorithm:
-  population_size: 20              # Individuos por generación
-  num_generations: 10              # Número de generaciones
+  population_size: 12              # Individuos por generación (reducido de 20)
+  num_generations: 8               # Número de generaciones (reducido de 10)
   mutation_rate: 0.15              # Probabilidad de mutación
   crossover_rate: 0.7              # Probabilidad de crossover
   elitism_count: 2                 # Mejores individuos que pasan directo
@@ -93,7 +93,7 @@ genetic_algorithm:
 
 # Early Stopping
 early_stopping:
-  patience: 20                     # Épocas sin mejora antes de parar
+  patience: 15                     # Épocas sin mejora antes de parar (reducido de 20)
   min_delta: 0.0001                # Mejora mínima considerada significativa
   restore_best_weights: true
 
