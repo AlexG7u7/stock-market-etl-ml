@@ -219,15 +219,35 @@ class OptimizationPipeline:
         ga_config: Dict
     ) -> int:
         """Crear experimento en base de datos"""
-        db_config = self.training_config['database']
+        import os
+        from dotenv import load_dotenv
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Cargar variables de entorno
+        load_dotenv()
+        
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
         
         self.experiment_tracker = ExperimentTracker(conn_str)
         
@@ -247,31 +267,48 @@ class OptimizationPipeline:
     def _get_ticker_id(self, ticker: str) -> int:
         """Obtener ticker_id desde base de datos"""
         import pyodbc
+        import os
+        from dotenv import load_dotenv
         
-        db_config = self.training_config['database']
+        # Cargar variables de entorno
+        load_dotenv()
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
+        
+        # Los tickers en DB están como WALMEX*, ALSEA*
+        ticker_symbol = ticker if '*' in ticker else f"{ticker}*"
         
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
             
-            if '.' in ticker:
-                emisora, serie = ticker.split('.')
-                query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora = ? AND serie = ?"
-                cursor.execute(query, (emisora, serie))
-            else:
-                query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora = ?"
-                cursor.execute(query, (ticker,))
+            query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora_serie = ?"
+            cursor.execute(query, (ticker_symbol,))
             
             row = cursor.fetchone()
             
             if not row:
-                raise ValueError(f"Ticker {ticker} no encontrado")
+                raise ValueError(f"Ticker {ticker_symbol} no encontrado")
             
             return row[0]
