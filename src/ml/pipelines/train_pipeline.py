@@ -220,10 +220,13 @@ class TrainingPipeline:
             password=password
         )
         
-        # Cargar datos (últimos 2 años para tener suficiente historia)
+        # Cargar datos (últimos 3 años para tener suficiente historia después de features)
+        # Features técnicos requieren ~50 días, sequence=60, horizon=5
+        # Total necesario: ~50 + 60 + 5 + 150 (min para split) = ~265 días mínimo
+        # 3 años = ~750 días de trading asegura suficientes datos
         from datetime import datetime, timedelta
         end_date = datetime.now().strftime('%Y-%m-%d')
-        start_date = (datetime.now() - timedelta(days=730)).strftime('%Y-%m-%d')  # 2 años
+        start_date = (datetime.now() - timedelta(days=1095)).strftime('%Y-%m-%d')  # 3 años
         
         logger.info(f"📅 Cargando datos desde {start_date} hasta {end_date}")
         data = self.data_loader.load_data(start_date=start_date, end_date=end_date)
@@ -246,6 +249,8 @@ class TrainingPipeline:
     
     def _preprocess(self, data, horizon_days: int):
         """Escalar datos y crear secuencias"""
+        logger.info(f"📊 Datos antes de preprocesar: {len(data)} registros, {len(data.columns)} columnas")
+        
         # Seleccionar features (incluir close al inicio para que sea índice 0)
         feature_cols = [col for col in data.columns if col not in ['fecha', 'ticker_id']]
         
@@ -254,12 +259,23 @@ class TrainingPipeline:
             feature_cols.remove('close')
             feature_cols = ['close'] + feature_cols
         
+        logger.info(f"📊 Features seleccionados: {len(feature_cols)} columnas")
+        logger.info(f"   Primera columna (target): {feature_cols[0]}")
+        
         # Escalar todas las features juntas
         self.scaler = DataScaler(scaler_type='minmax')
         data_scaled = self.scaler.fit_transform(data[feature_cols])
         
+        logger.info(f"📊 Datos escalados shape: {data_scaled.shape}")
+        
         # Crear secuencias (target_column_idx=0 porque 'close' está en posición 0)
         sequence_length = self.config.get('sequence_length', 60)
+        
+        logger.info(f"📊 Configuración secuencias:")
+        logger.info(f"   - sequence_length: {sequence_length}")
+        logger.info(f"   - prediction_horizon: {horizon_days}")
+        logger.info(f"   - datos disponibles: {len(data_scaled)}")
+        logger.info(f"   - máximo de secuencias: {len(data_scaled) - sequence_length - horizon_days + 1}")
         
         self.sequence_generator = SequenceGenerator(
             sequence_length=sequence_length,
