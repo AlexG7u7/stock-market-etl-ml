@@ -66,11 +66,14 @@ class ModelRegistry:
         logger.info(f"💾 Guardando modelo en registro...")
         
         try:
+            from datetime import datetime
+            
             # Serializar hyperparámetros a JSON
             hyperparameters_json = json.dumps(config.to_dict())
             
             # Guardar archivo del modelo
-            model_filename = f"lstm_ticker{ticker_id}_h{horizon_days}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.h5"
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            model_filename = f"lstm_ticker{ticker_id}_h{horizon_days}_{timestamp}.h5"
             model_path = self.models_path / model_filename
             
             model.save(str(model_path))
@@ -80,8 +83,6 @@ class ModelRegistry:
                 cursor = conn.cursor()
                 
                 # Generar model_name y version
-                from datetime import datetime
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                 model_name = f"LSTM_{ticker_id}_{horizon_days}d_{timestamp}"
                 version = "v1.0"
                 
