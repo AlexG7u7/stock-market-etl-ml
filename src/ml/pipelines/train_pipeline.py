@@ -233,9 +233,11 @@ class TrainingPipeline:
     
     def _add_features(self, data):
         """Agregar features técnicos"""
-        self.feature_engineer = FeatureEngineer()
+        # FeatureEngineer requiere el DataFrame en el constructor
+        self.feature_engineer = FeatureEngineer(data)
         
-        data_with_features = self.feature_engineer.add_all_features(data)
+        # add_all_features() no recibe parámetros, usa el df del constructor
+        data_with_features = self.feature_engineer.add_all_features()
         
         # Remover NaN de indicadores
         data_with_features = data_with_features.dropna().reset_index(drop=True)
