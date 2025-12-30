@@ -12,6 +12,7 @@ from pathlib import Path
 from datetime import datetime
 from loguru import logger
 import pyodbc
+import numpy as np
 
 # Agregar src/ al path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -205,22 +206,72 @@ def main():
             test_days=horizon_days
         )
         
-        # Crear simple model trainer wrapper
+        # Crear model trainer wrapper con preprocessing completo
+        from ml.shared.data_loaders.ohlcv_loader import FeatureEngineer
+        from ml.shared.preprocessors.scaler import DataScaler
+        from ml.shared.preprocessors.sequence_generator import SequenceGenerator
+        
         class ModelTrainer:
-            def __init__(self, model):
+            def __init__(self, model, model_config):
                 self.model = model
-            
+                self.sequence_length = model_config.get('sequence_length', 60)
+                self.prediction_horizon = model_config.get('prediction_horizon', horizon_days)
+                self.feature_engineer = FeatureEngineer()
+                self.scaler = DataScaler(scaler_type='minmax')
+                self.close_idx = None  # Índice de columna 'close' en features
+                
             def train(self, data):
-                # En backtesting simplificado, usamos modelo pre-entrenado
-                pass
+                # En backtesting, usamos modelo pre-entrenado (no reentrenamos)
+                # Solo necesitamos ajustar el scaler con datos de entrenamiento
+                features_df = self.feature_engineer.create_features(data.copy())
+                features_df = features_df.dropna()
+                if len(features_df) > 0:
+                    self.scaler.fit(features_df)
+                    # Guardar índice de 'close' para denormalización
+                    self.close_idx = list(features_df.columns).index('close')
             
             def predict(self, data):
-                # Simplificado: solo predecir close
-                X = data[['open', 'high', 'low', 'close', 'volume']].values
-                # En implementación real, aplicar mismo preprocesamiento que en entrenamiento
-                return X[:, 3]  # Retornar close como baseline
+                # Aplicar mismo preprocesamiento que en entrenamiento
+                features_df = self.feature_engineer.create_features(data.copy())
+                features_df = features_df.dropna()
+                
+                if len(features_df) < self.sequence_length:
+                    # No hay suficientes datos para crear secuencia
+                    return np.full(len(data), np.nan)
+                
+                # Escalar features
+                scaled_data = self.scaler.transform(features_df)
+                
+                # Para predicción, usamos ventanas deslizantes
+                predictions = []
+                for i in range(len(scaled_data) - self.sequence_length + 1):
+                    X_seq = scaled_data[i:i + self.sequence_length]
+                    X_seq = X_seq.reshape(1, self.sequence_length, -1)
+                    
+                    # Predecir (modelo devuelve precio escalado)
+                    pred_scaled = self.model.predict(X_seq, verbose=0)[0, 0]
+                    
+                    # Denormalizar: crear array dummy con todas las features
+                    # solo para usar inverse_transform correctamente
+                    dummy = np.zeros((1, scaled_data.shape[1]))
+                    dummy[0, self.close_idx] = pred_scaled
+                    
+                    # Denormalizar
+                    denorm = self.scaler.inverse_transform(dummy)
+                    pred = denorm[0, self.close_idx]
+                    
+                    predictions.append(pred)
+                
+                # Alinear predicciones con datos originales
+                # Las primeras sequence_length-1 posiciones no tienen predicción
+                full_predictions = np.full(len(data), np.nan)
+                if len(predictions) > 0:
+                    full_predictions[self.sequence_length-1:self.sequence_length-1+len(predictions)] = predictions
+                
+                return full_predictions[~np.isnan(full_predictions)][:len(data)]
         
-        trainer = ModelTrainer(model)
+        # Usar configuración del modelo cargado
+        trainer = ModelTrainer(model, model_config)
         
         metrics = backtester.run_backtest(
             data=data,
