@@ -191,6 +191,9 @@ def main():
             end_date=end_date
         )
         
+        # Reset index para tener 'fecha' como columna (backtester la necesita)
+        data = data.reset_index()
+        
         logger.success(f"✅ {len(data)} registros cargados")
         
         # 5. Ejecutar backtesting
