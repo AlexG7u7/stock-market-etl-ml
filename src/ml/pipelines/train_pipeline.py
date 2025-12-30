@@ -192,7 +192,8 @@ class TrainingPipeline:
         
         # Obtener ticker_id (la columna se llama emisora_serie, no ticker)
         query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora_serie = ?"
-        ticker_symbol = ticker if '.' in ticker else f"{ticker}.MX"
+        # Los tickers en la base de datos están como WALMEX*, ALSEA*, etc.
+        ticker_symbol = ticker if '*' in ticker else f"{ticker}*"
         
         logger.info(f"🔍 Buscando ticker: {ticker_symbol}")
         cursor.execute(query, ticker_symbol)
@@ -212,7 +213,7 @@ class TrainingPipeline:
         # Crear loader con ticker_id
         self.data_loader = OHLCVLoader(
             ticker_id=ticker_id,
-            ticker_symbol=ticker if '.' in ticker else f"{ticker}.MX",
+            ticker_symbol=ticker_symbol,  # Usar el mismo formato que en la DB
             server=server,
             database=database,
             username=username,
