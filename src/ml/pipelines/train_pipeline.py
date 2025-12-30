@@ -152,16 +152,28 @@ class TrainingPipeline:
     
     def _load_data(self, ticker: str):
         """Cargar datos desde base de datos"""
-        db_config = self.config['database']
+        import pyodbc
+        import os
+        from dotenv import load_dotenv
+        
+        # Cargar variables de entorno
+        load_dotenv()
+        
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        logger.info(f"🔗 Conectando a SQL Server: {server}/{database}")
         
         # Primero obtener ticker_id desde la base de datos
-        import pyodbc
         conn_str = (
             f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
+            f"SERVER={server};"
+            f"DATABASE={database};"
+            f"UID={username};"
+            f"PWD={password}"
         )
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
@@ -186,10 +198,10 @@ class TrainingPipeline:
         self.data_loader = OHLCVLoader(
             ticker_id=ticker_id,
             ticker_symbol=ticker if '.' in ticker else f"{ticker}.MX",
-            server=db_config['server'],
-            database=db_config['database'],
-            username=db_config['username'],
-            password=db_config['password']
+            server=server,
+            database=database,
+            username=username,
+            password=password
         )
         
         data = self.data_loader.load_data()
