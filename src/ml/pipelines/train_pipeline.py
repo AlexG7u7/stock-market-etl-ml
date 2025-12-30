@@ -220,7 +220,15 @@ class TrainingPipeline:
             password=password
         )
         
-        data = self.data_loader.load_data()
+        # Cargar datos (últimos 2 años para tener suficiente historia)
+        from datetime import datetime, timedelta
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        start_date = (datetime.now() - timedelta(days=730)).strftime('%Y-%m-%d')  # 2 años
+        
+        logger.info(f"📅 Cargando datos desde {start_date} hasta {end_date}")
+        data = self.data_loader.load_data(start_date=start_date, end_date=end_date)
+        
+        logger.info(f"✅ Datos cargados: {len(data)} registros")
         return data
     
     def _add_features(self, data):
