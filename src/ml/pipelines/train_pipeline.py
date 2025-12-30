@@ -246,28 +246,30 @@ class TrainingPipeline:
     
     def _preprocess(self, data, horizon_days: int):
         """Escalar datos y crear secuencias"""
-        # Seleccionar features
+        # Seleccionar features (incluir close al inicio para que sea índice 0)
         feature_cols = [col for col in data.columns if col not in ['fecha', 'ticker_id']]
-        target_col = 'close'
         
-        # Escalar (parámetro correcto es scaler_type, no method)
+        # Asegurar que 'close' esté en la posición 0
+        if 'close' in feature_cols:
+            feature_cols.remove('close')
+            feature_cols = ['close'] + feature_cols
+        
+        # Escalar todas las features juntas
         self.scaler = DataScaler(scaler_type='minmax')
-        X_scaled = self.scaler.fit_transform(data[feature_cols])
+        data_scaled = self.scaler.fit_transform(data[feature_cols])
         
-        # Target (solo close)
-        y = data[target_col].values
-        
-        # Crear secuencias
+        # Crear secuencias (target_column_idx=0 porque 'close' está en posición 0)
         sequence_length = self.config.get('sequence_length', 60)
         
         self.sequence_generator = SequenceGenerator(
             sequence_length=sequence_length,
-            prediction_horizon=horizon_days  # Parámetro correcto
+            prediction_horizon=horizon_days
         )
         
+        # create_sequences espera un array 2D y el índice del target
         X_sequences, y_sequences = self.sequence_generator.create_sequences(
-            X_scaled,
-            y
+            data=data_scaled,
+            target_column_idx=0  # 'close' está en posición 0
         )
         
         return X_sequences, y_sequences, feature_cols
