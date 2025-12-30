@@ -177,9 +177,18 @@ def main():
         
         start_date = datetime.strptime(args.start_date, '%Y-%m-%d').date() if args.start_date else None
         
+        # Si no se especifica start_date, usar últimos 2 años
+        if not start_date:
+            from datetime import timedelta
+            start_date = (datetime.now() - timedelta(days=730)).strftime('%Y-%m-%d')
+        else:
+            start_date = start_date.strftime('%Y-%m-%d')
+        
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        
         data = data_loader.load_data(
-            ticker=ticker_symbol,
-            start_date=start_date
+            start_date=start_date,
+            end_date=end_date
         )
         
         logger.success(f"✅ {len(data)} registros cargados")
