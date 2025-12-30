@@ -154,14 +154,45 @@ class TrainingPipeline:
         """Cargar datos desde base de datos"""
         db_config = self.config['database']
         
+        # Primero obtener ticker_id desde la base de datos
+        import pyodbc
+        conn_str = (
+            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+            f"SERVER={db_config['server']};"
+            f"DATABASE={db_config['database']};"
+            f"UID={db_config['username']};"
+            f"PWD={db_config['password']}"
+        )
+        conn = pyodbc.connect(conn_str)
+        cursor = conn.cursor()
+        
+        # Obtener ticker_id
+        query = "SELECT ticker_id FROM stage.cat_tickers WHERE ticker = ?"
+        cursor.execute(query, ticker if '.' in ticker else f"{ticker}.MX")
+        row = cursor.fetchone()
+        
+        if not row:
+            cursor.close()
+            conn.close()
+            raise ValueError(f"Ticker {ticker} no encontrado en stage.cat_tickers")
+        
+        ticker_id = row[0]
+        cursor.close()
+        conn.close()
+        
+        logger.info(f"✅ Ticker {ticker} encontrado con ID: {ticker_id}")
+        
+        # Crear loader con ticker_id
         self.data_loader = OHLCVLoader(
+            ticker_id=ticker_id,
+            ticker_symbol=ticker if '.' in ticker else f"{ticker}.MX",
             server=db_config['server'],
             database=db_config['database'],
             username=db_config['username'],
             password=db_config['password']
         )
         
-        data = self.data_loader.load_data(ticker=ticker)
+        data = self.data_loader.load_data()
         return data
     
     def _add_features(self, data):
