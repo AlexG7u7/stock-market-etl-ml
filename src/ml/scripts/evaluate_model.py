@@ -214,8 +214,9 @@ def main():
         class ModelTrainer:
             def __init__(self, model, model_config):
                 self.model = model
-                self.sequence_length = model_config.get('sequence_length', 60)
-                self.prediction_horizon = model_config.get('prediction_horizon', horizon_days)
+                # LSTMConfig is a dataclass, use direct attribute access
+                self.sequence_length = getattr(model_config, 'sequence_length', 60)
+                self.prediction_horizon = getattr(model_config, 'prediction_horizon', horizon_days)
                 self.feature_engineer = FeatureEngineer()
                 self.scaler = DataScaler(scaler_type='minmax')
                 self.close_idx = None  # Índice de columna 'close' en features
