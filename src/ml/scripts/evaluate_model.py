@@ -207,7 +207,7 @@ def main():
         )
         
         # Crear model trainer wrapper con preprocessing completo
-        from ml.shared.data_loaders.ohlcv_loader import FeatureEngineer
+        from ml.shared.data_loaders.feature_engineering import FeatureEngineer
         from ml.shared.preprocessors.scaler import DataScaler
         from ml.shared.preprocessors.sequence_generator import SequenceGenerator
         
