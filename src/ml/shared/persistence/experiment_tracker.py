@@ -51,11 +51,8 @@ class ExperimentTracker:
         logger.info("🧪 Creando nuevo experimento...")
         
         try:
-            # Preparar config como JSON
-            config_json = json.dumps({
-                'search_space': search_space,
-                'ga_config': ga_config
-            })
+            # Preparar search_space como JSON
+            search_space_json = json.dumps(search_space)
             
             with pyodbc.connect(self.conn_str) as conn:
                 cursor = conn.cursor()
@@ -63,23 +60,31 @@ class ExperimentTracker:
                 query = """
                 INSERT INTO ml.experiments (
                     ticker_id,
-                    horizon_days,
-                    experiment_type,
-                    config,
-                    description,
+                    experiment_name,
+                    prediction_horizon,
+                    population_size,
+                    num_generations,
+                    mutation_rate,
+                    crossover_rate,
+                    elitism_count,
+                    search_space,
                     status
                 )
                 OUTPUT INSERTED.experiment_id
-                VALUES (?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
                 
                 cursor.execute(query, (
                     ticker_id,
-                    horizon_days,
                     'GENETIC_ALGORITHM',
-                    config_json,
-                    description or f"GA optimization for ticker {ticker_id}",
-                    'RUNNING'
+                    horizon_days,
+                    ga_config.get('population_size'),
+                    ga_config.get('num_generations'),
+                    ga_config.get('mutation_rate'),
+                    ga_config.get('crossover_rate'),
+                    ga_config.get('elitism_count'),
+                    search_space_json,
+                    'running'
                 ))
                 
                 experiment_id = cursor.fetchone()[0]
@@ -134,8 +139,8 @@ class ExperimentTracker:
                     best_fitness,
                     avg_fitness,
                     worst_fitness,
-                    best_hyperparameters,
-                    population_diversity
+                    std_fitness,
+                    best_hyperparameters
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """
@@ -146,8 +151,8 @@ class ExperimentTracker:
                     best_fitness,
                     avg_fitness,
                     worst_fitness,
-                    hyperparams_json,
-                    population_diversity
+                    population_diversity,  # std_fitness
+                    hyperparams_json
                 ))
                 
                 conn.commit()
@@ -179,25 +184,35 @@ class ExperimentTracker:
             with pyodbc.connect(self.conn_str) as conn:
                 cursor = conn.cursor()
                 
+                # Calcular duración
+                duration_query = """
+                SELECT DATEDIFF(MINUTE, start_time, GETDATE())
+                FROM ml.experiments
+                WHERE experiment_id = ?
+                """
+                cursor.execute(duration_query, (experiment_id,))
+                duration_minutes = cursor.fetchone()[0]
+                
                 query = """
                 UPDATE ml.experiments
                 SET 
                     best_model_id = ?,
-                    best_val_rmse = ?,
-                    best_val_mae = ?,
-                    best_sharpe_ratio = ?,
-                    best_win_rate = ?,
-                    status = ?,
-                    completed_at = GETDATE()
+                    best_fitness = ?,
+                    best_hyperparameters = ?,
+                    end_time = GETDATE(),
+                    duration_minutes = ?,
+                    status = ?
                 WHERE experiment_id = ?
                 """
                 
+                # Preparar best_hyperparameters como JSON
+                best_hyperparams_json = json.dumps(final_metrics.get('best_hyperparameters', {}))
+                
                 cursor.execute(query, (
                     best_model_id,
-                    final_metrics.get('val_rmse'),
-                    final_metrics.get('val_mae'),
-                    final_metrics.get('sharpe_ratio'),
-                    final_metrics.get('win_rate'),
+                    final_metrics.get('fitness'),  # best_fitness
+                    best_hyperparams_json,
+                    duration_minutes,
                     status,
                     experiment_id
                 ))
@@ -208,8 +223,8 @@ class ExperimentTracker:
             
             if best_model_id:
                 logger.info(f"   Mejor modelo: {best_model_id}")
-                logger.info(f"   Val RMSE: {final_metrics.get('val_rmse', 'N/A')}")
-                logger.info(f"   Sharpe: {final_metrics.get('sharpe_ratio', 'N/A')}")
+                logger.info(f"   Fitness: {final_metrics.get('fitness', 'N/A')}")
+                logger.info(f"   Duración: {duration_minutes} minutos")
             
         except Exception as e:
             logger.error(f"❌ Error finalizando experimento: {e}")
@@ -286,17 +301,20 @@ class ExperimentTracker:
                 SELECT TOP {limit}
                     experiment_id,
                     ticker_id,
-                    horizon_days,
+                    experiment_name,
+                    prediction_horizon,
                     best_model_id,
-                    best_val_rmse,
-                    best_val_mae,
-                    best_sharpe_ratio,
-                    best_win_rate,
+                    best_fitness,
+                    best_hyperparameters,
+                    population_size,
+                    num_generations,
+                    total_models_trained,
                     status,
-                    started_at,
-                    completed_at
+                    start_time,
+                    end_time,
+                    duration_minutes
                 FROM ml.experiments
-                WHERE status = 'COMPLETED'
+                WHERE status = 'completed'
                 """
                 
                 params = []
@@ -304,7 +322,7 @@ class ExperimentTracker:
                     query += " AND ticker_id = ?"
                     params.append(ticker_id)
                 
-                query += " ORDER BY best_val_rmse ASC"
+                query += " ORDER BY best_fitness DESC"
                 
                 cursor.execute(query, params)
                 
@@ -313,15 +331,18 @@ class ExperimentTracker:
                     experiments.append({
                         'experiment_id': row[0],
                         'ticker_id': row[1],
-                        'horizon_days': row[2],
-                        'best_model_id': row[3],
-                        'best_val_rmse': row[4],
-                        'best_val_mae': row[5],
-                        'best_sharpe_ratio': row[6],
-                        'best_win_rate': row[7],
-                        'status': row[8],
-                        'started_at': row[9],
-                        'completed_at': row[10]
+                        'experiment_name': row[2],
+                        'prediction_horizon': row[3],
+                        'best_model_id': row[4],
+                        'best_fitness': row[5],
+                        'best_hyperparameters': row[6],
+                        'population_size': row[7],
+                        'num_generations': row[8],
+                        'total_models_trained': row[9],
+                        'status': row[10],
+                        'start_time': row[11],
+                        'end_time': row[12],
+                        'duration_minutes': row[13]
                     })
                 
                 return experiments
