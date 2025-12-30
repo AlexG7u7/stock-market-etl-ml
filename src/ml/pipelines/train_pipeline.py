@@ -348,19 +348,39 @@ class TrainingPipeline:
         experiment_id: Optional[int]
     ) -> int:
         """Guardar modelo en registry"""
-        db_config = self.config['database']
+        import os
+        from dotenv import load_dotenv
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Cargar variables de entorno
+        load_dotenv()
+        
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
         
         self.model_registry = ModelRegistry(
             conn_str=conn_str,
-            models_path=self.config['paths']['models']  # Key correcto del YAML
+            models_path=self.config['paths']['models']
         )
         
         # Obtener ticker_id
@@ -381,16 +401,35 @@ class TrainingPipeline:
     def _get_ticker_id(self, ticker: str) -> int:
         """Obtener ticker_id desde base de datos"""
         import pyodbc
+        import os
+        from dotenv import load_dotenv
         
-        db_config = self.config['database']
+        # Cargar variables de entorno
+        load_dotenv()
         
-        conn_str = (
-            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-            f"SERVER={db_config['server']};"
-            f"DATABASE={db_config['database']};"
-            f"UID={db_config['username']};"
-            f"PWD={db_config['password']}"
-        )
+        # Obtener credenciales de .env
+        server = os.getenv('SQL_SERVER', 'localhost')
+        database = os.getenv('SQL_DATABASE', 'MercadoBursatil')
+        username = os.getenv('SQL_USER', '')
+        password = os.getenv('SQL_PASSWORD', '')
+        
+        # Construir connection string
+        if username and password:
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"UID={username};"
+                f"PWD={password}"
+            )
+        else:
+            # Autenticación de Windows
+            conn_str = (
+                f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                f"SERVER={server};"
+                f"DATABASE={database};"
+                f"Trusted_Connection=yes;"
+            )
         
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
