@@ -223,7 +223,10 @@ def main():
             def train(self, data):
                 # En backtesting, usamos modelo pre-entrenado (no reentrenamos)
                 # Solo necesitamos ajustar el scaler con datos de entrenamiento
-                engineer = FeatureEngineer(data.copy())
+                data_copy = data.copy()
+                if 'fecha' in data_copy.columns:
+                    data_copy = data_copy.set_index('fecha')
+                engineer = FeatureEngineer(data_copy)
                 features_df = engineer.add_all_features()
                 features_df = features_df.dropna()
                 if len(features_df) > 0:
@@ -233,7 +236,10 @@ def main():
             
             def predict(self, data):
                 # Aplicar mismo preprocesamiento que en entrenamiento
-                engineer = FeatureEngineer(data.copy())
+                data_copy = data.copy()
+                if 'fecha' in data_copy.columns:
+                    data_copy = data_copy.set_index('fecha')
+                engineer = FeatureEngineer(data_copy)
                 features_df = engineer.add_all_features()
                 features_df = features_df.dropna()
                 
