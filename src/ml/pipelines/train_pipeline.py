@@ -190,21 +190,24 @@ class TrainingPipeline:
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
         
-        # Obtener ticker_id
-        query = "SELECT ticker_id FROM stage.cat_tickers WHERE ticker = ?"
-        cursor.execute(query, ticker if '.' in ticker else f"{ticker}.MX")
+        # Obtener ticker_id (la columna se llama emisora_serie, no ticker)
+        query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora_serie = ?"
+        ticker_symbol = ticker if '.' in ticker else f"{ticker}.MX"
+        
+        logger.info(f"🔍 Buscando ticker: {ticker_symbol}")
+        cursor.execute(query, ticker_symbol)
         row = cursor.fetchone()
         
         if not row:
             cursor.close()
             conn.close()
-            raise ValueError(f"Ticker {ticker} no encontrado en stage.cat_tickers")
+            raise ValueError(f"Ticker {ticker_symbol} no encontrado en stage.cat_tickers")
         
         ticker_id = row[0]
         cursor.close()
         conn.close()
         
-        logger.info(f"✅ Ticker {ticker} encontrado con ID: {ticker_id}")
+        logger.info(f"✅ Ticker {ticker_symbol} encontrado con ID: {ticker_id}")
         
         # Crear loader con ticker_id
         self.data_loader = OHLCVLoader(
