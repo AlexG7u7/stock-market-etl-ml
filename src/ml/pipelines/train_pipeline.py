@@ -109,10 +109,10 @@ class TrainingPipeline:
             lstm_config = LSTMConfig()
         
         self.model = LSTMModel(lstm_config)
-        self.model.build(
-            sequence_length=splits['X_train'].shape[1],
-            num_features=splits['X_train'].shape[2]
-        )
+        
+        # build() espera input_shape como tupla (sequence_length, num_features)
+        input_shape = (splits['X_train'].shape[1], splits['X_train'].shape[2])
+        self.model.build(input_shape=input_shape)
         
         history = self.model.train(
             X_train=splits['X_train'],
