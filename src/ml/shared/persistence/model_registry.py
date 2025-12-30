@@ -170,7 +170,7 @@ class ModelRegistry:
                 cursor = conn.cursor()
                 
                 query = """
-                SELECT model_path, hyperparameters
+                SELECT model_file_path, hyperparameters
                 FROM ml.model_registry
                 WHERE model_id = ?
                 """
@@ -224,9 +224,9 @@ class ModelRegistry:
                 SELECT model_id
                 FROM ml.model_registry
                 WHERE ticker_id = ?
-                  AND horizon_days = ?
+                  AND prediction_horizon = ?
                   AND status = 'PRODUCTION'
-                ORDER BY trained_at DESC
+                ORDER BY created_at DESC
                 """
                 
                 cursor.execute(query, (ticker_id, horizon_days))
@@ -296,7 +296,7 @@ class ModelRegistry:
                 
                 query = """
                 SELECT train_rmse, train_mae, val_rmse, val_mae,
-                       r2_score, sharpe_ratio, win_rate, max_drawdown
+                       test_r2, sharpe_ratio, win_rate, max_drawdown
                 FROM ml.model_registry
                 WHERE model_id = ?
                 """
@@ -312,7 +312,7 @@ class ModelRegistry:
                     'train_mae': row[1],
                     'val_rmse': row[2],
                     'val_mae': row[3],
-                    'r2_score': row[4],
+                    'test_r2': row[4],
                     'sharpe_ratio': row[5],
                     'win_rate': row[6],
                     'max_drawdown': row[7]
@@ -347,13 +347,13 @@ class ModelRegistry:
                 SELECT 
                     model_id,
                     ticker_id,
-                    horizon_days,
+                    prediction_horizon,
                     val_rmse,
                     val_mae,
                     sharpe_ratio,
                     win_rate,
                     status,
-                    trained_at
+                    created_at
                 FROM ml.model_registry
                 WHERE 1=1
                 """
@@ -368,7 +368,7 @@ class ModelRegistry:
                     query += " AND status = ?"
                     params.append(status)
                 
-                query += " ORDER BY trained_at DESC"
+                query += " ORDER BY created_at DESC"
                 
                 if limit:
                     query = f"SELECT TOP {limit} * FROM ({query}) t"
@@ -380,13 +380,13 @@ class ModelRegistry:
                     models.append({
                         'model_id': row[0],
                         'ticker_id': row[1],
-                        'horizon_days': row[2],
+                        'prediction_horizon': row[2],
                         'val_rmse': row[3],
                         'val_mae': row[4],
                         'sharpe_ratio': row[5],
                         'win_rate': row[6],
                         'status': row[7],
-                        'trained_at': row[8]
+                        'created_at': row[8]
                     })
                 
                 return models
