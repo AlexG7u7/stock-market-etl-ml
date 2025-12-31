@@ -84,7 +84,7 @@ def run(lookback_days: int = 0, start_date: str = None, end_date: str = None):
         # EXTRACT
         if start_date and end_date:
             logger.info(f"Extrayendo rango {start_date} a {end_date} de {TICKER_SYMBOL}...")
-            precios = extractor.extract_range(start_date=start_date, end_date=end_date)
+            precios = extractor.extract_historical(start_date=start_date, end_date=end_date)
         else:
             logger.info(f"Extrayendo últimos {lookback_days} días de {TICKER_SYMBOL}...")
             precios = extractor.extract_incremental(lookback_days=lookback_days)
