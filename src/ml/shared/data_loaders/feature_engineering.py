@@ -35,7 +35,7 @@ class FeatureEngineer:
         """
         logger.info("🔧 Calculando features técnicos...")
         
-        # Features básicos
+        # Features básicos (probados, ~26 columnas)
         self.add_returns()
         self.add_volatility()
         self.add_rsi()
@@ -43,16 +43,16 @@ class FeatureEngineer:
         self.add_bollinger_bands()
         self.add_moving_averages()
         self.add_volume_features()
-        self.add_price_ratios()
         
-        # Features avanzados (nuevos)
-        self.add_atr()
-        self.add_adx()
-        self.add_stochastic()
-        self.add_momentum()
-        self.add_price_position()
-        self.add_candle_patterns()
-        self.add_lag_features()
+        # Features avanzados - DESACTIVADOS (causaban overfitting)
+        # self.add_price_ratios()
+        # self.add_atr()
+        # self.add_adx()
+        # self.add_stochastic()
+        # self.add_momentum()
+        # self.add_price_position()
+        # self.add_candle_patterns()
+        # self.add_lag_features()
         
         logger.success(f"✅ Features calculados: {len(self.df.columns)} columnas")
         return self.df
