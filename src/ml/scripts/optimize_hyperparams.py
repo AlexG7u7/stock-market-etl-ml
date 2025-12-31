@@ -27,7 +27,7 @@ def parse_args():
         "--ticker",
         type=str,
         required=True,
-        help="Símbolo del ticker (ej: WALMEX, ALSEA)"
+        help="Símbolo del ticker (ej: WALMEX.*, ALSEA.*)"
     )
     
     parser.add_argument(
@@ -36,6 +36,13 @@ def parse_args():
         default=5,
         choices=[5, 10, 15],
         help="Horizonte de predicción en días (5, 10 o 15)"
+    )
+    
+    parser.add_argument(
+        "--experiment-name",
+        type=str,
+        default=None,
+        help="Nombre descriptivo del experimento (ej: 'GA_WALMEX_expanded_sequence')"
     )
     
     parser.add_argument(
@@ -112,7 +119,8 @@ def main():
             ticker=args.ticker,
             horizon_days=args.horizon,
             population_size=args.population,
-            num_generations=args.generations
+            num_generations=args.generations,
+            experiment_name=args.experiment_name
         )
         
         # Mostrar resultados
