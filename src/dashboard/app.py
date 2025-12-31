@@ -11,12 +11,18 @@ from flask import Flask, render_template, jsonify
 from dotenv import load_dotenv
 import pyodbc
 
+# Directorio base del dashboard
+DASHBOARD_DIR = Path(__file__).parent.absolute()
+
 # Agregar src al path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+sys.path.insert(0, str(DASHBOARD_DIR.parent.parent))
 
-load_dotenv()
+# Cargar .env desde la raíz del proyecto
+PROJECT_ROOT = DASHBOARD_DIR.parent.parent
+load_dotenv(PROJECT_ROOT / '.env')
 
-app = Flask(__name__)
+# Crear app con path explícito a templates
+app = Flask(__name__, template_folder=str(DASHBOARD_DIR / 'templates'))
 
 def get_db_connection():
     """Crear conexión a SQL Server"""
