@@ -446,31 +446,21 @@ class TrainingPipeline:
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
             
-            # Separar emisora y serie
-            if '.' in ticker:
-                emisora, serie = ticker.split('.')
-            else:
-                emisora = ticker
-                serie = None
+            # Normalizar ticker: WALMEX.* -> WALMEX*, WALMEX -> WALMEX*
+            ticker_symbol = ticker.replace('.*', '*')
+            if '*' not in ticker_symbol:
+                ticker_symbol = f"{ticker_symbol}*"
             
-            if serie:
-                query = """
-                SELECT ticker_id 
-                FROM stage.cat_tickers 
-                WHERE emisora = ? AND serie = ?
-                """
-                cursor.execute(query, (emisora, serie))
-            else:
-                query = """
-                SELECT ticker_id 
-                FROM stage.cat_tickers 
-                WHERE emisora = ?
-                """
-                cursor.execute(query, (emisora,))
+            query = """
+            SELECT ticker_id 
+            FROM stage.cat_tickers 
+            WHERE emisora_serie = ?
+            """
+            cursor.execute(query, (ticker_symbol,))
             
             row = cursor.fetchone()
             
             if not row:
-                raise ValueError(f"Ticker {ticker} no encontrado")
+                raise ValueError(f"Ticker {ticker_symbol} no encontrado")
             
             return row[0]
