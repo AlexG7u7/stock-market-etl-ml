@@ -347,7 +347,10 @@ class OptimizationPipeline:
             )
         
         # Los tickers en DB están como WALMEX*, ALSEA*
-        ticker_symbol = ticker if '*' in ticker else f"{ticker}*"
+        # Normalizar: quitar punto si viene como WALMEX.* y agregar * si falta
+        ticker_symbol = ticker.replace('.*', '*')  # WALMEX.* -> WALMEX*
+        if '*' not in ticker_symbol:
+            ticker_symbol = f"{ticker_symbol}*"  # WALMEX -> WALMEX*
         
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()

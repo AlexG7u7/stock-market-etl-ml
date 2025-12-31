@@ -197,7 +197,10 @@ class TrainingPipeline:
         # Obtener ticker_id (la columna se llama emisora_serie, no ticker)
         query = "SELECT ticker_id FROM stage.cat_tickers WHERE emisora_serie = ?"
         # Los tickers en la base de datos están como WALMEX*, ALSEA*, etc.
-        ticker_symbol = ticker if '*' in ticker else f"{ticker}*"
+        # Normalizar: quitar punto si viene como WALMEX.* y agregar * si falta
+        ticker_symbol = ticker.replace('.*', '*')  # WALMEX.* -> WALMEX*
+        if '*' not in ticker_symbol:
+            ticker_symbol = f"{ticker_symbol}*"  # WALMEX -> WALMEX*
         
         logger.info(f"🔍 Buscando ticker: {ticker_symbol}")
         cursor.execute(query, ticker_symbol)
