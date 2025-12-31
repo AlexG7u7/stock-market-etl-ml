@@ -93,7 +93,8 @@ class OptimizationPipeline:
         ticker: str,
         horizon_days: int = 5,
         population_size: Optional[int] = None,
-        num_generations: Optional[int] = None
+        num_generations: Optional[int] = None,
+        experiment_name: Optional[str] = None
     ) -> Dict:
         """
         Ejecutar optimización con GA
@@ -103,6 +104,7 @@ class OptimizationPipeline:
             horizon_days: Días a predecir
             population_size: Tamaño población (usa config si es None)
             num_generations: Número de generaciones (usa config si es None)
+            experiment_name: Nombre descriptivo del experimento
             
         Returns:
             Dict con resultados de optimización
@@ -131,7 +133,7 @@ class OptimizationPipeline:
         
         # 1. Crear experimento
         logger.info("🧪 PASO 1: Crear experimento...")
-        experiment_id = self._create_experiment(ticker, horizon_days, ga_config)
+        experiment_id = self._create_experiment(ticker, horizon_days, ga_config, experiment_name)
         logger.success(f"✅ Experimento {experiment_id} creado")
         
         # 2. Inicializar GA
@@ -259,7 +261,8 @@ class OptimizationPipeline:
         self,
         ticker: str,
         horizon_days: int,
-        ga_config: Dict
+        ga_config: Dict,
+        experiment_name: Optional[str] = None
     ) -> int:
         """Crear experimento en base de datos"""
         import os
@@ -297,12 +300,15 @@ class OptimizationPipeline:
         # Obtener ticker_id
         ticker_id = self._get_ticker_id(ticker)
         
+        # Construir descripción
+        description = experiment_name if experiment_name else f"GA optimization for {ticker}, horizon {horizon_days} days"
+        
         experiment_id = self.experiment_tracker.create_experiment(
             ticker_id=ticker_id,
             horizon_days=horizon_days,
             search_space=self.search_space_config,
             ga_config=ga_config,
-            description=f"GA optimization for {ticker}, horizon {horizon_days} days"
+            description=description
         )
         
         return experiment_id
