@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
 ETL Incremental para WALMEX
-Ejecuta carga diaria (último día disponible)
+Ejecuta carga diaria (último día disponible) o rango específico
 """
 import os
 import sys
+import argparse
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
@@ -45,12 +46,14 @@ def get_ticker_id(loader: SQLServerLoader) -> int:
         cursor.close()
 
 
-def run(lookback_days: int = 0):
+def run(lookback_days: int = 0, start_date: str = None, end_date: str = None):
     """
     Ejecuta el ETL incremental de WALMEX
     
     Args:
         lookback_days: Días hacia atrás a cargar (default: 0 = hoy)
+        start_date: Fecha inicio en formato YYYY-MM-DD (opcional)
+        end_date: Fecha fin en formato YYYY-MM-DD (opcional)
     """
     logger.info("=" * 80)
     logger.info(f"ETL INCREMENTAL - WALMEX - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -79,8 +82,12 @@ def run(lookback_days: int = 0):
         )
         
         # EXTRACT
-        logger.info(f"Extrayendo últimos {lookback_days} días de {TICKER_SYMBOL}...")
-        precios = extractor.extract_incremental(lookback_days=lookback_days)
+        if start_date and end_date:
+            logger.info(f"Extrayendo rango {start_date} a {end_date} de {TICKER_SYMBOL}...")
+            precios = extractor.extract_range(start_date=start_date, end_date=end_date)
+        else:
+            logger.info(f"Extrayendo últimos {lookback_days} días de {TICKER_SYMBOL}...")
+            precios = extractor.extract_incremental(lookback_days=lookback_days)
         
         if not precios:
             logger.warning("No se obtuvieron datos. Finalizando.")
@@ -107,6 +114,13 @@ def run(lookback_days: int = 0):
 
 
 if __name__ == "__main__":
+    # Parser de argumentos
+    parser = argparse.ArgumentParser(description="ETL Incremental WALMEX")
+    parser.add_argument('--lookback-days', type=int, default=0, help='Días hacia atrás (default: 0 = hoy)')
+    parser.add_argument('--start-date', type=str, help='Fecha inicio (YYYY-MM-DD)')
+    parser.add_argument('--end-date', type=str, help='Fecha fin (YYYY-MM-DD)')
+    args = parser.parse_args()
+    
     # Configurar logging
     logger.remove()  # Remover handler por defecto
     logger.add(
@@ -115,4 +129,4 @@ if __name__ == "__main__":
         level="INFO"
     )
     
-    run()
+    run(lookback_days=args.lookback_days, start_date=args.start_date, end_date=args.end_date)
