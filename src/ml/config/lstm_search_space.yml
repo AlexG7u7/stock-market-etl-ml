@@ -113,22 +113,80 @@ features:
     - volume
   
   technical_indicators:
+    # Momentum
     - rsi_14
+    - stoch_k
+    - stoch_d
+    - momentum_10
+    - momentum_20
+    - roc_10
+    - roc_20
+    
+    # Trend
     - macd
     - macd_signal
+    - macd_histogram
+    - adx_14
+    - plus_di
+    - minus_di
+    - sma_20
+    - sma_50
+    - sma_200
+    - ema_12
+    - ema_26
+    
+    # Volatility
     - bb_upper
     - bb_middle
     - bb_lower
-    - sma_20
-    - sma_50
-    - ema_12
-    - ema_26
+    - bb_bandwidth
+    - atr_14
+    - atr_14_pct
+    
+    # Volume
+    - volume_ma_20
+    - volume_relative
+    - obv
   
   derived_features:
+    # Returns
     - returns_1d
     - returns_5d
+    - returns_10d
+    - returns_21d
     - volatility_21d
-    - volume_ma_20
+    
+    # Price position
+    - dist_sma_20
+    - dist_sma_50
+    - dist_sma_200
+    - position_52w
+    - dist_high_52w
+    - dist_low_52w
+    
+    # Price ratios
+    - hl_ratio
+    - co_ratio
+    - position_in_range
+    
+    # Candle patterns
+    - body_size
+    - body_pct
+    - upper_shadow_pct
+    - lower_shadow_pct
+    - bullish
+    - bullish_streak
+    - is_doji
+    
+    # Lag features
+    - returns_lag_1
+    - returns_lag_2
+    - returns_lag_3
+    - returns_lag_5
+    - volume_rel_lag_1
+    - volume_rel_lag_2
+    - volume_rel_lag_3
+    - volume_rel_lag_5
 
 # Targets (predicciones a generar)
 prediction_targets:

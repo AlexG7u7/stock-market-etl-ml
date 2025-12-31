@@ -35,6 +35,7 @@ class FeatureEngineer:
         """
         logger.info("🔧 Calculando features técnicos...")
         
+        # Features básicos
         self.add_returns()
         self.add_volatility()
         self.add_rsi()
@@ -42,6 +43,16 @@ class FeatureEngineer:
         self.add_bollinger_bands()
         self.add_moving_averages()
         self.add_volume_features()
+        self.add_price_ratios()
+        
+        # Features avanzados (nuevos)
+        self.add_atr()
+        self.add_adx()
+        self.add_stochastic()
+        self.add_momentum()
+        self.add_price_position()
+        self.add_candle_patterns()
+        self.add_lag_features()
         
         logger.success(f"✅ Features calculados: {len(self.df.columns)} columnas")
         return self.df
@@ -246,6 +257,235 @@ class FeatureEngineer:
         
         return self.df
     
+    def add_atr(self, period: int = 14) -> pd.DataFrame:
+        """
+        Calcular ATR (Average True Range) - mide volatilidad real
+        
+        True Range = max(High-Low, |High-PrevClose|, |Low-PrevClose|)
+        ATR = SMA(True Range, period)
+        
+        Args:
+            period: Período de cálculo (default: 14)
+            
+        Returns:
+            DataFrame con columna atr_XX
+        """
+        high = self.df['high']
+        low = self.df['low']
+        close = self.df['close']
+        prev_close = close.shift(1)
+        
+        # True Range
+        tr1 = high - low
+        tr2 = abs(high - prev_close)
+        tr3 = abs(low - prev_close)
+        true_range = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+        
+        # ATR
+        self.df[f'atr_{period}'] = true_range.rolling(window=period).mean()
+        
+        # ATR como % del precio (normalizado)
+        self.df[f'atr_{period}_pct'] = self.df[f'atr_{period}'] / close * 100
+        
+        return self.df
+    
+    def add_adx(self, period: int = 14) -> pd.DataFrame:
+        """
+        Calcular ADX (Average Directional Index) - fuerza de tendencia
+        
+        ADX > 25 = tendencia fuerte
+        ADX < 20 = mercado lateral
+        
+        Args:
+            period: Período de cálculo (default: 14)
+            
+        Returns:
+            DataFrame con columnas adx, plus_di, minus_di
+        """
+        high = self.df['high']
+        low = self.df['low']
+        close = self.df['close']
+        
+        # +DM y -DM
+        plus_dm = high.diff()
+        minus_dm = -low.diff()
+        
+        plus_dm = plus_dm.where((plus_dm > minus_dm) & (plus_dm > 0), 0)
+        minus_dm = minus_dm.where((minus_dm > plus_dm) & (minus_dm > 0), 0)
+        
+        # ATR para normalización
+        if f'atr_{period}' not in self.df.columns:
+            self.add_atr(period)
+        atr = self.df[f'atr_{period}']
+        
+        # +DI y -DI (smoothed)
+        plus_di = 100 * (plus_dm.ewm(span=period, adjust=False).mean() / atr)
+        minus_di = 100 * (minus_dm.ewm(span=period, adjust=False).mean() / atr)
+        
+        # DX y ADX
+        dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di)
+        adx = dx.ewm(span=period, adjust=False).mean()
+        
+        self.df['plus_di'] = plus_di
+        self.df['minus_di'] = minus_di
+        self.df[f'adx_{period}'] = adx
+        
+        return self.df
+    
+    def add_stochastic(self, k_period: int = 14, d_period: int = 3) -> pd.DataFrame:
+        """
+        Calcular Stochastic Oscillator
+        
+        %K = (Close - Lowest Low) / (Highest High - Lowest Low) * 100
+        %D = SMA(%K, d_period)
+        
+        Args:
+            k_period: Período para %K (default: 14)
+            d_period: Período para %D (default: 3)
+            
+        Returns:
+            DataFrame con columnas stoch_k, stoch_d
+        """
+        low_min = self.df['low'].rolling(window=k_period).min()
+        high_max = self.df['high'].rolling(window=k_period).max()
+        
+        # %K
+        self.df['stoch_k'] = 100 * (self.df['close'] - low_min) / (high_max - low_min)
+        
+        # %D (señal)
+        self.df['stoch_d'] = self.df['stoch_k'].rolling(window=d_period).mean()
+        
+        return self.df
+    
+    def add_momentum(self, periods: list = [10, 20]) -> pd.DataFrame:
+        """
+        Calcular Momentum y ROC (Rate of Change)
+        
+        Momentum = Close - Close(n periods ago)
+        ROC = (Close - Close(n)) / Close(n) * 100
+        
+        Args:
+            periods: Lista de períodos
+            
+        Returns:
+            DataFrame con columnas momentum_X, roc_X
+        """
+        for period in periods:
+            # Momentum absoluto
+            self.df[f'momentum_{period}'] = self.df['close'] - self.df['close'].shift(period)
+            
+            # ROC (porcentual)
+            self.df[f'roc_{period}'] = (
+                (self.df['close'] - self.df['close'].shift(period)) / 
+                self.df['close'].shift(period) * 100
+            )
+        
+        return self.df
+    
+    def add_price_position(self) -> pd.DataFrame:
+        """
+        Calcular posición del precio relativa a promedios móviles
+        
+        Útil para detectar tendencia y puntos de reversión
+        
+        Returns:
+            DataFrame con columnas de posición relativa
+        """
+        close = self.df['close']
+        
+        # Asegurar que existan las SMAs
+        if 'sma_20' not in self.df.columns:
+            self.df['sma_20'] = close.rolling(window=20).mean()
+        if 'sma_50' not in self.df.columns:
+            self.df['sma_50'] = close.rolling(window=50).mean()
+        if 'sma_200' not in self.df.columns:
+            self.df['sma_200'] = close.rolling(window=200).mean()
+        
+        # Distancia porcentual a SMAs
+        self.df['dist_sma_20'] = (close - self.df['sma_20']) / self.df['sma_20'] * 100
+        self.df['dist_sma_50'] = (close - self.df['sma_50']) / self.df['sma_50'] * 100
+        self.df['dist_sma_200'] = (close - self.df['sma_200']) / self.df['sma_200'] * 100
+        
+        # Posición en rango de 52 semanas (252 días)
+        high_52w = close.rolling(window=252).max()
+        low_52w = close.rolling(window=252).min()
+        self.df['position_52w'] = (close - low_52w) / (high_52w - low_52w) * 100
+        
+        # Distancia a máximo/mínimo de 52 semanas
+        self.df['dist_high_52w'] = (close - high_52w) / high_52w * 100
+        self.df['dist_low_52w'] = (close - low_52w) / low_52w * 100
+        
+        return self.df
+    
+    def add_candle_patterns(self) -> pd.DataFrame:
+        """
+        Calcular patrones de velas simplificados
+        
+        Returns:
+            DataFrame con features de velas
+        """
+        open_p = self.df['open']
+        high = self.df['high']
+        low = self.df['low']
+        close = self.df['close']
+        
+        # Tamaño del cuerpo (absoluto y relativo)
+        body = abs(close - open_p)
+        candle_range = high - low
+        
+        self.df['body_size'] = body
+        self.df['body_pct'] = body / candle_range  # Qué % del rango es cuerpo
+        
+        # Sombras
+        upper_shadow = high - pd.concat([open_p, close], axis=1).max(axis=1)
+        lower_shadow = pd.concat([open_p, close], axis=1).min(axis=1) - low
+        
+        self.df['upper_shadow_pct'] = upper_shadow / candle_range
+        self.df['lower_shadow_pct'] = lower_shadow / candle_range
+        
+        # Vela alcista/bajista (1 = alcista, 0 = bajista)
+        self.df['bullish'] = (close > open_p).astype(int)
+        
+        # Secuencia de velas alcistas/bajistas
+        self.df['bullish_streak'] = self.df['bullish'].groupby(
+            (self.df['bullish'] != self.df['bullish'].shift()).cumsum()
+        ).cumcount() + 1
+        self.df['bullish_streak'] = self.df['bullish_streak'] * (2 * self.df['bullish'] - 1)
+        
+        # Doji (cuerpo muy pequeño)
+        self.df['is_doji'] = (self.df['body_pct'] < 0.1).astype(int)
+        
+        return self.df
+    
+    def add_lag_features(self, lags: list = [1, 2, 3, 5]) -> pd.DataFrame:
+        """
+        Agregar features con lag (valores de días anteriores)
+        
+        Útil para que el modelo capture patrones temporales
+        
+        Args:
+            lags: Lista de días de lag
+            
+        Returns:
+            DataFrame con features lagged
+        """
+        # Lag de returns
+        if 'returns_1d' not in self.df.columns:
+            self.df['returns_1d'] = self.df['close'].pct_change()
+        
+        for lag in lags:
+            self.df[f'returns_lag_{lag}'] = self.df['returns_1d'].shift(lag)
+        
+        # Lag de volumen relativo
+        if 'volume_relative' not in self.df.columns:
+            self.df['volume_ma_20'] = self.df['volume'].rolling(window=20).mean()
+            self.df['volume_relative'] = self.df['volume'] / self.df['volume_ma_20']
+        
+        for lag in lags:
+            self.df[f'volume_rel_lag_{lag}'] = self.df['volume_relative'].shift(lag)
+        
+        return self.df
+
     def get_feature_columns(self, exclude_ohlcv: bool = False) -> list:
         """
         Obtener lista de columnas de features (excluye OHLCV si se indica)
