@@ -66,15 +66,15 @@ def get_experiments():
         query = """
         SELECT 
             e.experiment_id,
-            e.description,
+            e.experiment_name,
             e.status,
-            e.created_at,
-            e.completed_at,
+            e.start_time,
+            e.end_time,
             t.emisora_serie as ticker,
-            (SELECT COUNT(*) FROM ml.model_registry WHERE experiment_id = e.experiment_id) as models_trained,
+            e.total_models_trained as models_trained,
             (SELECT MAX(generation_number) FROM ml.experiment_generations WHERE experiment_id = e.experiment_id) as current_generation,
-            JSON_VALUE(e.ga_config, '$.population_size') as population_size,
-            JSON_VALUE(e.ga_config, '$.num_generations') as num_generations
+            e.population_size,
+            e.num_generations
         FROM ml.experiments e
         LEFT JOIN stage.cat_tickers t ON e.ticker_id = t.ticker_id
         ORDER BY e.experiment_id DESC
@@ -87,10 +87,10 @@ def get_experiments():
         for row in cursor.fetchall():
             exp = dict(zip(columns, row))
             # Convertir datetime a string
-            if exp['created_at']:
-                exp['created_at'] = exp['created_at'].strftime('%Y-%m-%d %H:%M:%S')
-            if exp['completed_at']:
-                exp['completed_at'] = exp['completed_at'].strftime('%Y-%m-%d %H:%M:%S')
+            if exp.get('start_time'):
+                exp['start_time'] = exp['start_time'].strftime('%Y-%m-%d %H:%M:%S')
+            if exp.get('end_time'):
+                exp['end_time'] = exp['end_time'].strftime('%Y-%m-%d %H:%M:%S')
             experiments.append(exp)
         
         cursor.close()
@@ -208,12 +208,12 @@ def get_live_stats():
         cursor.execute("""
             SELECT TOP 1
                 e.experiment_id,
-                e.description,
+                e.experiment_name,
                 e.status,
-                e.created_at,
+                e.start_time,
                 t.emisora_serie as ticker,
-                JSON_VALUE(e.ga_config, '$.population_size') as pop_size,
-                JSON_VALUE(e.ga_config, '$.num_generations') as num_gen
+                e.population_size,
+                e.num_generations
             FROM ml.experiments e
             LEFT JOIN stage.cat_tickers t ON e.ticker_id = t.ticker_id
             ORDER BY e.experiment_id DESC
