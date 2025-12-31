@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 GA Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background: #4ade80;
+            color: #000;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-completed {
+            background: #60a5fa;
+            color: #000;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22d3ee);
+            border-radius: 12px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            min-width: 50px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+        
+        .best-model {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 211, 238, 0.2));
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        .generation-chart {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 120px;
+            gap: 5px;
+            padding: 10px 0;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #4ade80, #22d3ee);
+            border-radius: 5px 5px 0 0;
+            min-height: 10px;
+            transition: height 0.3s ease;
+        }
+        
+        .chart-labels {
+            display: flex;
+            gap: 5px;
+            font-size: 0.7em;
+            color: #94a3b8;
+        }
+        
+        .chart-labels span {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .models-list {
+            margin-top: 20px;
+        }
+        
+        .model-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .model-item:first-child {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        .model-id {
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
+        .model-metrics {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+        }
+        
+        .refresh-note {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85em;
+            margin-top: 20px;
+        }
+        
+        .experiments-list {
+            margin-top: 20px;
+        }
+        
+        .exp-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .exp-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .exp-item.active {
+            border: 2px solid #4ade80;
+        }
+        
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Genetic Algorithm Dashboard</h1>
+        
+        <div id="live-status" class="status-card">
+            <div class="loading">Cargando datos</div>
+        </div>
+        
+        <div id="generation-chart" class="status-card" style="display: none;">
+            <h3>📈 Evolución del Fitness</h3>
+            <div class="generation-chart">
+                <div class="chart-bars" id="chart-bars"></div>
+                <div class="chart-labels" id="chart-labels"></div>
+            </div>
+        </div>
+        
+        <div id="top-models" class="status-card" style="display: none;">
+            <h3>🏆 Top 5 Modelos</h3>
+            <div class="models-list" id="models-list"></div>
+        </div>
+        
+        <div id="experiments-section" class="status-card">
+            <h3>📋 Historial de Experimentos</h3>
+            <div class="experiments-list" id="experiments-list">
+                <div class="loading">Cargando experimentos</div>
+            </div>
+        </div>
+        
+        <p class="refresh-note">🔄 Auto-refresh cada 10 segundos</p>
+    </div>
+
+    <script>
+        let currentExperimentId = null;
+        
+        async function fetchLiveStatus() {
+            try {
+                const response = await fetch('/api/live');
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('live-status').innerHTML = `
+                        <div class="error">❌ Error: ${data.error}</div>
+                    `;
+                    return;
+                }
+                
+                if (data.status === 'no_experiments') {
+                    document.getElementById('live-status').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <p>No hay experimentos registrados</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                currentExperimentId = data.id;
+                
+                const isRunning = data.status === 'RUNNING' || data.current_gen < data.num_gen;
+                const statusClass = isRunning ? 'status-running' : 'status-completed';
+                const statusText = isRunning ? '🔄 EJECUTANDO' : '✅ COMPLETADO';
+                
+                document.getElementById('live-status').innerHTML = `
+                    <div class="status-header">
+                        <div>
+                            <strong>Experimento #${data.id}</strong>
+                            <br><small style="color: #94a3b8">${data.description || data.ticker}</small>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${data.progress_pct}%">
+                            ${Math.round(data.progress_pct)}%
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value">${data.current_gen || 0}/${data.num_gen}</div>
+                            <div class="stat-label">Generación</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${data.models_trained || 0}</div>
+                            <div class="stat-label">Modelos Entrenados</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${data.best_fitness ? data.best_fitness.toFixed(4) : '-'}</div>
+                            <div class="stat-label">Mejor Fitness (RMSE)</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${data.avg_fitness ? data.avg_fitness.toFixed(4) : '-'}</div>
+                            <div class="stat-label">Fitness Promedio</div>
+                        </div>
+                    </div>
+                    
+                    ${data.best_model ? `
+                        <div class="stat-box best-model" style="margin-top: 15px;">
+                            <div style="font-size: 0.9em; color: #94a3b8; margin-bottom: 10px;">🏆 Mejor Modelo</div>
+                            <div style="display: flex; justify-content: space-around;">
+                                <div>
+                                    <div class="stat-value" style="font-size: 1.2em;">#${data.best_model.id}</div>
+                                    <div class="stat-label">ID</div>
+                                </div>
+                                <div>
+                                    <div class="stat-value" style="font-size: 1.2em;">${data.best_model.rmse ? data.best_model.rmse.toFixed(4) : '-'}</div>
+                                    <div class="stat-label">RMSE</div>
+                                </div>
+                                <div>
+                                    <div class="stat-value" style="font-size: 1.2em;">${data.best_model.win_rate ? data.best_model.win_rate.toFixed(1) + '%' : '-'}</div>
+                                    <div class="stat-label">Win Rate</div>
+                                </div>
+                                <div>
+                                    <div class="stat-value" style="font-size: 1.2em;">${data.best_model.sharpe ? data.best_model.sharpe.toFixed(2) : '-'}</div>
+                                    <div class="stat-label">Sharpe</div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+                
+                // Fetch detailed data for chart
+                fetchExperimentDetail(data.id);
+                
+            } catch (error) {
+                document.getElementById('live-status').innerHTML = `
+                    <div class="error">❌ Error de conexión: ${error.message}</div>
+                `;
+            }
+        }
+        
+        async function fetchExperimentDetail(expId) {
+            try {
+                const response = await fetch(`/api/experiment/${expId}`);
+                const data = await response.json();
+                
+                if (data.generations && data.generations.length > 0) {
+                    document.getElementById('generation-chart').style.display = 'block';
+                    
+                    const maxFitness = Math.max(...data.generations.map(g => g.worst_fitness || 0));
+                    const minFitness = Math.min(...data.generations.map(g => g.best_fitness || 0));
+                    
+                    let barsHtml = '';
+                    let labelsHtml = '';
+                    
+                    data.generations.forEach(gen => {
+                        const height = maxFitness > 0 ? 
+                            100 - ((gen.best_fitness - minFitness) / (maxFitness - minFitness) * 80) : 50;
+                        barsHtml += `<div class="chart-bar" style="height: ${height}%" title="Gen ${gen.generation}: ${gen.best_fitness?.toFixed(4)}"></div>`;
+                        labelsHtml += `<span>${gen.generation}</span>`;
+                    });
+                    
+                    document.getElementById('chart-bars').innerHTML = barsHtml;
+                    document.getElementById('chart-labels').innerHTML = labelsHtml;
+                }
+                
+                if (data.top_models && data.top_models.length > 0) {
+                    document.getElementById('top-models').style.display = 'block';
+                    
+                    let modelsHtml = '';
+                    data.top_models.slice(0, 5).forEach((model, idx) => {
+                        modelsHtml += `
+                            <div class="model-item">
+                                <span class="model-id">${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '  '} #${model.model_id}</span>
+                                <div class="model-metrics">
+                                    <span>RMSE: ${model.val_rmse?.toFixed(4) || '-'}</span>
+                                    <span>Win: ${model.win_rate?.toFixed(1) || '-'}%</span>
+                                    <span>Seq: ${model.seq_len || '-'}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('models-list').innerHTML = modelsHtml;
+                }
+                
+            } catch (error) {
+                console.error('Error fetching detail:', error);
+            }
+        }
+        
+        async function fetchExperiments() {
+            try {
+                const response = await fetch('/api/experiments');
+                const experiments = await response.json();
+                
+                if (experiments.error) {
+                    document.getElementById('experiments-list').innerHTML = `
+                        <div class="error">❌ ${experiments.error}</div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                experiments.slice(0, 5).forEach(exp => {
+                    const isActive = exp.experiment_id === currentExperimentId;
+                    html += `
+                        <div class="exp-item ${isActive ? 'active' : ''}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>#${exp.experiment_id}</strong> - ${exp.ticker || 'N/A'}
+                                    <br><small style="color: #94a3b8">${exp.description || ''}</small>
+                                </div>
+                                <div style="text-align: right; font-size: 0.85em;">
+                                    <span style="color: ${exp.status === 'RUNNING' ? '#4ade80' : '#60a5fa'}">${exp.status || 'N/A'}</span>
+                                    <br><small style="color: #64748b">${exp.models_trained || 0} modelos</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('experiments-list').innerHTML = html || '<p>No hay experimentos</p>';
+                
+            } catch (error) {
+                document.getElementById('experiments-list').innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+        
+        // Initial load
+        fetchLiveStatus();
+        fetchExperiments();
+        
+        // Auto-refresh every 10 seconds
+        setInterval(() => {
+            fetchLiveStatus();
+            fetchExperiments();
+        }, 10000);
+    </script>
+</body>
+</html>
