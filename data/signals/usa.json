@@ -1,0 +1,2222 @@
+{
+  "universe": "🇺🇸 Acciones USA (SIC)",
+  "descripcion": "Acciones del NYSE y Nasdaq disponibles en GBM vía SIC o Trading USA",
+  "moneda": "USD",
+  "fecha": "2026-06-28",
+  "capital": 5000.0,
+  "monto_por_nombre": 1000.0,
+  "mercado": {
+    "estado": "lateral",
+    "emoji": "🟡",
+    "descripcion": "Sin tendencia clara (-0.9% en 10d)"
+  },
+  "n_tickers_analizados": 23,
+  "top5": [
+    {
+      "ticker": "INTC",
+      "score": 0.676,
+      "score_pct": "67%",
+      "precio_actual": 128.32,
+      "monto": 1000.0,
+      "acciones_aprox": 7,
+      "razones": [
+        "✅ pos 52w — top 22% del universo",
+        "✅ Volatilidad relativa — top 0% del universo",
+        "✅ sma20 vs sma50 — top 5% del universo"
+      ],
+      "gemini": {
+        "resumen": "Intel (INTC) se destaca en el universo de acciones de EE. UU. gracias a un fuerte momentum técnico, posicionándose como una opción atractiva con potencial de crecimiento.",
+        "accion": "COMPRA",
+        "riesgo": "El principal riesgo reside en la necesidad de una 'revitalización de ingeniería' para mantener su ventaja competitiva y el impulso actual.",
+        "catalizador": "Una mejora significativa en la ejecución de su estrategia de ingeniería y la adopción de sus nuevas tecnologías de IA podrían potenciar aún más su alza.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "Piper Sandler Upgrades “Overweight” from Neutral on Synopsys, Inc. (SNPS)",
+          "publisher": "Insider Monkey",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/piper-sandler-upgrades-overweight-neutral-184547036.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Intel Corporation (INTC)’s Stock Has Surged but Needs an Engineering Revival",
+          "publisher": "Insider Monkey",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/intel-corporation-intc-stock-surged-184539609.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Nancy Pelosi Has Added These 9 Stocks To Her Portfolio Since 2025, Including Three Magnificent Seven Names",
+          "publisher": "Benzinga",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/nancy-pelosi-added-9-stocks-153109696.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+          "publisher": "Barchart",
+          "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Thomas Massie Says Republicans Decry Communist 'Involvement' In Democratic Party, But Look Other Way As Trump Nationalizes 'Ownership' In Intel, US Steel",
+          "publisher": "Benzinga",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/thomas-massie-says-republicans-decry-104637943.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "FMX",
+      "score": 0.655,
+      "score_pct": "65%",
+      "precio_actual": 128.87,
+      "monto": 1000.0,
+      "acciones_aprox": 7,
+      "razones": [
+        "✅ pos 52w — top 5% del universo",
+        "✅ sma20 vs sma50 — top 18% del universo",
+        "⚠️ bb width — bottom 26% del universo"
+      ],
+      "gemini": {
+        "resumen": "FMX destaca en el universo de acciones de EE. UU. gracias a un fuerte impulso de momentum relativo, evidenciado por su posición en el top 5% de 52 semanas y una tendencia alcista en sus medias móviles.",
+        "accion": "COMPRA FUERTE",
+        "riesgo": "La expansión de las bandas de Bollinger en la parte inferior del universo podría indicar una volatilidad creciente o una posible reversión de tendencia si el momentum se debilita.",
+        "catalizador": "La reciente mejora a 'Strong Buy' y la inclusión en listas de 'Best Value Stocks' sugieren un potencial alcista impulsado por el sentimiento positivo del mercado y la percepción de valor.",
+        "sentimiento_news": "positivo"
+      },
+      "noticias": [
+        {
+          "title": "Can Innovation Efforts Help Diageo Outpace Industry Headwinds?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/innovation-efforts-help-diageo-outpace-133400216.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Why Does Boston Beer Expect Lower Volume Growth in 2026?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/why-does-boston-beer-expect-144000502.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Fomento Economico (FMX) Upgraded to Strong Buy: Here's Why",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/fomento-economico-fmx-upgraded-strong-160003028.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "New Strong Buy Stocks for June 22nd",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/strong-buy-stocks-june-22nd-101200041.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Best Value Stocks to Buy for June 22nd",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/best-value-stocks-buy-june-080900083.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "MCD",
+      "score": 0.645,
+      "score_pct": "64%",
+      "precio_actual": 269.76,
+      "monto": 1000.0,
+      "acciones_aprox": 3,
+      "razones": [
+        "⚠️ pos 52w — bottom 4% del universo",
+        "⚠️ Volatilidad relativa — bottom 21% del universo",
+        "⚠️ sma20 vs sma50 — bottom 26% del universo"
+      ],
+      "gemini": {
+        "resumen": "McDonald's (MCD) se destaca como el principal instrumento del universo de acciones de EE. UU. gracias a su fuerte momentum relativo, a pesar de señales técnicas de debilidad que sugieren una posible reversión.",
+        "accion": "ESPERA",
+        "riesgo": "Las señales técnicas de debilidad, como la posición en el percentil 4 en 52 semanas y la volatilidad relativa baja, sugieren cautela a pesar del buen ranking del modelo.",
+        "catalizador": "El regreso de productos populares y el interés de los inversores en acciones de valor podrían impulsar un repunte.",
+        "sentimiento_news": "positivo"
+      },
+      "noticias": [
+        {
+          "title": "McDonald's (MCD) Brings Back Fried Apple Pie To U.S. Menus After 34 Years",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-brings-back-fried-010718001.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Restaurant Brands International vs. McDonald's: Comparing Revenue Trends for These Fast-Food Giants",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/coverage/charts/2026/06/27/restaurant-brands-international-vs-mcdonald-s-comparing-revenue-trends-for-these-fast-food-giants/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "One of McDonald’s biggest fan-favorites is back for July 4",
+          "publisher": "TheStreet",
+          "link": "https://www.thestreet.com/restaurants/mcdonalds-brings-back-fan-favorite-fried-apple-pie-after-34-year-hiatus",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "McDonald's (MCD) Increases Despite Market Slip: Here's What You Need to Know",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-increases-despite-market-214504147.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "5 Stocks on Sale: Values or Traps?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/5-stocks-sale-values-traps-191800912.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "META",
+      "score": 0.634,
+      "score_pct": "63%",
+      "precio_actual": 550.25,
+      "monto": 1000.0,
+      "acciones_aprox": 1,
+      "razones": [
+        "⚠️ pos 52w — bottom 8% del universo",
+        "⚠️ sma20 vs sma50 — bottom 4% del universo",
+        "✅ bb width — top 22% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+          "publisher": "TechCrunch",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Meta Platforms Just Unveiled New Smart Glasses. What That Means for META Stock.",
+          "publisher": "Barchart",
+          "link": "https://www.barchart.com/story/news/3023201/meta-platforms-just-unveiled-new-smart-glasses-what-that-means-for-meta-stock",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "AI Demand Is Outstripping Supply — Even Google Can’t Keep Up",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/28/ai-demand-is-outstripping-supply-even-google-cant-keep-up/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Older tech workers are retiring at 55. But claiming Social Security early offers smaller checks for life.",
+          "publisher": "Moneywise",
+          "link": "https://finance.yahoo.com/small-business/articles/older-tech-workers-retiring-55-104500266.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "AI’s biggest winners may be electricians, not engineers",
+          "publisher": "Quartz",
+          "link": "https://qz.com/ai-data-center-boom-electricians-skilled-trades",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "TSLA",
+      "score": 0.628,
+      "score_pct": "62%",
+      "precio_actual": 379.71,
+      "monto": 1000.0,
+      "acciones_aprox": 2,
+      "razones": [
+        "✅ Volatilidad relativa — top 9% del universo",
+        "✅ bb width — top 18% del universo",
+        "⚠️ Tendencia alcista de la media — bottom 8% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "SpaceX, Tesla, and Alphabet All Fall in a Broad Tech Rout. Should You Rebalance Your Portfolio?",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/investing/2026/06/28/spacex-tesla-alphabet-fall-tech-rout-rebalance/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Dow Jones Futures: Market At Tipping Point As U.S.-Iran Attacks Escalate. Tesla, Jobs On Tap.",
+          "publisher": "Investor's Business Daily",
+          "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-futures-stock-market-tipping-point-eli-lilly-tesla/?src=A00220&yptr=yahoo",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Elon Musk Was First Trillionaire, Prediction Markets Pick This Magnificent Seven CEO To Be Second To Join Elite Club",
+          "publisher": "Benzinga",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/elon-musk-first-trillionaire-prediction-150022118.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+          "publisher": "TechCrunch",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Bernie Sanders Says MacBook, iPad Price Rise An Example Of Tim Cook's 'Corporate Greed: Here's How Much You'll Pay Now",
+          "publisher": "Benzinga",
+          "link": "https://finance.yahoo.com/technology/articles/bernie-sanders-says-macbook-ipad-133110883.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    }
+  ],
+  "evitar": [
+    "V",
+    "XOM",
+    "JNJ",
+    "BAC",
+    "AMD"
+  ],
+  "proximo_rebalanceo": "24 Jul 2026",
+  "universo_completo": [
+    {
+      "ticker": "INTC",
+      "score": 0.676,
+      "rank": 1
+    },
+    {
+      "ticker": "FMX",
+      "score": 0.655,
+      "rank": 2
+    },
+    {
+      "ticker": "MCD",
+      "score": 0.645,
+      "rank": 3
+    },
+    {
+      "ticker": "META",
+      "score": 0.634,
+      "rank": 4
+    },
+    {
+      "ticker": "TSLA",
+      "score": 0.628,
+      "rank": 5
+    },
+    {
+      "ticker": "PEP",
+      "score": 0.62,
+      "rank": 6
+    },
+    {
+      "ticker": "MSFT",
+      "score": 0.607,
+      "rank": 7
+    },
+    {
+      "ticker": "PFE",
+      "score": 0.601,
+      "rank": 8
+    },
+    {
+      "ticker": "AMX",
+      "score": 0.591,
+      "rank": 9
+    },
+    {
+      "ticker": "NVDA",
+      "score": 0.567,
+      "rank": 10
+    },
+    {
+      "ticker": "GS",
+      "score": 0.563,
+      "rank": 11
+    },
+    {
+      "ticker": "KO",
+      "score": 0.544,
+      "rank": 12
+    },
+    {
+      "ticker": "CVX",
+      "score": 0.534,
+      "rank": 13
+    },
+    {
+      "ticker": "MA",
+      "score": 0.518,
+      "rank": 14
+    },
+    {
+      "ticker": "AAPL",
+      "score": 0.516,
+      "rank": 15
+    },
+    {
+      "ticker": "AMZN",
+      "score": 0.506,
+      "rank": 16
+    },
+    {
+      "ticker": "GOOGL",
+      "score": 0.506,
+      "rank": 17
+    },
+    {
+      "ticker": "JPM",
+      "score": 0.496,
+      "rank": 18
+    },
+    {
+      "ticker": "V",
+      "score": 0.459,
+      "rank": 19
+    },
+    {
+      "ticker": "XOM",
+      "score": 0.448,
+      "rank": 20
+    },
+    {
+      "ticker": "JNJ",
+      "score": 0.411,
+      "rank": 21
+    },
+    {
+      "ticker": "BAC",
+      "score": 0.399,
+      "rank": 22
+    },
+    {
+      "ticker": "AMD",
+      "score": 0.335,
+      "rank": 23
+    }
+  ],
+  "by_horizon": {
+    "1s": {
+      "label": "1 semana",
+      "semanas": 1,
+      "horizon_d": 5,
+      "top5": [
+        {
+          "ticker": "MSFT",
+          "score": 0.671,
+          "score_pct": "67%",
+          "precio_actual": 372.97,
+          "monto": 1000.0,
+          "acciones_aprox": 2,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 17% del universo",
+            "⚠️ pos 52w — bottom 13% del universo",
+            "⚠️ mfi 14 — bottom 26% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Jobs, Home Prices, Nike, Constellation, and More to Watch This Week",
+              "publisher": "Barrons.com",
+              "link": "https://www.barrons.com/articles/jobs-home-prices-nike-constellation-brands-stocks-f8c90d81?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Artificial Intelligence (AI) Cloud Stock Has Crushed Amazon, Microsoft, and Google in 2026. It Can Continue Skyrocketing After 184% Gains",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-artificial-intelligence-ai-cloud-stock-has-cr/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is Oracle’s Debt Simply Too Much to Justify the Risk?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/is-oracles-debt-simply-too-much-to-justify-the-risk/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Overlooked AI Infrastructure Stock Could Be 2026's Biggest Winner",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-overlooked-ai-infrastructure-stock-could-be/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The OpenAI Trade Isn't Microsoft Anymore. Here's Where Smart Money May Be Looking.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/the-openai-trade-isnt-microsoft-anymore-heres-wher/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "META",
+          "score": 0.618,
+          "score_pct": "61%",
+          "precio_actual": 550.25,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "⚠️ pos 52w — bottom 8% del universo",
+            "⚠️ Flujo de dinero (OBV) — bottom 21% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Meta Platforms Just Unveiled New Smart Glasses. What That Means for META Stock.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023201/meta-platforms-just-unveiled-new-smart-glasses-what-that-means-for-meta-stock",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI Demand Is Outstripping Supply — Even Google Can’t Keep Up",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/ai-demand-is-outstripping-supply-even-google-cant-keep-up/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Older tech workers are retiring at 55. But claiming Social Security early offers smaller checks for life.",
+              "publisher": "Moneywise",
+              "link": "https://finance.yahoo.com/small-business/articles/older-tech-workers-retiring-55-104500266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI’s biggest winners may be electricians, not engineers",
+              "publisher": "Quartz",
+              "link": "https://qz.com/ai-data-center-boom-electricians-skilled-trades",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "GS",
+          "score": 0.591,
+          "score_pct": "59%",
+          "precio_actual": 1019.61,
+          "monto": 1000.0,
+          "acciones_aprox": 0,
+          "razones": [
+            "✅ sma20 vs sma50 — top 9% del universo",
+            "✅ Volatilidad relativa — top 27% del universo",
+            "⚠️ Flujo de dinero (OBV) — bottom 8% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Best CD rates today, Sunday, June 28, 2026: Lock in up to 4.10% APY",
+              "publisher": "Yahoo Personal Finance",
+              "link": "https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-sunday-june-28-2026-lock-in-up-to-410-apy-100000956.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Goldman Sachs Says These 2 Software Stocks Could Surge at Least 60% From Current Levels",
+              "publisher": "TipRanks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-says-2-software-175500464.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Jefferies Reports Earnings Before the Big Banks. Here's Why Wall Street Should Be Watching Closely.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/jefferies-reports-earnings-before-the-big-banks-he/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Tech Equity Sales Renew AI Debt-Binge Worries",
+              "publisher": "Bloomberg",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/tech-equity-sales-renew-ai-190000255.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Best CD rates today, Saturday, June 27, 2026: Best account provides 4.10% APY",
+              "publisher": "Yahoo Personal Finance",
+              "link": "https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-saturday-june-27-2026-best-account-provides-410-apy-100000070.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "AMD",
+          "score": 0.587,
+          "score_pct": "58%",
+          "precio_actual": 521.58,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ pos 52w — top 18% del universo",
+            "✅ Volatilidad relativa — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Taiwan Semiconductor Manufacturing Company (TSM)’s Monthly Sales Rise",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/taiwan-semiconductor-manufacturing-company-tsm-184425915.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AMD Just Acquired MEXT to Crack the Memory Optimization Problem. Should Micron and Sandisk Investors Be Nervous?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/amd-just-acquired-mext-to-crack-the-memory-optimiz/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is SpaceX Really Worth More Than Micron and AMD Combined? Here's the Unvarnished Truth.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/is-spacex-really-worth-more-than-micron-and-amd-co/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Advanced Micro Devices (AMD) Is A Stock That Could Skyrocket, According To Newsletters",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/advanced-micro-devices-amd-stock-064813824.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "JNJ",
+          "score": 0.574,
+          "score_pct": "57%",
+          "precio_actual": 254.66,
+          "monto": 1000.0,
+          "acciones_aprox": 3,
+          "razones": [
+            "✅ pos 52w — top 0% del universo",
+            "✅ Flujo de dinero (OBV) — top 9% del universo",
+            "✅ mfi 14 — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "These Household Names Are Dividend Kings. They’re Rock-Solid For Income.",
+              "publisher": "Barrons.com",
+              "link": "https://www.barrons.com/articles/retirement-dividend-income-stocks-559e8ee9?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Today’s Retirees May Need More Stocks Than Their Parents Did",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/personal-finance/2026/06/28/why-todays-retirees-may-need-more-stocks-than-their-parents-did/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Paying Off Your Mortgage Early May Be A Retirement Mistake",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/personal-finance/2026/06/28/why-paying-off-your-mortgage-early-may-be-a-retirement-mistake/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Johnson & Johnson (JNJ) – Among the 10 Best Dividend Stocks to Buy for Passive Income",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/johnson-johnson-jnj-among-10-033548285.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Ignore Every Utility Bill And Still Keep The Lights On. Here’s How",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/personal-finance/2026/06/27/ignore-every-utility-bill-and-still-keep-the-lights-on-heres-how/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "CVX",
+        "NVDA",
+        "JPM",
+        "V",
+        "AAPL"
+      ],
+      "proximo_rebalanceo": "03 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "MSFT",
+          "score": 0.671,
+          "rank": 1
+        },
+        {
+          "ticker": "META",
+          "score": 0.618,
+          "rank": 2
+        },
+        {
+          "ticker": "GS",
+          "score": 0.591,
+          "rank": 3
+        },
+        {
+          "ticker": "AMD",
+          "score": 0.587,
+          "rank": 4
+        },
+        {
+          "ticker": "JNJ",
+          "score": 0.574,
+          "rank": 5
+        },
+        {
+          "ticker": "INTC",
+          "score": 0.568,
+          "rank": 6
+        },
+        {
+          "ticker": "BAC",
+          "score": 0.557,
+          "rank": 7
+        },
+        {
+          "ticker": "KO",
+          "score": 0.551,
+          "rank": 8
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.545,
+          "rank": 9
+        },
+        {
+          "ticker": "PEP",
+          "score": 0.543,
+          "rank": 10
+        },
+        {
+          "ticker": "AMX",
+          "score": 0.538,
+          "rank": 11
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.535,
+          "rank": 12
+        },
+        {
+          "ticker": "MCD",
+          "score": 0.535,
+          "rank": 13
+        },
+        {
+          "ticker": "PFE",
+          "score": 0.505,
+          "rank": 14
+        },
+        {
+          "ticker": "AMZN",
+          "score": 0.504,
+          "rank": 15
+        },
+        {
+          "ticker": "GOOGL",
+          "score": 0.502,
+          "rank": 16
+        },
+        {
+          "ticker": "XOM",
+          "score": 0.499,
+          "rank": 17
+        },
+        {
+          "ticker": "MA",
+          "score": 0.497,
+          "rank": 18
+        },
+        {
+          "ticker": "CVX",
+          "score": 0.497,
+          "rank": 19
+        },
+        {
+          "ticker": "NVDA",
+          "score": 0.488,
+          "rank": 20
+        },
+        {
+          "ticker": "JPM",
+          "score": 0.478,
+          "rank": 21
+        },
+        {
+          "ticker": "V",
+          "score": 0.453,
+          "rank": 22
+        },
+        {
+          "ticker": "AAPL",
+          "score": 0.389,
+          "rank": 23
+        }
+      ]
+    },
+    "2s": {
+      "label": "2 semanas",
+      "semanas": 2,
+      "horizon_d": 10,
+      "top5": [
+        {
+          "ticker": "META",
+          "score": 0.74,
+          "score_pct": "74%",
+          "precio_actual": 550.25,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "⚠️ pos 52w — bottom 8% del universo",
+            "✅ bb width — top 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Meta Platforms Just Unveiled New Smart Glasses. What That Means for META Stock.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023201/meta-platforms-just-unveiled-new-smart-glasses-what-that-means-for-meta-stock",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI Demand Is Outstripping Supply — Even Google Can’t Keep Up",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/ai-demand-is-outstripping-supply-even-google-cant-keep-up/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Older tech workers are retiring at 55. But claiming Social Security early offers smaller checks for life.",
+              "publisher": "Moneywise",
+              "link": "https://finance.yahoo.com/small-business/articles/older-tech-workers-retiring-55-104500266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI’s biggest winners may be electricians, not engineers",
+              "publisher": "Quartz",
+              "link": "https://qz.com/ai-data-center-boom-electricians-skilled-trades",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MSFT",
+          "score": 0.674,
+          "score_pct": "67%",
+          "precio_actual": 372.97,
+          "monto": 1000.0,
+          "acciones_aprox": 2,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 17% del universo",
+            "⚠️ pos 52w — bottom 13% del universo",
+            "✅ bb width — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Jobs, Home Prices, Nike, Constellation, and More to Watch This Week",
+              "publisher": "Barrons.com",
+              "link": "https://www.barrons.com/articles/jobs-home-prices-nike-constellation-brands-stocks-f8c90d81?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Artificial Intelligence (AI) Cloud Stock Has Crushed Amazon, Microsoft, and Google in 2026. It Can Continue Skyrocketing After 184% Gains",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-artificial-intelligence-ai-cloud-stock-has-cr/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is Oracle’s Debt Simply Too Much to Justify the Risk?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/is-oracles-debt-simply-too-much-to-justify-the-risk/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Overlooked AI Infrastructure Stock Could Be 2026's Biggest Winner",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-overlooked-ai-infrastructure-stock-could-be/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The OpenAI Trade Isn't Microsoft Anymore. Here's Where Smart Money May Be Looking.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/the-openai-trade-isnt-microsoft-anymore-heres-wher/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "INTC",
+          "score": 0.666,
+          "score_pct": "66%",
+          "precio_actual": 128.32,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ sma20 vs sma50 — top 5% del universo",
+            "✅ pos 52w — top 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "Intel (INTC) se destaca en el universo de acciones de EE. UU. gracias a un fuerte momentum técnico, posicionándose como una opción atractiva con potencial de crecimiento.",
+            "accion": "COMPRA",
+            "riesgo": "El principal riesgo reside en la necesidad de una 'revitalización de ingeniería' para mantener su ventaja competitiva y el impulso actual.",
+            "catalizador": "Una mejora significativa en la ejecución de su estrategia de ingeniería y la adopción de sus nuevas tecnologías de IA podrían potenciar aún más su alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Piper Sandler Upgrades “Overweight” from Neutral on Synopsys, Inc. (SNPS)",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/piper-sandler-upgrades-overweight-neutral-184547036.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Intel Corporation (INTC)’s Stock Has Surged but Needs an Engineering Revival",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/intel-corporation-intc-stock-surged-184539609.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Nancy Pelosi Has Added These 9 Stocks To Her Portfolio Since 2025, Including Three Magnificent Seven Names",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/nancy-pelosi-added-9-stocks-153109696.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Thomas Massie Says Republicans Decry Communist 'Involvement' In Democratic Party, But Look Other Way As Trump Nationalizes 'Ownership' In Intel, US Steel",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/thomas-massie-says-republicans-decry-104637943.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "GS",
+          "score": 0.599,
+          "score_pct": "59%",
+          "precio_actual": 1019.61,
+          "monto": 1000.0,
+          "acciones_aprox": 0,
+          "razones": [
+            "✅ Volatilidad relativa — top 27% del universo",
+            "✅ sma20 vs sma50 — top 9% del universo",
+            "⚠️ Flujo de dinero (OBV) — bottom 8% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Best CD rates today, Sunday, June 28, 2026: Lock in up to 4.10% APY",
+              "publisher": "Yahoo Personal Finance",
+              "link": "https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-sunday-june-28-2026-lock-in-up-to-410-apy-100000956.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Goldman Sachs Says These 2 Software Stocks Could Surge at Least 60% From Current Levels",
+              "publisher": "TipRanks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-says-2-software-175500464.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Jefferies Reports Earnings Before the Big Banks. Here's Why Wall Street Should Be Watching Closely.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/jefferies-reports-earnings-before-the-big-banks-he/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Tech Equity Sales Renew AI Debt-Binge Worries",
+              "publisher": "Bloomberg",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/tech-equity-sales-renew-ai-190000255.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Best CD rates today, Saturday, June 27, 2026: Best account provides 4.10% APY",
+              "publisher": "Yahoo Personal Finance",
+              "link": "https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-saturday-june-27-2026-best-account-provides-410-apy-100000070.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.599,
+          "score_pct": "59%",
+          "precio_actual": 128.87,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ sma20 vs sma50 — top 18% del universo",
+            "✅ pos 52w — top 5% del universo",
+            "⚠️ bb width — bottom 26% del universo"
+          ],
+          "gemini": {
+            "resumen": "FMX destaca en el universo de acciones de EE. UU. gracias a un fuerte impulso de momentum relativo, evidenciado por su posición en el top 5% de 52 semanas y una tendencia alcista en sus medias móviles.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La expansión de las bandas de Bollinger en la parte inferior del universo podría indicar una volatilidad creciente o una posible reversión de tendencia si el momentum se debilita.",
+            "catalizador": "La reciente mejora a 'Strong Buy' y la inclusión en listas de 'Best Value Stocks' sugieren un potencial alcista impulsado por el sentimiento positivo del mercado y la percepción de valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Can Innovation Efforts Help Diageo Outpace Industry Headwinds?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/innovation-efforts-help-diageo-outpace-133400216.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Does Boston Beer Expect Lower Volume Growth in 2026?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-does-boston-beer-expect-144000502.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Fomento Economico (FMX) Upgraded to Strong Buy: Here's Why",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fomento-economico-fmx-upgraded-strong-160003028.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "New Strong Buy Stocks for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/strong-buy-stocks-june-22nd-101200041.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Best Value Stocks to Buy for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/best-value-stocks-buy-june-080900083.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "XOM",
+        "V",
+        "AMX",
+        "AMZN",
+        "AAPL"
+      ],
+      "proximo_rebalanceo": "10 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "META",
+          "score": 0.74,
+          "rank": 1
+        },
+        {
+          "ticker": "MSFT",
+          "score": 0.674,
+          "rank": 2
+        },
+        {
+          "ticker": "INTC",
+          "score": 0.666,
+          "rank": 3
+        },
+        {
+          "ticker": "GS",
+          "score": 0.599,
+          "rank": 4
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.599,
+          "rank": 5
+        },
+        {
+          "ticker": "JNJ",
+          "score": 0.591,
+          "rank": 6
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.577,
+          "rank": 7
+        },
+        {
+          "ticker": "AMD",
+          "score": 0.569,
+          "rank": 8
+        },
+        {
+          "ticker": "MCD",
+          "score": 0.568,
+          "rank": 9
+        },
+        {
+          "ticker": "GOOGL",
+          "score": 0.563,
+          "rank": 10
+        },
+        {
+          "ticker": "PFE",
+          "score": 0.559,
+          "rank": 11
+        },
+        {
+          "ticker": "NVDA",
+          "score": 0.555,
+          "rank": 12
+        },
+        {
+          "ticker": "JPM",
+          "score": 0.551,
+          "rank": 13
+        },
+        {
+          "ticker": "CVX",
+          "score": 0.55,
+          "rank": 14
+        },
+        {
+          "ticker": "PEP",
+          "score": 0.523,
+          "rank": 15
+        },
+        {
+          "ticker": "MA",
+          "score": 0.507,
+          "rank": 16
+        },
+        {
+          "ticker": "KO",
+          "score": 0.505,
+          "rank": 17
+        },
+        {
+          "ticker": "BAC",
+          "score": 0.504,
+          "rank": 18
+        },
+        {
+          "ticker": "XOM",
+          "score": 0.479,
+          "rank": 19
+        },
+        {
+          "ticker": "V",
+          "score": 0.479,
+          "rank": 20
+        },
+        {
+          "ticker": "AMX",
+          "score": 0.469,
+          "rank": 21
+        },
+        {
+          "ticker": "AMZN",
+          "score": 0.445,
+          "rank": 22
+        },
+        {
+          "ticker": "AAPL",
+          "score": 0.39,
+          "rank": 23
+        }
+      ]
+    },
+    "3s": {
+      "label": "3 semanas",
+      "semanas": 3,
+      "horizon_d": 15,
+      "top5": [
+        {
+          "ticker": "INTC",
+          "score": 0.775,
+          "score_pct": "77%",
+          "precio_actual": 128.32,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ pos 52w — top 22% del universo",
+            "✅ sma20 vs sma50 — top 5% del universo",
+            "✅ Volatilidad relativa — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "Intel (INTC) se destaca en el universo de acciones de EE. UU. gracias a un fuerte momentum técnico, posicionándose como una opción atractiva con potencial de crecimiento.",
+            "accion": "COMPRA",
+            "riesgo": "El principal riesgo reside en la necesidad de una 'revitalización de ingeniería' para mantener su ventaja competitiva y el impulso actual.",
+            "catalizador": "Una mejora significativa en la ejecución de su estrategia de ingeniería y la adopción de sus nuevas tecnologías de IA podrían potenciar aún más su alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Piper Sandler Upgrades “Overweight” from Neutral on Synopsys, Inc. (SNPS)",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/piper-sandler-upgrades-overweight-neutral-184547036.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Intel Corporation (INTC)’s Stock Has Surged but Needs an Engineering Revival",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/intel-corporation-intc-stock-surged-184539609.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Nancy Pelosi Has Added These 9 Stocks To Her Portfolio Since 2025, Including Three Magnificent Seven Names",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/nancy-pelosi-added-9-stocks-153109696.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Thomas Massie Says Republicans Decry Communist 'Involvement' In Democratic Party, But Look Other Way As Trump Nationalizes 'Ownership' In Intel, US Steel",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/thomas-massie-says-republicans-decry-104637943.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.678,
+          "score_pct": "67%",
+          "precio_actual": 128.87,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ pos 52w — top 5% del universo",
+            "✅ sma20 vs sma50 — top 18% del universo",
+            "⚠️ bb width — bottom 26% del universo"
+          ],
+          "gemini": {
+            "resumen": "FMX destaca en el universo de acciones de EE. UU. gracias a un fuerte impulso de momentum relativo, evidenciado por su posición en el top 5% de 52 semanas y una tendencia alcista en sus medias móviles.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La expansión de las bandas de Bollinger en la parte inferior del universo podría indicar una volatilidad creciente o una posible reversión de tendencia si el momentum se debilita.",
+            "catalizador": "La reciente mejora a 'Strong Buy' y la inclusión en listas de 'Best Value Stocks' sugieren un potencial alcista impulsado por el sentimiento positivo del mercado y la percepción de valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Can Innovation Efforts Help Diageo Outpace Industry Headwinds?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/innovation-efforts-help-diageo-outpace-133400216.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Does Boston Beer Expect Lower Volume Growth in 2026?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-does-boston-beer-expect-144000502.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Fomento Economico (FMX) Upgraded to Strong Buy: Here's Why",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fomento-economico-fmx-upgraded-strong-160003028.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "New Strong Buy Stocks for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/strong-buy-stocks-june-22nd-101200041.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Best Value Stocks to Buy for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/best-value-stocks-buy-june-080900083.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "META",
+          "score": 0.672,
+          "score_pct": "67%",
+          "precio_actual": 550.25,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "⚠️ pos 52w — bottom 8% del universo",
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "✅ bb width — top 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Meta Platforms Just Unveiled New Smart Glasses. What That Means for META Stock.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023201/meta-platforms-just-unveiled-new-smart-glasses-what-that-means-for-meta-stock",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI Demand Is Outstripping Supply — Even Google Can’t Keep Up",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/ai-demand-is-outstripping-supply-even-google-cant-keep-up/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Older tech workers are retiring at 55. But claiming Social Security early offers smaller checks for life.",
+              "publisher": "Moneywise",
+              "link": "https://finance.yahoo.com/small-business/articles/older-tech-workers-retiring-55-104500266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI’s biggest winners may be electricians, not engineers",
+              "publisher": "Quartz",
+              "link": "https://qz.com/ai-data-center-boom-electricians-skilled-trades",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.642,
+          "score_pct": "64%",
+          "precio_actual": 379.71,
+          "monto": 1000.0,
+          "acciones_aprox": 2,
+          "razones": [
+            "✅ Volatilidad relativa — top 9% del universo",
+            "✅ bb width — top 18% del universo",
+            "⚠️ Tendencia alcista de la media — bottom 8% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "SpaceX, Tesla, and Alphabet All Fall in a Broad Tech Rout. Should You Rebalance Your Portfolio?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/spacex-tesla-alphabet-fall-tech-rout-rebalance/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Dow Jones Futures: Market At Tipping Point As U.S.-Iran Attacks Escalate. Tesla, Jobs On Tap.",
+              "publisher": "Investor's Business Daily",
+              "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-futures-stock-market-tipping-point-eli-lilly-tesla/?src=A00220&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Elon Musk Was First Trillionaire, Prediction Markets Pick This Magnificent Seven CEO To Be Second To Join Elite Club",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/elon-musk-first-trillionaire-prediction-150022118.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bernie Sanders Says MacBook, iPad Price Rise An Example Of Tim Cook's 'Corporate Greed: Here's How Much You'll Pay Now",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/technology/articles/bernie-sanders-says-macbook-ipad-133110883.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MSFT",
+          "score": 0.64,
+          "score_pct": "64%",
+          "precio_actual": 372.97,
+          "monto": 1000.0,
+          "acciones_aprox": 2,
+          "razones": [
+            "⚠️ pos 52w — bottom 13% del universo",
+            "⚠️ sma20 vs sma50 — bottom 17% del universo",
+            "✅ bb width — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Jobs, Home Prices, Nike, Constellation, and More to Watch This Week",
+              "publisher": "Barrons.com",
+              "link": "https://www.barrons.com/articles/jobs-home-prices-nike-constellation-brands-stocks-f8c90d81?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Artificial Intelligence (AI) Cloud Stock Has Crushed Amazon, Microsoft, and Google in 2026. It Can Continue Skyrocketing After 184% Gains",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-artificial-intelligence-ai-cloud-stock-has-cr/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is Oracle’s Debt Simply Too Much to Justify the Risk?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/is-oracles-debt-simply-too-much-to-justify-the-risk/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Overlooked AI Infrastructure Stock Could Be 2026's Biggest Winner",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/this-overlooked-ai-infrastructure-stock-could-be/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The OpenAI Trade Isn't Microsoft Anymore. Here's Where Smart Money May Be Looking.",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/the-openai-trade-isnt-microsoft-anymore-heres-wher/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "AMD",
+        "AAPL",
+        "BAC",
+        "V",
+        "JNJ"
+      ],
+      "proximo_rebalanceo": "17 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "INTC",
+          "score": 0.775,
+          "rank": 1
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.678,
+          "rank": 2
+        },
+        {
+          "ticker": "META",
+          "score": 0.672,
+          "rank": 3
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.642,
+          "rank": 4
+        },
+        {
+          "ticker": "MSFT",
+          "score": 0.64,
+          "rank": 5
+        },
+        {
+          "ticker": "PFE",
+          "score": 0.639,
+          "rank": 6
+        },
+        {
+          "ticker": "MCD",
+          "score": 0.611,
+          "rank": 7
+        },
+        {
+          "ticker": "NVDA",
+          "score": 0.575,
+          "rank": 8
+        },
+        {
+          "ticker": "AMX",
+          "score": 0.56,
+          "rank": 9
+        },
+        {
+          "ticker": "GOOGL",
+          "score": 0.54,
+          "rank": 10
+        },
+        {
+          "ticker": "CVX",
+          "score": 0.536,
+          "rank": 11
+        },
+        {
+          "ticker": "PEP",
+          "score": 0.533,
+          "rank": 12
+        },
+        {
+          "ticker": "GS",
+          "score": 0.516,
+          "rank": 13
+        },
+        {
+          "ticker": "MA",
+          "score": 0.508,
+          "rank": 14
+        },
+        {
+          "ticker": "JPM",
+          "score": 0.503,
+          "rank": 15
+        },
+        {
+          "ticker": "AMZN",
+          "score": 0.5,
+          "rank": 16
+        },
+        {
+          "ticker": "KO",
+          "score": 0.499,
+          "rank": 17
+        },
+        {
+          "ticker": "XOM",
+          "score": 0.459,
+          "rank": 18
+        },
+        {
+          "ticker": "AMD",
+          "score": 0.442,
+          "rank": 19
+        },
+        {
+          "ticker": "AAPL",
+          "score": 0.429,
+          "rank": 20
+        },
+        {
+          "ticker": "BAC",
+          "score": 0.409,
+          "rank": 21
+        },
+        {
+          "ticker": "V",
+          "score": 0.402,
+          "rank": 22
+        },
+        {
+          "ticker": "JNJ",
+          "score": 0.386,
+          "rank": 23
+        }
+      ]
+    },
+    "4s": {
+      "label": "4 semanas",
+      "semanas": 4,
+      "horizon_d": 20,
+      "top5": [
+        {
+          "ticker": "INTC",
+          "score": 0.676,
+          "score_pct": "67%",
+          "precio_actual": 128.32,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ pos 52w — top 22% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ sma20 vs sma50 — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "Intel (INTC) se destaca en el universo de acciones de EE. UU. gracias a un fuerte momentum técnico, posicionándose como una opción atractiva con potencial de crecimiento.",
+            "accion": "COMPRA",
+            "riesgo": "El principal riesgo reside en la necesidad de una 'revitalización de ingeniería' para mantener su ventaja competitiva y el impulso actual.",
+            "catalizador": "Una mejora significativa en la ejecución de su estrategia de ingeniería y la adopción de sus nuevas tecnologías de IA podrían potenciar aún más su alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Piper Sandler Upgrades “Overweight” from Neutral on Synopsys, Inc. (SNPS)",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/piper-sandler-upgrades-overweight-neutral-184547036.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Intel Corporation (INTC)’s Stock Has Surged but Needs an Engineering Revival",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/intel-corporation-intc-stock-surged-184539609.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Nancy Pelosi Has Added These 9 Stocks To Her Portfolio Since 2025, Including Three Magnificent Seven Names",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/nancy-pelosi-added-9-stocks-153109696.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Thomas Massie Says Republicans Decry Communist 'Involvement' In Democratic Party, But Look Other Way As Trump Nationalizes 'Ownership' In Intel, US Steel",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/thomas-massie-says-republicans-decry-104637943.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.655,
+          "score_pct": "65%",
+          "precio_actual": 128.87,
+          "monto": 1000.0,
+          "acciones_aprox": 7,
+          "razones": [
+            "✅ pos 52w — top 5% del universo",
+            "✅ sma20 vs sma50 — top 18% del universo",
+            "⚠️ bb width — bottom 26% del universo"
+          ],
+          "gemini": {
+            "resumen": "FMX destaca en el universo de acciones de EE. UU. gracias a un fuerte impulso de momentum relativo, evidenciado por su posición en el top 5% de 52 semanas y una tendencia alcista en sus medias móviles.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La expansión de las bandas de Bollinger en la parte inferior del universo podría indicar una volatilidad creciente o una posible reversión de tendencia si el momentum se debilita.",
+            "catalizador": "La reciente mejora a 'Strong Buy' y la inclusión en listas de 'Best Value Stocks' sugieren un potencial alcista impulsado por el sentimiento positivo del mercado y la percepción de valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Can Innovation Efforts Help Diageo Outpace Industry Headwinds?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/innovation-efforts-help-diageo-outpace-133400216.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Does Boston Beer Expect Lower Volume Growth in 2026?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-does-boston-beer-expect-144000502.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Fomento Economico (FMX) Upgraded to Strong Buy: Here's Why",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fomento-economico-fmx-upgraded-strong-160003028.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "New Strong Buy Stocks for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/strong-buy-stocks-june-22nd-101200041.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Best Value Stocks to Buy for June 22nd",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/best-value-stocks-buy-june-080900083.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MCD",
+          "score": 0.645,
+          "score_pct": "64%",
+          "precio_actual": 269.76,
+          "monto": 1000.0,
+          "acciones_aprox": 3,
+          "razones": [
+            "⚠️ pos 52w — bottom 4% del universo",
+            "⚠️ Volatilidad relativa — bottom 21% del universo",
+            "⚠️ sma20 vs sma50 — bottom 26% del universo"
+          ],
+          "gemini": {
+            "resumen": "McDonald's (MCD) se destaca como el principal instrumento del universo de acciones de EE. UU. gracias a su fuerte momentum relativo, a pesar de señales técnicas de debilidad que sugieren una posible reversión.",
+            "accion": "ESPERA",
+            "riesgo": "Las señales técnicas de debilidad, como la posición en el percentil 4 en 52 semanas y la volatilidad relativa baja, sugieren cautela a pesar del buen ranking del modelo.",
+            "catalizador": "El regreso de productos populares y el interés de los inversores en acciones de valor podrían impulsar un repunte.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "McDonald's (MCD) Brings Back Fried Apple Pie To U.S. Menus After 34 Years",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-brings-back-fried-010718001.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Restaurant Brands International vs. McDonald's: Comparing Revenue Trends for These Fast-Food Giants",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/charts/2026/06/27/restaurant-brands-international-vs-mcdonald-s-comparing-revenue-trends-for-these-fast-food-giants/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "One of McDonald’s biggest fan-favorites is back for July 4",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/restaurants/mcdonalds-brings-back-fan-favorite-fried-apple-pie-after-34-year-hiatus",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "McDonald's (MCD) Increases Despite Market Slip: Here's What You Need to Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-increases-despite-market-214504147.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "5 Stocks on Sale: Values or Traps?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/5-stocks-sale-values-traps-191800912.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "META",
+          "score": 0.634,
+          "score_pct": "63%",
+          "precio_actual": 550.25,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "⚠️ pos 52w — bottom 8% del universo",
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "✅ bb width — top 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Meta Platforms Just Unveiled New Smart Glasses. What That Means for META Stock.",
+              "publisher": "Barchart",
+              "link": "https://www.barchart.com/story/news/3023201/meta-platforms-just-unveiled-new-smart-glasses-what-that-means-for-meta-stock",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI Demand Is Outstripping Supply — Even Google Can’t Keep Up",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/ai-demand-is-outstripping-supply-even-google-cant-keep-up/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Older tech workers are retiring at 55. But claiming Social Security early offers smaller checks for life.",
+              "publisher": "Moneywise",
+              "link": "https://finance.yahoo.com/small-business/articles/older-tech-workers-retiring-55-104500266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "AI’s biggest winners may be electricians, not engineers",
+              "publisher": "Quartz",
+              "link": "https://qz.com/ai-data-center-boom-electricians-skilled-trades",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.628,
+          "score_pct": "62%",
+          "precio_actual": 379.71,
+          "monto": 1000.0,
+          "acciones_aprox": 2,
+          "razones": [
+            "✅ Volatilidad relativa — top 9% del universo",
+            "✅ bb width — top 18% del universo",
+            "⚠️ Tendencia alcista de la media — bottom 8% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "SpaceX, Tesla, and Alphabet All Fall in a Broad Tech Rout. Should You Rebalance Your Portfolio?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/spacex-tesla-alphabet-fall-tech-rout-rebalance/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Dow Jones Futures: Market At Tipping Point As U.S.-Iran Attacks Escalate. Tesla, Jobs On Tap.",
+              "publisher": "Investor's Business Daily",
+              "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-futures-stock-market-tipping-point-eli-lilly-tesla/?src=A00220&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Elon Musk Was First Trillionaire, Prediction Markets Pick This Magnificent Seven CEO To Be Second To Join Elite Club",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/elon-musk-first-trillionaire-prediction-150022118.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why Wall Street thinks US memory maker Micron is the next Nvidia",
+              "publisher": "TechCrunch",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-wall-street-thinks-us-150000483.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bernie Sanders Says MacBook, iPad Price Rise An Example Of Tim Cook's 'Corporate Greed: Here's How Much You'll Pay Now",
+              "publisher": "Benzinga",
+              "link": "https://finance.yahoo.com/technology/articles/bernie-sanders-says-macbook-ipad-133110883.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "V",
+        "XOM",
+        "JNJ",
+        "BAC",
+        "AMD"
+      ],
+      "proximo_rebalanceo": "24 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "INTC",
+          "score": 0.676,
+          "rank": 1
+        },
+        {
+          "ticker": "FMX",
+          "score": 0.655,
+          "rank": 2
+        },
+        {
+          "ticker": "MCD",
+          "score": 0.645,
+          "rank": 3
+        },
+        {
+          "ticker": "META",
+          "score": 0.634,
+          "rank": 4
+        },
+        {
+          "ticker": "TSLA",
+          "score": 0.628,
+          "rank": 5
+        },
+        {
+          "ticker": "PEP",
+          "score": 0.62,
+          "rank": 6
+        },
+        {
+          "ticker": "MSFT",
+          "score": 0.607,
+          "rank": 7
+        },
+        {
+          "ticker": "PFE",
+          "score": 0.601,
+          "rank": 8
+        },
+        {
+          "ticker": "AMX",
+          "score": 0.591,
+          "rank": 9
+        },
+        {
+          "ticker": "NVDA",
+          "score": 0.567,
+          "rank": 10
+        },
+        {
+          "ticker": "GS",
+          "score": 0.563,
+          "rank": 11
+        },
+        {
+          "ticker": "KO",
+          "score": 0.544,
+          "rank": 12
+        },
+        {
+          "ticker": "CVX",
+          "score": 0.534,
+          "rank": 13
+        },
+        {
+          "ticker": "MA",
+          "score": 0.518,
+          "rank": 14
+        },
+        {
+          "ticker": "AAPL",
+          "score": 0.516,
+          "rank": 15
+        },
+        {
+          "ticker": "AMZN",
+          "score": 0.506,
+          "rank": 16
+        },
+        {
+          "ticker": "GOOGL",
+          "score": 0.506,
+          "rank": 17
+        },
+        {
+          "ticker": "JPM",
+          "score": 0.496,
+          "rank": 18
+        },
+        {
+          "ticker": "V",
+          "score": 0.459,
+          "rank": 19
+        },
+        {
+          "ticker": "XOM",
+          "score": 0.448,
+          "rank": 20
+        },
+        {
+          "ticker": "JNJ",
+          "score": 0.411,
+          "rank": 21
+        },
+        {
+          "ticker": "BAC",
+          "score": 0.399,
+          "rank": 22
+        },
+        {
+          "ticker": "AMD",
+          "score": 0.335,
+          "rank": 23
+        }
+      ]
+    }
+  },
+  "consensus": [
+    {
+      "ticker": "META",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "n_horizontes": 3,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s"
+      ]
+    },
+    {
+      "ticker": "INTC",
+      "n_horizontes": 3,
+      "horizontes": [
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "FMX",
+      "n_horizontes": 3,
+      "horizontes": [
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "GS",
+      "n_horizontes": 2,
+      "horizontes": [
+        "1s",
+        "2s"
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "n_horizontes": 2,
+      "horizontes": [
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "n_horizontes": 1,
+      "horizontes": [
+        "1s"
+      ]
+    },
+    {
+      "ticker": "JNJ",
+      "n_horizontes": 1,
+      "horizontes": [
+        "1s"
+      ]
+    },
+    {
+      "ticker": "MCD",
+      "n_horizontes": 1,
+      "horizontes": [
+        "4s"
+      ]
+    }
+  ]
+}

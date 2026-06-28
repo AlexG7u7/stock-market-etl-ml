@@ -1,0 +1,1860 @@
+{
+  "universe": "₿ Cripto (proxies GBM)",
+  "descripcion": "ETFs de BTC/ETH y acciones del ecosistema cripto disponibles en GBM",
+  "moneda": "USD",
+  "fecha": "2026-06-28",
+  "capital": 5000.0,
+  "monto_por_nombre": 1000.0,
+  "mercado": {
+    "estado": "bajista",
+    "emoji": "🔴",
+    "descripcion": "Benchmark bajo MA20 (-6.1% en 10d) — precaución"
+  },
+  "n_tickers_analizados": 9,
+  "top5": [
+    {
+      "ticker": "MSTR",
+      "score": 0.733,
+      "score_pct": "73%",
+      "precio_actual": 82.31,
+      "monto": 1000.0,
+      "acciones_aprox": 12,
+      "razones": [
+        "✅ Volatilidad relativa — top 0% del universo",
+        "⚠️ sma20 vs sma50 — bottom 22% del universo",
+        "⚠️ pos 52w — bottom 22% del universo"
+      ],
+      "gemini": {
+        "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
+        "accion": "ESPERA",
+        "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
+        "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
+        "sentimiento_news": "negativo"
+      },
+      "noticias": [
+        {
+          "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
+          "publisher": "BeInCrypto",
+          "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
+          "publisher": "Stocktwits",
+          "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
+          "publisher": "Stocktwits",
+          "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "CLSK",
+      "score": 0.731,
+      "score_pct": "73%",
+      "precio_actual": 16.33,
+      "monto": 1000.0,
+      "acciones_aprox": 61,
+      "razones": [
+        "✅ Volatilidad relativa — top 23% del universo",
+        "✅ sma20 vs sma50 — top 12% del universo",
+        "✅ pos 52w — top 12% del universo"
+      ],
+      "gemini": {
+        "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
+        "accion": "COMPRA",
+        "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
+        "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
+        "sentimiento_news": "positivo"
+      },
+      "noticias": [
+        {
+          "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
+          "publisher": "GuruFocus.com",
+          "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
+          "publisher": "Insider Monkey",
+          "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "ETHA",
+      "score": 0.675,
+      "score_pct": "67%",
+      "precio_actual": 11.89,
+      "monto": 1000.0,
+      "acciones_aprox": 84,
+      "razones": [
+        "⚠️ sma20 vs sma50 — bottom 11% del universo",
+        "⚠️ pos 52w — bottom 11% del universo",
+        "✅ bb width — top 12% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "The 2 Signals That Will Determine IBIT’s Next 12 Months",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/24/the-2-signals-that-will-determine-ibits-next-12-months/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "ETHT vs. ETHA: Should You Use a 2x Ether ETF or Just Own Spot ETH?",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/16/etht-vs-etha-should-you-use-a-2x-ether-etf-or-just-own-spot-eth/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "After Bitcoin Crash, Can the hype for HYPE ETFs Continue?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crash-hype-hype-etfs-170000975.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "The Ethereum Trust ETF (ETHA) Lost 46% of Its Value in 2026, and Friday’s Payroll Print Finished the Work",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/08/the-ethereum-trust-etf-etha-lost-46-of-its-value-in-2026-and-fridays-payroll-print-finished-the-work/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+          "publisher": "The Wall Street Journal",
+          "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "MARA",
+      "score": 0.66,
+      "score_pct": "65%",
+      "precio_actual": 14.54,
+      "monto": 1000.0,
+      "acciones_aprox": 68,
+      "razones": [
+        "✅ Volatilidad relativa — top 12% del universo",
+        "✅ sma20 vs sma50 — top 23% del universo",
+        "✅ pos 52w — top 23% del universo"
+      ],
+      "gemini": {
+        "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
+        "accion": "COMPRA FUERTE",
+        "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
+        "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
+        "sentimiento_news": "positivo"
+      },
+      "noticias": [
+        {
+          "title": "Another crypto firm cuts staff in major AI push",
+          "publisher": "TheStreet",
+          "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+          "publisher": "Trefis",
+          "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
+          "publisher": "Stocktwits",
+          "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "RIOT",
+      "score": 0.588,
+      "score_pct": "58%",
+      "precio_actual": 28.57,
+      "monto": 1000.0,
+      "acciones_aprox": 35,
+      "razones": [
+        "✅ sma20 vs sma50 — top 0% del universo",
+        "✅ pos 52w — top 0% del universo",
+        "⚠️ bb width — bottom 22% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Top AI Data Center Stock Pick of Leopold Aschenbrenner’s Situational Awareness Everyone’s Ignoring",
+          "publisher": "Insider Monkey",
+          "link": "https://finance.yahoo.com/technology/ai/articles/top-ai-data-center-stock-193822511.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Is Riot Platforms, Inc. (RIOT) a Buy as Wall Street Analysts Look Optimistic?",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-buy-133002688.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Riot Platforms, Inc. (RIOT) Gains As Market Dips: What You Should Know",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-gains-215002174.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Riot Platforms, Inc. (RIOT) Laps the Stock Market: Here's Why",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-laps-214504420.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    }
+  ],
+  "evitar": [
+    "RIOT",
+    "COIN",
+    "IBIT",
+    "GBTC",
+    "FBTC"
+  ],
+  "proximo_rebalanceo": "10 Jul 2026",
+  "universo_completo": [
+    {
+      "ticker": "MSTR",
+      "score": 0.733,
+      "rank": 1
+    },
+    {
+      "ticker": "CLSK",
+      "score": 0.731,
+      "rank": 2
+    },
+    {
+      "ticker": "ETHA",
+      "score": 0.675,
+      "rank": 3
+    },
+    {
+      "ticker": "MARA",
+      "score": 0.66,
+      "rank": 4
+    },
+    {
+      "ticker": "RIOT",
+      "score": 0.588,
+      "rank": 5
+    },
+    {
+      "ticker": "COIN",
+      "score": 0.55,
+      "rank": 6
+    },
+    {
+      "ticker": "IBIT",
+      "score": 0.487,
+      "rank": 7
+    },
+    {
+      "ticker": "GBTC",
+      "score": 0.447,
+      "rank": 8
+    },
+    {
+      "ticker": "FBTC",
+      "score": 0.396,
+      "rank": 9
+    }
+  ],
+  "by_horizon": {
+    "1s": {
+      "label": "1 semana",
+      "semanas": 1,
+      "horizon_d": 5,
+      "top5": [
+        {
+          "ticker": "CLSK",
+          "score": 0.779,
+          "score_pct": "77%",
+          "precio_actual": 16.33,
+          "monto": 1000.0,
+          "acciones_aprox": 61,
+          "razones": [
+            "✅ sma20 vs sma50 — top 12% del universo",
+            "✅ pos 52w — top 12% del universo",
+            "✅ consec down — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
+            "accion": "COMPRA",
+            "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
+            "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
+              "publisher": "GuruFocus.com",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MARA",
+          "score": 0.735,
+          "score_pct": "73%",
+          "precio_actual": 14.54,
+          "monto": 1000.0,
+          "acciones_aprox": 68,
+          "razones": [
+            "✅ sma20 vs sma50 — top 23% del universo",
+            "✅ pos 52w — top 23% del universo",
+            "✅ consec down — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
+            "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Another crypto firm cuts staff in major AI push",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.717,
+          "score_pct": "71%",
+          "precio_actual": 82.31,
+          "monto": 1000.0,
+          "acciones_aprox": 12,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "⚠️ pos 52w — bottom 22% del universo",
+            "✅ consec down — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
+            "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.695,
+          "score_pct": "69%",
+          "precio_actual": 28.57,
+          "monto": 1000.0,
+          "acciones_aprox": 35,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ pos 52w — top 0% del universo",
+            "✅ consec down — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Top AI Data Center Stock Pick of Leopold Aschenbrenner’s Situational Awareness Everyone’s Ignoring",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/technology/ai/articles/top-ai-data-center-stock-193822511.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is Riot Platforms, Inc. (RIOT) a Buy as Wall Street Analysts Look Optimistic?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-buy-133002688.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Riot Platforms, Inc. (RIOT) Gains As Market Dips: What You Should Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-gains-215002174.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Riot Platforms, Inc. (RIOT) Laps the Stock Market: Here's Why",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-laps-214504420.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.598,
+          "score_pct": "59%",
+          "precio_actual": 11.89,
+          "monto": 1000.0,
+          "acciones_aprox": 84,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 11% del universo",
+            "⚠️ pos 52w — bottom 11% del universo",
+            "✅ consec down — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "The 2 Signals That Will Determine IBIT’s Next 12 Months",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/24/the-2-signals-that-will-determine-ibits-next-12-months/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETHT vs. ETHA: Should You Use a 2x Ether ETF or Just Own Spot ETH?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/16/etht-vs-etha-should-you-use-a-2x-ether-etf-or-just-own-spot-eth/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "After Bitcoin Crash, Can the hype for HYPE ETFs Continue?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crash-hype-hype-etfs-170000975.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The Ethereum Trust ETF (ETHA) Lost 46% of Its Value in 2026, and Friday’s Payroll Print Finished the Work",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/08/the-ethereum-trust-etf-etha-lost-46-of-its-value-in-2026-and-fridays-payroll-print-finished-the-work/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "ETHA",
+        "COIN",
+        "FBTC",
+        "GBTC",
+        "IBIT"
+      ],
+      "proximo_rebalanceo": "03 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "CLSK",
+          "score": 0.779,
+          "rank": 1
+        },
+        {
+          "ticker": "MARA",
+          "score": 0.735,
+          "rank": 2
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.717,
+          "rank": 3
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.695,
+          "rank": 4
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.598,
+          "rank": 5
+        },
+        {
+          "ticker": "COIN",
+          "score": 0.592,
+          "rank": 6
+        },
+        {
+          "ticker": "FBTC",
+          "score": 0.507,
+          "rank": 7
+        },
+        {
+          "ticker": "GBTC",
+          "score": 0.499,
+          "rank": 8
+        },
+        {
+          "ticker": "IBIT",
+          "score": 0.488,
+          "rank": 9
+        }
+      ]
+    },
+    "2s": {
+      "label": "2 semanas",
+      "semanas": 2,
+      "horizon_d": 10,
+      "top5": [
+        {
+          "ticker": "MSTR",
+          "score": 0.733,
+          "score_pct": "73%",
+          "precio_actual": 82.31,
+          "monto": 1000.0,
+          "acciones_aprox": 12,
+          "razones": [
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "⚠️ pos 52w — bottom 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
+            "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.731,
+          "score_pct": "73%",
+          "precio_actual": 16.33,
+          "monto": 1000.0,
+          "acciones_aprox": 61,
+          "razones": [
+            "✅ Volatilidad relativa — top 23% del universo",
+            "✅ sma20 vs sma50 — top 12% del universo",
+            "✅ pos 52w — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
+            "accion": "COMPRA",
+            "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
+            "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
+              "publisher": "GuruFocus.com",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.675,
+          "score_pct": "67%",
+          "precio_actual": 11.89,
+          "monto": 1000.0,
+          "acciones_aprox": 84,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 11% del universo",
+            "⚠️ pos 52w — bottom 11% del universo",
+            "✅ bb width — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "The 2 Signals That Will Determine IBIT’s Next 12 Months",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/24/the-2-signals-that-will-determine-ibits-next-12-months/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETHT vs. ETHA: Should You Use a 2x Ether ETF or Just Own Spot ETH?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/16/etht-vs-etha-should-you-use-a-2x-ether-etf-or-just-own-spot-eth/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "After Bitcoin Crash, Can the hype for HYPE ETFs Continue?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crash-hype-hype-etfs-170000975.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The Ethereum Trust ETF (ETHA) Lost 46% of Its Value in 2026, and Friday’s Payroll Print Finished the Work",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/08/the-ethereum-trust-etf-etha-lost-46-of-its-value-in-2026-and-fridays-payroll-print-finished-the-work/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MARA",
+          "score": 0.66,
+          "score_pct": "65%",
+          "precio_actual": 14.54,
+          "monto": 1000.0,
+          "acciones_aprox": 68,
+          "razones": [
+            "✅ Volatilidad relativa — top 12% del universo",
+            "✅ sma20 vs sma50 — top 23% del universo",
+            "✅ pos 52w — top 23% del universo"
+          ],
+          "gemini": {
+            "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
+            "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Another crypto firm cuts staff in major AI push",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.588,
+          "score_pct": "58%",
+          "precio_actual": 28.57,
+          "monto": 1000.0,
+          "acciones_aprox": 35,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ pos 52w — top 0% del universo",
+            "⚠️ bb width — bottom 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Top AI Data Center Stock Pick of Leopold Aschenbrenner’s Situational Awareness Everyone’s Ignoring",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/technology/ai/articles/top-ai-data-center-stock-193822511.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is Riot Platforms, Inc. (RIOT) a Buy as Wall Street Analysts Look Optimistic?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-buy-133002688.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Riot Platforms, Inc. (RIOT) Gains As Market Dips: What You Should Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-gains-215002174.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Riot Platforms, Inc. (RIOT) Laps the Stock Market: Here's Why",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/riot-platforms-inc-riot-laps-214504420.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "RIOT",
+        "COIN",
+        "IBIT",
+        "GBTC",
+        "FBTC"
+      ],
+      "proximo_rebalanceo": "10 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "MSTR",
+          "score": 0.733,
+          "rank": 1
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.731,
+          "rank": 2
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.675,
+          "rank": 3
+        },
+        {
+          "ticker": "MARA",
+          "score": 0.66,
+          "rank": 4
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.588,
+          "rank": 5
+        },
+        {
+          "ticker": "COIN",
+          "score": 0.55,
+          "rank": 6
+        },
+        {
+          "ticker": "IBIT",
+          "score": 0.487,
+          "rank": 7
+        },
+        {
+          "ticker": "GBTC",
+          "score": 0.447,
+          "rank": 8
+        },
+        {
+          "ticker": "FBTC",
+          "score": 0.396,
+          "rank": 9
+        }
+      ]
+    },
+    "3s": {
+      "label": "3 semanas",
+      "semanas": 3,
+      "horizon_d": 15,
+      "top5": [
+        {
+          "ticker": "MARA",
+          "score": 0.691,
+          "score_pct": "69%",
+          "precio_actual": 14.54,
+          "monto": 1000.0,
+          "acciones_aprox": 68,
+          "razones": [
+            "✅ sma20 vs sma50 — top 23% del universo",
+            "✅ Volatilidad relativa — top 12% del universo",
+            "✅ pos 52w — top 23% del universo"
+          ],
+          "gemini": {
+            "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
+            "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Another crypto firm cuts staff in major AI push",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.668,
+          "score_pct": "66%",
+          "precio_actual": 11.89,
+          "monto": 1000.0,
+          "acciones_aprox": 84,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 11% del universo",
+            "⚠️ pos 52w — bottom 11% del universo",
+            "✅ bb width — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "The 2 Signals That Will Determine IBIT’s Next 12 Months",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/24/the-2-signals-that-will-determine-ibits-next-12-months/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETHT vs. ETHA: Should You Use a 2x Ether ETF or Just Own Spot ETH?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/16/etht-vs-etha-should-you-use-a-2x-ether-etf-or-just-own-spot-eth/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "After Bitcoin Crash, Can the hype for HYPE ETFs Continue?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crash-hype-hype-etfs-170000975.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The Ethereum Trust ETF (ETHA) Lost 46% of Its Value in 2026, and Friday’s Payroll Print Finished the Work",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/08/the-ethereum-trust-etf-etha-lost-46-of-its-value-in-2026-and-fridays-payroll-print-finished-the-work/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.655,
+          "score_pct": "65%",
+          "precio_actual": 82.31,
+          "monto": 1000.0,
+          "acciones_aprox": 12,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ pos 52w — bottom 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
+            "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.617,
+          "score_pct": "61%",
+          "precio_actual": 16.33,
+          "monto": 1000.0,
+          "acciones_aprox": 61,
+          "razones": [
+            "✅ sma20 vs sma50 — top 12% del universo",
+            "✅ Volatilidad relativa — top 23% del universo",
+            "✅ pos 52w — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
+            "accion": "COMPRA",
+            "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
+            "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
+              "publisher": "GuruFocus.com",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "COIN",
+          "score": 0.563,
+          "score_pct": "56%",
+          "precio_actual": 149.06,
+          "monto": 1000.0,
+          "acciones_aprox": 6,
+          "razones": [
+            "✅ bb width — top 23% del universo",
+            "⚠️ Flujo de dinero (OBV) — bottom 11% del universo",
+            "✅ hv ratio — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Bitcoin Has Had a Terrible 2026. What Can Make the Second Half of the Year Better?",
+              "publisher": "Investopedia",
+              "link": "https://www.investopedia.com/what-to-expect-from-bitcoin-crypto-in-the-second-half-2026-11990861",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Coinbase CEO Armstrong Comments on Betting Promotion Concerns in the Base App",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/coinbase-ceo-zcash-founder-risky-bets/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Cathie Wood buys $11.5 million of battered tech stock",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/investing/stocks/cathie-wood-buys-11-5-million-of-battered-tech-stock",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Cathie Wood's Ark Invest Resumes Buying Crypto Stocks After A Week-Long Pause",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/ark-invest-cathiewood-crypto-stocks-buy-weekly-pause/cZ13bnXR7WZ",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Coinbase CEO Halved AI Costs, Calls Bitcoin Downturn a Cool Breeze",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/coinbase-ceo-ai-costs-bitcoin-market/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "COIN",
+        "IBIT",
+        "GBTC",
+        "RIOT",
+        "FBTC"
+      ],
+      "proximo_rebalanceo": "17 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "MARA",
+          "score": 0.691,
+          "rank": 1
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.668,
+          "rank": 2
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.655,
+          "rank": 3
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.617,
+          "rank": 4
+        },
+        {
+          "ticker": "COIN",
+          "score": 0.563,
+          "rank": 5
+        },
+        {
+          "ticker": "IBIT",
+          "score": 0.523,
+          "rank": 6
+        },
+        {
+          "ticker": "GBTC",
+          "score": 0.52,
+          "rank": 7
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.412,
+          "rank": 8
+        },
+        {
+          "ticker": "FBTC",
+          "score": 0.403,
+          "rank": 9
+        }
+      ]
+    },
+    "4s": {
+      "label": "4 semanas",
+      "semanas": 4,
+      "horizon_d": 20,
+      "top5": [
+        {
+          "ticker": "MARA",
+          "score": 0.748,
+          "score_pct": "74%",
+          "precio_actual": 14.54,
+          "monto": 1000.0,
+          "acciones_aprox": 68,
+          "razones": [
+            "✅ sma20 vs sma50 — top 23% del universo",
+            "✅ Volatilidad relativa — top 12% del universo",
+            "✅ pos 52w — top 23% del universo"
+          ],
+          "gemini": {
+            "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
+            "accion": "COMPRA FUERTE",
+            "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
+            "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Another crypto firm cuts staff in major AI push",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.599,
+          "score_pct": "59%",
+          "precio_actual": 82.31,
+          "monto": 1000.0,
+          "acciones_aprox": 12,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ pos 52w — bottom 22% del universo"
+          ],
+          "gemini": {
+            "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
+            "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
+              "publisher": "BeInCrypto",
+              "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.586,
+          "score_pct": "58%",
+          "precio_actual": 16.33,
+          "monto": 1000.0,
+          "acciones_aprox": 61,
+          "razones": [
+            "✅ sma20 vs sma50 — top 12% del universo",
+            "✅ Volatilidad relativa — top 23% del universo",
+            "✅ pos 52w — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
+            "accion": "COMPRA",
+            "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
+            "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
+            "sentimiento_news": "positivo"
+          },
+          "noticias": [
+            {
+              "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
+              "publisher": "GuruFocus.com",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
+              "publisher": "Insider Monkey",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.58,
+          "score_pct": "58%",
+          "precio_actual": 11.89,
+          "monto": 1000.0,
+          "acciones_aprox": 84,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 11% del universo",
+            "⚠️ pos 52w — bottom 11% del universo",
+            "✅ bb width — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "The 2 Signals That Will Determine IBIT’s Next 12 Months",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/24/the-2-signals-that-will-determine-ibits-next-12-months/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETHT vs. ETHA: Should You Use a 2x Ether ETF or Just Own Spot ETH?",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/16/etht-vs-etha-should-you-use-a-2x-ether-etf-or-just-own-spot-eth/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "After Bitcoin Crash, Can the hype for HYPE ETFs Continue?",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crash-hype-hype-etfs-170000975.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The Ethereum Trust ETF (ETHA) Lost 46% of Its Value in 2026, and Friday’s Payroll Print Finished the Work",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/08/the-ethereum-trust-etf-etha-lost-46-of-its-value-in-2026-and-fridays-payroll-print-finished-the-work/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "GBTC",
+          "score": 0.546,
+          "score_pct": "54%",
+          "precio_actual": 46.28,
+          "monto": 1000.0,
+          "acciones_aprox": 21,
+          "razones": [
+            "⚠️ Volatilidad relativa — bottom 22% del universo",
+            "⚠️ Flujo de dinero (OBV) — bottom 22% del universo",
+            "✅ mfi 14 — top 12% del universo"
+          ],
+          "gemini": {
+            "resumen": "GBTC se posiciona como el instrumento líder en cripto debido a un fuerte momentum relativo, a pesar de señales de volatilidad y flujo de dinero, impulsado por un MFI favorable y la creciente demanda de exposición a cripto sin propiedad directa.",
+            "accion": "COMPRA",
+            "riesgo": "El principal riesgo reside en la alta comisión del 1.50% que erosiona significativamente las ganancias a largo plazo y la posible tributación de ingresos ordinarios sobre distribuciones forzadas para los tenedores de ETFs spot.",
+            "catalizador": "Un aumento en la adopción de ETFs de Bitcoin como vía de inversión indirecta y la percepción de Morgan Stanley sobre la exposición a activos digitales podrían impulsar aún más el valor de GBTC.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "GBTC’s 1.50% Fee Is Subtly Costing You Thousands Every Decade",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/19/gbtcs-1-50-fee-is-subtly-costing-you-thousands-every-decade/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "The Boom in Crypto ETFs Has a Downside for Investors",
+              "publisher": "The Wall Street Journal",
+              "link": "https://www.wsj.com/finance/investing/crypto-etfs-boom-downside-8e2535a7?siteid=yhoof2&yptr=yahoo",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Morgan Stanley reveals surprising asset exposure",
+              "publisher": "TheStreet",
+              "link": "https://www.thestreet.com/crypto/markets/morgan-stanley-discloses-bitcoin-xrp-sol-holdings",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "FBTC Holds $12 Billion in Bitcoin But Spot ETF Holders Pay Ordinary Income Tax on Forced Distributions Most Have Never Considered",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/05/27/fbtc-holds-12-billion-in-bitcoin-but-spot-etf-holders-pay-ordinary-income-tax-on-forced-distributions-most-have-never-considered/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "GBTC",
+        "COIN",
+        "IBIT",
+        "RIOT",
+        "FBTC"
+      ],
+      "proximo_rebalanceo": "24 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "MARA",
+          "score": 0.748,
+          "rank": 1
+        },
+        {
+          "ticker": "MSTR",
+          "score": 0.599,
+          "rank": 2
+        },
+        {
+          "ticker": "CLSK",
+          "score": 0.586,
+          "rank": 3
+        },
+        {
+          "ticker": "ETHA",
+          "score": 0.58,
+          "rank": 4
+        },
+        {
+          "ticker": "GBTC",
+          "score": 0.546,
+          "rank": 5
+        },
+        {
+          "ticker": "COIN",
+          "score": 0.544,
+          "rank": 6
+        },
+        {
+          "ticker": "IBIT",
+          "score": 0.523,
+          "rank": 7
+        },
+        {
+          "ticker": "RIOT",
+          "score": 0.415,
+          "rank": 8
+        },
+        {
+          "ticker": "FBTC",
+          "score": 0.368,
+          "rank": 9
+        }
+      ]
+    }
+  },
+  "consensus": [
+    {
+      "ticker": "CLSK",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "MARA",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "MSTR",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "ETHA",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "RIOT",
+      "n_horizontes": 2,
+      "horizontes": [
+        "1s",
+        "2s"
+      ]
+    },
+    {
+      "ticker": "COIN",
+      "n_horizontes": 1,
+      "horizontes": [
+        "3s"
+      ]
+    },
+    {
+      "ticker": "GBTC",
+      "n_horizontes": 1,
+      "horizontes": [
+        "4s"
+      ]
+    }
+  ]
+}

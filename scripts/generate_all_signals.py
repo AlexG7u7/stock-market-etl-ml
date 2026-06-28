@@ -32,6 +32,7 @@ sys.path.insert(0, str(ROOT))
 from src.data.universes import UNIVERSES
 from src.ml.features import (compute_features, add_macro_features,
                               add_cross_section_features, FEATURE_COLS)
+from src.ml.news import load_cached_news_features, get_news_features
 from scripts.cross_sectional_v2 import add_rank_normalized, RN_COLS, _LGBM_BASE
 
 OUT_DIR = ROOT / "data" / "signals"
@@ -321,17 +322,23 @@ def generate_universe_signal(
         key=lambda x: -x["n_horizontes"],
     )
 
-    # ── Gemini: analiza top tickers del consenso (máx 7 para no gastar API) ───
-    top_consensus_tickers = [c["ticker"] for c in consensus[:7]]
-    # Usar el ranking de 4 semanas como representativo para Gemini
-    ref_picks = by_horizon.get("4s", by_horizon[list(by_horizon.keys())[0]])["top5"]
-    ref_picks_filtered = [p for p in ref_picks if p["ticker"] in top_consensus_tickers]
-    ref_picks_filtered += [p for p in ref_picks if p["ticker"] not in top_consensus_tickers]
-    ref_picks_filtered = ref_picks_filtered[:top_n]
+    # ── Gemini: analiza TODOS los tickers únicos del top-5 de cualquier horizonte ─
+    # Recoger tickers únicos de todos los horizontes (prioriza consenso)
+    all_unique_picks: list[dict] = []
+    seen_tickers: set[str] = set()
+    for hk in ["4s", "3s", "2s", "1s"]:
+        for p in by_horizon.get(hk, {}).get("top5", []):
+            if p["ticker"] not in seen_tickers:
+                all_unique_picks.append(p)
+                seen_tickers.add(p["ticker"])
+
+    # Ordenar: consenso fuerte primero
+    consensus_rank = {c["ticker"]: c["n_horizontes"] for c in consensus}
+    all_unique_picks.sort(key=lambda p: -consensus_rank.get(p["ticker"], 0))
 
     from src.api.gemini_analyst import analyze_batch
     gemini_analyses = analyze_batch(
-        ref_picks_filtered, cfg["tickers"], universe_name, universe_slug=cfg["slug"]
+        all_unique_picks, cfg["tickers"], universe_name, universe_slug=cfg["slug"]
     )
 
     # Enriquecer picks de TODOS los horizontes con análisis Gemini
@@ -347,6 +354,44 @@ def generate_universe_signal(
                 "sentimiento_news": a.get("sentimiento_news", ""),
             }
             p["noticias"] = a.get("noticias", [])
+
+    # ── News sentiment — cargar del cache o computar en tiempo real ───────────
+    news_df = load_cached_news_features()   # data/news/latest.json (generado por fetch_news.py)
+    if news_df is None:
+        # Sin cache: calcular en tiempo real para los tickers top del consenso
+        print(f"  [{universe_name}]  news features (en tiempo real, sin cache)...")
+        top_tickers = [c["ticker"] for c in consensus[:10]]
+        news_rows = {}
+        for name, symbol in tickers.items():
+            if name in top_tickers:
+                try:
+                    feat = get_news_features(name, symbol, verbose=False)
+                    news_rows[name] = feat
+                except Exception:
+                    pass
+        news_df = pd.DataFrame(news_rows).T if news_rows else None
+
+    # Enriquecer picks con news_sent_score
+    if news_df is not None:
+        for hkey, hdata in by_horizon.items():
+            for p in hdata["top5"]:
+                name = p["ticker"]
+                if name in news_df.index:
+                    sent = float(news_df.loc[name, "news_sent_score"])
+                    p["news_sent_score"] = round(sent, 3)
+                    p["news_alerta"]     = sent < -0.35
+                else:
+                    p["news_sent_score"] = None
+                    p["news_alerta"]     = False
+
+        # Añadir news_sent_score al ranking completo
+        for hkey, hdata in by_horizon.items():
+            for entry in hdata.get("universo_completo", []):
+                name = entry["ticker"]
+                if news_df is not None and name in news_df.index:
+                    entry["news_sent_score"] = round(
+                        float(news_df.loc[name, "news_sent_score"]), 3
+                    )
 
     # El horizonte por defecto del universo como campo de compatibilidad
     default_key = next((h["key"] for h in HORIZONS if h["d"] == cfg.get("horizonte", 20)), "4s")

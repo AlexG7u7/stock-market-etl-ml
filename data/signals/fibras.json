@@ -1,0 +1,1083 @@
+{
+  "universe": "🏢 FIBRAs (bienes raíces MX)",
+  "descripcion": "Fideicomisos de Infraestructura y Bienes Raíces en México",
+  "moneda": "MXN",
+  "fecha": "2026-06-28",
+  "capital": 5000.0,
+  "monto_por_nombre": 1000.0,
+  "mercado": {
+    "estado": "lateral",
+    "emoji": "🟡",
+    "descripcion": "Sin tendencia clara (+0.8% en 10d)"
+  },
+  "n_tickers_analizados": 3,
+  "top5": [
+    {
+      "ticker": "FINN13",
+      "score": 0.802,
+      "score_pct": "80%",
+      "precio_actual": 4.64,
+      "monto": 1000.0,
+      "acciones_aprox": 215,
+      "razones": [
+        "✅ bb width — top 0% del universo",
+        "✅ Volatilidad relativa — top 0% del universo",
+        "✅ hv ratio — top 0% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "FIBRAPL",
+      "score": 0.793,
+      "score_pct": "79%",
+      "precio_actual": 75.37,
+      "monto": 1000.0,
+      "acciones_aprox": 13,
+      "razones": [
+        "✅ sma20 vs sma50 — top 0% del universo",
+        "✅ consec down — top 0% del universo",
+        "✅ Volumen inusualmente alto — top 0% del universo"
+      ],
+      "gemini": {
+        "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+        "accion": "ESPERA",
+        "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+        "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "FUNO11",
+      "score": 0.473,
+      "score_pct": "47%",
+      "precio_actual": 29.61,
+      "monto": 1000.0,
+      "acciones_aprox": 33,
+      "razones": [
+        "✅ mfi 14 — top 0% del universo",
+        "✅ pos 52w — top 0% del universo",
+        "✅ Flujo de dinero (OBV) — top 0% del universo"
+      ],
+      "gemini": {
+        "resumen": "",
+        "accion": "",
+        "riesgo": "",
+        "catalizador": "",
+        "sentimiento_news": ""
+      },
+      "noticias": [
+        {
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        }
+      ],
+      "news_sent_score": 0.0,
+      "news_alerta": false
+    }
+  ],
+  "evitar": [
+    "FINN13",
+    "FIBRAPL",
+    "FUNO11"
+  ],
+  "proximo_rebalanceo": "24 Jul 2026",
+  "universo_completo": [
+    {
+      "ticker": "FINN13",
+      "score": 0.802,
+      "rank": 1
+    },
+    {
+      "ticker": "FIBRAPL",
+      "score": 0.793,
+      "rank": 2
+    },
+    {
+      "ticker": "FUNO11",
+      "score": 0.473,
+      "rank": 3,
+      "news_sent_score": 0.0
+    }
+  ],
+  "by_horizon": {
+    "1s": {
+      "label": "1 semana",
+      "semanas": 1,
+      "horizon_d": 5,
+      "top5": [
+        {
+          "ticker": "FINN13",
+          "score": 0.722,
+          "score_pct": "72%",
+          "precio_actual": 4.64,
+          "monto": 1000.0,
+          "acciones_aprox": 215,
+          "razones": [
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ bb width — top 0% del universo",
+            "✅ hl range pct — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.693,
+          "score_pct": "69%",
+          "precio_actual": 75.37,
+          "monto": 1000.0,
+          "acciones_aprox": 13,
+          "razones": [
+            "✅ consec down — top 0% del universo",
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ vol down up — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+            "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.498,
+          "score_pct": "49%",
+          "precio_actual": 29.61,
+          "monto": 1000.0,
+          "acciones_aprox": 33,
+          "razones": [
+            "✅ Momentum relativo al universo — top 0% del universo",
+            "✅ mfi 14 — top 0% del universo",
+            "✅ pos 52w — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": 0.0,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "FINN13",
+        "FIBRAPL",
+        "FUNO11"
+      ],
+      "proximo_rebalanceo": "03 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "FINN13",
+          "score": 0.722,
+          "rank": 1
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.693,
+          "rank": 2
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.498,
+          "rank": 3,
+          "news_sent_score": 0.0
+        }
+      ]
+    },
+    "2s": {
+      "label": "2 semanas",
+      "semanas": 2,
+      "horizon_d": 10,
+      "top5": [
+        {
+          "ticker": "FINN13",
+          "score": 0.783,
+          "score_pct": "78%",
+          "precio_actual": 4.64,
+          "monto": 1000.0,
+          "acciones_aprox": 215,
+          "razones": [
+            "✅ hv ratio — top 0% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ bb width — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.724,
+          "score_pct": "72%",
+          "precio_actual": 75.37,
+          "monto": 1000.0,
+          "acciones_aprox": 13,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ consec down — top 0% del universo",
+            "✅ vol down up — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+            "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.464,
+          "score_pct": "46%",
+          "precio_actual": 29.61,
+          "monto": 1000.0,
+          "acciones_aprox": 33,
+          "razones": [
+            "✅ pos 52w — top 0% del universo",
+            "✅ mfi 14 — top 0% del universo",
+            "✅ Flujo de dinero (OBV) — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": 0.0,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "FINN13",
+        "FIBRAPL",
+        "FUNO11"
+      ],
+      "proximo_rebalanceo": "10 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "FINN13",
+          "score": 0.783,
+          "rank": 1
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.724,
+          "rank": 2
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.464,
+          "rank": 3,
+          "news_sent_score": 0.0
+        }
+      ]
+    },
+    "3s": {
+      "label": "3 semanas",
+      "semanas": 3,
+      "horizon_d": 15,
+      "top5": [
+        {
+          "ticker": "FINN13",
+          "score": 0.879,
+          "score_pct": "87%",
+          "precio_actual": 4.64,
+          "monto": 1000.0,
+          "acciones_aprox": 215,
+          "razones": [
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ bb width — top 0% del universo",
+            "✅ hv ratio — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.624,
+          "score_pct": "62%",
+          "precio_actual": 75.37,
+          "monto": 1000.0,
+          "acciones_aprox": 13,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ consec down — top 0% del universo",
+            "✅ vol down up — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+            "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.476,
+          "score_pct": "47%",
+          "precio_actual": 29.61,
+          "monto": 1000.0,
+          "acciones_aprox": 33,
+          "razones": [
+            "✅ pos 52w — top 0% del universo",
+            "✅ mfi 14 — top 0% del universo",
+            "✅ Flujo de dinero (OBV) — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": 0.0,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "FINN13",
+        "FIBRAPL",
+        "FUNO11"
+      ],
+      "proximo_rebalanceo": "17 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "FINN13",
+          "score": 0.879,
+          "rank": 1
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.624,
+          "rank": 2
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.476,
+          "rank": 3,
+          "news_sent_score": 0.0
+        }
+      ]
+    },
+    "4s": {
+      "label": "4 semanas",
+      "semanas": 4,
+      "horizon_d": 20,
+      "top5": [
+        {
+          "ticker": "FINN13",
+          "score": 0.802,
+          "score_pct": "80%",
+          "precio_actual": 4.64,
+          "monto": 1000.0,
+          "acciones_aprox": 215,
+          "razones": [
+            "✅ bb width — top 0% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "✅ hv ratio — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.793,
+          "score_pct": "79%",
+          "precio_actual": 75.37,
+          "monto": 1000.0,
+          "acciones_aprox": 13,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ consec down — top 0% del universo",
+            "✅ Volumen inusualmente alto — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+            "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.473,
+          "score_pct": "47%",
+          "precio_actual": 29.61,
+          "monto": 1000.0,
+          "acciones_aprox": 33,
+          "razones": [
+            "✅ mfi 14 — top 0% del universo",
+            "✅ pos 52w — top 0% del universo",
+            "✅ Flujo de dinero (OBV) — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            },
+            {
+              "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+              "publisher": "DataBursátil",
+              "link": "",
+              "ago": "",
+              "fuente": "DataBursátil"
+            }
+          ],
+          "news_sent_score": 0.0,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "FINN13",
+        "FIBRAPL",
+        "FUNO11"
+      ],
+      "proximo_rebalanceo": "24 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "FINN13",
+          "score": 0.802,
+          "rank": 1
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.793,
+          "rank": 2
+        },
+        {
+          "ticker": "FUNO11",
+          "score": 0.473,
+          "rank": 3,
+          "news_sent_score": 0.0
+        }
+      ]
+    }
+  },
+  "consensus": [
+    {
+      "ticker": "FINN13",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "FIBRAPL",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "FUNO11",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    }
+  ]
+}

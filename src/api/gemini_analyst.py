@@ -340,12 +340,11 @@ Responde SOLO en JSON con este formato exacto:
 
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.5-flash-lite",
             contents=prompt,
             config=genai_types.GenerateContentConfig(
                 max_output_tokens=512,
                 temperature=0.3,
-                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
             ),
         )
         txt = (response.text or "").strip()
@@ -361,6 +360,48 @@ Responde SOLO en JSON con este formato exacto:
         return {}
 
 
+_CACHE_PATH = None
+
+def _get_cache_path():
+    global _CACHE_PATH
+    if _CACHE_PATH is None:
+        from pathlib import Path
+        root = Path(__file__).parent.parent.parent
+        _CACHE_PATH = root / "data" / "gemini_cache.json"
+    return _CACHE_PATH
+
+
+def _load_cache() -> dict:
+    path = _get_cache_path()
+    today = datetime.now().strftime("%Y-%m-%d")
+    try:
+        if path.exists():
+            data = json.loads(path.read_text())
+            return data.get(today, {})
+    except Exception:
+        pass
+    return {}
+
+
+def _save_cache(today_cache: dict):
+    path = _get_cache_path()
+    today = datetime.now().strftime("%Y-%m-%d")
+    try:
+        existing = {}
+        if path.exists():
+            try:
+                existing = json.loads(path.read_text())
+            except Exception:
+                pass
+        existing[today] = today_cache
+        # keep only last 7 days
+        keys = sorted(existing.keys())[-7:]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({k: existing[k] for k in keys}, ensure_ascii=False, indent=2))
+    except Exception as e:
+        logger.debug(f"Cache save error: {e}")
+
+
 def analyze_batch(
     picks: list[dict],
     tickers_map: dict[str, str],   # nombre_corto → símbolo yfinance
@@ -369,16 +410,25 @@ def analyze_batch(
 ) -> dict[str, dict]:
     """
     Analiza todos los picks del top-5 en batch.
+    Usa caché diario para evitar re-llamadas a Gemini.
     Retorna dict {ticker: análisis}.
     """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         return {}
 
+    today_cache = _load_cache()
     results = {}
+
     for p in picks:
-        name   = p["ticker"]
-        sym    = tickers_map.get(name, name)
+        name = p["ticker"]
+        sym  = tickers_map.get(name, name)
+
+        if name in today_cache:
+            logger.info(f"  Gemini {name}: cache hit ✓")
+            results[name] = today_cache[name]
+            continue
+
         news   = fetch_news_for_ticker(name, sym, universe_slug)
         result = analyze_ticker(
             ticker=name,
@@ -389,7 +439,13 @@ def analyze_batch(
             universe_name=universe_name,
             news=news,
         )
-        results[name] = {**result, "noticias": news}
+        enriched = {**result, "noticias": news}
+        results[name] = enriched
+
+        if result:  # only cache successful responses
+            today_cache[name] = enriched
+            _save_cache(today_cache)
+
         logger.info(f"  Gemini {name}: {result.get('accion','—')} — {result.get('resumen','')[:60]}...")
 
     return results

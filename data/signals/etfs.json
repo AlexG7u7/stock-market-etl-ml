@@ -1,0 +1,2203 @@
+{
+  "universe": "📦 ETFs",
+  "descripcion": "ETFs de México y USA — rotación de sectores y clases de activo",
+  "moneda": "USD/MXN",
+  "fecha": "2026-06-28",
+  "capital": 5000.0,
+  "monto_por_nombre": 1000.0,
+  "mercado": {
+    "estado": "lateral",
+    "emoji": "🟡",
+    "descripcion": "Sin tendencia clara (-0.9% en 10d)"
+  },
+  "n_tickers_analizados": 22,
+  "top5": [
+    {
+      "ticker": "SLV",
+      "score": 0.722,
+      "score_pct": "72%",
+      "precio_actual": 53.28,
+      "monto": 1000.0,
+      "acciones_aprox": 18,
+      "razones": [
+        "⚠️ sma20 vs sma50 — bottom 4% del universo",
+        "✅ Volatilidad relativa — top 5% del universo",
+        "⚠️ pos 52w — bottom 9% del universo"
+      ],
+      "gemini": {
+        "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
+        "accion": "ESPERA",
+        "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
+        "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "FIBRAPL",
+      "score": 0.617,
+      "score_pct": "61%",
+      "precio_actual": 75.37,
+      "monto": 1000.0,
+      "acciones_aprox": 13,
+      "razones": [
+        "⚠️ sma20 vs sma50 — bottom 27% del universo",
+        "✅ Volatilidad relativa — top 23% del universo",
+        "⚠️ pos 52w — bottom 27% del universo"
+      ],
+      "gemini": {
+        "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+        "accion": "ESPERA",
+        "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+        "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+          "publisher": "Simply Wall St.",
+          "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "XLF",
+      "score": 0.551,
+      "score_pct": "55%",
+      "precio_actual": 53.57,
+      "monto": 1000.0,
+      "acciones_aprox": 18,
+      "razones": [
+        "⚠️ Volatilidad relativa — bottom 18% del universo",
+        "✅ mfi 14 — top 0% del universo",
+        "✅ mkt trend — top 0% del universo"
+      ],
+      "gemini": {
+        "resumen": "El XLF se destaca en el universo de ETFs gracias a su fuerte tendencia de mercado y momentum de volumen, a pesar de una volatilidad relativa baja.",
+        "accion": "COMPRA",
+        "riesgo": "La baja volatilidad relativa podría indicar una falta de impulso direccional a corto plazo, a pesar de las señales positivas.",
+        "catalizador": "Un cambio en el sentimiento del mercado que favorezca a los valores financieros o noticias positivas específicas del sector podrían impulsar aún más el XLF.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "Sector Update: Financial Stocks Edge Higher Late Afternoon",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-edge-higher-195207753.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Sector Update: Financial Stocks Advance Friday Afternoon",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-friday-174611169.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "USO",
+      "score": 0.545,
+      "score_pct": "54%",
+      "precio_actual": 105.48,
+      "monto": 1000.0,
+      "acciones_aprox": 9,
+      "razones": [
+        "⚠️ sma20 vs sma50 — bottom 9% del universo",
+        "✅ Volatilidad relativa — top 0% del universo",
+        "⚠️ pos 52w — bottom 18% del universo"
+      ],
+      "gemini": {
+        "resumen": "USO se destaca en el top de ETFs gracias a su excepcional volatilidad relativa, a pesar de señales técnicas de corto plazo débiles.",
+        "accion": "ESPERA",
+        "riesgo": "Las señales técnicas de corto plazo, como el cruce de medias móviles y la posición de 52 semanas, sugieren debilidad actual en el momentum del precio del petróleo.",
+        "catalizador": "Un repunte en el precio del petróleo crudo, impulsado por tensiones geopolíticas o una mejora en la demanda global, podría revertir las tendencias técnicas actuales.",
+        "sentimiento_news": "negativo"
+      },
+      "noticias": [
+        {
+          "title": "Forget USO. Copper Is the New Crude, and This Miner Fund Is Up 115% in a Year",
+          "publisher": "24/7 Wall St.",
+          "link": "https://247wallst.com/investing/2026/06/28/forget-uso-copper-is-the-new-crude-and-this-miner-fund-is-up-115-in-a-year/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Update: WTI Oil Hits a Four-Month Low as Strait of Hormuz Shipping Resumes",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/energy/articles/wti-oil-hits-four-month-191558949.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Sector Update: Energy Stocks Decline Premarket Friday",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    },
+    {
+      "ticker": "XLP",
+      "score": 0.535,
+      "score_pct": "53%",
+      "precio_actual": 84.71,
+      "monto": 1000.0,
+      "acciones_aprox": 11,
+      "razones": [
+        "⚠️ Volatilidad relativa — bottom 13% del universo",
+        "✅ mkt trend — top 0% del universo",
+        "✅ Precio sobre media 50d vs pares — top 28% del universo"
+      ],
+      "gemini": {
+        "resumen": "XLP se posiciona como el ETF líder en su categoría gracias a un momentum de mercado excepcional y un rendimiento superior frente a sus pares, a pesar de su baja volatilidad relativa.",
+        "accion": "COMPRA",
+        "riesgo": "La baja volatilidad relativa podría indicar una falta de potencial de crecimiento explosivo en comparación con activos más volátiles.",
+        "catalizador": "Un cambio en el sentimiento del mercado hacia sectores defensivos o una mejora en el entorno macroeconómico podría impulsar aún más el rendimiento de XLP.",
+        "sentimiento_news": "neutral"
+      },
+      "noticias": [
+        {
+          "title": "Vanguard vs. State Street: Which Consumer Staples ETF Stands Out?",
+          "publisher": "Motley Fool",
+          "link": "https://www.fool.com/coverage/etfs/2026/06/27/vanguard-vs-state-street-which-consumer-staples-etf-stands-out/",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Sector Update: Consumer Stocks Rise Late Afternoon",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-193717058.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Stock Market News for Jun 26, 2026",
+          "publisher": "Zacks",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-jun-26-132200376.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        },
+        {
+          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+          "publisher": "MT Newswires",
+          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+          "ago": "",
+          "fuente": "Yahoo Finance"
+        }
+      ],
+      "news_sent_score": null,
+      "news_alerta": false
+    }
+  ],
+  "evitar": [
+    "XLK",
+    "TLT",
+    "XLI",
+    "IWM",
+    "XLV"
+  ],
+  "proximo_rebalanceo": "24 Jul 2026",
+  "universo_completo": [
+    {
+      "ticker": "SLV",
+      "score": 0.722,
+      "rank": 1
+    },
+    {
+      "ticker": "FIBRAPL",
+      "score": 0.617,
+      "rank": 2
+    },
+    {
+      "ticker": "XLF",
+      "score": 0.551,
+      "rank": 3
+    },
+    {
+      "ticker": "USO",
+      "score": 0.545,
+      "rank": 4
+    },
+    {
+      "ticker": "XLP",
+      "score": 0.535,
+      "rank": 5
+    },
+    {
+      "ticker": "FXI",
+      "score": 0.524,
+      "rank": 6
+    },
+    {
+      "ticker": "XLE",
+      "score": 0.518,
+      "rank": 7
+    },
+    {
+      "ticker": "GLD",
+      "score": 0.498,
+      "rank": 8
+    },
+    {
+      "ticker": "NAFTRAC",
+      "score": 0.491,
+      "rank": 9
+    },
+    {
+      "ticker": "EEM",
+      "score": 0.484,
+      "rank": 10
+    },
+    {
+      "ticker": "QQQ",
+      "score": 0.481,
+      "rank": 11
+    },
+    {
+      "ticker": "HYG",
+      "score": 0.481,
+      "rank": 12
+    },
+    {
+      "ticker": "VOO",
+      "score": 0.475,
+      "rank": 13
+    },
+    {
+      "ticker": "EWZ",
+      "score": 0.458,
+      "rank": 14
+    },
+    {
+      "ticker": "SPY",
+      "score": 0.431,
+      "rank": 15
+    },
+    {
+      "ticker": "XLY",
+      "score": 0.405,
+      "rank": 16
+    },
+    {
+      "ticker": "VTI",
+      "score": 0.395,
+      "rank": 17
+    },
+    {
+      "ticker": "XLK",
+      "score": 0.392,
+      "rank": 18
+    },
+    {
+      "ticker": "TLT",
+      "score": 0.38,
+      "rank": 19
+    },
+    {
+      "ticker": "XLI",
+      "score": 0.285,
+      "rank": 20
+    },
+    {
+      "ticker": "IWM",
+      "score": 0.283,
+      "rank": 21
+    },
+    {
+      "ticker": "XLV",
+      "score": 0.197,
+      "rank": 22
+    }
+  ],
+  "by_horizon": {
+    "1s": {
+      "label": "1 semana",
+      "semanas": 1,
+      "horizon_d": 5,
+      "top5": [
+        {
+          "ticker": "USO",
+          "score": 0.743,
+          "score_pct": "74%",
+          "precio_actual": 105.48,
+          "monto": 1000.0,
+          "acciones_aprox": 9,
+          "razones": [
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ sma20 vs sma50 — bottom 9% del universo",
+            "⚠️ pos 52w — bottom 18% del universo"
+          ],
+          "gemini": {
+            "resumen": "USO se destaca en el top de ETFs gracias a su excepcional volatilidad relativa, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "Las señales técnicas de corto plazo, como el cruce de medias móviles y la posición de 52 semanas, sugieren debilidad actual en el momentum del precio del petróleo.",
+            "catalizador": "Un repunte en el precio del petróleo crudo, impulsado por tensiones geopolíticas o una mejora en la demanda global, podría revertir las tendencias técnicas actuales.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Forget USO. Copper Is the New Crude, and This Miner Fund Is Up 115% in a Year",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/forget-uso-copper-is-the-new-crude-and-this-miner-fund-is-up-115-in-a-year/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Update: WTI Oil Hits a Four-Month Low as Strait of Hormuz Shipping Resumes",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/wti-oil-hits-four-month-191558949.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Energy Stocks Decline Premarket Friday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.707,
+          "score_pct": "70%",
+          "precio_actual": 706.52,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "✅ Volatilidad relativa — top 19% del universo",
+            "✅ sma20 vs sma50 — top 5% del universo",
+            "✅ consec down — top 5% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "SpaceX rises modestly ahead of Russell rebalance, Nasdaq entry next",
+              "publisher": "Reuters",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/spacex-rises-marginally-ahead-russell-205428459.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "S&P 500, Nasdaq End Week Lower As Investors Rotate Out Of Tech, AI Plays — ON, AAPL, SLS, INFQ, NKE in Focus",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-end-week-lower-as-investors-rotate-out-of-tech-ai-plays-on-aapl-sls-infq-nke-in-focus/cZ12ck9R7W9",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "25% Yield!? Why Robinhood Traders Are Piling Into This FANG Income ETF Like There’s No Tomorrow",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/25-yield-why-robinhood-traders-are-piling-into-this-fang-income-etf-like-theres-no-tomorrow/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Strategist Thinks the S&P 500 Could Smash Through 8,000 ‘In the Near Term’",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/this-strategist-thinks-the-sp-500-could-smash-through-8000-in-the-near-term/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.699,
+          "score_pct": "69%",
+          "precio_actual": 181.11,
+          "monto": 1000.0,
+          "acciones_aprox": 5,
+          "razones": [
+            "✅ Volatilidad relativa — top 10% del universo",
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ Flujo de dinero (OBV) — top 28% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Sector Update: Tech Stocks Fall Late Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-tech-stocks-fall-afternoon-194357745.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Move Over, VIG: Why Yield-Hungry Investors Are Quietly Dumping Vanguard for This 3.3% Monster",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/move-over-vig-why-yield-hungry-investors-are-quietly-dumping-vanguard-for-this-3-3-monster/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Tech Stocks Fall Friday Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-tech-stocks-fall-friday-173143428.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "SLV",
+          "score": 0.661,
+          "score_pct": "66%",
+          "precio_actual": 53.28,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "✅ Volatilidad relativa — top 5% del universo",
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "⚠️ pos 52w — bottom 9% del universo"
+          ],
+          "gemini": {
+            "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
+            "accion": "ESPERA",
+            "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
+            "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FXI",
+          "score": 0.644,
+          "score_pct": "64%",
+          "precio_actual": 31.59,
+          "monto": 1000.0,
+          "acciones_aprox": 31,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "⚠️ pos 52w — bottom 4% del universo",
+            "✅ bb width — top 14% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Is Buying This FXI Dip a Smart Move?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604742/is-buying-this-fxi-dip-a-smart-move/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Forget FXI. The South Korea Fund Beating China’s AI Trade Charges 19% Less",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/25/forget-fxi-the-south-korea-fund-beating-chinas-ai-trade-charges-19-less/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Here’s Why $10,000 in KWEB Five Years Ago Is Worth $4,237 Today",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/23/heres-why-10000-in-kweb-five-years-ago-is-worth-4237-today/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Pentagon Claims Beijing Is Making Chinese Tech Giants Helps its Military",
+              "publisher": "Moby",
+              "link": "https://app.moby.co/home/news/news-pentagon-claims-beijing-is-making-chinese-tech-giants-helps-its-military?utm_source=yahoo_finance&utm_medium=rss",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MoneyMasters Podcast 5-28-26- US-China Relations and the Race for Innovation",
+              "publisher": "MoneyShow",
+              "link": "https://finance.yahoo.com/sectors/technology/articles/moneymasters-podcast-5-28-26-163000334.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "IWM",
+        "XLF",
+        "XLI",
+        "HYG",
+        "XLV"
+      ],
+      "proximo_rebalanceo": "03 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "USO",
+          "score": 0.743,
+          "rank": 1
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.707,
+          "rank": 2
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.699,
+          "rank": 3
+        },
+        {
+          "ticker": "SLV",
+          "score": 0.661,
+          "rank": 4
+        },
+        {
+          "ticker": "FXI",
+          "score": 0.644,
+          "rank": 5
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.631,
+          "rank": 6
+        },
+        {
+          "ticker": "XLE",
+          "score": 0.629,
+          "rank": 7
+        },
+        {
+          "ticker": "EWZ",
+          "score": 0.617,
+          "rank": 8
+        },
+        {
+          "ticker": "GLD",
+          "score": 0.614,
+          "rank": 9
+        },
+        {
+          "ticker": "SPY",
+          "score": 0.582,
+          "rank": 10
+        },
+        {
+          "ticker": "XLY",
+          "score": 0.572,
+          "rank": 11
+        },
+        {
+          "ticker": "NAFTRAC",
+          "score": 0.564,
+          "rank": 12
+        },
+        {
+          "ticker": "VTI",
+          "score": 0.555,
+          "rank": 13
+        },
+        {
+          "ticker": "VOO",
+          "score": 0.53,
+          "rank": 14
+        },
+        {
+          "ticker": "XLP",
+          "score": 0.529,
+          "rank": 15
+        },
+        {
+          "ticker": "TLT",
+          "score": 0.507,
+          "rank": 16
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.499,
+          "rank": 17
+        },
+        {
+          "ticker": "IWM",
+          "score": 0.483,
+          "rank": 18
+        },
+        {
+          "ticker": "XLF",
+          "score": 0.482,
+          "rank": 19
+        },
+        {
+          "ticker": "XLI",
+          "score": 0.471,
+          "rank": 20
+        },
+        {
+          "ticker": "HYG",
+          "score": 0.432,
+          "rank": 21
+        },
+        {
+          "ticker": "XLV",
+          "score": 0.408,
+          "rank": 22
+        }
+      ]
+    },
+    "2s": {
+      "label": "2 semanas",
+      "semanas": 2,
+      "horizon_d": 10,
+      "top5": [
+        {
+          "ticker": "FXI",
+          "score": 0.675,
+          "score_pct": "67%",
+          "precio_actual": 31.59,
+          "monto": 1000.0,
+          "acciones_aprox": 31,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 22% del universo",
+            "⚠️ pos 52w — bottom 4% del universo",
+            "✅ bb width — top 14% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Is Buying This FXI Dip a Smart Move?",
+              "publisher": "Trefis",
+              "link": "https://www.trefis.com/articles/604742/is-buying-this-fxi-dip-a-smart-move/2026-06-26",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Forget FXI. The South Korea Fund Beating China’s AI Trade Charges 19% Less",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/25/forget-fxi-the-south-korea-fund-beating-chinas-ai-trade-charges-19-less/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Here’s Why $10,000 in KWEB Five Years Ago Is Worth $4,237 Today",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/23/heres-why-10000-in-kweb-five-years-ago-is-worth-4237-today/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Pentagon Claims Beijing Is Making Chinese Tech Giants Helps its Military",
+              "publisher": "Moby",
+              "link": "https://app.moby.co/home/news/news-pentagon-claims-beijing-is-making-chinese-tech-giants-helps-its-military?utm_source=yahoo_finance&utm_medium=rss",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "MoneyMasters Podcast 5-28-26- US-China Relations and the Race for Innovation",
+              "publisher": "MoneyShow",
+              "link": "https://finance.yahoo.com/sectors/technology/articles/moneymasters-podcast-5-28-26-163000334.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "SLV",
+          "score": 0.668,
+          "score_pct": "66%",
+          "precio_actual": 53.28,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "✅ Volatilidad relativa — top 5% del universo",
+            "⚠️ pos 52w — bottom 9% del universo"
+          ],
+          "gemini": {
+            "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
+            "accion": "ESPERA",
+            "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
+            "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.647,
+          "score_pct": "64%",
+          "precio_actual": 181.11,
+          "monto": 1000.0,
+          "acciones_aprox": 5,
+          "razones": [
+            "✅ sma20 vs sma50 — top 0% del universo",
+            "✅ Volatilidad relativa — top 10% del universo",
+            "✅ bb width — top 19% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Sector Update: Tech Stocks Fall Late Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-tech-stocks-fall-afternoon-194357745.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Move Over, VIG: Why Yield-Hungry Investors Are Quietly Dumping Vanguard for This 3.3% Monster",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/move-over-vig-why-yield-hungry-investors-are-quietly-dumping-vanguard-for-this-3-3-monster/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Tech Stocks Fall Friday Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-tech-stocks-fall-friday-173143428.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.647,
+          "score_pct": "64%",
+          "precio_actual": 706.52,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "✅ sma20 vs sma50 — top 5% del universo",
+            "✅ Volatilidad relativa — top 19% del universo",
+            "✅ mkt trend — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "SpaceX rises modestly ahead of Russell rebalance, Nasdaq entry next",
+              "publisher": "Reuters",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/spacex-rises-marginally-ahead-russell-205428459.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "S&P 500, Nasdaq End Week Lower As Investors Rotate Out Of Tech, AI Plays — ON, AAPL, SLS, INFQ, NKE in Focus",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-end-week-lower-as-investors-rotate-out-of-tech-ai-plays-on-aapl-sls-infq-nke-in-focus/cZ12ck9R7W9",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "25% Yield!? Why Robinhood Traders Are Piling Into This FANG Income ETF Like There’s No Tomorrow",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/25-yield-why-robinhood-traders-are-piling-into-this-fang-income-etf-like-theres-no-tomorrow/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Strategist Thinks the S&P 500 Could Smash Through 8,000 ‘In the Near Term’",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/this-strategist-thinks-the-sp-500-could-smash-through-8000-in-the-near-term/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.612,
+          "score_pct": "61%",
+          "precio_actual": 67.19,
+          "monto": 1000.0,
+          "acciones_aprox": 14,
+          "razones": [
+            "✅ sma20 vs sma50 — top 10% del universo",
+            "✅ Volatilidad relativa — top 14% del universo",
+            "✅ pos 52w — top 23% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETF Faceoff: Does iShares IXUS or EEM Offer Better Global Exposure?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/etfs/2026/06/23/etf-faceoff-does-ishares-ixus-or-eem-offer-better-global-exposure/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "HYG",
+        "IWM",
+        "XLI",
+        "TLT",
+        "XLV"
+      ],
+      "proximo_rebalanceo": "10 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "FXI",
+          "score": 0.675,
+          "rank": 1
+        },
+        {
+          "ticker": "SLV",
+          "score": 0.668,
+          "rank": 2
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.647,
+          "rank": 3
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.647,
+          "rank": 4
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.612,
+          "rank": 5
+        },
+        {
+          "ticker": "GLD",
+          "score": 0.581,
+          "rank": 6
+        },
+        {
+          "ticker": "XLE",
+          "score": 0.58,
+          "rank": 7
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.576,
+          "rank": 8
+        },
+        {
+          "ticker": "USO",
+          "score": 0.565,
+          "rank": 9
+        },
+        {
+          "ticker": "XLY",
+          "score": 0.56,
+          "rank": 10
+        },
+        {
+          "ticker": "SPY",
+          "score": 0.515,
+          "rank": 11
+        },
+        {
+          "ticker": "EWZ",
+          "score": 0.514,
+          "rank": 12
+        },
+        {
+          "ticker": "NAFTRAC",
+          "score": 0.497,
+          "rank": 13
+        },
+        {
+          "ticker": "VOO",
+          "score": 0.49,
+          "rank": 14
+        },
+        {
+          "ticker": "VTI",
+          "score": 0.489,
+          "rank": 15
+        },
+        {
+          "ticker": "XLP",
+          "score": 0.485,
+          "rank": 16
+        },
+        {
+          "ticker": "XLF",
+          "score": 0.475,
+          "rank": 17
+        },
+        {
+          "ticker": "HYG",
+          "score": 0.434,
+          "rank": 18
+        },
+        {
+          "ticker": "IWM",
+          "score": 0.394,
+          "rank": 19
+        },
+        {
+          "ticker": "XLI",
+          "score": 0.378,
+          "rank": 20
+        },
+        {
+          "ticker": "TLT",
+          "score": 0.378,
+          "rank": 21
+        },
+        {
+          "ticker": "XLV",
+          "score": 0.349,
+          "rank": 22
+        }
+      ]
+    },
+    "3s": {
+      "label": "3 semanas",
+      "semanas": 3,
+      "horizon_d": 15,
+      "top5": [
+        {
+          "ticker": "SLV",
+          "score": 0.832,
+          "score_pct": "83%",
+          "precio_actual": 53.28,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "✅ Volatilidad relativa — top 5% del universo",
+            "⚠️ pos 52w — bottom 9% del universo"
+          ],
+          "gemini": {
+            "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
+            "accion": "ESPERA",
+            "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
+            "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "XLE",
+          "score": 0.629,
+          "score_pct": "62%",
+          "precio_actual": 53.84,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "✅ bb width — top 23% del universo",
+            "✅ Flujo de dinero (OBV) — top 23% del universo",
+            "✅ mkt trend — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Sector Update: Energy Stocks Decline Late Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-afternoon-194915501.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Energy Stocks Decline Friday Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-friday-175342609.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Energy Stocks Decline Premarket Friday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.604,
+          "score_pct": "60%",
+          "precio_actual": 67.19,
+          "monto": 1000.0,
+          "acciones_aprox": 14,
+          "razones": [
+            "✅ sma20 vs sma50 — top 10% del universo",
+            "✅ Volatilidad relativa — top 14% del universo",
+            "✅ pos 52w — top 23% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "ETF Faceoff: Does iShares IXUS or EEM Offer Better Global Exposure?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/etfs/2026/06/23/etf-faceoff-does-ishares-ixus-or-eem-offer-better-global-exposure/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.592,
+          "score_pct": "59%",
+          "precio_actual": 706.52,
+          "monto": 1000.0,
+          "acciones_aprox": 1,
+          "razones": [
+            "✅ sma20 vs sma50 — top 5% del universo",
+            "✅ Volatilidad relativa — top 19% del universo",
+            "✅ mkt trend — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "",
+            "accion": "",
+            "riesgo": "",
+            "catalizador": "",
+            "sentimiento_news": ""
+          },
+          "noticias": [
+            {
+              "title": "SpaceX rises modestly ahead of Russell rebalance, Nasdaq entry next",
+              "publisher": "Reuters",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/spacex-rises-marginally-ahead-russell-205428459.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "S&P 500, Nasdaq End Week Lower As Investors Rotate Out Of Tech, AI Plays — ON, AAPL, SLS, INFQ, NKE in Focus",
+              "publisher": "Stocktwits",
+              "link": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-end-week-lower-as-investors-rotate-out-of-tech-ai-plays-on-aapl-sls-infq-nke-in-focus/cZ12ck9R7W9",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "25% Yield!? Why Robinhood Traders Are Piling Into This FANG Income ETF Like There’s No Tomorrow",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/25-yield-why-robinhood-traders-are-piling-into-this-fang-income-etf-like-theres-no-tomorrow/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "This Strategist Thinks the S&P 500 Could Smash Through 8,000 ‘In the Near Term’",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/26/this-strategist-thinks-the-sp-500-could-smash-through-8000-in-the-near-term/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "USO",
+          "score": 0.586,
+          "score_pct": "58%",
+          "precio_actual": 105.48,
+          "monto": 1000.0,
+          "acciones_aprox": 9,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 9% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ pos 52w — bottom 18% del universo"
+          ],
+          "gemini": {
+            "resumen": "USO se destaca en el top de ETFs gracias a su excepcional volatilidad relativa, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "Las señales técnicas de corto plazo, como el cruce de medias móviles y la posición de 52 semanas, sugieren debilidad actual en el momentum del precio del petróleo.",
+            "catalizador": "Un repunte en el precio del petróleo crudo, impulsado por tensiones geopolíticas o una mejora en la demanda global, podría revertir las tendencias técnicas actuales.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Forget USO. Copper Is the New Crude, and This Miner Fund Is Up 115% in a Year",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/forget-uso-copper-is-the-new-crude-and-this-miner-fund-is-up-115-in-a-year/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Update: WTI Oil Hits a Four-Month Low as Strait of Hormuz Shipping Resumes",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/wti-oil-hits-four-month-191558949.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Energy Stocks Decline Premarket Friday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "TLT",
+        "VTI",
+        "XLI",
+        "XLV",
+        "IWM"
+      ],
+      "proximo_rebalanceo": "17 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "SLV",
+          "score": 0.832,
+          "rank": 1
+        },
+        {
+          "ticker": "XLE",
+          "score": 0.629,
+          "rank": 2
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.604,
+          "rank": 3
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.592,
+          "rank": 4
+        },
+        {
+          "ticker": "USO",
+          "score": 0.586,
+          "rank": 5
+        },
+        {
+          "ticker": "FXI",
+          "score": 0.572,
+          "rank": 6
+        },
+        {
+          "ticker": "NAFTRAC",
+          "score": 0.551,
+          "rank": 7
+        },
+        {
+          "ticker": "GLD",
+          "score": 0.548,
+          "rank": 8
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.546,
+          "rank": 9
+        },
+        {
+          "ticker": "XLP",
+          "score": 0.545,
+          "rank": 10
+        },
+        {
+          "ticker": "XLF",
+          "score": 0.507,
+          "rank": 11
+        },
+        {
+          "ticker": "HYG",
+          "score": 0.492,
+          "rank": 12
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.477,
+          "rank": 13
+        },
+        {
+          "ticker": "SPY",
+          "score": 0.475,
+          "rank": 14
+        },
+        {
+          "ticker": "XLY",
+          "score": 0.471,
+          "rank": 15
+        },
+        {
+          "ticker": "VOO",
+          "score": 0.462,
+          "rank": 16
+        },
+        {
+          "ticker": "EWZ",
+          "score": 0.436,
+          "rank": 17
+        },
+        {
+          "ticker": "TLT",
+          "score": 0.433,
+          "rank": 18
+        },
+        {
+          "ticker": "VTI",
+          "score": 0.421,
+          "rank": 19
+        },
+        {
+          "ticker": "XLI",
+          "score": 0.392,
+          "rank": 20
+        },
+        {
+          "ticker": "XLV",
+          "score": 0.354,
+          "rank": 21
+        },
+        {
+          "ticker": "IWM",
+          "score": 0.319,
+          "rank": 22
+        }
+      ]
+    },
+    "4s": {
+      "label": "4 semanas",
+      "semanas": 4,
+      "horizon_d": 20,
+      "top5": [
+        {
+          "ticker": "SLV",
+          "score": 0.722,
+          "score_pct": "72%",
+          "precio_actual": 53.28,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 4% del universo",
+            "✅ Volatilidad relativa — top 5% del universo",
+            "⚠️ pos 52w — bottom 9% del universo"
+          ],
+          "gemini": {
+            "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
+            "accion": "ESPERA",
+            "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
+            "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.617,
+          "score_pct": "61%",
+          "precio_actual": 75.37,
+          "monto": 1000.0,
+          "acciones_aprox": 13,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 27% del universo",
+            "✅ Volatilidad relativa — top 23% del universo",
+            "⚠️ pos 52w — bottom 27% del universo"
+          ],
+          "gemini": {
+            "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
+            "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
+              "publisher": "Simply Wall St.",
+              "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "XLF",
+          "score": 0.551,
+          "score_pct": "55%",
+          "precio_actual": 53.57,
+          "monto": 1000.0,
+          "acciones_aprox": 18,
+          "razones": [
+            "⚠️ Volatilidad relativa — bottom 18% del universo",
+            "✅ mfi 14 — top 0% del universo",
+            "✅ mkt trend — top 0% del universo"
+          ],
+          "gemini": {
+            "resumen": "El XLF se destaca en el universo de ETFs gracias a su fuerte tendencia de mercado y momentum de volumen, a pesar de una volatilidad relativa baja.",
+            "accion": "COMPRA",
+            "riesgo": "La baja volatilidad relativa podría indicar una falta de impulso direccional a corto plazo, a pesar de las señales positivas.",
+            "catalizador": "Un cambio en el sentimiento del mercado que favorezca a los valores financieros o noticias positivas específicas del sector podrían impulsar aún más el XLF.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Sector Update: Financial Stocks Edge Higher Late Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-edge-higher-195207753.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Financial Stocks Advance Friday Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-friday-174611169.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "USO",
+          "score": 0.545,
+          "score_pct": "54%",
+          "precio_actual": 105.48,
+          "monto": 1000.0,
+          "acciones_aprox": 9,
+          "razones": [
+            "⚠️ sma20 vs sma50 — bottom 9% del universo",
+            "✅ Volatilidad relativa — top 0% del universo",
+            "⚠️ pos 52w — bottom 18% del universo"
+          ],
+          "gemini": {
+            "resumen": "USO se destaca en el top de ETFs gracias a su excepcional volatilidad relativa, a pesar de señales técnicas de corto plazo débiles.",
+            "accion": "ESPERA",
+            "riesgo": "Las señales técnicas de corto plazo, como el cruce de medias móviles y la posición de 52 semanas, sugieren debilidad actual en el momentum del precio del petróleo.",
+            "catalizador": "Un repunte en el precio del petróleo crudo, impulsado por tensiones geopolíticas o una mejora en la demanda global, podría revertir las tendencias técnicas actuales.",
+            "sentimiento_news": "negativo"
+          },
+          "noticias": [
+            {
+              "title": "Forget USO. Copper Is the New Crude, and This Miner Fund Is Up 115% in a Year",
+              "publisher": "24/7 Wall St.",
+              "link": "https://247wallst.com/investing/2026/06/28/forget-uso-copper-is-the-new-crude-and-this-miner-fund-is-up-115-in-a-year/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Update: WTI Oil Hits a Four-Month Low as Strait of Hormuz Shipping Resumes",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/wti-oil-hits-four-month-191558949.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Energy Stocks Decline Premarket Friday",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        },
+        {
+          "ticker": "XLP",
+          "score": 0.535,
+          "score_pct": "53%",
+          "precio_actual": 84.71,
+          "monto": 1000.0,
+          "acciones_aprox": 11,
+          "razones": [
+            "⚠️ Volatilidad relativa — bottom 13% del universo",
+            "✅ mkt trend — top 0% del universo",
+            "✅ Precio sobre media 50d vs pares — top 28% del universo"
+          ],
+          "gemini": {
+            "resumen": "XLP se posiciona como el ETF líder en su categoría gracias a un momentum de mercado excepcional y un rendimiento superior frente a sus pares, a pesar de su baja volatilidad relativa.",
+            "accion": "COMPRA",
+            "riesgo": "La baja volatilidad relativa podría indicar una falta de potencial de crecimiento explosivo en comparación con activos más volátiles.",
+            "catalizador": "Un cambio en el sentimiento del mercado hacia sectores defensivos o una mejora en el entorno macroeconómico podría impulsar aún más el rendimiento de XLP.",
+            "sentimiento_news": "neutral"
+          },
+          "noticias": [
+            {
+              "title": "Vanguard vs. State Street: Which Consumer Staples ETF Stands Out?",
+              "publisher": "Motley Fool",
+              "link": "https://www.fool.com/coverage/etfs/2026/06/27/vanguard-vs-state-street-which-consumer-staples-etf-stands-out/",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Sector Update: Consumer Stocks Rise Late Afternoon",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-193717058.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Stock Market News for Jun 26, 2026",
+              "publisher": "Zacks",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-jun-26-132200376.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            },
+            {
+              "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
+              "publisher": "MT Newswires",
+              "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+              "ago": "",
+              "fuente": "Yahoo Finance"
+            }
+          ],
+          "news_sent_score": null,
+          "news_alerta": false
+        }
+      ],
+      "evitar": [
+        "XLK",
+        "TLT",
+        "XLI",
+        "IWM",
+        "XLV"
+      ],
+      "proximo_rebalanceo": "24 Jul 2026",
+      "universo_completo": [
+        {
+          "ticker": "SLV",
+          "score": 0.722,
+          "rank": 1
+        },
+        {
+          "ticker": "FIBRAPL",
+          "score": 0.617,
+          "rank": 2
+        },
+        {
+          "ticker": "XLF",
+          "score": 0.551,
+          "rank": 3
+        },
+        {
+          "ticker": "USO",
+          "score": 0.545,
+          "rank": 4
+        },
+        {
+          "ticker": "XLP",
+          "score": 0.535,
+          "rank": 5
+        },
+        {
+          "ticker": "FXI",
+          "score": 0.524,
+          "rank": 6
+        },
+        {
+          "ticker": "XLE",
+          "score": 0.518,
+          "rank": 7
+        },
+        {
+          "ticker": "GLD",
+          "score": 0.498,
+          "rank": 8
+        },
+        {
+          "ticker": "NAFTRAC",
+          "score": 0.491,
+          "rank": 9
+        },
+        {
+          "ticker": "EEM",
+          "score": 0.484,
+          "rank": 10
+        },
+        {
+          "ticker": "QQQ",
+          "score": 0.481,
+          "rank": 11
+        },
+        {
+          "ticker": "HYG",
+          "score": 0.481,
+          "rank": 12
+        },
+        {
+          "ticker": "VOO",
+          "score": 0.475,
+          "rank": 13
+        },
+        {
+          "ticker": "EWZ",
+          "score": 0.458,
+          "rank": 14
+        },
+        {
+          "ticker": "SPY",
+          "score": 0.431,
+          "rank": 15
+        },
+        {
+          "ticker": "XLY",
+          "score": 0.405,
+          "rank": 16
+        },
+        {
+          "ticker": "VTI",
+          "score": 0.395,
+          "rank": 17
+        },
+        {
+          "ticker": "XLK",
+          "score": 0.392,
+          "rank": 18
+        },
+        {
+          "ticker": "TLT",
+          "score": 0.38,
+          "rank": 19
+        },
+        {
+          "ticker": "XLI",
+          "score": 0.285,
+          "rank": 20
+        },
+        {
+          "ticker": "IWM",
+          "score": 0.283,
+          "rank": 21
+        },
+        {
+          "ticker": "XLV",
+          "score": 0.197,
+          "rank": 22
+        }
+      ]
+    }
+  },
+  "consensus": [
+    {
+      "ticker": "SLV",
+      "n_horizontes": 4,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "USO",
+      "n_horizontes": 3,
+      "horizontes": [
+        "1s",
+        "3s",
+        "4s"
+      ]
+    },
+    {
+      "ticker": "QQQ",
+      "n_horizontes": 3,
+      "horizontes": [
+        "1s",
+        "2s",
+        "3s"
+      ]
+    },
+    {
+      "ticker": "XLK",
+      "n_horizontes": 2,
+      "horizontes": [
+        "1s",
+        "2s"
+      ]
+    },
+    {
+      "ticker": "FXI",
+      "n_horizontes": 2,
+      "horizontes": [
+        "1s",
+        "2s"
+      ]
+    },
+    {
+      "ticker": "EEM",
+      "n_horizontes": 2,
+      "horizontes": [
+        "2s",
+        "3s"
+      ]
+    },
+    {
+      "ticker": "XLE",
+      "n_horizontes": 1,
+      "horizontes": [
+        "3s"
+      ]
+    },
+    {
+      "ticker": "FIBRAPL",
+      "n_horizontes": 1,
+      "horizontes": [
+        "4s"
+      ]
+    },
+    {
+      "ticker": "XLF",
+      "n_horizontes": 1,
+      "horizontes": [
+        "4s"
+      ]
+    },
+    {
+      "ticker": "XLP",
+      "n_horizontes": 1,
+      "horizontes": [
+        "4s"
+      ]
+    }
+  ]
+}

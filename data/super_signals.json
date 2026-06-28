@@ -1,0 +1,3054 @@
+{
+  "fecha": "2026-06-28",
+  "n_tickers": 88,
+  "master_ranking": [
+    {
+      "ticker": "CUERVO",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 14.68,
+      "conviction_raw": 0.7786,
+      "conviction": 0.8564,
+      "disagreement": 0.1705,
+      "signals": {
+        "xs_lgbm": 0.7053,
+        "ensemble": 0.5164,
+        "heuristic": 0.9333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 1,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "CONFIRMA",
+        "confianza_gemini": 85,
+        "tesis": "La recomendación de CUERVO se mantiene sólida, respaldada por un alto ranking global y convicción, a pesar de la divergencia en las predicciones de los modelos base. El régimen de mercado alcista y la ausencia de noticias negativas refuerzan la señal positiva.",
+        "evidencia_a_favor": [
+          "Ranking global #1 de 88, indicando un fuerte desempeño relativo.",
+          "Convicción alta de 0.856, sugiriendo una fuerte señal del modelo principal.",
+          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, amplificando las señales positivas.",
+          "Sentimiento de noticias neutral (+0.00), sin indicios de eventos negativos recientes que afecten a CUERVO directamente.",
+          "El modelo 'heuristic' predice un valor muy alto (0.933), lo que podría indicar una fuerte señal basada en patrones históricos o reglas predefinidas."
+        ],
+        "red_flags": [
+          "Desacuerdo entre modelos de 0.171, lo que indica una variabilidad en las predicciones de los modelos base.",
+          "El modelo 'xs_lgbm' tiene un AUC bajo (0.521) y una predicción de 0.705, mientras que 'ensemble' tiene un AUC aún más bajo (0.506) y una predicción de 0.516, lo que sugiere que algunos modelos base tienen un rendimiento marginalmente mejor que el azar y no están completamente alineados con la alta convicción general."
+        ],
+        "accion_final": "COMPRA FUERTE",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "Q",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 175.21,
+      "conviction_raw": 0.7447,
+      "conviction": 0.8192,
+      "disagreement": 0.1244,
+      "signals": {
+        "xs_lgbm": 0.755,
+        "ensemble": 0.5164,
+        "heuristic": 0.8
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 2,
+      "n_total": 88,
+      "headlines": [
+        "12:13 Incode adquiere compañía de soluciones de privacidad Identiq",
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el ranking global y la convicción son altos, la baja calidad predictiva de los modelos base, evidenciada por sus AUCs cercanos a 0.5, sugiere que la recomendación podría ser el resultado de un sobreajuste o ruido, no de una señal robusta. La falta de información directa sobre Q (bmv, MXN) en los titulares recientes también añade incertidumbre.",
+        "evidencia_a_favor": [
+          "Ranking global: #2 de 88, indicando una posición superior entre los activos evaluados.",
+          "Convicción: 0.819, lo que sugiere una fuerte señal por parte del modelo agregado.",
+          "Régimen de mercado: bull (factor ×1.1), lo que podría favorecer las inversiones en general."
+        ],
+        "red_flags": [
+          "AUCs de los modelos base (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520) son muy cercanos a 0.5, lo que indica que los modelos tienen un poder predictivo marginalmente mejor que el azar.",
+          "El desacuerdo entre modelos es de 0.124, lo que, aunque no es extremadamente alto, combinado con los bajos AUCs, sugiere que la señal no es unánime ni robusta.",
+          "Los titulares recientes no mencionan directamente a Q (bmv, MXN), lo que impide contextualizar la recomendación con eventos específicos de la compañía o sector."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "ALSEA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 44.46,
+      "conviction_raw": 0.7395,
+      "conviction": 0.8135,
+      "disagreement": 0.1676,
+      "signals": {
+        "xs_lgbm": 0.9231,
+        "ensemble": 0.5423,
+        "heuristic": 0.6
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 3,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "A pesar de un alto ranking global y convicción, la baja calidad de los modelos base y el desacuerdo entre ellos, junto con la falta de noticias relevantes sobre ALSEA, sugieren cautela y la necesidad de una evaluación más profunda antes de una acción decisiva.",
+        "evidencia_a_favor": [
+          "Ranking global #3 de 88, indicando una fuerte posición relativa.",
+          "Convicción de 0.814, lo que sugiere una alta confianza del modelo en la recomendación.",
+          "Régimen de mercado 'bull' con un factor de 1.1, lo que podría amplificar ganancias."
+        ],
+        "red_flags": [
+          "Desacuerdo entre modelos de 0.168, que es relativamente alto y sugiere inconsistencia en las predicciones individuales.",
+          "Bajo AUC de los modelos base (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520), lo que indica que los modelos apenas superan una predicción aleatoria y tienen poca capacidad predictiva real.",
+          "Falta de titulares recientes específicos sobre ALSEA, lo que dificulta la validación de la recomendación con información de mercado actual y relevante para la empresa.",
+          "El modelo 'ensemble' tiene el AUC más bajo (0.506), lo cual es preocupante ya que suele ser el modelo más robusto."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "POSADAS",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 29.3,
+      "conviction_raw": 0.7384,
+      "conviction": 0.8122,
+      "disagreement": 0.1159,
+      "signals": {
+        "xs_lgbm": 0.8002,
+        "ensemble": 0.5278,
+        "heuristic": 0.7333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 4,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el modelo muestra una alta convicción y un buen ranking, el bajo AUC de los modelos base y el desacuerdo entre ellos sugieren que la señal no es lo suficientemente robusta para una compra fuerte, a pesar del régimen de mercado alcista.",
+        "evidencia_a_favor": [
+          "Ranking global #4 de 88, indicando una posición fuerte relativa.",
+          "Convicción de 0.812, lo que el modelo considera una señal fuerte.",
+          "Régimen de mercado 'bull' que aplica un factor de 1.1, potencialmente amplificando la señal positiva."
+        ],
+        "red_flags": [
+          "El AUC de los modelos base (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520) es muy bajo, apenas superior a un lanzamiento de moneda (0.5), lo que indica una capacidad predictiva débil de los componentes individuales.",
+          "El desacuerdo entre modelos de 0.116, aunque no es extremadamente alto, combinado con el bajo AUC, sugiere que no hay una convergencia fuerte en la señal.",
+          "Los titulares recientes no mencionan directamente a POSADAS, lo que significa que el sentimiento de noticias de +0.00 no tiene un contexto específico para la acción."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "FEMSAUBD",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 224.58,
+      "conviction_raw": 0.7236,
+      "conviction": 0.7959,
+      "disagreement": 0.1947,
+      "signals": {
+        "xs_lgbm": 0.5959,
+        "ensemble": 0.4726,
+        "heuristic": 0.9333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 5,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el ranking global y la convicción son altos, el desacuerdo entre los modelos base y el bajo AUC de los modelos individuales sugieren una falta de consenso y fiabilidad en la predicción, lo que justifica una postura más cautelosa a pesar del régimen de mercado alcista.",
+        "evidencia_a_favor": [
+          "Ranking global #5 de 88, indicando una posición fuerte en el universo de inversión.",
+          "Convicción de 0.796, lo que sugiere una señal de compra relativamente fuerte por parte del modelo principal.",
+          "Régimen de mercado 'bull' (factor ×1.1), que generalmente favorece las inversiones."
+        ],
+        "red_flags": [
+          "Desacuerdo entre modelos de 0.195, lo que indica una divergencia significativa en las predicciones de los modelos base.",
+          "Bajo AUC de los modelos individuales (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520), lo que sugiere que la capacidad predictiva de cada modelo base es apenas superior a la de un lanzamiento de moneda.",
+          "El modelo 'heuristic' tiene una predicción muy alta (0.933) pero un AUC bajo (0.520), lo que podría indicar un sobreajuste o una señal poco robusta.",
+          "El sentimiento de noticias es neutro (+0.00), no aportando un impulso adicional positivo."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "LABB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 14.96,
+      "conviction_raw": 0.6756,
+      "conviction": 0.7431,
+      "disagreement": 0.1124,
+      "signals": {
+        "xs_lgbm": 0.7389,
+        "ensemble": 0.4726,
+        "heuristic": 0.6667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 6,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el modelo muestra una alta convicción y un buen ranking, el bajo rendimiento de los modelos base y el desacuerdo entre ellos sugieren una señal mixta que justifica una postura más cautelosa. La falta de noticias directamente relevantes para LABB en los titulares recientes también contribuye a la incertidumbre.",
+        "evidencia_a_favor": [
+          "Ranking global #6 de 88, indicando una fuerte posición relativa.",
+          "Convicción de 0.743, lo que sugiere una alta confianza del modelo en la recomendación.",
+          "Régimen de mercado 'bull' con un factor de 1.1, lo que podría amplificar ganancias."
+        ],
+        "red_flags": [
+          "El AUC de los modelos base (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520) es muy cercano a 0.5, lo que indica que su capacidad predictiva es apenas mejor que el azar.",
+          "El desacuerdo entre modelos de 0.112, aunque no es extremadamente alto, combinado con el bajo AUC de los modelos base, sugiere que no hay un consenso robusto entre las predicciones individuales.",
+          "El modelo 'ensemble' tiene una predicción de 0.473, lo que está por debajo de 0.5 y contradice la alta convicción global, indicando una posible inconsistencia interna.",
+          "No hay titulares recientes directamente relacionados con LABB, lo que dificulta contextualizar la recomendación con eventos específicos de la empresa."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "MARA",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 14.54,
+      "conviction_raw": 0.9187,
+      "conviction": 0.735,
+      "disagreement": 0.1866,
+      "signals": {
+        "xs_lgbm": 0.9394,
+        "ensemble": 0.5773,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 7,
+      "n_total": 88,
+      "headlines": [
+        "Another crypto firm cuts staff in major AI push",
+        "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
+        "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
+        "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
+        "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el ranking global y la convicción del modelo son altos, la baja calidad de los modelos base (AUCs cercanos a 0.5) y el desacuerdo entre ellos, junto con un régimen de mercado bajista, sugieren que la recomendación no es lo suficientemente robusta para una compra fuerte. La narrativa de 'mineros de Bitcoin como propietarios de IA' es interesante, pero aún no está completamente validada por el modelo.",
+        "evidencia_a_favor": [
+          "Ranking global #7 de 88, indicando una posición fuerte relativa.",
+          "Convicción de 0.735, lo que sugiere una señal positiva del modelo agregado.",
+          "El modelo 'heuristic' predice 1.000, lo que podría indicar un factor fuerte a favor según esa heurística.",
+          "Los titulares sugieren un cambio narrativo positivo para MARA, pasando de minería a centros de datos de IA, lo que podría ser un catalizador."
+        ],
+        "red_flags": [
+          "Los AUCs de los modelos base (xs_lgbm: 0.509, ensemble: 0.505, heuristic: 0.520) son extremadamente bajos, apenas superiores a un lanzamiento de moneda, lo que indica una calidad predictiva muy pobre de los componentes individuales.",
+          "El desacuerdo entre modelos de 0.187 es significativo, especialmente dada la baja calidad individual de los modelos, lo que sugiere que no hay un consenso robusto.",
+          "El régimen de mercado es 'bear' (factor x0.8), lo que introduce un viento en contra general para las inversiones.",
+          "La predicción del modelo 'ensemble' (0.577) es considerablemente más baja que la de 'xs_lgbm' (0.939) y 'heuristic' (1.000), lo que indica una falta de coherencia en las señales."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "ORBIA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 22.22,
+      "conviction_raw": 0.6388,
+      "conviction": 0.7027,
+      "disagreement": 0.1065,
+      "signals": {
+        "xs_lgbm": 0.5958,
+        "ensemble": 0.4726,
+        "heuristic": 0.7333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 8,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el ranking global es alto y la convicción moderada, la baja calidad predictiva de los modelos base y el desacuerdo significativo entre ellos, junto con la ausencia de noticias relevantes sobre ORBIA, sugieren cautela. La recomendación no está suficientemente respaldada por la evidencia interna del modelo.",
+        "evidencia_a_favor": [
+          "Ranking global #8 de 88, indicando una posición fuerte en el universo de inversión.",
+          "Convicción de 0.703, lo que sugiere una señal positiva moderada del modelo agregado.",
+          "Régimen de mercado 'bull' (factor ×1.1), que podría favorecer el desempeño general de las acciones."
+        ],
+        "red_flags": [
+          "Desacuerdo entre modelos de 0.106, lo que es relativamente alto y sugiere inconsistencia en las predicciones de los modelos base.",
+          "Bajo AUC de los modelos base (xs_lgbm: 0.521, ensemble: 0.506, heuristic: 0.520), lo que indica que su capacidad predictiva es apenas superior a un lanzamiento de moneda.",
+          "El modelo 'ensemble' tiene un AUC de 0.506, lo que es extremadamente bajo y cuestiona su utilidad en la predicción.",
+          "Ausencia de titulares recientes específicos sobre ORBIA, lo que dificulta la validación cualitativa de la recomendación."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "FUNO11",
+      "universe": "🏢 FIBRAs (bienes raíces MX)",
+      "universe_slug": "fibras",
+      "moneda": "MXN",
+      "precio": 29.61,
+      "conviction_raw": 0.6308,
+      "conviction": 0.6939,
+      "disagreement": 0.4161,
+      "signals": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.6706,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.17,
+        "ensemble": 0.604,
+        "heuristic": 0.226
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5151,
+        "ensemble": 0.5536,
+        "heuristic": 0.52
+      },
+      "rank_global": 9,
+      "n_total": 88,
+      "headlines": [
+        "17:24 Indexity - OMA - Cumplimiento de su ODS",
+        "17:23 Indexity - NM Fitch Ratificó su Calificación",
+        "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+        "17:20 Indexity - Banxico - Monetary Policy Decision",
+        "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "A pesar de un ranking global alto y un régimen de mercado alcista, la baja convicción de los modelos base y el alto desacuerdo entre ellos, junto con la ausencia de noticias relevantes sobre FUNO11, sugieren una recomendación de compra menos agresiva.",
+        "evidencia_a_favor": [
+          "Ranking global #9 de 88 indica un buen posicionamiento relativo.",
+          "Régimen de mercado 'bull' con factor de 1.1 es favorable para la inversión.",
+          "Convicción global de 0.694 es moderadamente alta."
+        ],
+        "red_flags": [
+          "Desacuerdo entre modelos de 0.416 es alto, indicando falta de consenso.",
+          "El modelo base 'xs_lgbm' predice 0.000 con un AUC muy bajo (0.515), lo que sugiere que no aporta valor o incluso es perjudicial para la predicción.",
+          "El modelo 'ensemble' tiene un AUC de 0.554, apenas superior a un lanzamiento de moneda, lo que cuestiona su poder predictivo.",
+          "El modelo 'heuristic' predice 1.000 con un AUC de 0.520, lo que también es muy bajo y podría ser una señal de sobreajuste o una heurística poco robusta.",
+          "No hay titulares recientes específicos sobre FUNO11, lo que dificulta la validación cualitativa de la recomendación."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "AMD",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 521.58,
+      "conviction_raw": 0.8601,
+      "conviction": 0.6881,
+      "disagreement": 0.1977,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.5157,
+        "heuristic": 0.7647
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 10,
+      "n_total": 88,
+      "headlines": [
+        "Taiwan Semiconductor Manufacturing Company (TSM)’s Monthly Sales Rise",
+        "AMD Just Acquired MEXT to Crack the Memory Optimization Problem. Should Micron and Sandisk Investors Be Nervous?",
+        "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
+        "Is SpaceX Really Worth More Than Micron and AMD Combined? Here's the Unvarnished Truth.",
+        "Advanced Micro Devices (AMD) Is A Stock That Could Skyrocket, According To Newsletters"
+      ],
+      "gemini": {
+        "veredicto": "DEGRADA",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el modelo base xs_lgbm muestra una convicción muy alta, el bajo AUC de todos los modelos base y el desacuerdo entre ellos, junto con un régimen de mercado bajista, sugieren cautela. La adquisición de MEXT es un catalizador positivo, pero la sobrevaloración potencial y la competencia en IA requieren una evaluación más profunda.",
+        "evidencia_a_favor": [
+          "El ranking global de AMD es #10 de 88, indicando una posición fuerte dentro del universo de inversión del modelo.",
+          "La convicción general del modelo es de 0.688, lo que es relativamente alto.",
+          "El modelo base xs_lgbm predice 1.000, mostrando una convicción muy fuerte en esta señal específica.",
+          "La adquisición de MEXT para optimización de memoria es un desarrollo estratégico positivo que podría mejorar la competitividad de AMD.",
+          "AMD es mencionada en titulares como una acción con potencial de 'skyrocket' y parte de un nuevo 'MANIA' trade en IA, lo que sugiere un sentimiento positivo en el mercado."
+        ],
+        "red_flags": [
+          "El AUC de todos los modelos base es muy bajo (0.517, 0.501, 0.520), lo que indica que su capacidad predictiva es apenas mejor que el azar y genera poca confianza en sus predicciones individuales.",
+          "El desacuerdo entre modelos es de 0.198, lo que es significativo y sugiere que los modelos no están alineados en su visión sobre AMD.",
+          "El régimen de mercado es 'bear' (bajista), lo que aplica un factor de ajuste de ×0.8, reduciendo el atractivo de la recomendación.",
+          "El modelo 'ensemble' tiene una predicción de 0.516, que es muy cercana al umbral de indecisión, lo que debilita la convicción general.",
+          "La mención de 'Is SpaceX Really Worth More Than Micron and AMD Combined?' podría implicar una percepción de sobrevaloración o una comparación desfavorable en el mercado."
+        ],
+        "accion_final": "ESPERA",
+        "_fallback": false
+      }
+    },
+    {
+      "ticker": "GRUMAB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 283.18,
+      "conviction_raw": 0.6144,
+      "conviction": 0.6759,
+      "disagreement": 0.1336,
+      "signals": {
+        "xs_lgbm": 0.7757,
+        "ensemble": 0.5278,
+        "heuristic": 0.4667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 11
+    },
+    {
+      "ticker": "HERDEZ",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 56.76,
+      "conviction_raw": 0.6025,
+      "conviction": 0.6627,
+      "disagreement": 0.0833,
+      "signals": {
+        "xs_lgbm": 0.5803,
+        "ensemble": 0.4634,
+        "heuristic": 0.6667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 12
+    },
+    {
+      "ticker": "MEGACPO",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 60.23,
+      "conviction_raw": 0.5963,
+      "conviction": 0.656,
+      "disagreement": 0.1166,
+      "signals": {
+        "xs_lgbm": 0.5021,
+        "ensemble": 0.4726,
+        "heuristic": 0.7333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 13
+    },
+    {
+      "ticker": "FUNO11",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 29.61,
+      "conviction_raw": 0.5887,
+      "conviction": 0.6476,
+      "disagreement": 0.064,
+      "signals": {
+        "xs_lgbm": 0.6599,
+        "ensemble": 0.5164,
+        "heuristic": 0.5333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 14
+    },
+    {
+      "ticker": "PINFRA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 277.29,
+      "conviction_raw": 0.5863,
+      "conviction": 0.6449,
+      "disagreement": 0.0616,
+      "signals": {
+        "xs_lgbm": 0.6546,
+        "ensemble": 0.5164,
+        "heuristic": 0.5333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 15
+    },
+    {
+      "ticker": "GCC",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 208.37,
+      "conviction_raw": 0.585,
+      "conviction": 0.6435,
+      "disagreement": 0.0769,
+      "signals": {
+        "xs_lgbm": 0.662,
+        "ensemble": 0.4786,
+        "heuristic": 0.5333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 16
+    },
+    {
+      "ticker": "FIBRAPL",
+      "universe": "🏢 FIBRAs (bienes raíces MX)",
+      "universe_slug": "fibras",
+      "moneda": "MXN",
+      "precio": 75.37,
+      "conviction_raw": 0.5596,
+      "conviction": 0.6156,
+      "disagreement": 0.3842,
+      "signals": {
+        "xs_lgbm": 0.9072,
+        "ensemble": 0.6706,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.17,
+        "ensemble": 0.604,
+        "heuristic": 0.226
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5151,
+        "ensemble": 0.5536,
+        "heuristic": 0.52
+      },
+      "rank_global": 17
+    },
+    {
+      "ticker": "WALMEX",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 50.8,
+      "conviction_raw": 0.5468,
+      "conviction": 0.6015,
+      "disagreement": 0.2248,
+      "signals": {
+        "xs_lgbm": 0.8164,
+        "ensemble": 0.5164,
+        "heuristic": 0.2667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 18
+    },
+    {
+      "ticker": "FINN13",
+      "universe": "🏢 FIBRAs (bienes raíces MX)",
+      "universe_slug": "fibras",
+      "moneda": "MXN",
+      "precio": 4.64,
+      "conviction_raw": 0.5403,
+      "conviction": 0.5944,
+      "disagreement": 0.4117,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.6126,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.17,
+        "ensemble": 0.604,
+        "heuristic": 0.226
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5151,
+        "ensemble": 0.5536,
+        "heuristic": 0.52
+      },
+      "rank_global": 19
+    },
+    {
+      "ticker": "RIOT",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 28.57,
+      "conviction_raw": 0.7276,
+      "conviction": 0.5821,
+      "disagreement": 0.1347,
+      "signals": {
+        "xs_lgbm": 0.9027,
+        "ensemble": 0.5773,
+        "heuristic": 0.6923
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 20
+    },
+    {
+      "ticker": "GENTERA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 38.37,
+      "conviction_raw": 0.5237,
+      "conviction": 0.5761,
+      "disagreement": 0.2037,
+      "signals": {
+        "xs_lgbm": 0.7655,
+        "ensemble": 0.5164,
+        "heuristic": 0.2667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 21
+    },
+    {
+      "ticker": "KIMBERA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 38.9,
+      "conviction_raw": 0.5197,
+      "conviction": 0.5717,
+      "disagreement": 0.0231,
+      "signals": {
+        "xs_lgbm": 0.5182,
+        "ensemble": 0.4786,
+        "heuristic": 0.5333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 22
+    },
+    {
+      "ticker": "GMEXICOB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 200.13,
+      "conviction_raw": 0.5194,
+      "conviction": 0.5714,
+      "disagreement": 0.1987,
+      "signals": {
+        "xs_lgbm": 0.753,
+        "ensemble": 0.5278,
+        "heuristic": 0.2667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 23
+    },
+    {
+      "ticker": "FXI",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 31.59,
+      "conviction_raw": 0.7108,
+      "conviction": 0.5687,
+      "disagreement": 0.2397,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.4835,
+        "heuristic": 0.5
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 24
+    },
+    {
+      "ticker": "VISTA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 1138.76,
+      "conviction_raw": 0.5042,
+      "conviction": 0.5546,
+      "disagreement": 0.1326,
+      "signals": {
+        "xs_lgbm": 0.6509,
+        "ensemble": 0.551,
+        "heuristic": 0.3333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 25
+    },
+    {
+      "ticker": "AC",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 211.49,
+      "conviction_raw": 0.4912,
+      "conviction": 0.5403,
+      "disagreement": 0.1228,
+      "signals": {
+        "xs_lgbm": 0.6316,
+        "ensemble": 0.5164,
+        "heuristic": 0.3333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 26
+    },
+    {
+      "ticker": "V",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 336.23,
+      "conviction_raw": 0.6674,
+      "conviction": 0.5339,
+      "disagreement": 0.3,
+      "signals": {
+        "xs_lgbm": 0.2792,
+        "ensemble": 0.5157,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 27
+    },
+    {
+      "ticker": "VOLARA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 16.36,
+      "conviction_raw": 0.4821,
+      "conviction": 0.5303,
+      "disagreement": 0.4084,
+      "signals": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.4786,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 28
+    },
+    {
+      "ticker": "KO",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 82.63,
+      "conviction_raw": 0.6471,
+      "conviction": 0.5177,
+      "disagreement": 0.2651,
+      "signals": {
+        "xs_lgbm": 0.3037,
+        "ensemble": 0.5157,
+        "heuristic": 0.9412
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 29
+    },
+    {
+      "ticker": "XLE",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 53.84,
+      "conviction_raw": 0.644,
+      "conviction": 0.5152,
+      "disagreement": 0.1162,
+      "signals": {
+        "xs_lgbm": 0.7722,
+        "ensemble": 0.5641,
+        "heuristic": 0.5
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 30
+    },
+    {
+      "ticker": "VESTA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 59.05,
+      "conviction_raw": 0.4666,
+      "conviction": 0.5132,
+      "disagreement": 0.2603,
+      "signals": {
+        "xs_lgbm": 0.7683,
+        "ensemble": 0.5,
+        "heuristic": 0.1333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 31
+    },
+    {
+      "ticker": "CEMEXCPO",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 21.54,
+      "conviction_raw": 0.4606,
+      "conviction": 0.5066,
+      "disagreement": 0.2545,
+      "signals": {
+        "xs_lgbm": 0.7507,
+        "ensemble": 0.5164,
+        "heuristic": 0.1333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 32
+    },
+    {
+      "ticker": "USO",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 105.48,
+      "conviction_raw": 0.6294,
+      "conviction": 0.5035,
+      "disagreement": 0.2461,
+      "signals": {
+        "xs_lgbm": 0.889,
+        "ensemble": 0.4835,
+        "heuristic": 0.3
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 33
+    },
+    {
+      "ticker": "SPY",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 728.99,
+      "conviction_raw": 0.6248,
+      "conviction": 0.4998,
+      "disagreement": 0.0972,
+      "signals": {
+        "xs_lgbm": 0.7111,
+        "ensemble": 0.4995,
+        "heuristic": 0.7
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 34
+    },
+    {
+      "ticker": "GLD",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 373.63,
+      "conviction_raw": 0.6213,
+      "conviction": 0.4971,
+      "disagreement": 0.3397,
+      "signals": {
+        "xs_lgbm": 0.932,
+        "ensemble": 0.4995,
+        "heuristic": 0.1
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 35
+    },
+    {
+      "ticker": "FIBRAPL",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 75.37,
+      "conviction_raw": 0.6184,
+      "conviction": 0.4947,
+      "disagreement": 0.1395,
+      "signals": {
+        "xs_lgbm": 0.7874,
+        "ensemble": 0.4835,
+        "heuristic": 0.5
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 36
+    },
+    {
+      "ticker": "VOO",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 670.26,
+      "conviction_raw": 0.6167,
+      "conviction": 0.4933,
+      "disagreement": 0.1579,
+      "signals": {
+        "xs_lgbm": 0.7801,
+        "ensemble": 0.5286,
+        "heuristic": 0.4
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 37
+    },
+    {
+      "ticker": "META",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 550.25,
+      "conviction_raw": 0.5973,
+      "conviction": 0.4779,
+      "disagreement": 0.2802,
+      "signals": {
+        "xs_lgbm": 0.9674,
+        "ensemble": 0.5157,
+        "heuristic": 0.2941
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 38
+    },
+    {
+      "ticker": "EWZ",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 34.67,
+      "conviction_raw": 0.5949,
+      "conviction": 0.4759,
+      "disagreement": 0.1813,
+      "signals": {
+        "xs_lgbm": 0.595,
+        "ensemble": 0.468,
+        "heuristic": 0.9
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 39
+    },
+    {
+      "ticker": "OMAB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 244.92,
+      "conviction_raw": 0.4295,
+      "conviction": 0.4724,
+      "disagreement": 0.1408,
+      "signals": {
+        "xs_lgbm": 0.2588,
+        "ensemble": 0.4726,
+        "heuristic": 0.6
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 40
+    },
+    {
+      "ticker": "XLY",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 114.37,
+      "conviction_raw": 0.5804,
+      "conviction": 0.4643,
+      "disagreement": 0.3588,
+      "signals": {
+        "xs_lgbm": 0.876,
+        "ensemble": 0.4995,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 41
+    },
+    {
+      "ticker": "BAC",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 57.88,
+      "conviction_raw": 0.5648,
+      "conviction": 0.4519,
+      "disagreement": 0.1264,
+      "signals": {
+        "xs_lgbm": 0.3991,
+        "ensemble": 0.5157,
+        "heuristic": 0.7059
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 42
+    },
+    {
+      "ticker": "SLV",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 53.28,
+      "conviction_raw": 0.5537,
+      "conviction": 0.443,
+      "disagreement": 0.1766,
+      "signals": {
+        "xs_lgbm": 0.7292,
+        "ensemble": 0.468,
+        "heuristic": 0.3
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 43
+    },
+    {
+      "ticker": "FMX",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 128.87,
+      "conviction_raw": 0.5486,
+      "conviction": 0.4388,
+      "disagreement": 0.1933,
+      "signals": {
+        "xs_lgbm": 0.2914,
+        "ensemble": 0.5157,
+        "heuristic": 0.7647
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 44
+    },
+    {
+      "ticker": "ASURB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 537.94,
+      "conviction_raw": 0.3977,
+      "conviction": 0.4375,
+      "disagreement": 0.0413,
+      "signals": {
+        "xs_lgbm": 0.3753,
+        "ensemble": 0.4726,
+        "heuristic": 0.4
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 45
+    },
+    {
+      "ticker": "XLP",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 84.71,
+      "conviction_raw": 0.5386,
+      "conviction": 0.4309,
+      "disagreement": 0.0581,
+      "signals": {
+        "xs_lgbm": 0.58,
+        "ensemble": 0.468,
+        "heuristic": 0.6
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 46
+    },
+    {
+      "ticker": "VTI",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 362.22,
+      "conviction_raw": 0.538,
+      "conviction": 0.4304,
+      "disagreement": 0.0998,
+      "signals": {
+        "xs_lgbm": 0.6406,
+        "ensemble": 0.4835,
+        "heuristic": 0.4
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 47
+    },
+    {
+      "ticker": "MSFT",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 372.97,
+      "conviction_raw": 0.5237,
+      "conviction": 0.4189,
+      "disagreement": 0.1107,
+      "signals": {
+        "xs_lgbm": 0.3761,
+        "ensemble": 0.5157,
+        "heuristic": 0.6471
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 48
+    },
+    {
+      "ticker": "XLF",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 53.57,
+      "conviction_raw": 0.5212,
+      "conviction": 0.417,
+      "disagreement": 0.2732,
+      "signals": {
+        "xs_lgbm": 0.3733,
+        "ensemble": 0.4835,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 49
+    },
+    {
+      "ticker": "TLEVISA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 9.49,
+      "conviction_raw": 0.3759,
+      "conviction": 0.4135,
+      "disagreement": 0.2946,
+      "signals": {
+        "xs_lgbm": 0.6791,
+        "ensemble": 0.551,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 50
+    },
+    {
+      "ticker": "JNJ",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 254.66,
+      "conviction_raw": 0.5138,
+      "conviction": 0.4111,
+      "disagreement": 0.2788,
+      "signals": {
+        "xs_lgbm": 0.1418,
+        "ensemble": 0.5157,
+        "heuristic": 0.8235
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 51
+    },
+    {
+      "ticker": "JPM",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 329.05,
+      "conviction_raw": 0.5116,
+      "conviction": 0.4093,
+      "disagreement": 0.2809,
+      "signals": {
+        "xs_lgbm": 0.1368,
+        "ensemble": 0.5157,
+        "heuristic": 0.8235
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 52
+    },
+    {
+      "ticker": "BIMBOA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 57.01,
+      "conviction_raw": 0.3675,
+      "conviction": 0.4042,
+      "disagreement": 0.2865,
+      "signals": {
+        "xs_lgbm": 0.6698,
+        "ensemble": 0.5164,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 53
+    },
+    {
+      "ticker": "GCARSOA1",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 134.15,
+      "conviction_raw": 0.3673,
+      "conviction": 0.4041,
+      "disagreement": 0.2871,
+      "signals": {
+        "xs_lgbm": 0.6665,
+        "ensemble": 0.5278,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 54
+    },
+    {
+      "ticker": "IWM",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 299.83,
+      "conviction_raw": 0.4838,
+      "conviction": 0.387,
+      "disagreement": 0.1539,
+      "signals": {
+        "xs_lgbm": 0.3276,
+        "ensemble": 0.5641,
+        "heuristic": 0.7
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 55
+    },
+    {
+      "ticker": "GAPB",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 439.85,
+      "conviction_raw": 0.3517,
+      "conviction": 0.3869,
+      "disagreement": 0.0851,
+      "signals": {
+        "xs_lgbm": 0.2722,
+        "ensemble": 0.4786,
+        "heuristic": 0.4
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 56
+    },
+    {
+      "ticker": "GFNORTEO",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 182.23,
+      "conviction_raw": 0.3494,
+      "conviction": 0.3843,
+      "disagreement": 0.2752,
+      "signals": {
+        "xs_lgbm": 0.6269,
+        "ensemble": 0.5278,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": 0.0,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 57
+    },
+    {
+      "ticker": "HOTEL",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 4.56,
+      "conviction_raw": 0.6598,
+      "conviction": 0.3629,
+      "disagreement": 0.2799,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.5278,
+        "heuristic": 0.3333
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": -1.0,
+      "news_alerta": true,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 58
+    },
+    {
+      "ticker": "AAPL",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 283.78,
+      "conviction_raw": 0.4478,
+      "conviction": 0.3582,
+      "disagreement": 0.1861,
+      "signals": {
+        "xs_lgbm": 0.2035,
+        "ensemble": 0.5157,
+        "heuristic": 0.6471
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 59
+    },
+    {
+      "ticker": "MA",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 499.02,
+      "conviction_raw": 0.4253,
+      "conviction": 0.3402,
+      "disagreement": 0.1579,
+      "signals": {
+        "xs_lgbm": 0.2229,
+        "ensemble": 0.5157,
+        "heuristic": 0.5882
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 60
+    },
+    {
+      "ticker": "BOLSAA",
+      "universe": "🇲🇽 Acciones BMV",
+      "universe_slug": "bmv",
+      "moneda": "MXN",
+      "precio": 34.96,
+      "conviction_raw": 0.6084,
+      "conviction": 0.3346,
+      "disagreement": 0.143,
+      "signals": {
+        "xs_lgbm": 0.7758,
+        "ensemble": 0.4786,
+        "heuristic": 0.4667
+      },
+      "model_weights": {
+        "xs_lgbm": 0.454,
+        "ensemble": 0.123,
+        "heuristic": 0.423
+      },
+      "regime": "bull",
+      "regime_factor": 1.1,
+      "news_sent": -0.397,
+      "news_alerta": true,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5214,
+        "ensemble": 0.5058,
+        "heuristic": 0.52
+      },
+      "rank_global": 61
+    },
+    {
+      "ticker": "CVX",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 171.06,
+      "conviction_raw": 0.407,
+      "conviction": 0.3256,
+      "disagreement": 0.0539,
+      "signals": {
+        "xs_lgbm": 0.3934,
+        "ensemble": 0.5157,
+        "heuristic": 0.4118
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 62
+    },
+    {
+      "ticker": "NAFTRAC",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 67.37,
+      "conviction_raw": 0.4056,
+      "conviction": 0.3245,
+      "disagreement": 0.2293,
+      "signals": {
+        "xs_lgbm": 0.503,
+        "ensemble": 0.468,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 63
+    },
+    {
+      "ticker": "CLSK",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 16.33,
+      "conviction_raw": 0.3974,
+      "conviction": 0.3179,
+      "disagreement": 0.2911,
+      "signals": {
+        "xs_lgbm": 0.8643,
+        "ensemble": 0.5625,
+        "heuristic": 0.1538
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 64
+    },
+    {
+      "ticker": "XLI",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 181.2,
+      "conviction_raw": 0.3808,
+      "conviction": 0.3046,
+      "disagreement": 0.3882,
+      "signals": {
+        "xs_lgbm": 0.0504,
+        "ensemble": 0.4835,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 65
+    },
+    {
+      "ticker": "INTC",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 128.32,
+      "conviction_raw": 0.3738,
+      "conviction": 0.299,
+      "disagreement": 0.1174,
+      "signals": {
+        "xs_lgbm": 0.2471,
+        "ensemble": 0.5157,
+        "heuristic": 0.4706
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 66
+    },
+    {
+      "ticker": "XLV",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 160.34,
+      "conviction_raw": 0.3662,
+      "conviction": 0.2929,
+      "disagreement": 0.4016,
+      "signals": {
+        "xs_lgbm": 0.0168,
+        "ensemble": 0.4835,
+        "heuristic": 1.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 67
+    },
+    {
+      "ticker": "XOM",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 136.54,
+      "conviction_raw": 0.3539,
+      "conviction": 0.2831,
+      "disagreement": 0.0997,
+      "signals": {
+        "xs_lgbm": 0.2724,
+        "ensemble": 0.5157,
+        "heuristic": 0.4118
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 68
+    },
+    {
+      "ticker": "COIN",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 149.06,
+      "conviction_raw": 0.3431,
+      "conviction": 0.2745,
+      "disagreement": 0.4099,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.5773,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 69
+    },
+    {
+      "ticker": "AMX",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 26.41,
+      "conviction_raw": 0.3403,
+      "conviction": 0.2723,
+      "disagreement": 0.153,
+      "signals": {
+        "xs_lgbm": 0.171,
+        "ensemble": 0.5157,
+        "heuristic": 0.4706
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 70
+    },
+    {
+      "ticker": "QQQ",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 706.52,
+      "conviction_raw": 0.3363,
+      "conviction": 0.269,
+      "disagreement": 0.123,
+      "signals": {
+        "xs_lgbm": 0.2531,
+        "ensemble": 0.4835,
+        "heuristic": 0.2
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 71
+    },
+    {
+      "ticker": "GOOGL",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 337.39,
+      "conviction_raw": 0.3308,
+      "conviction": 0.2646,
+      "disagreement": 0.0928,
+      "signals": {
+        "xs_lgbm": 0.3612,
+        "ensemble": 0.5157,
+        "heuristic": 0.2941
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 72
+    },
+    {
+      "ticker": "MCD",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 269.76,
+      "conviction_raw": 0.3273,
+      "conviction": 0.2618,
+      "disagreement": 0.126,
+      "signals": {
+        "xs_lgbm": 0.212,
+        "ensemble": 0.5157,
+        "heuristic": 0.4118
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 73
+    },
+    {
+      "ticker": "EEM",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 67.19,
+      "conviction_raw": 0.3229,
+      "conviction": 0.2583,
+      "disagreement": 0.1187,
+      "signals": {
+        "xs_lgbm": 0.2364,
+        "ensemble": 0.468,
+        "heuristic": 0.2
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 74
+    },
+    {
+      "ticker": "NVDA",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 192.53,
+      "conviction_raw": 0.3124,
+      "conviction": 0.2499,
+      "disagreement": 0.099,
+      "signals": {
+        "xs_lgbm": 0.3194,
+        "ensemble": 0.5157,
+        "heuristic": 0.2941
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 75
+    },
+    {
+      "ticker": "IBIT",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 33.85,
+      "conviction_raw": 0.3051,
+      "conviction": 0.2441,
+      "disagreement": 0.3543,
+      "signals": {
+        "xs_lgbm": 0.85,
+        "ensemble": 0.5773,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 76
+    },
+    {
+      "ticker": "PFE",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 24.29,
+      "conviction_raw": 0.3049,
+      "conviction": 0.2439,
+      "disagreement": 0.1026,
+      "signals": {
+        "xs_lgbm": 0.3023,
+        "ensemble": 0.5157,
+        "heuristic": 0.2941
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 77
+    },
+    {
+      "ticker": "ETHA",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 11.89,
+      "conviction_raw": 0.2986,
+      "conviction": 0.2389,
+      "disagreement": 0.3453,
+      "signals": {
+        "xs_lgbm": 0.8241,
+        "ensemble": 0.5773,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 78
+    },
+    {
+      "ticker": "GS",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 1019.61,
+      "conviction_raw": 0.2956,
+      "conviction": 0.2365,
+      "disagreement": 0.1247,
+      "signals": {
+        "xs_lgbm": 0.2105,
+        "ensemble": 0.5157,
+        "heuristic": 0.3529
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 79
+    },
+    {
+      "ticker": "HYG",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 79.83,
+      "conviction_raw": 0.2954,
+      "conviction": 0.2363,
+      "disagreement": 0.1689,
+      "signals": {
+        "xs_lgbm": 0.3893,
+        "ensemble": 0.3158,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 80
+    },
+    {
+      "ticker": "GBTC",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 46.28,
+      "conviction_raw": 0.2897,
+      "conviction": 0.2318,
+      "disagreement": 0.3335,
+      "signals": {
+        "xs_lgbm": 0.789,
+        "ensemble": 0.5773,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 81
+    },
+    {
+      "ticker": "MSTR",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 82.31,
+      "conviction_raw": 0.2873,
+      "conviction": 0.2298,
+      "disagreement": 0.1813,
+      "signals": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.3846,
+        "heuristic": 0.3846
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 82
+    },
+    {
+      "ticker": "TLT",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 87.36,
+      "conviction_raw": 0.2862,
+      "conviction": 0.229,
+      "disagreement": 0.3267,
+      "signals": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.3846,
+        "heuristic": 0.8
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 83
+    },
+    {
+      "ticker": "FBTC",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 51.98,
+      "conviction_raw": 0.2815,
+      "conviction": 0.2252,
+      "disagreement": 0.3228,
+      "signals": {
+        "xs_lgbm": 0.7566,
+        "ensemble": 0.5773,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.253,
+        "ensemble": 0.156,
+        "heuristic": 0.591
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.5086,
+        "ensemble": 0.5053,
+        "heuristic": 0.52
+      },
+      "rank_global": 84
+    },
+    {
+      "ticker": "XLK",
+      "universe": "📦 ETFs",
+      "universe_slug": "etfs",
+      "moneda": "USD/MXN",
+      "precio": 181.11,
+      "conviction_raw": 0.2531,
+      "conviction": 0.2025,
+      "disagreement": 0.1755,
+      "signals": {
+        "xs_lgbm": 0.0619,
+        "ensemble": 0.4835,
+        "heuristic": 0.2
+      },
+      "model_weights": {
+        "xs_lgbm": 0.435,
+        "ensemble": 0.399,
+        "heuristic": 0.166
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5525,
+        "ensemble": 0.5482,
+        "heuristic": 0.52
+      },
+      "rank_global": 85
+    },
+    {
+      "ticker": "AMZN",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 232.69,
+      "conviction_raw": 0.172,
+      "conviction": 0.1376,
+      "disagreement": 0.2112,
+      "signals": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.5157,
+        "heuristic": 0.2941
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 86
+    },
+    {
+      "ticker": "PEP",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 141.39,
+      "conviction_raw": 0.1453,
+      "conviction": 0.1162,
+      "disagreement": 0.1803,
+      "signals": {
+        "xs_lgbm": 0.1512,
+        "ensemble": 0.5157,
+        "heuristic": 0.1176
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 87
+    },
+    {
+      "ticker": "TSLA",
+      "universe": "🇺🇸 Acciones USA (SIC)",
+      "universe_slug": "usa",
+      "moneda": "USD",
+      "precio": 379.71,
+      "conviction_raw": 0.1187,
+      "conviction": 0.0949,
+      "disagreement": 0.2109,
+      "signals": {
+        "xs_lgbm": 0.2319,
+        "ensemble": 0.5157,
+        "heuristic": 0.0
+      },
+      "model_weights": {
+        "xs_lgbm": 0.44,
+        "ensemble": 0.032,
+        "heuristic": 0.528
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 20,
+      "model_auc": {
+        "xs_lgbm": 0.5167,
+        "ensemble": 0.5012,
+        "heuristic": 0.52
+      },
+      "rank_global": 88
+    }
+  ],
+  "insights": [
+    {
+      "tipo": "Consenso fuerte",
+      "ticker": "Q",
+      "texto": "Q (bmv): convicción 0.82, modelos de acuerdo (desac. 0.12). Régimen bull."
+    },
+    {
+      "tipo": "Consenso fuerte",
+      "ticker": "POSADAS",
+      "texto": "POSADAS (bmv): convicción 0.81, modelos de acuerdo (desac. 0.12). Régimen bull."
+    },
+    {
+      "tipo": "Consenso fuerte",
+      "ticker": "LABB",
+      "texto": "LABB (bmv): convicción 0.74, modelos de acuerdo (desac. 0.11). Régimen bull."
+    },
+    {
+      "tipo": "Divergencia",
+      "ticker": "FUNO11",
+      "texto": "FUNO11: modelos en desacuerdo (desac. 0.42) — señales {'xs_lgbm': 0.0, 'ensemble': 0.6706, 'heuristic': 1.0}. Revisar antes de operar."
+    },
+    {
+      "tipo": "Divergencia",
+      "ticker": "FIBRAPL",
+      "texto": "FIBRAPL: modelos en desacuerdo (desac. 0.38) — señales {'xs_lgbm': 0.9072, 'ensemble': 0.6706, 'heuristic': 0.0}. Revisar antes de operar."
+    },
+    {
+      "tipo": "Veto por noticias",
+      "ticker": "HOTEL",
+      "texto": "HOTEL: score técnico alto pero news_sent -1.00 redujo la convicción a la mitad."
+    },
+    {
+      "tipo": "Veto por noticias",
+      "ticker": "BOLSAA",
+      "texto": "BOLSAA: score técnico alto pero news_sent -0.40 redujo la convicción a la mitad."
+    },
+    {
+      "tipo": "Concentración",
+      "ticker": "",
+      "texto": "7/10 del top provienen de 'bmv'. Considerar diversificar entre clases de activo."
+    },
+    {
+      "tipo": "Régimen",
+      "ticker": "",
+      "texto": "Régimen de mercado: MXN=bull · USD=bear · USD/MXN=bear"
+    }
+  ],
+  "top_gemini": 10,
+  "gemini_summary": {
+    "validados": 10,
+    "confirma": 1,
+    "degrada": 9,
+    "veta": 0,
+    "modo": "gemini"
+  },
+  "generated_at": "2026-06-28T13:51:26.305779",
+  "elapsed_sec": 72.9
+}
