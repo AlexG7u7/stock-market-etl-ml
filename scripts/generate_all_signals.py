@@ -333,15 +333,45 @@ def generate_universe_signal(
                 seen_tickers.add(p["ticker"])
 
     # Ordenar: consenso fuerte primero
-    consensus_rank = {c["ticker"]: c["n_horizontes"] for c in consensus}
-    all_unique_picks.sort(key=lambda p: -consensus_rank.get(p["ticker"], 0))
+    consensus_rank_d = {c["ticker"]: c["n_horizontes"] for c in consensus}
+    all_unique_picks.sort(key=lambda p: -consensus_rank_d.get(p["ticker"], 0))
+
+    # Computar contexto macro para Gemini
+    macro_ctx: dict = {}
+    if macro_data:
+        for key, df in macro_data.items():
+            if not df.empty and "Close" in df.columns:
+                try:
+                    ret5 = float(df["Close"].pct_change(5).iloc[-1]) * 100
+                    if not pd.isna(ret5):
+                        macro_ctx[key] = round(ret5, 2)
+                except Exception:
+                    pass
+    # Régimen de mercado (simple: si benchmark sube > 1% en 10d = alcista)
+    try:
+        bench_key = cfg.get("benchmark", "SP500")
+        bench_df  = macro_data.get(bench_key) or macro_data.get("SP500") or macro_data.get("NAFTRAC")
+        if bench_df is not None and not bench_df.empty and "Close" in bench_df.columns:
+            ret10 = float(bench_df["Close"].pct_change(10).iloc[-1]) * 100
+            macro_ctx["regime"] = "alcista" if ret10 > 1 else ("bajista" if ret10 < -1 else "lateral")
+        else:
+            macro_ctx["regime"] = "desconocido"
+    except Exception:
+        macro_ctx["regime"] = "desconocido"
 
     from src.api.gemini_analyst import analyze_batch
     gemini_analyses = analyze_batch(
-        all_unique_picks, cfg["tickers"], universe_name, universe_slug=cfg["slug"]
+        all_unique_picks,
+        cfg["tickers"],
+        universe_name,
+        universe_slug=cfg["slug"],
+        by_horizon=by_horizon,
+        macro_context=macro_ctx,
+        consensus=consensus,
+        n_universe=len(tickers),
     )
 
-    # Enriquecer picks de TODOS los horizontes con análisis Gemini
+    # Enriquecer picks de TODOS los horizontes con análisis Gemini (campos del agente)
     for hkey, hdata in by_horizon.items():
         for p in hdata["top5"]:
             name = p["ticker"]
@@ -349,9 +379,12 @@ def generate_universe_signal(
             p["gemini"]   = {
                 "resumen":          a.get("resumen", ""),
                 "accion":           a.get("accion", ""),
+                "confianza":        a.get("confianza", ""),
                 "riesgo":           a.get("riesgo", ""),
                 "catalizador":      a.get("catalizador", ""),
+                "horizonte_optimo": a.get("horizonte_optimo", ""),
                 "sentimiento_news": a.get("sentimiento_news", ""),
+                "contradiccion":    a.get("contradiccion"),
             }
             p["noticias"] = a.get("noticias", [])
 

@@ -46,17 +46,17 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el modelo global sugiere una fuerte convicción, el desacuerdo entre los modelos base y la baja AUC de algunos componentes, junto con un régimen de mercado bajista, justifican una postura más cautelosa. La narrativa de 'mineros de Bitcoin como landlords de IA' es interesante, pero aún no está completamente validada por el rendimiento del modelo.",
+        "tesis": "Aunque el modelo global sugiere una fuerte compra, la baja calidad de los modelos base y el desacuerdo significativo entre ellos, junto con un régimen de mercado bajista, justifican una degradación a 'Espera'. La narrativa de 'mineros de Bitcoin como landlords de IA' es interesante, pero aún no está completamente validada por el modelo.",
         "evidencia_a_favor": [
           "Ranking global #1 de 88 con una convicción de 0.800, lo que indica una fuerte señal del modelo agregado.",
-          "El modelo 'heuristic' y 'xs_lgbm' muestran predicciones altas (1.000 y 0.886 respectivamente), lo que contribuye a la alta convicción global.",
-          "Los titulares recientes sugieren un cambio narrativo positivo para MARA, posicionándolos como 'AI landlords', lo que podría ser un catalizador alcista no completamente capturado por los modelos tradicionales."
+          "El modelo 'heuristic' predice 1.000 con un AUC de 0.520, lo que sugiere una fuerte señal positiva desde una perspectiva heurística."
         ],
         "red_flags": [
-          "El desacuerdo entre modelos es de 0.219, lo que es relativamente alto y sugiere que no todos los modelos base están alineados con la predicción final.",
-          "Las AUC de los modelos base son bajas (0.495, 0.471, 0.520, 0.490), lo que indica que la capacidad predictiva individual de cada modelo es cercana a la aleatoriedad, a pesar de la alta convicción del ensamble.",
+          "El AUC de todos los modelos base es muy bajo (alrededor de 0.5), lo que indica que su capacidad predictiva individual es apenas mejor que el azar.",
+          "El 'desacuerdo entre modelos' es de 0.219, lo que es relativamente alto y sugiere que los modelos individuales no están alineados en su predicción.",
           "El régimen de mercado es 'bear' (factor ×0.8), lo que introduce un sesgo negativo general que el modelo global podría no estar ponderando suficientemente.",
-          "El modelo 'ensemble' tiene una predicción de 0.453, lo que contrasta fuertemente con la predicción global y la de otros modelos base, indicando una posible inconsistencia interna."
+          "El modelo 'ensemble' tiene una predicción de 0.453 con un AUC de 0.471, lo que contradice la señal positiva del modelo global y del heurístico.",
+          "La narrativa de 'mineros de Bitcoin como landlords de IA' es una tendencia emergente y especulativa, que podría no estar completamente capturada o validada por los datos históricos en los que se entrenaron los modelos."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -106,17 +106,17 @@
       "gemini": {
         "veredicto": "CONFIRMA",
         "confianza_gemini": 85,
-        "tesis": "La recomendación de POSADAS se valida por su alto ranking global y convicción, respaldada por la mayoría de los modelos base y un bajo desacuerdo, en un régimen de mercado alcista. A pesar de la falta de noticias directas sobre la empresa, la fortaleza de la señal del modelo sugiere una oportunidad de compra.",
+        "tesis": "La recomendación de compra de POSADAS está fuertemente respaldada por un alto ranking global y una convicción significativa del modelo, a pesar de un ligero desacuerdo entre los modelos base. El régimen de mercado alcista amplifica la señal positiva, sugiriendo un potencial de rendimiento favorable.",
         "evidencia_a_favor": [
-          "Ranking global muy alto (#2 de 88), indicando una fuerte señal de compra.",
-          "Convicción alta (0.744), lo que sugiere una alta confianza del modelo en la recomendación.",
-          "Bajo desacuerdo entre modelos (0.111), lo que implica consistencia en las predicciones.",
-          "La mayoría de los modelos base (xs_lgbm y heuristic) muestran puntuaciones elevadas (0.725 y 0.733 respectivamente), respaldando la recomendación.",
-          "El régimen de mercado 'bull' aplica un factor multiplicador (x1.1) que refuerza la señal positiva."
+          "Ranking global muy alto (#2 de 88), indicando una fuerte señal de compra relativa.",
+          "Convicción alta (0.744), lo que sugiere una fuerte creencia del modelo en la recomendación.",
+          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, amplificando la señal positiva.",
+          "Dos de los cuatro modelos base (xs_lgbm y heuristic) muestran predicciones altas (0.725 y 0.733 respectivamente) y AUCs razonables, lo que indica un soporte significativo.",
+          "El sentimiento de noticias es neutro (+0.00), lo que no introduce un sesgo negativo."
         ],
         "red_flags": [
-          "Ausencia de titulares recientes directamente relacionados con POSADAS, lo que podría indicar una falta de catalizadores de noticias a corto plazo o que el modelo está capturando factores no noticiosos.",
-          "Los AUC de los modelos base son relativamente bajos (alrededor de 0.5), lo que sugiere que la capacidad predictiva individual de cada modelo no es extremadamente fuerte, aunque la combinación y el bajo desacuerdo compensan esto."
+          "El desacuerdo entre modelos (0.111) es moderado, lo que podría indicar cierta incertidumbre en la predicción agregada.",
+          "Los AUCs de los modelos base son relativamente bajos (alrededor de 0.5), lo que sugiere que la capacidad predictiva individual de cada modelo no es extremadamente fuerte, aunque la agregación puede mejorar esto."
         ],
         "accion_final": "COMPRA FUERTE",
         "_fallback": false
@@ -166,17 +166,17 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el modelo global muestra una alta convicción y un buen ranking, el bajo rendimiento de los modelos base y el desacuerdo entre ellos, junto con la falta de noticias específicas sobre CUERVO, sugieren cautela. La recomendación se degrada a la espera de mayor claridad y un rendimiento más consistente de los modelos subyacentes.",
+        "tesis": "Aunque el ranking global es alto, la baja convicción y el desacuerdo entre modelos base, junto con la debilidad de los AUC individuales, sugieren que la recomendación de CUERVO no es lo suficientemente robusta para una compra fuerte en este momento.",
         "evidencia_a_favor": [
-          "Ranking global #3 de 88, indicando una posición fuerte en el universo de inversión.",
-          "Convicción de 0.739, lo que sugiere una alta confianza del modelo global en la recomendación.",
-          "Régimen de mercado 'bull' (factor ×1.1) que podría favorecer el rendimiento general del mercado."
+          "Ranking global de #3 de 88 es muy positivo.",
+          "El régimen de mercado 'bull' aplica un factor multiplicador de x1.1, lo que podría amplificar ganancias."
         ],
         "red_flags": [
-          "Desacuerdo entre modelos de 0.177, lo que indica una falta de consenso significativo entre los modelos base.",
-          "Bajo rendimiento de los modelos base: xs_lgbm (AUC 0.525), ensemble (AUC 0.508), woe_abs (AUC 0.506), todos muy cercanos a un rendimiento aleatorio (0.5).",
-          "El modelo 'heuristic' tiene una predicción muy alta (0.933) pero un AUC bajo (0.520), lo que sugiere que podría estar sobreajustado o ser menos fiable en su predicción.",
-          "Ausencia de titulares recientes específicos sobre CUERVO, lo que dificulta la validación de la recomendación con información fundamental reciente."
+          "La convicción del modelo es de 0.739, lo cual es aceptable, pero no excepcionalmente alta para un ranking #3.",
+          "El desacuerdo entre modelos es de 0.177, lo que indica una falta de consenso significativo entre las predicciones individuales.",
+          "Los AUC de los modelos base son bajos (entre 0.506 y 0.525), lo que sugiere que la capacidad predictiva individual de cada modelo es apenas mejor que el azar.",
+          "El modelo 'heuristic' tiene una predicción muy alta (0.933) pero un AUC bajo (0.520), lo que podría indicar un sobreajuste o una señal poco fiable.",
+          "Los titulares recientes no ofrecen información específica sobre CUERVO que respalde o contradiga la recomendación, siendo en su mayoría noticias macroeconómicas o de otras empresas."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -225,20 +225,19 @@
       ],
       "gemini": {
         "veredicto": "DEGRADA",
-        "confianza_gemini": 70,
-        "tesis": "A pesar de un ranking global alto y un régimen de mercado alcista, la baja convicción del modelo principal y el pobre rendimiento de algunos modelos base, junto con un desacuerdo significativo, sugieren cautela. La falta de noticias relevantes sobre FUNO11 en los titulares recientes añade incertidumbre.",
+        "confianza_gemini": 75,
+        "tesis": "Aunque el ranking global es alto y el régimen de mercado es favorable, la baja convicción del modelo ensemble y el pobre desempeño de xs_lgbm, junto con el alto desacuerdo entre modelos, sugieren una señal mixta que requiere mayor cautela.",
         "evidencia_a_favor": [
-          "Ranking global #4 de 88, indicando un buen posicionamiento relativo.",
-          "Régimen de mercado 'bull' con un factor de 1.1, lo que debería impulsar las recomendaciones positivas.",
-          "Sentimiento de noticias neutral (+0.00), no hay señales negativas evidentes."
+          "Ranking global #4 de 88, lo que indica una posición fuerte en el universo de inversión.",
+          "Régimen de mercado 'bull' con un factor de 1.1, lo que amplifica las señales positivas.",
+          "El modelo 'heuristic' predice 1.000, lo que podría indicar un sesgo positivo basado en reglas predefinidas."
         ],
         "red_flags": [
-          "Convicción del modelo principal de 0.738, que aunque es buena, no es excepcionalmente alta para una recomendación de 'compra fuerte'.",
-          "Desacuerdo entre modelos de 0.359, lo que indica una falta de consenso entre los sub-modelos.",
-          "El modelo 'xs_lgbm' tiene un rendimiento de AUC de 0.494, lo que es peor que un lanzamiento de moneda y su predicción es 0.000, lo que es una señal de alerta importante.",
-          "El modelo 'ensemble' tiene un AUC de 0.551, que es bajo y su predicción es 0.640, lo que no es una señal fuerte.",
-          "El modelo 'heuristic' tiene un AUC de 0.520, también bajo, a pesar de su predicción de 1.000.",
-          "La ausencia de titulares recientes específicos sobre FUNO11 en el contexto proporcionado, lo que podría indicar una falta de catalizadores inmediatos o una menor visibilidad."
+          "La convicción del modelo es de 0.738, lo cual, aunque no es bajo, no es excepcionalmente alto para una recomendación tan bien rankeada.",
+          "El desacuerdo entre modelos es de 0.359, lo que indica una falta de consenso significativo entre los modelos base.",
+          "El modelo 'xs_lgbm' predice 0.000 con un AUC de 0.494, lo que sugiere que este modelo no tiene capacidad predictiva o incluso predice lo contrario.",
+          "El modelo 'ensemble' tiene una predicción de 0.640 con un AUC de 0.551, lo que es un rendimiento modesto para el modelo que debería integrar las señales.",
+          "El sentimiento de noticias es neutral (+0.00), lo que no añade un catalizador positivo."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -288,16 +287,18 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el ranking global es alto y el régimen de mercado es favorable, la baja convicción y el desacuerdo significativo entre los modelos base, junto con el bajo AUC de los modelos individuales, sugieren una señal débil y poco robusta. La mayoría de los titulares recientes no están directamente relacionados con Q (bmv, MXN), lo que no aporta evidencia adicional para la recomendación.",
+        "tesis": "Aunque el ranking global es alto y el régimen de mercado es favorable, la baja convicción y el desacuerdo significativo entre los modelos base, junto con el bajo AUC de los modelos individuales, sugieren una señal débil y poco robusta. La falta de noticias directamente relacionadas con Q (bmv, MXN) en los titulares recientes añade incertidumbre.",
         "evidencia_a_favor": [
-          "Ranking global #5 de 88, lo que indica una posición superior en el universo de inversión.",
-          "Régimen de mercado 'bull' con un factor multiplicador de ×1.1, lo que favorece las posiciones largas."
+          "Ranking global #5 de 88 es fuerte.",
+          "Régimen de mercado 'bull' aplica un factor multiplicador de 1.1, lo cual es positivo.",
+          "El modelo 'heuristic' muestra una predicción alta de 0.800."
         ],
         "red_flags": [
-          "Convicción de 0.694, que, aunque por encima de 0.5, no es lo suficientemente alta para una señal fuerte, especialmente considerando el alto ranking.",
-          "Desacuerdo entre modelos de 0.118, lo que es relativamente alto y sugiere falta de consenso entre los modelos base.",
-          "Bajo AUC de los modelos base (xs_lgbm: 0.525, ensemble: 0.508, heuristic: 0.520, woe_abs: 0.506), lo que indica que la capacidad predictiva individual de los modelos es apenas superior a un lanzamiento de moneda.",
-          "La predicción del modelo 'heuristic' es significativamente más alta (0.800) que el resto, lo que podría estar sesgando el ranking global sin un respaldo robusto de los otros modelos."
+          "La convicción de 0.694 es moderada, no alta, para un ranking tan elevado.",
+          "El desacuerdo entre modelos de 0.118 es relativamente alto, indicando falta de consenso.",
+          "Los AUC de los modelos base son muy bajos (0.506-0.525), lo que sugiere que los modelos individuales tienen poca capacidad predictiva real, apenas mejor que el azar.",
+          "La predicción del modelo 'xs_lgbm' (0.560) y 'woe_abs' (0.529) es baja, y 'ensemble' (0.507) es casi neutral, lo que contradice la alta predicción del modelo 'heuristic'.",
+          "No hay titulares de noticias recientes directamente relacionados con Q (bmv, MXN), lo que podría indicar una falta de catalizadores o información relevante para el modelo."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -347,17 +348,16 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el ranking global es alto y el régimen de mercado es favorable, la baja convicción y el desacuerdo significativo entre los modelos base, junto con el bajo AUC de los modelos individuales, sugieren una señal débil que requiere mayor análisis antes de una acción decisiva.",
+        "tesis": "Aunque el ranking global es alto y el régimen de mercado es alcista, la baja convicción general y el desacuerdo significativo entre los modelos base, junto con el bajo rendimiento de AUC de los modelos individuales, sugieren una falta de robustez en la recomendación.",
         "evidencia_a_favor": [
-          "Ranking global alto (#6 de 88) indica una posición favorable relativa.",
-          "Régimen de mercado 'bull' con un factor de 1.1 es un viento de cola general para el mercado.",
-          "Sentimiento de noticias neutral (+0.00) no presenta un riesgo inmediato por eventos externos."
+          "Ranking global #6 de 88, lo que indica una posición favorable relativa.",
+          "Régimen de mercado 'bull' con un factor de 1.1, lo que podría amplificar ganancias."
         ],
         "red_flags": [
-          "Convicción del modelo de 0.680 es moderada, no alta, lo que sugiere una señal no tan fuerte.",
-          "Desacuerdo entre modelos de 0.200 es significativo, indicando que los modelos base no están alineados en su predicción.",
-          "Los AUC de los modelos base (0.525, 0.508, 0.520, 0.506) son muy cercanos a 0.50, lo que implica que su capacidad predictiva es apenas mejor que el azar.",
-          "La predicción del modelo 'heuristic' (0.933) es un valor atípico en comparación con los otros modelos, lo que podría estar sesgando el ranking global y la convicción, a pesar de su bajo AUC."
+          "Convicción del modelo de 0.680, que es moderada y no particularmente fuerte.",
+          "Desacuerdo entre modelos de 0.200, lo que indica una falta de consenso significativo entre las predicciones individuales.",
+          "Bajo rendimiento de AUC de los modelos base (xs_lgbm: 0.525, ensemble: 0.508, heuristic: 0.520, woe_abs: 0.506), lo que sugiere que los modelos tienen poca capacidad predictiva real, apenas superando el azar.",
+          "La predicción del modelo 'heuristic' (0.933) es un valor atípico en comparación con los otros modelos, lo que podría estar sesgando la predicción global sin una base sólida."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -407,17 +407,17 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el ranking global es alto y la convicción moderada, la baja calidad predictiva de los modelos base y el desacuerdo entre ellos, junto con la falta de información específica sobre LABB en los titulares, sugieren cautela. La recomendación necesita una revisión más profunda.",
+        "tesis": "Aunque el modelo asigna un ranking alto y una convicción moderada, la baja calidad predictiva de los modelos base (AUCs cercanos a 0.5) y el desacuerdo entre ellos sugieren una señal débil. La falta de noticias directamente relevantes para LABB en los titulares recientes añade incertidumbre.",
         "evidencia_a_favor": [
-          "Ranking global #7 de 88, lo que indica una posición fuerte en el universo de inversión.",
-          "Convicción de 0.666, lo que sugiere una señal positiva moderada del modelo principal.",
-          "Régimen de mercado 'bull' con un factor multiplicador de 1.1, lo que podría amplificar ganancias."
+          "Ranking global #7 de 88, indicando una posición favorable relativa.",
+          "Convicción de 0.666, lo que sugiere una señal moderadamente fuerte por parte del modelo principal.",
+          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, potencialmente amplificando las ganancias."
         ],
         "red_flags": [
-          "Desacuerdo entre modelos de 0.082, lo que indica una falta de consenso significativo entre los modelos base.",
-          "Bajo AUC de los modelos base (xs_lgbm: 0.525, ensemble: 0.508, heuristic: 0.520, woe_abs: 0.506), lo que sugiere que su capacidad predictiva es apenas superior a un lanzamiento de moneda.",
-          "Ninguno de los titulares recientes menciona directamente a LABB, lo que impide evaluar el impacto de noticias específicas en la acción.",
-          "La predicción del modelo 'ensemble' (0.459) es significativamente más baja que la de otros modelos, lo que contribuye al desacuerdo y a la incertidumbre."
+          "Desacuerdo entre modelos de 0.082, lo que indica una falta de consenso significativo entre las predicciones de los modelos base.",
+          "Bajo rendimiento predictivo de los modelos base (AUCs entre 0.506 y 0.525), lo que sugiere que los modelos apenas superan una predicción aleatoria y pueden no estar capturando patrones robustos.",
+          "La predicción del modelo 'ensemble' es notablemente más baja (0.459) que las de 'xs_lgbm' (0.624) y 'heuristic' (0.667), lo que contribuye al desacuerdo y a la incertidumbre sobre la señal real.",
+          "Ausencia de titulares recientes directamente relacionados con LABB, lo que dificulta la validación cualitativa de la recomendación del modelo con información de mercado actual."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -469,17 +469,16 @@
         "confianza_gemini": 85,
         "tesis": "La recomendación de ALSEA se valida por su alto ranking global y convicción, respaldada por el régimen de mercado alcista y el bajo desacuerdo entre modelos, a pesar de la ausencia de noticias directas sobre la empresa.",
         "evidencia_a_favor": [
-          "Ranking global muy alto (#8 de 88), indicando una fuerte señal de compra relativa.",
-          "Convicción sólida (0.654), sugiriendo una alta probabilidad de éxito según el modelo.",
-          "Bajo desacuerdo entre modelos (0.035), lo que implica consistencia en las predicciones de los modelos base.",
-          "Régimen de mercado 'bull' que aplica un factor multiplicador (×1.1), amplificando la señal positiva.",
-          "Todos los modelos base (xs_lgbm, ensemble, heuristic, woe_abs) muestran una predicción positiva (superior a 0.5), aunque con AUCs modestos."
+          "Ranking global muy alto (#8 de 88), indicando una fuerte señal positiva del modelo.",
+          "Convicción de 0.654, que es un valor sólido y superior a la media, sugiriendo una alta probabilidad de éxito.",
+          "Desacuerdo entre modelos muy bajo (0.035), lo que implica una alta coherencia y robustez en las predicciones de los modelos base.",
+          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, amplificando la señal positiva de la recomendación.",
+          "Todas las predicciones de los modelos base (xs_lgbm, ensemble, heuristic, woe_abs) son superiores a 0.5, indicando una tendencia alcista generalizada."
         ],
         "red_flags": [
-          "La ausencia de titulares recientes directamente relacionados con ALSEA podría indicar una falta de catalizadores de noticias a corto plazo, aunque el sentimiento general es neutro.",
-          "Los valores de AUC de los modelos base son relativamente bajos (cercanos a 0.5), lo que sugiere que la capacidad predictiva individual de cada modelo es marginalmente mejor que el azar, aunque la combinación y el ranking global compensan esto."
+          "Ausencia de titulares recientes directamente relacionados con ALSEA, lo que podría limitar la información contextual más actual para la empresa específica."
         ],
-        "accion_final": "COMPRA",
+        "accion_final": "COMPRA FUERTE",
         "_fallback": false
       }
     },
@@ -527,17 +526,19 @@
       "gemini": {
         "veredicto": "DEGRADA",
         "confianza_gemini": 75,
-        "tesis": "Aunque el ranking global y la convicción del modelo son altos, la baja calidad de los modelos base y el desacuerdo significativo entre ellos, junto con la ausencia de noticias relevantes para FIBRAPL, sugieren cautela. La recomendación se degrada a la espera de mayor claridad.",
+        "tesis": "Aunque el ranking global y la convicción son altos, la discrepancia entre los modelos base y la baja AUC de algunos de ellos, junto con la ausencia de un sentimiento de noticias positivo, sugieren que la recomendación no es lo suficientemente robusta para una compra fuerte. Se requiere una evaluación más profunda de los factores subyacentes.",
         "evidencia_a_favor": [
-          "Ranking global #9 de 88, indicando una posición fuerte relativa.",
-          "Convicción de 0.614, lo que sugiere una confianza moderada del modelo en su predicción.",
-          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, lo que podría impulsar el rendimiento general."
+          "Ranking global de #9 de 88, indicando una posición fuerte relativa.",
+          "Convicción de 0.614, lo que sugiere una señal positiva del modelo agregado.",
+          "Régimen de mercado 'bull' que aplica un factor multiplicador de 1.1, potencialmente amplificando las ganancias."
         ],
         "red_flags": [
-          "Desacuerdo entre modelos de 0.292, lo que indica una falta de consenso significativo entre los modelos base.",
-          "Bajo AUC de los modelos base (xs_lgbm: 0.494, ensemble: 0.551, heuristic: 0.520, woe_abs: 0.587), lo que sugiere que la capacidad predictiva individual de cada modelo es débil o apenas superior al azar.",
-          "El modelo 'heuristic' predice 0.000, lo que contrasta fuertemente con las predicciones de otros modelos y el ranking global, indicando una posible inconsistencia o un punto ciego en este modelo específico.",
-          "Ausencia de titulares recientes directamente relacionados con FIBRAPL, lo que dificulta la validación de la recomendación con información fundamental actualizada."
+          "Desacuerdo entre modelos de 0.292, lo que es relativamente alto y sugiere falta de consenso entre las predicciones individuales.",
+          "El modelo 'heuristic' predice 0.000, lo que contrasta fuertemente con los otros modelos y podría indicar un sesgo o una falla en la captura de ciertos factores.",
+          "La AUC de 'xs_lgbm' es de 0.494, lo que es inferior a 0.5 y sugiere que este modelo es peor que una selección aleatoria, lo que es una señal de alarma significativa.",
+          "La AUC de 'ensemble' es de 0.551, lo que es apenas superior a una selección aleatoria, indicando una capacidad predictiva limitada.",
+          "Ausencia de sentimiento de noticias, lo que significa que no hay un catalizador positivo externo que respalde la recomendación.",
+          "Los titulares recientes no mencionan directamente a FIBRAPL, lo que no proporciona un contexto positivo inmediato para la acción."
         ],
         "accion_final": "ESPERA",
         "_fallback": false
@@ -585,20 +586,20 @@
         "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp"
       ],
       "gemini": {
-        "veredicto": "DEGRADA",
-        "confianza_gemini": 75,
-        "tesis": "Aunque el modelo posiciona a PINFRA en un ranking alto, la baja convicción y el rendimiento marginal de los modelos base, junto con la ausencia de noticias directamente relevantes para la empresa, sugieren cautela. La recomendación es degradada a la espera de una señal más fuerte o una justificación más clara.",
+        "veredicto": "CONFIRMA",
+        "confianza_gemini": 85,
+        "tesis": "La recomendación del modelo para PINFRA es sólida, respaldada por un alto ranking global y una convicción considerable, a pesar de la ausencia de noticias específicas sobre la empresa. El régimen de mercado alcista amplifica la señal positiva, sugiriendo una oportunidad de compra.",
         "evidencia_a_favor": [
-          "Ranking global #10 de 88, lo que indica una posición relativamente fuerte dentro del universo de inversión.",
-          "El régimen de mercado 'bull' aplica un factor multiplicador de 1.1, lo que podría amplificar ganancias si la predicción es correcta."
+          "PINFRA se ubica en el top 10 (#10 de 88) del ranking global, indicando un fuerte desempeño relativo.",
+          "La convicción del modelo es alta (0.598), lo que sugiere una fuerte señal de compra.",
+          "El desacuerdo entre modelos es bajo (0.028), lo que indica consistencia en las predicciones de los modelos base.",
+          "El régimen de mercado 'bull' aplica un factor multiplicador de 1.1, lo que refuerza la señal positiva del modelo.",
+          "El sentimiento de noticias es neutral (+0.00), lo que no introduce un sesgo negativo."
         ],
         "red_flags": [
-          "La convicción del modelo es de 0.598, lo que es relativamente bajo (cercano al punto medio de 0.5) y no indica una señal fuerte de compra.",
-          "El desacuerdo entre modelos es bajo (0.028), lo cual es positivo, pero no compensa la baja convicción general.",
-          "Los AUC de los modelos base (xs_lgbm: 0.525, ensemble: 0.508, heuristic: 0.520, woe_abs: 0.506) son muy cercanos a 0.5, lo que sugiere que los modelos tienen un poder predictivo marginalmente mejor que el azar.",
-          "Ninguno de los titulares recientes está directamente relacionado con PINFRA, lo que significa que no hay un catalizador de noticias inmediato que respalde la recomendación."
+          "No hay titulares recientes específicos sobre PINFRA, lo que podría indicar una falta de catalizadores inmediatos o una menor visibilidad en el mercado."
         ],
-        "accion_final": "ESPERA",
+        "accion_final": "COMPRA",
         "_fallback": false
       }
     },
@@ -3119,74 +3120,6 @@
       "rank_global": 84
     },
     {
-      "ticker": "COIN",
-      "universe": "₿ Cripto (proxies GBM)",
-      "universe_slug": "cripto",
-      "moneda": "USD",
-      "precio": 149.06,
-      "conviction_raw": 0.0,
-      "conviction": 0.0,
-      "disagreement": 0.3556,
-      "signals": {
-        "xs_lgbm": 1.0,
-        "ensemble": 0.5306,
-        "heuristic": 0.0,
-        "woe_abs": 0.5943
-      },
-      "model_weights": {
-        "xs_lgbm": 0.0,
-        "ensemble": 0.0,
-        "heuristic": 1.0,
-        "woe_abs": 0.0
-      },
-      "regime": "bear",
-      "regime_factor": 0.8,
-      "news_sent": null,
-      "news_alerta": false,
-      "horizonte_d": 10,
-      "model_auc": {
-        "xs_lgbm": 0.4949,
-        "ensemble": 0.4711,
-        "heuristic": 0.52,
-        "woe_abs": 0.4905
-      },
-      "rank_global": 85
-    },
-    {
-      "ticker": "FBTC",
-      "universe": "₿ Cripto (proxies GBM)",
-      "universe_slug": "cripto",
-      "moneda": "USD",
-      "precio": 51.98,
-      "conviction_raw": 0.0,
-      "conviction": 0.0,
-      "disagreement": 0.2829,
-      "signals": {
-        "xs_lgbm": 0.746,
-        "ensemble": 0.5576,
-        "heuristic": 0.0,
-        "woe_abs": 0.5943
-      },
-      "model_weights": {
-        "xs_lgbm": 0.0,
-        "ensemble": 0.0,
-        "heuristic": 1.0,
-        "woe_abs": 0.0
-      },
-      "regime": "bear",
-      "regime_factor": 0.8,
-      "news_sent": null,
-      "news_alerta": false,
-      "horizonte_d": 10,
-      "model_auc": {
-        "xs_lgbm": 0.4949,
-        "ensemble": 0.4711,
-        "heuristic": 0.52,
-        "woe_abs": 0.4905
-      },
-      "rank_global": 86
-    },
-    {
       "ticker": "IBIT",
       "universe": "₿ Cripto (proxies GBM)",
       "universe_slug": "cripto",
@@ -3218,7 +3151,7 @@
         "heuristic": 0.52,
         "woe_abs": 0.4905
       },
-      "rank_global": 87
+      "rank_global": 85
     },
     {
       "ticker": "ETHA",
@@ -3231,6 +3164,74 @@
       "disagreement": 0.3273,
       "signals": {
         "xs_lgbm": 0.9088,
+        "ensemble": 0.5576,
+        "heuristic": 0.0,
+        "woe_abs": 0.5943
+      },
+      "model_weights": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.0,
+        "heuristic": 1.0,
+        "woe_abs": 0.0
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.4949,
+        "ensemble": 0.4711,
+        "heuristic": 0.52,
+        "woe_abs": 0.4905
+      },
+      "rank_global": 86
+    },
+    {
+      "ticker": "COIN",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 149.06,
+      "conviction_raw": 0.0,
+      "conviction": 0.0,
+      "disagreement": 0.3556,
+      "signals": {
+        "xs_lgbm": 1.0,
+        "ensemble": 0.5306,
+        "heuristic": 0.0,
+        "woe_abs": 0.5943
+      },
+      "model_weights": {
+        "xs_lgbm": 0.0,
+        "ensemble": 0.0,
+        "heuristic": 1.0,
+        "woe_abs": 0.0
+      },
+      "regime": "bear",
+      "regime_factor": 0.8,
+      "news_sent": null,
+      "news_alerta": false,
+      "horizonte_d": 10,
+      "model_auc": {
+        "xs_lgbm": 0.4949,
+        "ensemble": 0.4711,
+        "heuristic": 0.52,
+        "woe_abs": 0.4905
+      },
+      "rank_global": 87
+    },
+    {
+      "ticker": "FBTC",
+      "universe": "₿ Cripto (proxies GBM)",
+      "universe_slug": "cripto",
+      "moneda": "USD",
+      "precio": 51.98,
+      "conviction_raw": 0.0,
+      "conviction": 0.0,
+      "disagreement": 0.2829,
+      "signals": {
+        "xs_lgbm": 0.746,
         "ensemble": 0.5576,
         "heuristic": 0.0,
         "woe_abs": 0.5943
@@ -3305,11 +3306,11 @@
   "top_gemini": 10,
   "gemini_summary": {
     "validados": 10,
-    "confirma": 2,
-    "degrada": 8,
+    "confirma": 3,
+    "degrada": 7,
     "veta": 0,
     "modo": "gemini"
   },
-  "generated_at": "2026-06-28T14:00:54.172116",
-  "elapsed_sec": 79.2
+  "generated_at": "2026-06-28T14:59:01.165157",
+  "elapsed_sec": 75.5
 }

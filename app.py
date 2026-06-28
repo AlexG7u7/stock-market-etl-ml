@@ -353,12 +353,19 @@ if page.startswith("🏆"):
                     n    = c["n_horizontes"]
                     bar  = "🟩" * n + "⬜" * (4 - n)
                     gem  = gemini_idx.get(c["ticker"], {})
-                    accion = gem.get("accion", "")
-                    icon   = accion_colors.get(accion, "")
-                    resumen = gem.get("resumen", "")
+                    accion    = gem.get("accion", "")
+                    confianza = gem.get("confianza", "")
+                    hz_opt    = gem.get("horizonte_optimo", "")
+                    icon      = accion_colors.get(accion, "")
+                    conf_icon = {"ALTA": "🔵", "MEDIA": "🟡", "BAJA": "🔸"}.get(confianza, "")
+                    resumen   = gem.get("resumen", "")
                     line = f"**{c['ticker']}** &nbsp;{bar}&nbsp; {n}/4 horizontes"
                     if accion:
                         line += f" &nbsp;·&nbsp; {icon} **{accion}**"
+                    if confianza:
+                        line += f" &nbsp;·&nbsp; {conf_icon} {confianza}"
+                    if hz_opt:
+                        line += f" &nbsp;·&nbsp; ⏱ {hz_opt}"
                     if resumen:
                         line += f"  \n&nbsp;&nbsp;&nbsp;&nbsp;_{resumen}_"
                     st.markdown(line)
@@ -418,8 +425,21 @@ if page.startswith("🏆"):
                             expanded=(i < 2),
                         ):
                             if gem.get("resumen"):
-                                sent_ico = sent_icons.get(gem.get("sentimiento_news", ""), "")
+                                sent_ico    = sent_icons.get(gem.get("sentimiento_news", ""), "")
+                                confianza   = gem.get("confianza", "")
+                                hz_optimo   = gem.get("horizonte_optimo", "")
+                                contradict  = gem.get("contradiccion")
+                                conf_icon   = {"ALTA": "🔵", "MEDIA": "🟡", "BAJA": "🔸"}.get(confianza, "")
+                                hz_label    = {"1s": "1 sem", "2s": "2 sem", "3s": "3 sem", "4s": "4 sem"}.get(hz_optimo, hz_optimo)
+
                                 st.markdown(f"### {gem_icon} {gem.get('resumen', '')}")
+
+                                # Confianza + horizonte óptimo
+                                meta_cols = st.columns(3)
+                                meta_cols[0].metric("Confianza", f"{conf_icon} {confianza}" if confianza else "—")
+                                meta_cols[1].metric("Horizonte óptimo", hz_label or "—")
+                                meta_cols[2].metric("Noticias", f"{sent_ico} {gem.get('sentimiento_news','—')}")
+
                                 g1, g2 = st.columns(2)
                                 with g1:
                                     if gem.get("catalizador"):
@@ -427,8 +447,9 @@ if page.startswith("🏆"):
                                 with g2:
                                     if gem.get("riesgo"):
                                         st.warning(f"**Riesgo:** {gem['riesgo']}")
-                                if gem.get("sentimiento_news"):
-                                    st.caption(f"{sent_ico} Noticias: **{gem['sentimiento_news']}**")
+
+                                if contradict and contradict not in ("null", "None", ""):
+                                    st.error(f"⚠️ **Señal contradictoria:** {contradict}")
                             else:
                                 st.caption("_Análisis Gemini no disponible para este ticker (cuota agotada o sin datos)_")
 

@@ -1,99 +1,14 @@
 {
   "2026-06-28": {
-    "WALMEX": {
-      "resumen": "WALMEX se posiciona como la principal oportunidad de inversión en la BMV gracias a su sólido momentum relativo, respaldado por una calificación crediticia favorable y decisiones de política monetaria que sugieren un entorno económico estable.",
-      "accion": "COMPRA FUERTE",
-      "riesgo": "La principal preocupación radica en la volatilidad inherente del mercado mexicano y la posibilidad de que factores macroeconómicos externos afecten negativamente el desempeño de la empresa.",
-      "catalizador": "Un incremento en el gasto del consumidor mexicano, impulsado por políticas gubernamentales de apoyo o una mejora general en la confianza económica, podría potenciar significativamente el alza de WALMEX.",
-      "sentimiento_news": "positivo",
-      "noticias": [
-        {
-          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        }
-      ]
-    },
     "POSADAS": {
-      "resumen": "POSADAS se posiciona como líder en el universo BMV gracias a un fuerte momentum relativo, evidenciado por su cruce de medias móviles, a pesar de señales de advertencia en volatilidad y flujo de dinero.",
-      "accion": "COMPRA",
-      "riesgo": "La baja volatilidad relativa y el flujo de dinero decreciente sugieren una posible falta de impulso sostenido o una toma de ganancias inminente.",
-      "catalizador": "Noticias positivas sobre calificaciones crediticias o decisiones de política monetaria que favorezcan al sector turístico podrían impulsar aún más su cotización.",
+      "resumen": "POSADAS exhibe un fuerte y consistente momentum predictivo en todos los horizontes de análisis, posicionándose como una oportunidad de inversión atractiva dentro del universo de acciones BMV.",
+      "accion": "COMPRA FUERTE",
+      "confianza": "ALTA",
+      "riesgo": "La volatilidad relativa y el flujo de dinero (OBV) en la parte baja del universo sugieren una posible debilidad subyacente que podría ser exacerbada por condiciones de mercado adversas.",
+      "catalizador": "Un entorno macroeconómico más favorable o noticias positivas específicas de la compañía podrían amplificar el momentum técnico actual.",
+      "horizonte_optimo": "4s",
       "sentimiento_news": "neutral",
-      "noticias": [
-        {
-          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        },
-        {
-          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
-          "publisher": "DataBursátil",
-          "link": "",
-          "ago": "",
-          "fuente": "DataBursátil"
-        }
-      ]
-    },
-    "PINFRA": {
-      "resumen": "PINFRA se posiciona como una oportunidad de inversión destacada dentro del universo BMV gracias a su sólido momentum relativo, respaldado por señales técnicas mixtas pero con un MFI 14 en el top 23% y noticias recientes que sugieren una mejora en su perfil crediticio.",
-      "accion": "COMPRA",
-      "riesgo": "La debilidad en la relación SMA20 vs SMA50 y el flujo de dinero (OBV) sugieren cautela ante posibles presiones vendedoras a corto plazo.",
-      "catalizador": "Noticias de mejoras en calificaciones crediticias y el cumplimiento de ODS podrían mejorar la percepción del mercado y atraer capital institucional.",
-      "sentimiento_news": "positivo",
+      "contradiccion": "null",
       "noticias": [
         {
           "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
@@ -133,11 +48,14 @@
       ]
     },
     "GENTERA": {
-      "resumen": "GENTERA se posiciona en el top gracias a su fuerte momentum relativo, a pesar de señales técnicas de debilidad a corto plazo, destacando por su baja volatilidad relativa.",
-      "accion": "ESPERA",
-      "riesgo": "La debilidad en las medias móviles y la posición en 52 semanas sugieren una tendencia bajista a corto plazo que podría persistir.",
-      "catalizador": "Una mejora en las señales técnicas de corto plazo, como cruces alcistas de medias móviles, podría impulsar un repunte significativo.",
+      "resumen": "GENTERA presenta un momentum técnico positivo y consistente en horizontes de mediano plazo, a pesar de un entorno macroeconómico desafiante y señales técnicas de corto plazo débiles. La volatilidad relativa favorable y el consenso del modelo sugieren una oportunidad de compra.",
+      "accion": "COMPRA",
+      "confianza": "MEDIA",
+      "riesgo": "La debilidad general del mercado mexicano y la depreciación del peso podrían limitar el potencial alcista.",
+      "catalizador": "Una mejora en el sentimiento del mercado mexicano o noticias positivas específicas de GENTERA podrían impulsar su desempeño.",
+      "horizonte_optimo": "4s",
       "sentimiento_news": "neutral",
+      "contradiccion": "Las señales técnicas de corto plazo (sma20 vs sma50, pos 52w) son débiles y contradicen el momentum positivo observado en horizontes de 2 a 4 semanas. El contexto macroeconómico es mayormente negativo, lo que también genera una contradicción con las señales del modelo.",
       "noticias": [
         {
           "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
@@ -177,11 +95,14 @@
       ]
     },
     "GCC": {
-      "resumen": "GCC se destaca como la principal acción del universo BMV gracias a su excepcional posicionamiento en máximos de 52 semanas y un fuerte flujo de dinero, indicando un momentum alcista significativo.",
-      "accion": "COMPRA FUERTE",
-      "riesgo": "La principal preocupación reside en la posible reversión de la tendencia alcista si el fuerte flujo de dinero observado se debilita o si el mercado en general experimenta una corrección.",
-      "catalizador": "La continuación del fuerte flujo de dinero (OBV) y el mantenimiento de su posición en el top 10% de máximos de 52 semanas podrían impulsar aún más su valor.",
+      "resumen": "GCC presenta un momentum técnico positivo y consistente en horizontes de mediano plazo, respaldado por fortaleza en indicadores de flujo de dinero y posicionamiento en el universo de la BMV, a pesar de un contexto macroeconómico volátil.",
+      "accion": "COMPRA",
+      "confianza": "MEDIA",
+      "riesgo": "La depreciación del peso mexicano y la debilidad general de los mercados globales podrían limitar el potencial alcista.",
+      "catalizador": "Una mejora en el sentimiento del mercado global o noticias específicas positivas sobre GCC podrían acelerar su rendimiento.",
+      "horizonte_optimo": "3s",
       "sentimiento_news": "neutral",
+      "contradiccion": "null",
       "noticias": [
         {
           "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
@@ -220,584 +141,250 @@
         }
       ]
     },
-    "INTC": {
-      "resumen": "Intel (INTC) se destaca en el universo de acciones de EE. UU. gracias a un fuerte momentum técnico, posicionándose como una opción atractiva con potencial de crecimiento.",
+    "WALMEX": {
+      "resumen": "WALMEX presenta un fuerte momentum técnico a mediano plazo, con señales consistentes en los horizontes de 2, 3 y 4 semanas, a pesar de un contexto macroeconómico desafiante y algunos indicadores técnicos de corto plazo desfavorables.",
       "accion": "COMPRA",
-      "riesgo": "El principal riesgo reside en la necesidad de una 'revitalización de ingeniería' para mantener su ventaja competitiva y el impulso actual.",
-      "catalizador": "Una mejora significativa en la ejecución de su estrategia de ingeniería y la adopción de sus nuevas tecnologías de IA podrían potenciar aún más su alza.",
+      "confianza": "MEDIA",
+      "riesgo": "La depreciación del peso mexicano y la debilidad general del mercado mexicano podrían limitar el potencial alcista.",
+      "catalizador": "Un cambio en el sentimiento del mercado mexicano o noticias positivas específicas de la empresa podrían impulsar aún más el precio.",
+      "horizonte_optimo": "3s",
       "sentimiento_news": "neutral",
+      "contradiccion": "Si bien el modelo predictivo muestra consistencia en los horizontes de 2 a 4 semanas, los 'features' técnicos como la SMA20 vs SMA50, la posición a 52 semanas y la volatilidad relativa se encuentran en la parte baja del universo, lo que sugiere una divergencia entre el momentum predictivo y la salud técnica de corto plazo. El contexto macroeconómico es mayormente negativo, con un peso depreciándose y caídas en índices bursátiles y petróleo, lo que contradice las señales alcistas del modelo.",
       "noticias": [
         {
-          "title": "Piper Sandler Upgrades “Overweight” from Neutral on Synopsys, Inc. (SNPS)",
-          "publisher": "Insider Monkey",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/piper-sandler-upgrades-overweight-neutral-184547036.html",
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Intel Corporation (INTC)’s Stock Has Surged but Needs an Engineering Revival",
-          "publisher": "Insider Monkey",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/intel-corporation-intc-stock-surged-184539609.html",
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Nancy Pelosi Has Added These 9 Stocks To Her Portfolio Since 2025, Including Three Magnificent Seven Names",
-          "publisher": "Benzinga",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/nancy-pelosi-added-9-stocks-153109696.html",
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "5 AI Hardware Stocks Create a New ‘MANIA’ Trade That Replaces the Magnificent 7. Hedge Your Bets on the Hot Tickers with These 2 Leveraged ETFs.",
-          "publisher": "Barchart",
-          "link": "https://www.barchart.com/story/news/3023086/5-ai-hardware-stocks-create-a-new-mania-trade-that-replaces-the-magnificent-7-hedge-your-bets-on-the-hot-tickers-with-these-2-leveraged-etfs",
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Thomas Massie Says Republicans Decry Communist 'Involvement' In Democratic Party, But Look Other Way As Trump Nationalizes 'Ownership' In Intel, US Steel",
-          "publisher": "Benzinga",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/thomas-massie-says-republicans-decry-104637943.html",
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         }
       ]
     },
-    "FMX": {
-      "resumen": "FMX destaca en el universo de acciones de EE. UU. gracias a un fuerte impulso de momentum relativo, evidenciado por su posición en el top 5% de 52 semanas y una tendencia alcista en sus medias móviles.",
-      "accion": "COMPRA FUERTE",
-      "riesgo": "La expansión de las bandas de Bollinger en la parte inferior del universo podría indicar una volatilidad creciente o una posible reversión de tendencia si el momentum se debilita.",
-      "catalizador": "La reciente mejora a 'Strong Buy' y la inclusión en listas de 'Best Value Stocks' sugieren un potencial alcista impulsado por el sentimiento positivo del mercado y la percepción de valor.",
+    "GMEXICOB": {
+      "resumen": "GMEXICOB presenta un momentum técnico positivo y focalizado en horizontes de corto plazo, respaldado por noticias corporativas favorables y un sentimiento técnico robusto, a pesar de un contexto macroeconómico volátil.",
+      "accion": "COMPRA",
+      "confianza": "MEDIA",
+      "riesgo": "La volatilidad del peso mexicano y la depreciación del petróleo podrían generar presión sobre el instrumento.",
+      "catalizador": "Una mejora en el sentimiento del mercado global o noticias específicas sobre el desempeño operativo de GMEXICOB podrían potenciar su alza.",
+      "horizonte_optimo": "1s",
       "sentimiento_news": "positivo",
+      "contradiccion": "Los horizontes de 2 y 4 semanas no muestran el mismo nivel de fortaleza que los de 1 y 3 semanas, indicando una señal menos consistente a mediano plazo. El contexto macroeconómico es mayormente adverso (depreciación del peso, caída del petróleo y del S&P 500), lo cual contradice parcialmente el momentum técnico positivo del instrumento.",
       "noticias": [
         {
-          "title": "Can Innovation Efforts Help Diageo Outpace Industry Headwinds?",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/innovation-efforts-help-diageo-outpace-133400216.html",
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Why Does Boston Beer Expect Lower Volume Growth in 2026?",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/why-does-boston-beer-expect-144000502.html",
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Fomento Economico (FMX) Upgraded to Strong Buy: Here's Why",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/fomento-economico-fmx-upgraded-strong-160003028.html",
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "New Strong Buy Stocks for June 22nd",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/strong-buy-stocks-june-22nd-101200041.html",
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Best Value Stocks to Buy for June 22nd",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/best-value-stocks-buy-june-080900083.html",
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         }
       ]
     },
-    "MCD": {
-      "resumen": "McDonald's (MCD) se destaca como el principal instrumento del universo de acciones de EE. UU. gracias a su fuerte momentum relativo, a pesar de señales técnicas de debilidad que sugieren una posible reversión.",
-      "accion": "ESPERA",
-      "riesgo": "Las señales técnicas de debilidad, como la posición en el percentil 4 en 52 semanas y la volatilidad relativa baja, sugieren cautela a pesar del buen ranking del modelo.",
-      "catalizador": "El regreso de productos populares y el interés de los inversores en acciones de valor podrían impulsar un repunte.",
-      "sentimiento_news": "positivo",
-      "noticias": [
-        {
-          "title": "McDonald's (MCD) Brings Back Fried Apple Pie To U.S. Menus After 34 Years",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-brings-back-fried-010718001.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Restaurant Brands International vs. McDonald's: Comparing Revenue Trends for These Fast-Food Giants",
-          "publisher": "Motley Fool",
-          "link": "https://www.fool.com/coverage/charts/2026/06/27/restaurant-brands-international-vs-mcdonald-s-comparing-revenue-trends-for-these-fast-food-giants/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "One of McDonald’s biggest fan-favorites is back for July 4",
-          "publisher": "TheStreet",
-          "link": "https://www.thestreet.com/restaurants/mcdonalds-brings-back-fan-favorite-fried-apple-pie-after-34-year-hiatus",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "McDonald's (MCD) Increases Despite Market Slip: Here's What You Need to Know",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/mcdonalds-mcd-increases-despite-market-214504147.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "5 Stocks on Sale: Values or Traps?",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/5-stocks-sale-values-traps-191800912.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "PEP": {
-      "resumen": "PepsiCo (PEP) se destaca como una inversión de primer nivel debido a su fuerte momentum relativo, a pesar de algunas señales técnicas de advertencia, impulsado por noticias que resaltan su potencial como acción de dividendos y su resiliencia en el sector de consumo básico.",
+    "HOTEL": {
+      "resumen": "HOTEL presenta un fuerte momentum técnico a corto plazo, con señales consistentes en los horizontes de 1 y 2 semanas, a pesar de un contexto macroeconómico volátil y un indicador técnico de flujo de dinero en la parte baja del universo.",
       "accion": "COMPRA",
-      "riesgo": "La debilidad en el segmento de snacks y la volatilidad general del sector de consumo básico podrían presionar el rendimiento de PEP.",
-      "catalizador": "Una estrategia de marketing exitosa o la confirmación de su atractivo como acción de dividendos ante la búsqueda de ingresos pasivos podrían potenciar su alza.",
-      "sentimiento_news": "positivo",
-      "noticias": [
-        {
-          "title": "Is PepsiCo (PEP) One of the 10 Best Dividend Stocks to Buy for Passive Income?",
-          "publisher": "Insider Monkey",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/pepsico-pep-one-10-best-033207284.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Is Hershey (HSY) Quietly Redefining Its US Playbook With New Leadership And Protein Snacking?",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/hershey-hsy-quietly-redefining-us-220758844.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Does PepsiCo’s Marketing Blitz Amid Snack Weakness Reshape the Bull Case for PepsiCo (PEP)?",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/does-pepsico-marketing-blitz-amid-160646550.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "The Average Dividend Yield is 1%. Want More Income? These 3 Stocks Offer Yields of Up 5.9%",
-          "publisher": "Motley Fool",
-          "link": "https://www.fool.com/investing/2026/06/27/the-average-dividend-yield-is-1-want-more-income-t/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Forget Pepsi: As Volatility Tests Consumer Staples, This Global Household Name Wins Every Time",
-          "publisher": "24/7 Wall St.",
-          "link": "https://247wallst.com/investing/2026/06/27/forget-pepsi-as-volatility-tests-consumer-staples-this-global-household-name-wins-every-time/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "SLV": {
-      "resumen": "SLV se posiciona como el ETF líder gracias a su fuerte volatilidad relativa, a pesar de señales técnicas de debilidad a corto plazo.",
-      "accion": "ESPERA",
-      "riesgo": "La debilidad en los cruces de medias móviles y la posición de 52 semanas sugieren un potencial de reversión bajista si el momentum relativo se deteriora.",
-      "catalizador": "Un repunte en el precio de la plata o un cambio en el sentimiento del mercado hacia activos refugio podría impulsar el rendimiento de SLV.",
+      "confianza": "MEDIA",
+      "riesgo": "La depreciación del peso mexicano y la debilidad del petróleo podrían impactar negativamente el sector hotelero.",
+      "catalizador": "Una mejora en el sentimiento del mercado o noticias positivas específicas del sector hotelero mexicano podrían potenciar el alza.",
+      "horizonte_optimo": "2s",
       "sentimiento_news": "neutral",
+      "contradiccion": "El consenso del modelo se enfoca en los horizontes de 1 y 2 semanas, pero el MFI 14 se encuentra en el bottom 25% del universo, lo que sugiere una posible divergencia en la fuerza del movimiento a más largo plazo. El contexto macroeconómico es mayoritariamente negativo, contradiciendo el momentum técnico positivo.",
       "noticias": [
         {
-          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
+          "title": "10:05 Hilton abre hotel en Guadalajara bajo la marca Motto",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday as Investors Embrace AI Growth Themes, Reduced Middle East Risks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123158533.html",
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Wednesday Amid Easing US-Iran Tensions",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131740078.html",
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         },
         {
-          "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Tuesday as AI Spending Concerns Weigh on Technology Shares",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131921257.html",
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
           "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "FIBRAPL": {
-      "resumen": "FIBRAPL se posiciona como el ETF líder gracias a su volatilidad relativa favorable, a pesar de señales técnicas de corto plazo débiles.",
-      "accion": "ESPERA",
-      "riesgo": "El principal riesgo reside en la debilidad de las señales técnicas de corto plazo (SMA y posición de 52 semanas), que podrían indicar una tendencia bajista subyacente.",
-      "catalizador": "Un cambio positivo en las señales técnicas de corto plazo o noticias que refuercen una mejora en el valor intrínseco y las perspectivas de la empresa podrían potenciar un alza.",
-      "sentimiento_news": "neutral",
-      "noticias": [
-        {
-          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Narrative Is Shifting As Fair Value Steadies",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/fibra-prologis-bmv-fibrapl-14-080711890.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "How The Story Is Shifting For FIBRA Prologis (BMV:FIBRAPL 14) As Models And Management Evolve",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/news/story-shifting-fibra-prologis-bmv-111023594.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "How The FIBRA Prologis (BMV:FIBRAPL 14) Investment Story Is Shifting With New Analyst Assumptions",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/news/fibra-prologis-bmv-fibrapl-14-091257123.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "How The Narrative Around FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With Mixed Analyst Signals",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/news/narrative-around-fibra-prologis-bmv-010849954.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Why The Story Behind FIBRA Prologis (BMV:FIBRAPL 14) Is Shifting With New Price Targets",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/news/why-story-behind-fibra-prologis-201031266.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "USO": {
-      "resumen": "USO se destaca en el top de ETFs gracias a su excepcional volatilidad relativa, a pesar de señales técnicas de corto plazo débiles.",
-      "accion": "ESPERA",
-      "riesgo": "Las señales técnicas de corto plazo, como el cruce de medias móviles y la posición de 52 semanas, sugieren debilidad actual en el momentum del precio del petróleo.",
-      "catalizador": "Un repunte en el precio del petróleo crudo, impulsado por tensiones geopolíticas o una mejora en la demanda global, podría revertir las tendencias técnicas actuales.",
-      "sentimiento_news": "negativo",
-      "noticias": [
-        {
-          "title": "Forget USO. Copper Is the New Crude, and This Miner Fund Is Up 115% in a Year",
-          "publisher": "24/7 Wall St.",
-          "link": "https://247wallst.com/investing/2026/06/28/forget-uso-copper-is-the-new-crude-and-this-miner-fund-is-up-115-in-a-year/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Update: WTI Oil Hits a Four-Month Low as Strait of Hormuz Shipping Resumes",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/energy/articles/wti-oil-hits-four-month-191558949.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Sector Update: Energy Stocks Decline Premarket Friday",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-decline-premarket-132641713.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "XLF": {
-      "resumen": "El XLF se destaca en el universo de ETFs gracias a su fuerte tendencia de mercado y momentum de volumen, a pesar de una volatilidad relativa baja.",
-      "accion": "COMPRA",
-      "riesgo": "La baja volatilidad relativa podría indicar una falta de impulso direccional a corto plazo, a pesar de las señales positivas.",
-      "catalizador": "Un cambio en el sentimiento del mercado que favorezca a los valores financieros o noticias positivas específicas del sector podrían impulsar aún más el XLF.",
-      "sentimiento_news": "neutral",
-      "noticias": [
-        {
-          "title": "Sector Update: Financial Stocks Edge Higher Late Afternoon",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-edge-higher-195207753.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Sector Update: Financial Stocks Advance Friday Afternoon",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-friday-174611169.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Exchange-Traded Funds Mixed, US Equities Advance After Midday",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/articles/exchange-traded-funds-mixed-us-171850205.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "XLP": {
-      "resumen": "XLP se posiciona como el ETF líder en su categoría gracias a un momentum de mercado excepcional y un rendimiento superior frente a sus pares, a pesar de su baja volatilidad relativa.",
-      "accion": "COMPRA",
-      "riesgo": "La baja volatilidad relativa podría indicar una falta de potencial de crecimiento explosivo en comparación con activos más volátiles.",
-      "catalizador": "Un cambio en el sentimiento del mercado hacia sectores defensivos o una mejora en el entorno macroeconómico podría impulsar aún más el rendimiento de XLP.",
-      "sentimiento_news": "neutral",
-      "noticias": [
-        {
-          "title": "Vanguard vs. State Street: Which Consumer Staples ETF Stands Out?",
-          "publisher": "Motley Fool",
-          "link": "https://www.fool.com/coverage/etfs/2026/06/27/vanguard-vs-state-street-which-consumer-staples-etf-stands-out/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Sector Update: Consumer Stocks Rise Late Afternoon",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-193717058.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Correction: Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/correction-exchange-traded-funds-equity-135811891.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Stock Market News for Jun 26, 2026",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-jun-26-132200376.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Exchange-Traded Funds, Equity Futures Decline Pre-Bell Friday as Investors Shift Focus From Middle East to Technology Stocks",
-          "publisher": "MT Newswires",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131102405.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "MARA": {
-      "resumen": "MARA se destaca como el principal instrumento del universo cripto gracias a un fuerte impulso técnico y una narrativa de diversificación hacia el sector de la IA, lo que atrae el optimismo de Wall Street.",
-      "accion": "COMPRA FUERTE",
-      "riesgo": "La alta volatilidad inherente al mercado de criptomonedas y la dependencia de la evolución del precio de Bitcoin representan el principal riesgo.",
-      "catalizador": "La exitosa ejecución de su estrategia de centro de datos de IA y la validación de su modelo de negocio como 'AI landlords' por parte del mercado podrían potenciar significativamente su alza.",
-      "sentimiento_news": "positivo",
-      "noticias": [
-        {
-          "title": "Another crypto firm cuts staff in major AI push",
-          "publisher": "TheStreet",
-          "link": "https://www.thestreet.com/crypto/markets/another-crypto-firm-cuts-staff-in-major-ai-push",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Is MSTR Stock's 40% Bitcoin Discount A Generational Buy Or An Optical Illusion?",
-          "publisher": "Trefis",
-          "link": "https://www.trefis.com/articles/604725/is-mstr-stocks-40-bitcoin-discount-a-generational-buy-or-an-optical-illusion/2026-06-26",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Wall Street Bulls Look Optimistic About Marathon Digital (MARA): Should You Buy?",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bulls-look-optimistic-133005704.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "How Marathon’s AI Data Center Pivot and Starwood Deal At MARA (MARA) Has Changed Its Investment Story",
-          "publisher": "Simply Wall St.",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/marathon-ai-data-center-pivot-191438123.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "MARA, CLSK, BTDR Draw Bullish Calls: Bitcoin Miners Are Becoming AI Landlords, And This Analyst Believes Market Hasn’t Priced It In Yet",
-          "publisher": "Stocktwits",
-          "link": "https://stocktwits.com/news-articles/markets/equity/mara-clsk-btdr-stock-citizens-ai-data-center-play/cZKyeioR7fP",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "MSTR": {
-      "resumen": "MicroStrategy (MSTR) se posiciona como el instrumento de mayor momentum relativo dentro del universo cripto debido a su volatilidad relativa excepcional, a pesar de mostrar debilidad en métricas de tendencia y posición en 52 semanas.",
-      "accion": "ESPERA",
-      "riesgo": "El principal riesgo reside en la pronunciada caída de su valor liquidativo (mNAV) por debajo de 1 y la exposición directa a la volatilidad del Bitcoin, lo que podría exacerbar las pérdidas en caso de un retroceso significativo del activo subyacente.",
-      "catalizador": "Un repunte sostenido del Bitcoin, acompañado de una mejora en las métricas de tendencia de MSTR (SMA20 vs SMA50 y posición en 52 semanas), podría impulsar un alza significativa.",
-      "sentimiento_news": "negativo",
-      "noticias": [
-        {
-          "title": "Who Actually Pays When MicroStrategy’s $64 Billion Bitcoin Bet Goes Wrong?",
-          "publisher": "BeInCrypto",
-          "link": "https://beincrypto.com/microstrategy-bitcoin-bet-who-pays/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Strategy's mNAV Cracks Below 1 For The First Time, Exposing The Cost Of Saylor's No-Sell Vow— Here's What Analysts Say Comes Next",
-          "publisher": "Stocktwits",
-          "link": "https://stocktwits.com/news-articles/markets/equity/mstr-mnav-below-1-first-time-saylor-bitcoin/cZ1e5jgR7Wr",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Michael Saylor’s Bitcoin Treasury Strategy Has Finally Hit Its Breaking Point",
-          "publisher": "24/7 Wall St.",
-          "link": "https://247wallst.com/investing/2026/06/28/michael-saylors-bitcoin-treasury-strategy-has-finally-hit-its-breaking-point/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Grayscale Pushes Back On The 80% Crash Calls — Says Bitcoin's Bottom Hinges On The Fed And CLARITY Act",
-          "publisher": "Stocktwits",
-          "link": "https://stocktwits.com/news-articles/markets/cryptocurrency/grayscale-bitcoin-bottom-fed-clarity-act/cZ1eR3sR7Wp",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Strategy Just Fell Below $100 for the First Time Since Early 2024. Is MSTR a Buy, Sell, or Hold Right Now?",
-          "publisher": "Motley Fool",
-          "link": "https://www.fool.com/investing/2026/06/28/strategy-just-fell-below-100-for-the-first-time-si/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "CLSK": {
-      "resumen": "CleanSpark (CLSK) se destaca como el principal instrumento en el universo cripto gracias a su fuerte impulso técnico y noticias positivas sobre su expansión en centros de datos de IA, a pesar de la volatilidad del mercado de criptomonedas.",
-      "accion": "COMPRA",
-      "riesgo": "La principal preocupación radica en la alta volatilidad inherente al sector de las criptomonedas y su impacto potencial en las acciones relacionadas.",
-      "catalizador": "El éxito en la expansión de sus centros de datos de IA y la adopción de su infraestructura de minería de Bitcoin podrían impulsar significativamente su valor.",
-      "sentimiento_news": "positivo",
-      "noticias": [
-        {
-          "title": "Stock Market Today, June 26: Keel Infrastructure Rises as Convertible Financing Backs AI Data Center Push",
-          "publisher": "Motley Fool",
-          "link": "https://www.fool.com/coverage/stock-market-today/2026/06/26/stock-market-today-june-26-keel-infrastructure-rises-as-convertible-financing-backs-ai-data-center-push/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Why the Market Dipped But CleanSpark (CLSK) Gained Today",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/why-market-dipped-cleanspark-clsk-214502054.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Bitcoin Crashes Below $60,000 as Crypto Stocks Enter Free Fall",
-          "publisher": "GuruFocus.com",
-          "link": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-crashes-below-60-000-165954362.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Leopold Aschenbrenner’s Situational Awareness Likes This Crypto Stock Despite Bitcoin Declines",
-          "publisher": "Insider Monkey",
-          "link": "https://finance.yahoo.com/markets/crypto/articles/leopold-aschenbrenner-situational-awareness-likes-140516829.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "CleanSpark (CLSK) Falls More Steeply Than Broader Market: What Investors Need to Know",
-          "publisher": "Zacks",
-          "link": "https://finance.yahoo.com/markets/stocks/articles/cleanspark-clsk-falls-more-steeply-215003608.html",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        }
-      ]
-    },
-    "GBTC": {
-      "resumen": "GBTC se posiciona como el instrumento líder en cripto debido a un fuerte momentum relativo, a pesar de señales de volatilidad y flujo de dinero, impulsado por un MFI favorable y la creciente demanda de exposición a cripto sin propiedad directa.",
-      "accion": "COMPRA",
-      "riesgo": "El principal riesgo reside en la alta comisión del 1.50% que erosiona significativamente las ganancias a largo plazo y la posible tributación de ingresos ordinarios sobre distribuciones forzadas para los tenedores de ETFs spot.",
-      "catalizador": "Un aumento en la adopción de ETFs de Bitcoin como vía de inversión indirecta y la percepción de Morgan Stanley sobre la exposición a activos digitales podrían impulsar aún más el valor de GBTC.",
-      "sentimiento_news": "neutral",
-      "noticias": [
-        {
-          "title": "GBTC’s 1.50% Fee Is Subtly Costing You Thousands Every Decade",
-          "publisher": "24/7 Wall St.",
-          "link": "https://247wallst.com/investing/2026/06/19/gbtcs-1-50-fee-is-subtly-costing-you-thousands-every-decade/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "How to Get Crypto Exposure Without Owning Crypto Directly",
-          "publisher": "The Wall Street Journal",
-          "link": "https://www.wsj.com/finance/currencies/crypto-exposure-etfs-funds-a23ca52c?siteid=yhoof2&yptr=yahoo",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "The Boom in Crypto ETFs Has a Downside for Investors",
-          "publisher": "The Wall Street Journal",
-          "link": "https://www.wsj.com/finance/investing/crypto-etfs-boom-downside-8e2535a7?siteid=yhoof2&yptr=yahoo",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "Morgan Stanley reveals surprising asset exposure",
-          "publisher": "TheStreet",
-          "link": "https://www.thestreet.com/crypto/markets/morgan-stanley-discloses-bitcoin-xrp-sol-holdings",
-          "ago": "",
-          "fuente": "Yahoo Finance"
-        },
-        {
-          "title": "FBTC Holds $12 Billion in Bitcoin But Spot ETF Holders Pay Ordinary Income Tax on Forced Distributions Most Have Never Considered",
-          "publisher": "24/7 Wall St.",
-          "link": "https://247wallst.com/investing/2026/05/27/fbtc-holds-12-billion-in-bitcoin-but-spot-etf-holders-pay-ordinary-income-tax-on-forced-distributions-most-have-never-considered/",
-          "ago": "",
-          "fuente": "Yahoo Finance"
+          "fuente": "DataBursátil"
         }
       ]
     },
     "GFNORTEO": {
-      "resumen": "GFNORTEO se posiciona como líder en el mercado mexicano gracias a un sólido momentum alcista respaldado por cruces de medias móviles favorables y una tendencia de precios positiva.",
-      "accion": "COMPRA FUERTE",
-      "riesgo": "La principal preocupación radica en la volatilidad reciente del rango de precios (hl range pct), lo que sugiere una potencial reversión o consolidación si no se mantiene el impulso alcista.",
-      "catalizador": "Noticias positivas sobre calificaciones crediticias y decisiones de política monetaria podrían reforzar la confianza del inversor y potenciar el alza de GFNORTEO.",
-      "sentimiento_news": "positivo",
+      "resumen": "GFNORTEO muestra un momentum técnico emergente en el horizonte de 4 semanas, con señales alcistas en sus medias móviles y retorno relativo, a pesar de un contexto macroeconómico volátil y un sentimiento de noticias neutral.",
+      "accion": "COMPRA",
+      "confianza": "MEDIA",
+      "riesgo": "La depreciación del peso mexicano y la volatilidad general del mercado podrían limitar el potencial alcista.",
+      "catalizador": "Una mejora en el sentimiento del mercado mexicano o noticias corporativas positivas específicas para GFNORTEO podrían potenciar su rendimiento.",
+      "horizonte_optimo": "4s",
+      "sentimiento_news": "neutral",
+      "contradiccion": "null",
+      "noticias": [
+        {
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        }
+      ]
+    },
+    "ASURB": {
+      "resumen": "ASURB presenta un fuerte momentum técnico a corto plazo, liderando el universo BMV en la primera semana, aunque el contexto macroeconómico y la falta de señales consistentes en horizontes más largos sugieren cautela.",
+      "accion": "ESPERA",
+      "confianza": "MEDIA",
+      "riesgo": "La falta de consistencia en los horizontes de predicción y un entorno macroeconómico volátil limitan la confianza en un movimiento sostenido.",
+      "catalizador": "Una mejora en el sentimiento del mercado mexicano o noticias corporativas positivas específicas de ASURB podrían impulsar un mayor rendimiento.",
+      "horizonte_optimo": "1s",
+      "sentimiento_news": "neutral",
+      "contradiccion": "Los horizontes de predicción son inconsistentes, mostrando fortaleza solo en la primera semana. El contexto macroeconómico es mixto a negativo, con el peso depreciándose y los índices bursátiles cayendo, lo que contradice parcialmente el fuerte momentum técnico de ASURB. Las noticias recientes son mayormente corporativas y de calificaciones, sin un impacto claro en el sentimiento general del mercado o en ASURB específicamente.",
+      "noticias": [
+        {
+          "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:23 Indexity - NM Fitch Ratificó su Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:21 Indexity - DHIC Evento Relevante Mejora de Calificación",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "17:20 Indexity - Banxico - Monetary Policy Decision",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        },
+        {
+          "title": "15:40 GM Financial pagará dividendo en efectivo de 1,500 mdp",
+          "publisher": "DataBursátil",
+          "link": "",
+          "ago": "",
+          "fuente": "DataBursátil"
+        }
+      ]
+    },
+    "TLEVISA": {
+      "resumen": "TLEVISA presenta un fuerte momentum de corto plazo con un rank #5 en el horizonte de 1 semana, aunque la señal se diluye en horizontes más largos. El contexto macro y las noticias recientes no aportan una confirmación clara, generando un perfil de riesgo moderado.",
+      "accion": "COMPRA",
+      "confianza": "MEDIA",
+      "riesgo": "La falta de consistencia en las señales predictivas a través de los horizontes temporales y la ausencia de un catalizador macroeconómico claro.",
+      "catalizador": "Una mejora en el sentimiento del mercado mexicano o noticias corporativas positivas específicas de TLEVISA podrían potenciar el movimiento al alza.",
+      "horizonte_optimo": "1s",
+      "sentimiento_news": "neutral",
+      "contradiccion": "Las señales predictivas son consistentes solo para el horizonte de 1 semana. El contexto macro es mixto (peso depreciando, IPC y petróleo cayendo, S&P 500 cayendo), y las noticias recientes son mayormente corporativas sin un impacto directo claro en el momentum de TLEVISA.",
       "noticias": [
         {
           "title": "17:24 Indexity - OMA - Cumplimiento de su ODS",

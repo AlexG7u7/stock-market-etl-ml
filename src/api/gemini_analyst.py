@@ -290,18 +290,26 @@ def analyze_ticker(
     razones: list[str],
     universe_name: str,
     news: list[dict] | None = None,
+    # contexto enriquecido (modo agente)
+    horizon_signals: dict | None = None,   # {"1s": {"rank": 2, "score": 0.71}, ...}
+    macro_context:   dict | None = None,   # {"USDMXN": 1.2, "WTI": -0.5, "SP500": 0.8, "regime": "alcista"}
+    n_consenso:      int = 0,
+    n_universe:      int = 0,
 ) -> dict:
     """
-    Llama a Gemini 2.5-flash para generar un análisis ejecutivo del ticker.
-    Si no hay GEMINI_API_KEY, retorna dict vacío (degradación elegante).
+    Llama a Gemini como agente analista con TODOS los outputs del modelo.
+    Si no hay GEMINI_API_KEY retorna dict vacío.
 
     Returns:
         {
-            "resumen": str,       — 1 frase ejecutiva de por qué está en el top
-            "accion": str,        — "COMPRA FUERTE / COMPRA / ESPERA / EVITA"
-            "riesgo": str,        — principal riesgo en 1 frase
-            "catalizador": str,   — qué podría hacer que suba más
-            "sentimiento_news": str  — positivo/neutral/negativo según noticias
+            "resumen":          str,  — tesis de inversión en 1-2 frases
+            "accion":           str,  — COMPRA FUERTE / COMPRA / ESPERA / EVITA
+            "confianza":        str,  — ALTA / MEDIA / BAJA
+            "riesgo":           str,  — principal riesgo
+            "catalizador":      str,  — qué podría potenciar el alza
+            "horizonte_optimo": str,  — 1s / 2s / 3s / 4s (dónde es más fuerte)
+            "sentimiento_news": str,  — positivo / neutral / negativo
+            "contradiccion":    str | None  — señales contradictorias o null
         }
     """
     api_key = os.getenv("GEMINI_API_KEY")
@@ -310,28 +318,87 @@ def analyze_ticker(
 
     news = news or fetch_news_yfinance(sym)
     news_txt = "\n".join(f"  • {n['title']} ({n.get('ago','')})" for n in news) or "  (sin noticias recientes)"
-    razones_txt = "\n".join(f"  - {r}" for r in razones) or "  (múltiples factores técnicos)"
 
-    prompt = f"""Eres un analista de inversiones ejecutivo. Analiza este instrumento:
+    # ── Sección 1: señales del modelo por horizonte ───────────────────────────
+    horizon_labels = {"1s": "1 semana", "2s": "2 semanas", "3s": "3 semanas", "4s": "4 semanas"}
+    if horizon_signals:
+        lines_hz = []
+        for hk in ["1s", "2s", "3s", "4s"]:
+            if hk in horizon_signals:
+                h = horizon_signals[hk]
+                lines_hz.append(
+                    f"  • {horizon_labels[hk]}: rank #{h['rank']} / {n_universe}  |  score {h['score']:.2f}"
+                )
+            else:
+                lines_hz.append(f"  • {horizon_labels[hk]}: NO está en top-5")
+        horizons_txt = "\n".join(lines_hz)
+        consenso_txt = f"Aparece en {n_consenso}/4 horizontes — {'señal de mediano plazo consistente' if n_consenso >= 3 else 'señal focalizada'}"
+    else:
+        horizons_txt = f"  • Rank #{rank} / {n_universe}  |  score {score:.2f}"
+        consenso_txt = f"Horizonte único"
 
-Instrumento: {ticker}
-Universo: {universe_name}
-Rank del modelo: #{rank} de su universo (top-5)
-Score del modelo: {score:.2f} (mayor = mejor momentum relativo)
+    # ── Sección 2: features técnicos rank-normalizados ─────────────────────────
+    razones_txt = "\n".join(f"  - {r}" for r in razones) or "  (factores técnicos combinados)"
 
-Señales técnicas que lo pusieron en el top:
+    # ── Sección 3: macro context ───────────────────────────────────────────────
+    if macro_context:
+        regime = macro_context.get("regime", "desconocido")
+        macro_lines = [f"  • Régimen de mercado: {regime.upper()}"]
+        for key, val in macro_context.items():
+            if key == "regime":
+                continue
+            direction = "↑" if val > 0 else "↓"
+            label = {
+                "USDMXN":  "USD/MXN retorno 5d (peso)",
+                "WTI":     "WTI petróleo retorno 5d",
+                "SP500":   "S&P 500 retorno 5d",
+                "NAFTRAC": "IPC/NAFTRAC retorno 5d",
+            }.get(key, key)
+            note = ""
+            if key == "USDMXN" and val > 1.0:
+                note = " ⚠️ peso depreciando"
+            elif key == "USDMXN" and val < -1.0:
+                note = " ✅ peso apreciando"
+            macro_lines.append(f"  • {label}: {val:+.1f}%{direction}{note}")
+        macro_txt = "\n".join(macro_lines)
+    else:
+        macro_txt = "  (contexto macro no disponible)"
+
+    prompt = f"""Eres un agente analista cuantitativo de inversiones. Tienes acceso a los outputs completos del modelo predictivo para el siguiente instrumento. Sintetiza TODA la evidencia y emite una recomendación ejecutiva.
+
+════════════════════════════════
+INSTRUMENTO: {ticker}
+UNIVERSO: {universe_name} ({n_universe} instrumentos analizados)
+CONSENSO: {consenso_txt}
+════════════════════════════════
+
+=== SEÑALES DEL MODELO POR HORIZONTE ===
+{horizons_txt}
+
+=== FEATURES TÉCNICOS (rank-normalizados vs el universo) ===
+Los features que más peso tienen en el modelo y cuál es la posición de {ticker}:
 {razones_txt}
 
-Noticias recientes:
+=== CONTEXTO MACRO ===
+{macro_txt}
+
+=== NOTICIAS RECIENTES ===
 {news_txt}
+
+════════════════════════════════
+TAREA: Analiza la evidencia. ¿Los horizontes son consistentes? ¿El macro confirma o contradice? ¿Las noticias apoyan el momentum técnico?
+════════════════════════════════
 
 Responde SOLO en JSON con este formato exacto:
 {{
-  "resumen": "Una frase ejecutiva de por qué este instrumento está en el top ahora",
+  "resumen": "Tesis de inversión en 1-2 frases ejecutivas",
   "accion": "COMPRA FUERTE | COMPRA | ESPERA | EVITA",
-  "riesgo": "Una frase sobre el principal riesgo",
-  "catalizador": "Una frase sobre qué podría potenciar el alza",
-  "sentimiento_news": "positivo | neutral | negativo"
+  "confianza": "ALTA | MEDIA | BAJA",
+  "riesgo": "Principal factor de riesgo en 1 frase",
+  "catalizador": "Qué evento podría potenciar el alza en 1 frase",
+  "horizonte_optimo": "1s | 2s | 3s | 4s",
+  "sentimiento_news": "positivo | neutral | negativo",
+  "contradiccion": "Describe brevemente si hay señales contradictorias entre horizontes, macro o noticias, o null si todo apunta en la misma dirección"
 }}"""
 
     try:
@@ -407,15 +474,31 @@ def analyze_batch(
     tickers_map: dict[str, str],   # nombre_corto → símbolo yfinance
     universe_name: str,
     universe_slug: str = "",
+    by_horizon: dict | None = None,    # todos los horizontes {hk: {top5: [...]}}
+    macro_context: dict | None = None, # {USDMXN, WTI, SP500, regime}
+    consensus: list | None = None,     # [{ticker, n_horizontes}]
+    n_universe: int = 0,
 ) -> dict[str, dict]:
     """
-    Analiza todos los picks del top-5 en batch.
-    Usa caché diario para evitar re-llamadas a Gemini.
+    Analiza todos los picks en batch.
+    Usa caché diario. Pasa contexto completo (modo agente) si está disponible.
     Retorna dict {ticker: análisis}.
     """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         return {}
+
+    # Índice de consenso
+    consensus_rank = {c["ticker"]: c["n_horizontes"] for c in (consensus or [])}
+
+    # Señales por horizonte para cada ticker
+    ticker_hz: dict[str, dict] = {}
+    for hk, hdata in (by_horizon or {}).items():
+        for i, p in enumerate(hdata.get("top5", []), start=1):
+            t = p["ticker"]
+            if t not in ticker_hz:
+                ticker_hz[t] = {}
+            ticker_hz[t][hk] = {"rank": i, "score": p.get("score", 0.5)}
 
     today_cache = _load_cache()
     results = {}
@@ -424,10 +507,13 @@ def analyze_batch(
         name = p["ticker"]
         sym  = tickers_map.get(name, name)
 
+        # Cache key: incluye fecha implícita en _load_cache
         if name in today_cache:
-            logger.info(f"  Gemini {name}: cache hit ✓")
-            results[name] = today_cache[name]
-            continue
+            # Solo usar caché si tiene los campos del modo agente
+            if today_cache[name].get("confianza"):
+                logger.info(f"  Gemini {name}: cache hit ✓")
+                results[name] = today_cache[name]
+                continue
 
         news   = fetch_news_for_ticker(name, sym, universe_slug)
         result = analyze_ticker(
@@ -438,15 +524,19 @@ def analyze_batch(
             razones=p.get("razones", []),
             universe_name=universe_name,
             news=news,
+            horizon_signals=ticker_hz.get(name),
+            macro_context=macro_context,
+            n_consenso=consensus_rank.get(name, 0),
+            n_universe=n_universe,
         )
         enriched = {**result, "noticias": news}
         results[name] = enriched
 
-        if result:  # only cache successful responses
+        if result:
             today_cache[name] = enriched
             _save_cache(today_cache)
 
-        logger.info(f"  Gemini {name}: {result.get('accion','—')} — {result.get('resumen','')[:60]}...")
+        logger.info(f"  Gemini {name}: {result.get('accion','—')} ({result.get('confianza','')}) — {result.get('resumen','')[:60]}...")
 
     return results
 
