@@ -1,16 +1,15 @@
 """
-Motor de señal mensual multi-universo.
+Motor de señal multi-universo y multi-horizonte.
 
-Genera el ranking top-N para CUALQUIER universo de GBM
-(BMV, USA/SIC, ETFs, Cripto-proxy, FIBRAs) con el mismo
-modelo cross-seccional v2a.
+Genera rankings para 4 horizontes por universo:
+  1 semana (5d) · 2 semanas (10d) · 3 semanas (15d) · 4 semanas (20d)
 
-También integra sentimiento de noticias via Vertex AI (Gemini)
-si GCP_PROJECT_ID está configurado en .env.
+Comparte descarga de precios y cómputo de features entre horizontes.
+Integra análisis Gemini por ticker en el top-5.
 
 Uso:
     python scripts/generate_all_signals.py
-    python scripts/generate_all_signals.py --capital 50000 --universe "ETFs"
+    python scripts/generate_all_signals.py --capital 50000 --universe "📦 ETFs"
 """
 from __future__ import annotations
 
@@ -20,6 +19,7 @@ import os
 import sys
 from datetime import date, timedelta
 from pathlib import Path
+from collections import defaultdict
 
 import lightgbm as lgb
 import numpy as np
@@ -31,12 +31,20 @@ sys.path.insert(0, str(ROOT))
 
 from src.data.universes import UNIVERSES
 from src.ml.features import (compute_features, add_macro_features,
-                              add_cross_section_features, FEATURE_COLS,
-                              TECH_FEATURE_COLS)
+                              add_cross_section_features, FEATURE_COLS)
 from scripts.cross_sectional_v2 import add_rank_normalized, RN_COLS, _LGBM_BASE
 
 OUT_DIR = ROOT / "data" / "signals"
 OUT_DIR.mkdir(exist_ok=True)
+
+# ── Horizontes disponibles ────────────────────────────────────────────────────
+
+HORIZONS = [
+    {"key": "1s", "label": "1 semana",   "semanas": 1, "d": 5},
+    {"key": "2s", "label": "2 semanas",  "semanas": 2, "d": 10},
+    {"key": "3s", "label": "3 semanas",  "semanas": 3, "d": 15},
+    {"key": "4s", "label": "4 semanas",  "semanas": 4, "d": 20},
+]
 
 FEAT_LABELS = {
     "rn_cs_mom_rank":    "Momentum relativo al universo",
@@ -56,7 +64,6 @@ FEAT_LABELS = {
     "rn_usdmxn_ret5":    "Movimiento del peso",
 }
 
-
 # ── Descarga de activos macro ─────────────────────────────────────────────────
 
 MACRO_SYMBOLS = {
@@ -67,11 +74,10 @@ MACRO_SYMBOLS = {
 }
 
 def download_macro() -> dict[str, pd.DataFrame]:
-    """Descarga los 4 activos macro necesarios para add_macro_features()."""
     out: dict[str, pd.DataFrame] = {}
-    symbols = list(MACRO_SYMBOLS.values())
     try:
-        raw = yf.download(symbols, period="2y", auto_adjust=True, progress=False)
+        raw = yf.download(list(MACRO_SYMBOLS.values()), period="2y",
+                          auto_adjust=True, progress=False)
         if isinstance(raw.columns, pd.MultiIndex):
             for key, sym in MACRO_SYMBOLS.items():
                 try:
@@ -80,24 +86,16 @@ def download_macro() -> dict[str, pd.DataFrame]:
                         out[key] = df
                 except Exception:
                     pass
-        else:
-            # Un solo símbolo descargado
-            first_key = list(MACRO_SYMBOLS.keys())[0]
-            if not raw.empty:
-                out[first_key] = raw
     except Exception as e:
-        print(f"  ! Error descargando macro: {e}")
+        print(f"  ! macro: {e}")
     return out
 
 
-# ── Descarga de precios via yfinance ─────────────────────────────────────────
-
 def download_prices(tickers: dict[str, str]) -> dict[str, pd.DataFrame]:
-    """Descarga OHLCV de todos los tickers del universo."""
     out = {}
-    symbols = list(tickers.values())
     try:
-        raw = yf.download(symbols, period="5y", auto_adjust=True, progress=False)
+        raw = yf.download(list(tickers.values()), period="5y",
+                          auto_adjust=True, progress=False)
         if isinstance(raw.columns, pd.MultiIndex):
             for name, sym in tickers.items():
                 try:
@@ -111,11 +109,9 @@ def download_prices(tickers: dict[str, str]) -> dict[str, pd.DataFrame]:
             if len(raw) > 100:
                 out[name] = raw
     except Exception as e:
-        print(f"  ! Error descargando batch: {e}")
+        print(f"  ! precios: {e}")
     return out
 
-
-# ── Régimen de mercado ────────────────────────────────────────────────────────
 
 def market_regime(benchmark_sym: str) -> dict:
     try:
@@ -124,105 +120,83 @@ def market_regime(benchmark_sym: str) -> dict:
             df.columns = df.columns.get_level_values(0)
         c = df["Close"].dropna()
         if len(c) < 30:
-            raise ValueError("pocas barras")
+            raise ValueError
         ma20 = c.rolling(20).mean()
         ma50 = c.rolling(50).mean()
-        ultimo, m20, m50 = c.iloc[-1], ma20.iloc[-1], ma50.iloc[-1]
-        ret10 = (ultimo / c.iloc[-11] - 1) * 100 if len(c) > 11 else 0
-        if ultimo > m20 > m50 and ret10 > 0:
+        ret10 = (c.iloc[-1] / c.iloc[-11] - 1) * 100 if len(c) > 11 else 0
+        if c.iloc[-1] > ma20.iloc[-1] > ma50.iloc[-1] and ret10 > 0:
             return {"estado": "alcista", "emoji": "🟢",
-                    "descripcion": f"Benchmark sobre MA20 y MA50 ({ret10:+.1f}% en 10d) — buen momento"}
-        elif ultimo < ma20.iloc[-1] and ret10 < -3:
+                    "descripcion": f"Benchmark sobre MA20 y MA50 ({ret10:+.1f}% en 10d)"}
+        elif c.iloc[-1] < ma20.iloc[-1] and ret10 < -3:
             return {"estado": "bajista", "emoji": "🔴",
                     "descripcion": f"Benchmark bajo MA20 ({ret10:+.1f}% en 10d) — precaución"}
         return {"estado": "lateral", "emoji": "🟡",
-                "descripcion": f"Sin tendencia clara ({ret10:+.1f}% en 10d) — neutral"}
+                "descripcion": f"Sin tendencia clara ({ret10:+.1f}% en 10d)"}
     except Exception:
-        return {"estado": "desconocido", "emoji": "⚪", "descripcion": "Sin datos del benchmark"}
+        return {"estado": "desconocido", "emoji": "⚪", "descripcion": "Sin datos"}
 
 
-# ── Motor principal ───────────────────────────────────────────────────────────
+# ── Ranking para un horizonte dado ────────────────────────────────────────────
 
-def generate_universe_signal(
-    universe_name: str,
-    capital: float = 50_000.0,
-    top_n: int = 5,
-) -> dict:
-    cfg = UNIVERSES[universe_name]
-    tickers = cfg["tickers"]
-    horizon = cfg["horizonte"]
-    benchmark = cfg["macro_benchmark"]
-    min_n = cfg["min_tickers"]
+def _next_bday(horizon_d: int) -> str:
+    d = date.today()
+    bd = 0
+    while bd < horizon_d:
+        d += timedelta(days=1)
+        if d.weekday() < 5:
+            bd += 1
+    return d.strftime("%d %b %Y")
 
-    print(f"\n  [{universe_name}]  descargando {len(tickers)} tickers...")
-    prices = download_prices(tickers)
-    if len(prices) < min_n:
-        return {"error": f"Solo {len(prices)} tickers disponibles (mínimo {min_n})"}
 
-    # datos macro (USD/MXN, NAFTRAC, WTI, SP500) — necesarios para FEATURE_COLS
-    print(f"  [{universe_name}]  descargando macro (USDMXN, NAFTRAC, WTI, SP500)...")
-    macro_data = download_macro()
+def _last_price(name: str, prices: dict) -> float | None:
+    df = prices.get(name)
+    if df is None or df.empty:
+        return None
+    return float(df["Close"].iloc[-1])
 
-    # features técnicas + macro
-    feat_frames = {}
-    for name, df in prices.items():
-        try:
-            feat = compute_features(df)
-            if macro_data:
-                feat = add_macro_features(feat, macro_data)
-            feat["ticker"] = name
-            feat_frames[name] = feat
-        except Exception:
-            continue
 
-    if len(feat_frames) < min_n:
-        return {"error": "Insuficientes features calculadas"}
-
-    feat_frames = add_cross_section_features(feat_frames)
-
-    # columnas de features disponibles en este run
-    available_feat_cols = [c for c in FEATURE_COLS if c in next(iter(feat_frames.values())).columns]
-
-    # dataset con target para entrenar
+def rank_at_horizon(
+    feat_frames: dict[str, pd.DataFrame],
+    last_vals: dict,
+    available_feat_cols: list[str],
+    prices: dict,
+    horizon_d: int,
+    capital: float,
+    top_n: int,
+) -> dict | None:
+    """Entrena modelo para un horizonte y retorna picks + ranking."""
     rows = []
     for name, df in feat_frames.items():
         df = df.dropna(subset=available_feat_cols)
         if len(df) < 100:
             continue
-        df["fwd_ret"] = df["Close"].pct_change(horizon).shift(-horizon) * 100
+        df = df.copy()
+        df["fwd_ret"] = df["Close"].pct_change(horizon_d).shift(-horizon_d) * 100
         df = df.dropna(subset=available_feat_cols + ["fwd_ret"])
         rows.append(df)
 
     if not rows:
-        return {"error": "Sin datos suficientes para entrenar"}
+        return None
 
-    full = pd.concat(rows).sort_index()
-    full = add_rank_normalized(full)
-    full = full.dropna(subset=RN_COLS + ["pct_fwd"])
+    h_full = pd.concat(rows).sort_index()
+    h_full = add_rank_normalized(h_full)
+    h_full = h_full.dropna(subset=RN_COLS + ["pct_fwd"])
 
-    # entrenar
-    reg = lgb.LGBMRegressor(**_LGBM_BASE)
-    reg.fit(full[RN_COLS].values, full["pct_fwd"].values)
+    if len(h_full) < 50:
+        return None
 
-    # predecir sobre los datos más recientes de cada ticker
+    reg = lgb.LGBMRegressor(**_LGBM_BASE, verbose=-1)
+    reg.fit(h_full[RN_COLS].values, h_full["pct_fwd"].values)
+
+    # Predecir hoy
     today_rows = []
-    # recalcular ranks del universo de hoy
-    last_vals = {}
-    for name, df in feat_frames.items():
-        df_clean = df.dropna(subset=available_feat_cols)
-        if df_clean.empty:
-            continue
-        last_vals[name] = df_clean.iloc[-1]
-
-    if not last_vals:
-        return {"error": "Sin datos recientes"}
-
     for name, row in last_vals.items():
-        rn_row = {}
+        rn_row = {"ticker": name}
         for c in available_feat_cols:
-            vals = [r[c] for r in last_vals.values() if c in r.index and not pd.isna(r[c])]
-            rn_row[f"rn_{c}"] = sum(1 for v in vals if v <= row.get(c, 0)) / len(vals) if vals else 0.5
-        rn_row["ticker"] = name
+            vals = [r[c] for r in last_vals.values()
+                    if c in r.index and not pd.isna(r[c])]
+            rn_row[f"rn_{c}"] = (sum(1 for v in vals if v <= row.get(c, 0)) / len(vals)
+                                  if vals else 0.5)
         today_rows.append(rn_row)
 
     today_df = pd.DataFrame(today_rows)
@@ -230,23 +204,14 @@ def generate_universe_signal(
     today_df["score"] = reg.predict(today_df[rn_cols_avail].fillna(0.5).values)
     today_df = today_df.sort_values("score", ascending=False).reset_index(drop=True)
 
-    # precio actual de cada ticker
-    def last_price(name: str) -> float | None:
-        df = prices.get(name)
-        if df is None or df.empty:
-            return None
-        return float(df["Close"].iloc[-1])
-
-    # picks
-    picks = []
+    feat_imp = pd.Series(reg.feature_importances_, index=RN_COLS).sort_values(ascending=False)
     monto = capital / top_n
+
+    picks = []
     for _, row in today_df.head(top_n).iterrows():
-        name = row["ticker"]
-        precio = last_price(name)
-        acciones = int(monto / precio) if precio and precio > 0 else None
-        # razones
+        name   = row["ticker"]
+        precio = _last_price(name, prices)
         razones = []
-        feat_imp = pd.Series(reg.feature_importances_, index=RN_COLS).sort_values(ascending=False)
         for feat in feat_imp.head(15).index:
             val = row.get(feat, 0.5)
             if pd.isna(val):
@@ -259,56 +224,151 @@ def generate_universe_signal(
             if len(razones) >= 3:
                 break
         picks.append({
-            "ticker": name,
-            "score": round(float(row["score"]), 3),
-            "score_pct": f"{int(row['score']*100)}%",
-            "precio_actual": round(precio, 2) if precio else None,
-            "monto": round(monto, 2),
-            "acciones_aprox": acciones,
-            "razones": razones or ["ℹ️ Combinación de factores técnicos favorables"],
+            "ticker":         name,
+            "score":          round(float(row["score"]), 3),
+            "score_pct":      f"{int(row['score']*100)}%",
+            "precio_actual":  round(precio, 2) if precio else None,
+            "monto":          round(monto, 2),
+            "acciones_aprox": int(monto / precio) if precio and precio > 0 else None,
+            "razones":        razones or ["ℹ️ Combinación de factores técnicos favorables"],
         })
 
-    evitar = [row["ticker"] for _, row in today_df.tail(top_n).iterrows()]
-    d_rebal = date.today()
-    bdays = 0
-    while bdays < horizon:
-        d_rebal += timedelta(days=1)
-        if d_rebal.weekday() < 5:
-            bdays += 1
+    return {
+        "top5":             picks,
+        "evitar":           [r["ticker"] for _, r in today_df.tail(top_n).iterrows()],
+        "proximo_rebalanceo": _next_bday(horizon_d),
+        "universo_completo": [
+            {"ticker": r["ticker"], "score": round(float(r["score"]), 3), "rank": i+1}
+            for i, (_, r) in enumerate(today_df.iterrows())
+        ],
+    }
 
-    # ── Análisis Gemini por pick ────────────────────────────────────────────
+
+# ── Motor principal multi-horizonte ──────────────────────────────────────────
+
+def generate_universe_signal(
+    universe_name: str,
+    capital: float = 50_000.0,
+    top_n: int = 5,
+) -> dict:
+    cfg     = UNIVERSES[universe_name]
+    tickers = cfg["tickers"]
+    min_n   = cfg["min_tickers"]
+
+    print(f"\n  [{universe_name}]  precios + macro...")
+    prices     = download_prices(tickers)
+    if len(prices) < min_n:
+        return {"error": f"Solo {len(prices)} tickers (mínimo {min_n})"}
+    macro_data = download_macro()
+
+    # Features técnicas + macro — se calculan UNA VEZ para todos los horizontes
+    feat_frames: dict[str, pd.DataFrame] = {}
+    for name, df in prices.items():
+        try:
+            feat = compute_features(df)
+            if macro_data:
+                feat = add_macro_features(feat, macro_data)
+            feat["ticker"] = name
+            feat_frames[name] = feat
+        except Exception:
+            continue
+
+    if len(feat_frames) < min_n:
+        return {"error": "Insuficientes features"}
+
+    feat_frames = add_cross_section_features(feat_frames)
+    available_feat_cols = [c for c in FEATURE_COLS
+                           if c in next(iter(feat_frames.values())).columns]
+
+    # Datos de hoy para predicción (compartidos entre horizontes)
+    last_vals: dict = {}
+    for name, df in feat_frames.items():
+        clean = df.dropna(subset=available_feat_cols)
+        if not clean.empty:
+            last_vals[name] = clean.iloc[-1]
+
+    if not last_vals:
+        return {"error": "Sin datos recientes"}
+
+    # ── Entrenar modelo por horizonte ─────────────────────────────────────────
+    by_horizon: dict[str, dict] = {}
+    for h in HORIZONS:
+        print(f"  [{universe_name}]  horizonte {h['label']} ({h['d']}d)...")
+        result = rank_at_horizon(
+            feat_frames, last_vals, available_feat_cols, prices,
+            h["d"], capital, top_n,
+        )
+        if result:
+            by_horizon[h["key"]] = {
+                "label":    h["label"],
+                "semanas":  h["semanas"],
+                "horizon_d": h["d"],
+                **result,
+            }
+
+    if not by_horizon:
+        return {"error": "No se pudo entrenar ningún horizonte"}
+
+    # ── Consenso: tickers que aparecen en top-5 de múltiples horizontes ───────
+    ticker_counts: dict[str, list[str]] = defaultdict(list)
+    for hkey, hdata in by_horizon.items():
+        for p in hdata.get("top5", []):
+            ticker_counts[p["ticker"]].append(hkey)
+
+    consensus = sorted(
+        [{"ticker": t, "n_horizontes": len(hs), "horizontes": hs}
+         for t, hs in ticker_counts.items()],
+        key=lambda x: -x["n_horizontes"],
+    )
+
+    # ── Gemini: analiza top tickers del consenso (máx 7 para no gastar API) ───
+    top_consensus_tickers = [c["ticker"] for c in consensus[:7]]
+    # Usar el ranking de 4 semanas como representativo para Gemini
+    ref_picks = by_horizon.get("4s", by_horizon[list(by_horizon.keys())[0]])["top5"]
+    ref_picks_filtered = [p for p in ref_picks if p["ticker"] in top_consensus_tickers]
+    ref_picks_filtered += [p for p in ref_picks if p["ticker"] not in top_consensus_tickers]
+    ref_picks_filtered = ref_picks_filtered[:top_n]
+
     from src.api.gemini_analyst import analyze_batch
-    tickers_map = cfg["tickers"]
-    gemini_analyses = analyze_batch(picks, tickers_map, universe_name, universe_slug=cfg["slug"])
-    # Enriquecer cada pick con el análisis y noticias
-    for p in picks:
-        name = p["ticker"]
-        a = gemini_analyses.get(name, {})
-        p["gemini"] = {
-            "resumen":          a.get("resumen", ""),
-            "accion":           a.get("accion", ""),
-            "riesgo":           a.get("riesgo", ""),
-            "catalizador":      a.get("catalizador", ""),
-            "sentimiento_news": a.get("sentimiento_news", ""),
-        }
-        p["noticias"] = a.get("noticias", [])
+    gemini_analyses = analyze_batch(
+        ref_picks_filtered, cfg["tickers"], universe_name, universe_slug=cfg["slug"]
+    )
+
+    # Enriquecer picks de TODOS los horizontes con análisis Gemini
+    for hkey, hdata in by_horizon.items():
+        for p in hdata["top5"]:
+            name = p["ticker"]
+            a    = gemini_analyses.get(name, {})
+            p["gemini"]   = {
+                "resumen":          a.get("resumen", ""),
+                "accion":           a.get("accion", ""),
+                "riesgo":           a.get("riesgo", ""),
+                "catalizador":      a.get("catalizador", ""),
+                "sentimiento_news": a.get("sentimiento_news", ""),
+            }
+            p["noticias"] = a.get("noticias", [])
+
+    # El horizonte por defecto del universo como campo de compatibilidad
+    default_key = next((h["key"] for h in HORIZONS if h["d"] == cfg.get("horizonte", 20)), "4s")
+    default     = by_horizon.get(default_key, by_horizon[list(by_horizon.keys())[-1]])
 
     return {
-        "universe": universe_name,
-        "descripcion": cfg["descripcion"],
-        "moneda": cfg["moneda"],
-        "fecha": date.today().isoformat(),
-        "proximo_rebalanceo": d_rebal.strftime("%d %b %Y"),
-        "capital": capital,
-        "monto_por_nombre": round(monto, 2),
-        "mercado": market_regime(benchmark),
-        "top5": picks,
-        "evitar": evitar,
-        "universo_completo": [
-            {"ticker": row["ticker"], "score": round(float(row["score"]), 3), "rank": i+1}
-            for i, (_, row) in enumerate(today_df.iterrows())
-        ],
-        "n_tickers_analizados": len(today_df),
+        "universe":            universe_name,
+        "descripcion":         cfg["descripcion"],
+        "moneda":              cfg["moneda"],
+        "fecha":               date.today().isoformat(),
+        "capital":             capital,
+        "monto_por_nombre":    round(capital / top_n, 2),
+        "mercado":             market_regime(cfg["macro_benchmark"]),
+        "n_tickers_analizados": len(last_vals),
+        # Horizonte por defecto (compatibilidad con versiones anteriores del app)
+        "top5":                default["top5"],
+        "evitar":              default["evitar"],
+        "proximo_rebalanceo":  default["proximo_rebalanceo"],
+        "universo_completo":   default["universo_completo"],
+        # Multi-horizonte
+        "by_horizon":          by_horizon,
+        "consensus":           consensus,
     }
 
 
@@ -319,35 +379,36 @@ def main(capital: float = 50_000.0, target_universe: str | None = None):
     universes = ([target_universe] if target_universe and target_universe in UNIVERSES
                  else list(UNIVERSES.keys()))
 
-    all_results = {}
     for uname in universes:
         result = generate_universe_signal(uname, capital=capital)
-        slug = UNIVERSES[uname]["slug"]
-        out_path = OUT_DIR / f"{slug}.json"
-        out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2))
-        all_results[uname] = result
-
+        slug   = UNIVERSES[uname]["slug"]
+        (OUT_DIR / f"{slug}.json").write_text(
+            json.dumps(result, ensure_ascii=False, indent=2)
+        )
         if "error" in result:
             print(f"  ✗ {uname}: {result['error']}")
-            continue
+        else:
+            m = result["mercado"]
+            cons_top = [c["ticker"] for c in result["consensus"] if c["n_horizontes"] >= 3]
+            print(f"  {m['emoji']} {uname} — {m['estado'].upper()}")
+            for h in HORIZONS:
+                hd = result["by_horizon"].get(h["key"])
+                if hd:
+                    tickers_str = " · ".join(p["ticker"] for p in hd["top5"])
+                    print(f"     {h['label']:12s} → {tickers_str}")
+            if cons_top:
+                print(f"     ⭐ Consenso (≥3 horizontes): {' · '.join(cons_top)}")
 
-        reg = result["mercado"]
-        print(f"  {reg['emoji']} {uname} — {reg['estado'].upper()}")
-        print(f"     Top: {' · '.join(p['ticker'] for p in result['top5'])}")
-        print(f"     Rebalanceo: {result['proximo_rebalanceo']}")
-
-    # Guardar índice consolidado
-    idx_path = OUT_DIR / "index.json"
-    idx_path.write_text(json.dumps({
+    (OUT_DIR / "index.json").write_text(json.dumps({
         "fecha": date.today().isoformat(),
-        "universos": list(all_results.keys()),
+        "universos": universes,
     }, ensure_ascii=False, indent=2))
     print(f"\n  Guardado en: {OUT_DIR}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--capital", type=float, default=50_000.0)
-    parser.add_argument("--universe", type=str, default=None)
+    parser.add_argument("--capital",   type=float, default=50_000.0)
+    parser.add_argument("--universe",  type=str,   default=None)
     args = parser.parse_args()
     main(capital=args.capital, target_universe=args.universe)

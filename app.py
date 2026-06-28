@@ -164,12 +164,14 @@ if page.startswith("🏆"):
             reg_emoji = mercado.get("emoji", "⚪")
             reg_est   = mercado.get("estado", "—").upper()
             reg_desc  = mercado.get("descripcion", "")
+            moneda_sym = "$" if cfg["moneda"] == "MXN" else "USD "
+            monto_por  = sig.get("monto_por_nombre", capital_global / 5)
 
             m1, m2, m3, m4 = st.columns(4)
             m1.metric("📅 Fecha", sig.get("fecha", "—"))
-            m2.metric("⏰ Rebalanceo", sig.get("proximo_rebalanceo", "—"))
+            m2.metric("🔢 Universo", f"{sig.get('n_tickers_analizados', '—')} tickers · {cfg['moneda']}")
             m3.metric(f"{reg_emoji} Mercado", reg_est)
-            m4.metric("🔢 Universo", f"{sig.get('n_tickers_analizados', '—')} tickers · {cfg['moneda']}")
+            m4.metric("💰 Capital/posición", f"${monto_por:,.0f} {cfg['moneda']}")
 
             if mercado.get("estado") == "alcista":
                 st.success(f"🟢 {reg_desc}")
@@ -177,155 +179,147 @@ if page.startswith("🏆"):
                 st.warning(f"🔴 {reg_desc} — considera reducir posiciones")
             else:
                 st.info(f"🟡 {reg_desc}")
-
             st.caption(f"*{cfg['descripcion']}*")
-            st.divider()
 
-            # ── Top-5 picks ──────────────────────────────────────────────────
-            st.subheader("📋 ¿Qué comprar este mes?")
-            picks      = sig.get("top5", [])
-            monto_por  = sig.get("monto_por_nombre", capital_global / 5)
-            moneda_sym = "$" if cfg["moneda"] == "MXN" else "USD "
-
-            if picks:
-                medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
-                accion_colors = {
-                    "COMPRA FUERTE": "🟢", "COMPRA": "🟢",
-                    "ESPERA": "🟡", "EVITA": "🔴",
-                }
-                sent_icons = {"positivo": "📈", "neutral": "➡️", "negativo": "📉"}
-
-                for i, p in enumerate(picks):
-                    precio     = p.get("precio_actual")
-                    precio_str = f"{moneda_sym}{precio:,.2f}" if precio else "—"
-                    acciones   = p.get("acciones_aprox")
-                    accion_str = str(acciones) if acciones else "fraccionado"
-                    gem        = p.get("gemini", {})
-                    gem_accion = gem.get("accion", "")
-                    gem_icon   = accion_colors.get(gem_accion, "⚪")
-
-                    with st.expander(
-                        f"{medals[i]}  **{p['ticker']}**  —  confianza {p['score_pct']}  "
-                        f"|  {precio_str}  |  ≈ {accion_str} acciones/títulos  "
-                        + (f"|  {gem_icon} Gemini: **{gem_accion}**" if gem_accion else ""),
-                        expanded=(i < 3),
-                    ):
-                        # ── Análisis Gemini (protagonista) ───────────────────
-                        if gem.get("resumen"):
-                            sent_ico = sent_icons.get(gem.get("sentimiento_news", ""), "")
-                            st.markdown(f"### {gem_icon} {gem.get('resumen', '')}")
-
-                            g1, g2 = st.columns(2)
-                            with g1:
-                                if gem.get("catalizador"):
-                                    st.success(f"**Catalizador:** {gem['catalizador']}")
-                            with g2:
-                                if gem.get("riesgo"):
-                                    st.warning(f"**Riesgo:** {gem['riesgo']}")
-
-                            if gem.get("sentimiento_news"):
-                                st.caption(f"{sent_ico} Noticias recientes: **{gem['sentimiento_news']}**")
-                        else:
-                            st.caption("_(Agrega GEMINI_API_KEY al .env para análisis ejecutivo)_")
-
-                        st.divider()
-
-                        # ── Métricas ──────────────────────────────────────────
-                        cc1, cc2, cc3 = st.columns(3)
-                        cc1.metric("Score del modelo", p["score_pct"])
-                        cc2.metric(f"Monto ({cfg['moneda']})", f"${monto_por:,.0f}")
-                        cc3.metric("Acciones aprox.", accion_str)
-
-                        # ── Señales técnicas (detalles) ───────────────────────
-                        with st.expander("🔬 Señales técnicas", expanded=False):
-                            for r in p.get("razones", []):
-                                st.markdown(f"- {r}")
-
-                        # ── Noticias recientes ────────────────────────────────
-                        noticias = p.get("noticias", [])
-                        if noticias:
-                            with st.expander(f"📰 {len(noticias)} noticias recientes", expanded=False):
-                                for n in noticias:
-                                    link = n.get("link", "")
-                                    title = n.get("title", "")
-                                    pub   = n.get("publisher", "")
-                                    ago   = n.get("ago", "")
-                                    if link:
-                                        st.markdown(f"- [{title}]({link}) — *{pub}* {ago}")
-                                    else:
-                                        st.markdown(f"- {title} — *{pub}* {ago}")
-
-            # ── Evitar ───────────────────────────────────────────────────────
-            evitar = sig.get("evitar", [])
-            if evitar:
-                st.markdown(f"⛔ **Evitar este ciclo:** {' · '.join(evitar)}")
-
-            st.divider()
-
-            # ── Ranking completo ─────────────────────────────────────────────
-            universo = sig.get("universo_completo", [])
-            if universo:
-                st.subheader(f"📊 Ranking completo ({len(universo)} instrumentos)")
-
-                df_u = pd.DataFrame(universo)
-                n    = len(df_u)
-                top5_ranks = set(range(1, 6))
-                bot5_ranks = set(range(n - 3, n + 1))
-
-                df_u["Score %"] = (df_u["score"] * 100).round(1).astype(str) + "%"
-                df_u["Barra"]   = df_u["score"].apply(
-                    lambda s: "█" * max(1, int(s * 25))
-                )
-
-                def _color_row(row):
-                    if row["#"] in top5_ranks:
-                        return ["background-color: #1a472a; color: white"] * len(row)
-                    if row["#"] in bot5_ranks:
-                        return ["background-color: #4a1a1a; color: white"] * len(row)
-                    return [""] * len(row)
-
-                st.dataframe(
-                    df_u[["rank", "ticker", "Score %", "Barra"]].rename(
-                        columns={"rank": "#", "ticker": "Instrumento"}
-                    ).style.apply(_color_row, axis=1),
-                    use_container_width=True,
-                    hide_index=True,
-                    height=min(700, 38 * n + 40),
-                )
-
-                # Mini gráfico de barras con scores
-                fig_bar = px.bar(
-                    df_u.sort_values("score", ascending=True),
-                    x="score", y="ticker", orientation="h",
-                    color="score",
-                    color_continuous_scale=["#ff4b4b", "#ffa500", "#00d4aa"],
-                    labels={"score": "Score", "ticker": ""},
-                    height=max(300, 20 * n),
-                )
-                fig_bar.update_layout(
-                    plot_bgcolor="#0e1117", paper_bgcolor="#0e1117",
-                    font_color="white", showlegend=False,
-                    coloraxis_showscale=False,
-                    margin=dict(t=10, b=10, l=10, r=10),
-                )
-                st.plotly_chart(fig_bar, use_container_width=True)
-
-            # ── Plan de acción ───────────────────────────────────────────────
-            if picks:
+            # ── Consenso — tickers en top-5 de múltiples horizontes ──────────
+            consensus = sig.get("consensus", [])
+            strong    = [c for c in consensus if c["n_horizontes"] >= 3]
+            if strong:
                 st.divider()
-                st.subheader("🗓️ Plan de acción")
-                tickers_comprar = " + ".join(p["ticker"] for p in picks)
-                st.markdown(f"""
-| Paso | Acción |
-|---|---|
-| **Hoy** | Vende posiciones del ciclo anterior (si las tienes) |
-| **Hoy** | Compra **{tickers_comprar}** — ${monto_por:,.0f} {cfg['moneda']} c/u |
-| **{sig.get('proximo_rebalanceo', '~20d hábiles')}** | Re-corre el modelo y rota si cambió el top-5 |
-| **Siempre** | No toques entre rebalanceos — el ruido diario es normal |
-""")
+                st.subheader("⭐ Picks de consenso (fuertes en 3-4 horizontes)")
+                for c in strong:
+                    sems = " · ".join(c["horizontes"])
+                    n    = c["n_horizontes"]
+                    bar  = "🟩" * n + "⬜" * (4 - n)
+                    st.markdown(f"**{c['ticker']}** — {bar} aparece en {n}/4 horizontes ({sems})")
+
+            st.divider()
+
+            # ── Tabs por horizonte temporal ───────────────────────────────────
+            by_horizon = sig.get("by_horizon", {})
+            if not by_horizon:
+                st.info("Señal generada con el motor antiguo. Regenera para ver multi-horizonte.")
+                by_horizon = {"4s": {
+                    "label": "4 semanas", "top5": sig.get("top5", []),
+                    "evitar": sig.get("evitar", []),
+                    "proximo_rebalanceo": sig.get("proximo_rebalanceo", "—"),
+                    "universo_completo": sig.get("universo_completo", []),
+                }}
+
+            horizon_keys   = [h for h in ["1s", "2s", "3s", "4s"] if h in by_horizon]
+            horizon_labels = [by_horizon[k]["label"] for k in horizon_keys]
+            h_tabs = st.tabs([f"📅 {lbl}" for lbl in horizon_labels])
+
+            for h_tab, hkey in zip(h_tabs, horizon_keys):
+                hdata = by_horizon[hkey]
+
+                with h_tab:
+                    picks    = hdata.get("top5", [])
+                    evitar   = hdata.get("evitar", [])
+                    rebal    = hdata.get("proximo_rebalanceo", "—")
+                    universo = hdata.get("universo_completo", [])
+
+                    st.caption(f"⏰ Próximo rebalanceo: **{rebal}**")
+
+                    # ── Picks ─────────────────────────────────────────────────
+                    medals       = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
+                    accion_colors = {"COMPRA FUERTE": "🟢", "COMPRA": "🟢",
+                                     "ESPERA": "🟡", "EVITA": "🔴"}
+                    sent_icons   = {"positivo": "📈", "neutral": "➡️", "negativo": "📉"}
+
+                    for i, p in enumerate(picks):
+                        precio     = p.get("precio_actual")
+                        precio_str = f"{moneda_sym}{precio:,.2f}" if precio else "—"
+                        accion_str = str(p.get("acciones_aprox", "")) or "fraccionado"
+                        gem        = p.get("gemini", {})
+                        gem_accion = gem.get("accion", "")
+                        gem_icon   = accion_colors.get(gem_accion, "⚪")
+
+                        # Marcar si es pick de consenso
+                        tick_consensus = next((c for c in consensus if c["ticker"] == p["ticker"]), None)
+                        consensus_badge = f" ⭐×{tick_consensus['n_horizontes']}" if tick_consensus and tick_consensus["n_horizontes"] >= 3 else ""
+
+                        with st.expander(
+                            f"{medals[i]}  **{p['ticker']}**{consensus_badge}  —  confianza {p['score_pct']}  "
+                            f"|  {precio_str}  |  ≈ {accion_str} acciones/títulos  "
+                            + (f"|  {gem_icon} **{gem_accion}**" if gem_accion else ""),
+                            expanded=(i < 3),
+                        ):
+                            if gem.get("resumen"):
+                                sent_ico = sent_icons.get(gem.get("sentimiento_news", ""), "")
+                                st.markdown(f"### {gem_icon} {gem.get('resumen', '')}")
+                                g1, g2 = st.columns(2)
+                                with g1:
+                                    if gem.get("catalizador"):
+                                        st.success(f"**Catalizador:** {gem['catalizador']}")
+                                with g2:
+                                    if gem.get("riesgo"):
+                                        st.warning(f"**Riesgo:** {gem['riesgo']}")
+                                if gem.get("sentimiento_news"):
+                                    st.caption(f"{sent_ico} Noticias: **{gem['sentimiento_news']}**")
+                            else:
+                                st.caption("_(Agrega GEMINI_API_KEY al .env para análisis Gemini)_")
+
+                            st.divider()
+                            cc1, cc2, cc3 = st.columns(3)
+                            cc1.metric("Score", p["score_pct"])
+                            cc2.metric(f"Monto ({cfg['moneda']})", f"${monto_por:,.0f}")
+                            cc3.metric("Acciones", accion_str)
+
+                            with st.expander("🔬 Señales técnicas", expanded=False):
+                                for r in p.get("razones", []):
+                                    st.markdown(f"- {r}")
+
+                            noticias_p = p.get("noticias", [])
+                            if noticias_p:
+                                with st.expander(f"📰 {len(noticias_p)} noticias", expanded=False):
+                                    for n in noticias_p:
+                                        link  = n.get("link", "")
+                                        title = n.get("title", "")
+                                        pub   = n.get("publisher", "")
+                                        ago   = n.get("ago", "")
+                                        fuente = n.get("fuente", "")
+                                        line   = f"- [{title}]({link})" if link else f"- {title}"
+                                        st.markdown(f"{line} — *{pub}* {ago} `{fuente}`")
+
+                    if evitar:
+                        st.markdown(f"⛔ **Evitar este ciclo:** {' · '.join(evitar)}")
+
+                    # ── Ranking completo ──────────────────────────────────────
+                    if universo:
+                        st.divider()
+                        with st.expander(f"📊 Ranking completo ({len(universo)} instrumentos)", expanded=False):
+                            df_u = pd.DataFrame(universo)
+                            n    = len(df_u)
+                            df_u["Score %"] = (df_u["score"] * 100).round(1).astype(str) + "%"
+                            df_u["Barra"]   = df_u["score"].apply(lambda s: "█" * max(1, int(s * 25)))
+
+                            def _color_rank(row):
+                                if row["#"] <= 5:
+                                    return ["background-color: #1a472a; color: white"] * len(row)
+                                if row["#"] >= n - 3:
+                                    return ["background-color: #4a1a1a; color: white"] * len(row)
+                                return [""] * len(row)
+
+                            st.dataframe(
+                                df_u[["rank", "ticker", "Score %", "Barra"]].rename(
+                                    columns={"rank": "#", "ticker": "Instrumento"}
+                                ).style.apply(_color_rank, axis=1),
+                                use_container_width=True, hide_index=True,
+                                height=min(700, 38 * n + 40),
+                            )
+
+                    # ── Plan de acción ────────────────────────────────────────
+                    if picks:
+                        tickers_comprar = " + ".join(p["ticker"] for p in picks)
+                        st.info(
+                            f"**🗓️ Plan:** Hoy compra **{tickers_comprar}** — "
+                            f"${monto_por:,.0f} {cfg['moneda']} c/u  |  "
+                            f"Rebalanceo: {rebal}"
+                        )
 
             st.caption(
-                f"Modelo: LGBMRegressor · features rank-normalizadas · horizonte {cfg['horizonte']}d"
+                f"Modelo: LGBMRegressor · features rank-normalizadas"
                 + (" · validación 2016-2024: +7.7% anual (7/9 años)" if slug == "bmv" else "")
             )
 

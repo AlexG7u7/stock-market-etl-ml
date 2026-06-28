@@ -142,7 +142,94 @@ def fetch_news_cryptopanic(ticker: str, max_items: int = 5) -> list[dict]:
         return []
 
 
-# ─── Router: elige la mejor fuente según el universo ─────────────────────────
+# ─── Fetch noticias de Google News RSS (gratis, sin key) ─────────────────────
+
+def fetch_news_google_rss(query: str, max_items: int = 5, lang: str = "es") -> list[dict]:
+    """
+    Google News RSS — gratis, sin key, cualquier query.
+    query: ej. "WALMEX BMV" o "Bitcoin ETF"
+    """
+    try:
+        import urllib.parse, xml.etree.ElementTree as ET
+        hl = "es-419" if lang == "es" else "en-US"
+        gl = "MX"     if lang == "es" else "US"
+        q  = urllib.parse.quote(query)
+        url = f"https://news.google.com/rss/search?q={q}&hl={hl}&gl={gl}&ceid={gl}:{lang}"
+        import requests as _req
+        r = _req.get(url, timeout=8,
+                     headers={"User-Agent": "Mozilla/5.0 (compatible; stockbot/1.0)"})
+        if not r.ok:
+            return []
+        root = ET.fromstring(r.content)
+        out  = []
+        for item in root.findall(".//item")[:max_items]:
+            title = item.findtext("title", "")
+            link  = item.findtext("link",  "")
+            pub   = item.findtext("pubDate", "")
+            if title:
+                out.append({
+                    "title":     title,
+                    "publisher": "Google News",
+                    "link":      link,
+                    "ago":       pub[:16] if pub else "",
+                    "fuente":    "Google News RSS",
+                })
+        return out
+    except Exception as e:
+        logger.debug(f"Google News RSS '{query}': {e}")
+        return []
+
+
+# ─── Fetch noticias de Alpha Vantage (25 req/día gratis, sentimiento incluido) 
+
+def fetch_news_alpha_vantage(ticker: str, max_items: int = 5) -> list[dict]:
+    """
+    Alpha Vantage News & Sentiment API.
+    Requiere ALPHA_VANTAGE_API_KEY (gratis en alphavantage.co).
+    Incluye sentimiento por artículo (bullish/bearish score).
+    Límite: 25 req/día en plan gratuito.
+    """
+    api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
+    if not api_key:
+        return []
+    try:
+        import requests
+        r = requests.get(
+            "https://www.alphavantage.co/query",
+            params={
+                "function": "NEWS_SENTIMENT",
+                "tickers":  ticker,
+                "apikey":   api_key,
+                "limit":    max_items,
+                "sort":     "LATEST",
+            },
+            timeout=10,
+        )
+        if not r.ok:
+            return []
+        feed = r.json().get("feed", [])
+        out  = []
+        for item in feed[:max_items]:
+            title = item.get("title", "")
+            if not title:
+                continue
+            # sentiment_label: Bullish / Bearish / Neutral
+            sent  = item.get("overall_sentiment_label", "")
+            score = item.get("overall_sentiment_score", "")
+            sent_icon = {"Bullish": "📈", "Bearish": "📉", "Neutral": "➡️"}.get(sent, "")
+            out.append({
+                "title":     f"{sent_icon} {title}" if sent_icon else title,
+                "publisher": item.get("source", "Alpha Vantage"),
+                "link":      item.get("url", ""),
+                "ago":       item.get("time_published", "")[:10],
+                "fuente":    "Alpha Vantage",
+                "sentiment": sent,
+                "score":     score,
+            })
+        return out
+    except Exception as e:
+        logger.debug(f"Alpha Vantage {ticker}: {e}")
+        return []
 
 def fetch_news_for_ticker(
     ticker: str,
@@ -151,25 +238,32 @@ def fetch_news_for_ticker(
     max_items: int = 5,
 ) -> list[dict]:
     """
-    Elige la mejor fuente de noticias según el universo:
-      - bmv/fibras   → DataBursátil primero, yfinance como fallback
-      - cripto       → CryptoPanic primero, yfinance como fallback
-      - usa/etfs     → yfinance (Yahoo Finance)
+    Prioridad por universo:
+      bmv/fibras → DataBursátil → Alpha Vantage → Google News RSS (español)
+      cripto     → CryptoPanic  → Alpha Vantage → yfinance
+      usa/etfs   → Alpha Vantage → yfinance → Google News RSS
     """
     if universe_slug in ("bmv", "fibras"):
         news = fetch_news_databursatil(ticker, max_items)
         if not news:
-            news = fetch_news_yfinance(sym, max_items)
+            news = fetch_news_alpha_vantage(ticker, max_items)
+        if not news:
+            news = fetch_news_google_rss(f"{ticker} BMV bolsa mexicana", max_items, lang="es")
         return news
 
     if universe_slug == "cripto":
         news = fetch_news_cryptopanic(ticker, max_items)
         if not news:
+            news = fetch_news_alpha_vantage(ticker, max_items)
+        if not news:
             news = fetch_news_yfinance(sym, max_items)
         return news
 
-    # usa / etfs → Yahoo Finance
-    return fetch_news_yfinance(sym, max_items)
+    # usa / etfs → Alpha Vantage (tiene sentimiento), luego yfinance
+    news = fetch_news_alpha_vantage(ticker, max_items)
+    if not news:
+        news = fetch_news_yfinance(sym, max_items)
+    return news
 
 
 def _ago(ts: int | None) -> str:
@@ -306,46 +400,47 @@ def analyze_batch(
 NEWS_SOURCES = {
     "🇲🇽 Acciones BMV": {
         "fuentes": [
-            {"nombre": "DataBursátil",  "tipo": "API",  "costo": "Incluida", "url": "https://databursatil.com/docs.html",     "cobertura": "Noticias BMV en tiempo real, cables financieros MX"},
-            {"nombre": "El Financiero", "tipo": "RSS",  "costo": "Gratis",   "url": "https://www.elfinanciero.com.mx/rss",    "cobertura": "Economía y finanzas México"},
-            {"nombre": "El Economista", "tipo": "RSS",  "costo": "Gratis",   "url": "https://www.eleconomista.com.mx/rss",   "cobertura": "Mercados mexicanos"},
-            {"nombre": "yfinance news", "tipo": "SDK",  "costo": "Gratis",   "url": "https://pypi.org/project/yfinance/",    "cobertura": "Noticias por ticker .MX"},
+            {"nombre": "DataBursátil",  "tipo": "API",  "costo": "Incluida",    "url": "https://databursatil.com/docs.html",     "cobertura": "Cables BMV en español, mercado MX del día"},
+            {"nombre": "Alpha Vantage", "tipo": "API",  "costo": "Gratis 25/d", "url": "https://alphavantage.co",                "cobertura": "Noticias + sentimiento (Bullish/Bearish) para tickers"},
+            {"nombre": "Google News",   "tipo": "RSS",  "costo": "Gratis",      "url": "https://news.google.com/rss",            "cobertura": "Búsqueda en español de cualquier ticker/empresa"},
+            {"nombre": "BIVA RSS",      "tipo": "RSS",  "costo": "Gratis",      "url": "https://www.biva.mx/cms/.../rss",        "cobertura": "Hechos relevantes y avisos oficiales de emisoras"},
+            {"nombre": "yfinance",      "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",     "cobertura": "Noticias Yahoo Finance (fallback)"},
         ],
-        "integrado": ["DataBursátil", "yfinance news"],
+        "integrado": ["DataBursátil", "Alpha Vantage", "Google News", "yfinance"],
     },
     "🇺🇸 Acciones USA (SIC)": {
         "fuentes": [
-            {"nombre": "yfinance news",   "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",          "cobertura": "Noticias por ticker NYSE/Nasdaq"},
-            {"nombre": "Alpha Vantage",   "tipo": "API",  "costo": "Gratis 25/d", "url": "https://www.alphavantage.co/",                "cobertura": "News + sentimiento para acciones USA"},
-            {"nombre": "Polygon.io",      "tipo": "API",  "costo": "Gratis 5/min","url": "https://polygon.io/docs/stocks/get_v2_reference_news", "cobertura": "Noticias + earnings USA"},
-            {"nombre": "Reuters RSS",     "tipo": "RSS",  "costo": "Gratis",      "url": "https://feeds.reuters.com/reuters/businessNews", "cobertura": "Negocios y finanzas globales"},
+            {"nombre": "Alpha Vantage", "tipo": "API",  "costo": "Gratis 25/d", "url": "https://alphavantage.co",                            "cobertura": "Noticias + sentimiento Bullish/Bearish para NYSE/Nasdaq"},
+            {"nombre": "yfinance",      "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",                  "cobertura": "Yahoo Finance news por ticker"},
+            {"nombre": "Polygon.io",    "tipo": "API",  "costo": "Gratis 5/min","url": "https://polygon.io/docs/stocks/get_v2_reference_news", "cobertura": "Noticias + earnings USA, tiempo real"},
+            {"nombre": "Google News",   "tipo": "RSS",  "costo": "Gratis",      "url": "https://news.google.com/rss",                         "cobertura": "Cualquier ticker en inglés"},
         ],
-        "integrado": ["yfinance news"],
+        "integrado": ["Alpha Vantage", "yfinance"],
+        "proximos":  ["Polygon.io"],
     },
     "📦 ETFs": {
         "fuentes": [
-            {"nombre": "yfinance news",  "tipo": "SDK",  "costo": "Gratis",   "url": "https://pypi.org/project/yfinance/",        "cobertura": "Noticias por ETF (SPY, QQQ, etc.)"},
-            {"nombre": "ETF.com RSS",    "tipo": "RSS",  "costo": "Gratis",   "url": "https://www.etf.com/rss",                   "cobertura": "Flujos de capital en ETFs"},
-            {"nombre": "Seeking Alpha",  "tipo": "API",  "costo": "$29/mes",  "url": "https://seekingalpha.com/api/v3/articles",  "cobertura": "Análisis de ETFs con IA"},
+            {"nombre": "Alpha Vantage", "tipo": "API",  "costo": "Gratis 25/d", "url": "https://alphavantage.co",               "cobertura": "Noticias + sentimiento para ETFs (SPY, QQQ, GLD...)"},
+            {"nombre": "yfinance",      "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",     "cobertura": "Yahoo Finance news por ETF"},
+            {"nombre": "ETF.com RSS",   "tipo": "RSS",  "costo": "Gratis",      "url": "https://www.etf.com/rss",                "cobertura": "Flujos de capital y análisis de ETFs"},
         ],
-        "integrado": ["yfinance news"],
+        "integrado": ["Alpha Vantage", "yfinance"],
     },
     "₿ Cripto (proxies GBM)": {
         "fuentes": [
-            {"nombre": "CryptoPanic",     "tipo": "API",  "costo": "Gratis 1k/mes","url": "https://cryptopanic.com/developers/api/",   "cobertura": "Noticias cripto con sentimiento por coin (BTC, ETH, COIN...)"},
-            {"nombre": "CoinGecko",       "tipo": "API",  "costo": "Gratis 30/min","url": "https://www.coingecko.com/api/v3",           "cobertura": "Precios + noticias cripto globales"},
-            {"nombre": "yfinance news",   "tipo": "SDK",  "costo": "Gratis",       "url": "https://pypi.org/project/yfinance/",         "cobertura": "Noticias de IBIT, MSTR, COIN (fallback)"},
-            {"nombre": "Decrypt RSS",     "tipo": "RSS",  "costo": "Gratis",       "url": "https://decrypt.co/feed",                    "cobertura": "Noticias BTC/ETH en tiempo real"},
+            {"nombre": "CryptoPanic",   "tipo": "API",  "costo": "Gratis c/key","url": "https://cryptopanic.com/developers/api/",   "cobertura": "Noticias BTC/ETH con sentimiento, 1k req/mes gratis"},
+            {"nombre": "Alpha Vantage", "tipo": "API",  "costo": "Gratis 25/d", "url": "https://alphavantage.co",                   "cobertura": "Noticias IBIT, MSTR, COIN con sentimiento"},
+            {"nombre": "yfinance",      "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",         "cobertura": "Yahoo Finance (fallback)"},
+            {"nombre": "Decrypt RSS",   "tipo": "RSS",  "costo": "Gratis",      "url": "https://decrypt.co/feed",                    "cobertura": "Noticias BTC/ETH en tiempo real"},
         ],
-        "integrado": ["CryptoPanic", "yfinance news"],
-        "proximos":  ["CoinGecko"],
+        "integrado": ["CryptoPanic", "Alpha Vantage", "yfinance"],
     },
     "🏢 FIBRAs (bienes raíces MX)": {
         "fuentes": [
-            {"nombre": "DataBursátil",    "tipo": "API",  "costo": "Incluida",  "url": "https://databursatil.com/docs.html",          "cobertura": "Noticias FIBRAs en tiempo real"},
-            {"nombre": "AMEFIBRA",        "tipo": "Web",  "costo": "Gratis",    "url": "https://amefibra.com/noticias/",               "cobertura": "Reportes trimestrales FIBRA"},
-            {"nombre": "yfinance news",   "tipo": "SDK",  "costo": "Gratis",    "url": "https://pypi.org/project/yfinance/",           "cobertura": "Noticias de FIBRAs listadas"},
+            {"nombre": "DataBursátil",  "tipo": "API",  "costo": "Incluida",    "url": "https://databursatil.com/docs.html",     "cobertura": "Cables BMV en español (FIBRAs incluidas)"},
+            {"nombre": "Google News",   "tipo": "RSS",  "costo": "Gratis",      "url": "https://news.google.com/rss",            "cobertura": "Noticias FUNO, FIBRAPL, TERRA en español"},
+            {"nombre": "yfinance",      "tipo": "SDK",  "costo": "Gratis",      "url": "https://pypi.org/project/yfinance/",     "cobertura": "Yahoo Finance (fallback)"},
         ],
-        "integrado": ["DataBursátil", "yfinance news"],
+        "integrado": ["DataBursátil", "Alpha Vantage", "Google News", "yfinance"],
     },
 }
