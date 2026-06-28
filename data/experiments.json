@@ -1,0 +1,125 @@
+{
+  "lever1_horizon": {
+    "h5": {
+      "total_ret": -2.35,
+      "sharpe": 0.017,
+      "max_dd": -18.93,
+      "n_periods": 52,
+      "n_trades": 120,
+      "trade_win_rate": 0.508,
+      "final_equity": 97648.71,
+      "auc_primary": 0.5264,
+      "auc_meta": 0.5593,
+      "n_train": 95064,
+      "train_start": "2008-03-12"
+    },
+    "h10": {
+      "total_ret": -16.03,
+      "sharpe": -0.899,
+      "max_dd": -16.03,
+      "n_periods": 4,
+      "n_trades": 8,
+      "trade_win_rate": 0.375,
+      "final_equity": 83968.53,
+      "auc_primary": 0.5373,
+      "auc_meta": 0.5838,
+      "n_train": 95064,
+      "train_start": "2008-03-12"
+    },
+    "h15": {
+      "total_ret": -11.28,
+      "sharpe": -0.394,
+      "max_dd": -17.14,
+      "n_periods": 10,
+      "n_trades": 20,
+      "trade_win_rate": 0.4,
+      "final_equity": 88717.57,
+      "auc_primary": 0.5325,
+      "auc_meta": 0.5953,
+      "n_train": 95064,
+      "train_start": "2008-03-12"
+    }
+  },
+  "lever2_vix": {
+    "sin_vix": {
+      "total_ret": -2.35,
+      "sharpe": 0.017,
+      "max_dd": -18.93,
+      "n_periods": 52,
+      "n_trades": 120,
+      "trade_win_rate": 0.508,
+      "final_equity": 97648.71,
+      "auc_primary": 0.5264,
+      "auc_meta": 0.5593,
+      "n_train": 95064,
+      "train_start": "2008-03-12"
+    },
+    "con_vix": {
+      "total_ret": -6.63,
+      "sharpe": -0.269,
+      "max_dd": -8.28,
+      "n_periods": 16,
+      "n_trades": 23,
+      "trade_win_rate": 0.478,
+      "final_equity": 93368.54,
+      "auc_primary": 0.5283,
+      "auc_meta": 0.5636,
+      "n_train": 95042,
+      "train_start": "2008-03-14"
+    }
+  },
+  "lever3_window": {
+    "todo (2008+)": {
+      "total_ret": -2.35,
+      "sharpe": 0.017,
+      "max_dd": -18.93,
+      "n_periods": 52,
+      "n_trades": 120,
+      "trade_win_rate": 0.508,
+      "final_equity": 97648.71,
+      "auc_primary": 0.5264,
+      "auc_meta": 0.5593,
+      "n_train": 95064,
+      "train_start": "2008-03-12"
+    },
+    "desde 2016": {
+      "total_ret": -12.54,
+      "sharpe": -0.562,
+      "max_dd": -16.15,
+      "n_periods": 7,
+      "n_trades": 7,
+      "trade_win_rate": 0.286,
+      "final_equity": 87459.82,
+      "auc_primary": 0.5216,
+      "auc_meta": 0.5403,
+      "n_train": 51364,
+      "train_start": "2016-01-04"
+    },
+    "desde 2019": {
+      "total_ret": -3.67,
+      "sharpe": -0.012,
+      "max_dd": -19.84,
+      "n_periods": 57,
+      "n_trades": 137,
+      "trade_win_rate": 0.511,
+      "final_equity": 96325.98,
+      "auc_primary": 0.5273,
+      "auc_meta": 0.5867,
+      "n_train": 30473,
+      "train_start": "2019-01-02"
+    },
+    "desde 2021": {
+      "total_ret": -17.59,
+      "sharpe": -0.423,
+      "max_dd": -19.73,
+      "n_periods": 49,
+      "n_trades": 143,
+      "trade_win_rate": 0.399,
+      "final_equity": 82409.26,
+      "auc_primary": 0.5243,
+      "auc_meta": 0.6641,
+      "n_train": 16039,
+      "train_start": "2021-01-04"
+    }
+  }
+}

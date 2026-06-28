@@ -1,0 +1,387 @@
+[
+  {
+    "ticker": "LABB",
+    "price": 15.04,
+    "ret_1d": 2.59,
+    "ret_1w": 2.66,
+    "ret_1m": -6.35,
+    "rsi": 55.2,
+    "sma20": 14.93,
+    "sma50": 16.0,
+    "vol_ratio": 1.03,
+    "pos_52w": 14.6,
+    "score": 40.0,
+    "direction": "COMPRA",
+    "signals": [
+      "Sobre SMA20",
+      "Mom+1S 2.7%",
+      "Cerca mín 52s"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "FEMSAUBD",
+    "price": 219.34,
+    "ret_1d": 1.42,
+    "ret_1w": -0.03,
+    "ret_1m": 2.94,
+    "rsi": 56.4,
+    "sma20": 215.4,
+    "sma50": 210.2,
+    "vol_ratio": 0.59,
+    "pos_52w": 85.6,
+    "score": 35.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "Sobre SMA20",
+      "SMA20 > SMA50"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "Q",
+    "price": 175.96,
+    "ret_1d": 1.31,
+    "ret_1w": 0.6,
+    "ret_1m": -0.91,
+    "rsi": 63.4,
+    "sma20": 172.79,
+    "sma50": 172.19,
+    "vol_ratio": 0.94,
+    "pos_52w": 67.3,
+    "score": 35.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "Sobre SMA20",
+      "SMA20 > SMA50"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "VOLARA",
+    "price": 16.55,
+    "ret_1d": 2.6,
+    "ret_1w": 6.71,
+    "ret_1m": 26.24,
+    "rsi": 85.6,
+    "sma20": 14.27,
+    "sma50": 13.36,
+    "vol_ratio": 1.43,
+    "pos_52w": 100.0,
+    "score": 35.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "RSI alto",
+      "Sobre SMA20",
+      "SMA20 > SMA50",
+      "Mom+1S 6.7%",
+      "Cerca máx 52s"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "KIMBERA",
+    "price": 38.24,
+    "ret_1d": 2.71,
+    "ret_1w": 3.18,
+    "ret_1m": -2.07,
+    "rsi": 58.2,
+    "sma20": 37.47,
+    "sma50": 38.72,
+    "vol_ratio": 0.93,
+    "pos_52w": 34.8,
+    "score": 30.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "Sobre SMA20",
+      "Mom+1S 3.2%"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "MEGACPO",
+    "price": 59.47,
+    "ret_1d": 2.43,
+    "ret_1w": 3.43,
+    "ret_1m": -1.67,
+    "rsi": 49.4,
+    "sma20": 58.62,
+    "sma50": 59.68,
+    "vol_ratio": 0.72,
+    "pos_52w": 41.1,
+    "score": 30.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "Sobre SMA20",
+      "Mom+1S 3.4%"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "ALSEA",
+    "price": 44.33,
+    "ret_1d": -1.23,
+    "ret_1w": -4.93,
+    "ret_1m": -16.3,
+    "rsi": 25.4,
+    "sma20": 48.55,
+    "sma50": 50.72,
+    "vol_ratio": 1.56,
+    "pos_52w": 0.0,
+    "score": 20.0,
+    "direction": "VIGILAR",
+    "signals": [
+      "RSI oversold",
+      "Bajo SMA20",
+      "Mom-1S -4.9%",
+      "Vol x1.6",
+      "Cerca mín 52s"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "GFNORTEO",
+    "price": 185.97,
+    "ret_1d": 2.09,
+    "ret_1w": -2.94,
+    "ret_1m": -6.99,
+    "rsi": 62.6,
+    "sma20": 183.3,
+    "sma50": 188.4,
+    "vol_ratio": 0.95,
+    "pos_52w": 44.7,
+    "score": 15.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "PINFRA",
+    "price": 280.12,
+    "ret_1d": 2.36,
+    "ret_1w": -0.93,
+    "ret_1m": -1.09,
+    "rsi": 64.2,
+    "sma20": 275.38,
+    "sma50": 281.6,
+    "vol_ratio": 0.82,
+    "pos_52w": 43.2,
+    "score": 15.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "NAFTRAC",
+    "price": 67.62,
+    "ret_1d": 1.79,
+    "ret_1w": -1.27,
+    "ret_1m": -2.11,
+    "rsi": 50.2,
+    "sma20": 67.5,
+    "sma50": 68.23,
+    "vol_ratio": 0.49,
+    "pos_52w": 53.0,
+    "score": 15.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "GRUMAB",
+    "price": 282.99,
+    "ret_1d": 0.77,
+    "ret_1w": -1.92,
+    "ret_1m": -4.85,
+    "rsi": 42.6,
+    "sma20": 289.55,
+    "sma50": 295.14,
+    "vol_ratio": 0.77,
+    "pos_52w": 5.1,
+    "score": 10.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "RSI bajo",
+      "Bajo SMA20",
+      "Cerca mín 52s"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "CEMEXCPO",
+    "price": 21.68,
+    "ret_1d": 2.65,
+    "ret_1w": -2.12,
+    "ret_1m": -5.78,
+    "rsi": 49.7,
+    "sma20": 21.89,
+    "sma50": 21.87,
+    "vol_ratio": 0.81,
+    "pos_52w": 56.6,
+    "score": 5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Bajo SMA20",
+      "SMA20 > SMA50"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "ASURB",
+    "price": 541.09,
+    "ret_1d": 1.87,
+    "ret_1w": 1.27,
+    "ret_1m": 2.01,
+    "rsi": 67.9,
+    "sma20": 513.24,
+    "sma50": 528.49,
+    "vol_ratio": 0.45,
+    "pos_52w": 42.6,
+    "score": 5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "RSI alto",
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "OMAB",
+    "price": 243.69,
+    "ret_1d": 2.87,
+    "ret_1w": -1.36,
+    "ret_1m": 9.9,
+    "rsi": 75.5,
+    "sma20": 226.22,
+    "sma50": 230.26,
+    "vol_ratio": 1.23,
+    "pos_52w": 72.2,
+    "score": 5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "RSI alto",
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "GAPB",
+    "price": 444.19,
+    "ret_1d": 2.6,
+    "ret_1w": 0.61,
+    "ret_1m": 4.53,
+    "rsi": 71.3,
+    "sma20": 416.67,
+    "sma50": 424.74,
+    "vol_ratio": 0.46,
+    "pos_52w": 71.3,
+    "score": 5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "RSI alto",
+      "Sobre SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "ORBIA",
+    "price": 21.92,
+    "ret_1d": 1.67,
+    "ret_1w": 3.89,
+    "ret_1m": -2.84,
+    "rsi": 50.0,
+    "sma20": 22.02,
+    "sma50": 22.09,
+    "vol_ratio": 0.79,
+    "pos_52w": 41.6,
+    "score": 0.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Bajo SMA20",
+      "Mom+1S 3.9%"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  },
+  {
+    "ticker": "WALMEX",
+    "price": 51.12,
+    "ret_1d": -0.7,
+    "ret_1w": 1.59,
+    "ret_1m": -6.63,
+    "rsi": 50.1,
+    "sma20": 51.44,
+    "sma50": 53.76,
+    "vol_ratio": 0.7,
+    "pos_52w": 11.1,
+    "score": -5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Bajo SMA20",
+      "Cerca mín 52s"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "GMEXICOB",
+    "price": 202.99,
+    "ret_1d": 3.23,
+    "ret_1w": -5.24,
+    "ret_1m": -5.86,
+    "rsi": 50.7,
+    "sma20": 208.84,
+    "sma50": 205.56,
+    "vol_ratio": 0.58,
+    "pos_52w": 54.7,
+    "score": -5.0,
+    "direction": "NEUTRO",
+    "signals": [
+      "Bajo SMA20",
+      "SMA20 > SMA50",
+      "Mom-1S -5.2%"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "BIMBOA",
+    "price": 56.38,
+    "ret_1d": 2.12,
+    "ret_1w": -1.36,
+    "ret_1m": -5.24,
+    "rsi": 52.7,
+    "sma20": 57.27,
+    "sma50": 57.63,
+    "vol_ratio": 0.67,
+    "pos_52w": 41.8,
+    "score": -15.0,
+    "direction": "EVITAR",
+    "signals": [
+      "Bajo SMA20"
+    ],
+    "fetched_at": "2026-06-26 18:23"
+  },
+  {
+    "ticker": "GCARSOA1",
+    "price": 135.29,
+    "ret_1d": 1.15,
+    "ret_1w": -11.47,
+    "ret_1m": -0.96,
+    "rsi": 56.2,
+    "sma20": 136.68,
+    "sma50": 138.09,
+    "vol_ratio": 0.47,
+    "pos_52w": 23.3,
+    "score": -25.0,
+    "direction": "EVITAR",
+    "signals": [
+      "Bajo SMA20",
+      "Mom-1S -11.5%"
+    ],
+    "fetched_at": "2026-06-26 18:24"
+  }
+]

@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "horizon": 5,
+    "mult_target": 1.5,
+    "mult_stop": 1.5,
+    "train_ratio": 0.8,
+    "primary_thresh": 0.53,
+    "meta_thresh": 0.5,
+    "train_start": "2008-03-12",
+    "train_end": "2023-03-14",
+    "test_start": "0",
+    "n_train": 95064,
+    "n_test": 23791
+  },
+  "barrier_stats": {
+    "n": 118855,
+    "win_rate": 0.5032,
+    "avg_ret": 0.0964,
+    "avg_bars": 3.9,
+    "pct_target": 0.2718,
+    "pct_stop": 0.2583,
+    "pct_time": 0.4699
+  },
+  "auc_primary": 0.5264,
+  "auc_meta": 0.5593,
+  "meta_precision": 0.5483,
+  "meta_recall": 0.5499,
+  "meta_cut": 0.6931,
+  "strategy_base": {
+    "n": 3102,
+    "win_rate": 0.4877,
+    "avg_ret": -0.0987,
+    "sharpe": -0.174,
+    "profit_factor": 0.944,
+    "total_ret": -306.16
+  },
+  "strategy_meta": {
+    "n": 1551,
+    "win_rate": 0.4848,
+    "avg_ret": -0.0365,
+    "sharpe": -0.066,
+    "profit_factor": 0.978,
+    "total_ret": -56.68
+  },
+  "selectivity_sweep": [
+    {
+      "quantile": 0.0,
+      "cut": 0.0,
+      "n": 3102,
+      "win_rate": 0.4877,
+      "avg_ret": -0.0987,
+      "sharpe": -0.174,
+      "profit_factor": 0.944,
+      "total_ret": -306.16
+    },
+    {
+      "quantile": 0.5,
+      "cut": 0.6931,
+      "n": 1551,
+      "win_rate": 0.4848,
+      "avg_ret": -0.0365,
+      "sharpe": -0.066,
+      "profit_factor": 0.978,
+      "total_ret": -56.68
+    },
+    {
+      "quantile": 0.7,
+      "cut": 0.7327,
+      "n": 931,
+      "win_rate": 0.4726,
+      "avg_ret": -0.0801,
+      "sharpe": -0.141,
+      "profit_factor": 0.954,
+      "total_ret": -74.56
+    },
+    {
+      "quantile": 0.8,
+      "cut": 0.7583,
+      "n": 621,
+      "win_rate": 0.4831,
+      "avg_ret": -0.0338,
+      "sharpe": -0.059,
+      "profit_factor": 0.98,
+      "total_ret": -21.0
+    },
+    {
+      "quantile": 0.9,
+      "cut": 0.7902,
+      "n": 311,
+      "win_rate": 0.4791,
+      "avg_ret": -0.067,
+      "sharpe": -0.119,
+      "profit_factor": 0.96,
+      "total_ret": -20.82
+    },
+    {
+      "quantile": 0.95,
+      "cut": 0.8071,
+      "n": 156,
+      "win_rate": 0.5064,
+      "avg_ret": 0.1197,
+      "sharpe": 0.2,
+      "profit_factor": 1.071,
+      "total_ret": 18.67
+    }
+  ],
+  "improvement": {
+    "win_rate_delta": -0.29,
+    "profit_factor_delta": 0.034,
+    "trades_filtered": 1551
+  },
+  "meta_feat_importance": [
+    {
+      "feature": "mkt_ret10",
+      "importance": 462
+    },
+    {
+      "feature": "williams_r",
+      "importance": 462
+    },
+    {
+      "feature": "_primary_p",
+      "importance": 388
+    },
+    {
+      "feature": "mkt_trend",
+      "importance": 354
+    },
+    {
+      "feature": "cs_vol_rank",
+      "importance": 346
+    },
+    {
+      "feature": "sp500_ret5",
+      "importance": 332
+    },
+    {
+      "feature": "usdmxn_vs_ma20",
+      "importance": 309
+    },
+    {
+      "feature": "wti_ret5",
+      "importance": 289
+    },
+    {
+      "feature": "usdmxn_ret5",
+      "importance": 285
+    },
+    {
+      "feature": "_primary_edge",
+      "importance": 229
+    },
+    {
+      "feature": "cs_mean_rev",
+      "importance": 213
+    },
+    {
+      "feature": "pos_52w",
+      "importance": 175
+    },
+    {
+      "feature": "bb_width",
+      "importance": 169
+    },
+    {
+      "feature": "vol_ratio_20",
+      "importance": 149
+    },
+    {
+      "feature": "sma20_vs_sma50",
+      "importance": 145
+    }
+  ]
+}

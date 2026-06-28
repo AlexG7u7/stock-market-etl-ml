@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "date": "2026-06-27 21:29",
+    "train_ratio": 0.8,
+    "cutoff_date": "2022-10-26",
+    "train_start": "2008-03-12",
+    "train_end": "2022-10-25",
+    "test_start": "2022-10-26",
+    "test_end": "2026-06-26",
+    "n_train": 63762,
+    "n_test": 16896,
+    "n_features": 12,
+    "base_rate_train": 0.2971,
+    "base_rate_test": 0.2951
+  },
+  "performance": {
+    "auc": 0.546,
+    "brier": 0.207,
+    "n_signals": 17,
+    "signal_pct": 0.1,
+    "win_rate": 0.4118,
+    "mean_ret": 1.989,
+    "std_ret": 5.866,
+    "sharpe": 2.408,
+    "profit_factor": 2.606
+  },
+  "calibration": [
+    {
+      "bucket": "0.40–0.45",
+      "n": 235,
+      "mean_pred": 0.4203,
+      "actual_rate": 0.4298
+    },
+    {
+      "bucket": "0.45–0.50",
+      "n": 61,
+      "mean_pred": 0.4666,
+      "actual_rate": 0.3607
+    },
+    {
+      "bucket": "0.50–0.55",
+      "n": 21,
+      "mean_pred": 0.519,
+      "actual_rate": 0.3333
+    },
+    {
+      "bucket": "0.55–0.60",
+      "n": 7,
+      "mean_pred": 0.5662,
+      "actual_rate": 0.2857
+    }
+  ],
+  "ticker_stats": [
+    {
+      "ticker": "ASURB",
+      "n": 1,
+      "win_rate": 1.0,
+      "mean_ret": 8.27
+    },
+    {
+      "ticker": "GAPB",
+      "n": 2,
+      "win_rate": 0.5,
+      "mean_ret": 3.85
+    },
+    {
+      "ticker": "MEGACPO",
+      "n": 1,
+      "win_rate": 1.0,
+      "mean_ret": 2.45
+    },
+    {
+      "ticker": "OMAB",
+      "n": 5,
+      "win_rate": 0.0,
+      "mean_ret": -0.39
+    },
+    {
+      "ticker": "VOLARA",
+      "n": 8,
+      "win_rate": 0.5,
+      "mean_ret": 2.17
+    }
+  ],
+  "iv_summary": [
+    {
+      "feature": "atr_pct",
+      "iv": 0.05591
+    },
+    {
+      "feature": "bb_width",
+      "iv": 0.03241
+    },
+    {
+      "feature": "hl_range_pct",
+      "iv": 0.032
+    },
+    {
+      "feature": "ret_5d",
+      "iv": 0.02545
+    },
+    {
+      "feature": "price_vs_sma20",
+      "iv": 0.02352
+    },
+    {
+      "feature": "sp500_ret5",
+      "iv": 0.02279
+    },
+    {
+      "feature": "trend_5d",
+      "iv": 0.02253
+    },
+    {
+      "feature": "ret_10d",
+      "iv": 0.02139
+    },
+    {
+      "feature": "price_vs_sma50",
+      "iv": 0.02096
+    },
+    {
+      "feature": "ret_20d",
+      "iv": 0.02025
+    },
+    {
+      "feature": "mkt_trend",
+      "iv": 0.01866
+    },
+    {
+      "feature": "sma20_vs_sma50",
+      "iv": 0.01849
+    }
+  ],
+  "coefficients": [
+    {
+      "feature": "sma20_vs_sma50",
+      "coef": 0.45310086615758083
+    },
+    {
+      "feature": "price_vs_sma20",
+      "coef": 0.4434500827522346
+    },
+    {
+      "feature": "atr_pct",
+      "coef": 0.1697277958637608
+    },
+    {
+      "feature": "mkt_trend",
+      "coef": 0.07547542968466536
+    },
+    {
+      "feature": "hl_range_pct",
+      "coef": 0.05368220629235041
+    },
+    {
+      "feature": "bb_width",
+      "coef": 0.03085624995335658
+    },
+    {
+      "feature": "ret_20d",
+      "coef": 0.006096607275073542
+    },
+    {
+      "feature": "ret_10d",
+      "coef": -0.014176002127961038
+    },
+    {
+      "feature": "ret_5d",
+      "coef": -0.02713874793650292
+    },
+    {
+      "feature": "trend_5d",
+      "coef": -0.03647594799959835
+    },
+    {
+      "feature": "sp500_ret5",
+      "coef": -0.059473012134220585
+    },
+    {
+      "feature": "price_vs_sma50",
+      "coef": -0.7432346837087425
+    }
+  ],
+  "wf_comparison": {
+    "note": "Walk-forward AUC promedio está en model_results.json para comparación",
+    "holdout_auc": 0.546
+  }
+}

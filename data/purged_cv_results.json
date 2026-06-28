@@ -1,0 +1,97 @@
+{
+  "folds": [
+    {
+      "fold": 1,
+      "test_start": "2025-02-12",
+      "test_end": "2026-06-26",
+      "n_test": 9907,
+      "n_train": 108963,
+      "auc": 0.5151,
+      "sharpe": -0.034,
+      "win_rate": 0.498,
+      "n_signals": 2894,
+      "w_lr": 0.747,
+      "w_lgbm": 0.253
+    },
+    {
+      "fold": 2,
+      "test_start": "2023-09-28",
+      "test_end": "2025-02-12",
+      "n_test": 9907,
+      "n_train": 99056,
+      "auc": 0.5206,
+      "sharpe": 0.155,
+      "win_rate": 0.511,
+      "n_signals": 2889,
+      "w_lr": 0.878,
+      "w_lgbm": 0.122
+    },
+    {
+      "fold": 3,
+      "test_start": "2022-05-25",
+      "test_end": "2023-09-28",
+      "n_test": 9907,
+      "n_train": 89149,
+      "auc": 0.5152,
+      "sharpe": 0.151,
+      "win_rate": 0.511,
+      "n_signals": 3288,
+      "w_lr": 0.578,
+      "w_lgbm": 0.422
+    },
+    {
+      "fold": 4,
+      "test_start": "2021-01-13",
+      "test_end": "2022-05-25",
+      "n_test": 9907,
+      "n_train": 79242,
+      "auc": 0.514,
+      "sharpe": 0.182,
+      "win_rate": 0.513,
+      "n_signals": 3676,
+      "w_lr": 0.578,
+      "w_lgbm": 0.422
+    },
+    {
+      "fold": 5,
+      "test_start": "2019-08-29",
+      "test_end": "2021-01-13",
+      "n_test": 9907,
+      "n_train": 69335,
+      "auc": 0.5207,
+      "sharpe": 0.488,
+      "win_rate": 0.534,
+      "n_signals": 3706,
+      "w_lr": 0.46,
+      "w_lgbm": 0.54
+    },
+    {
+      "fold": 6,
+      "test_start": "2018-04-12",
+      "test_end": "2019-08-29",
+      "n_test": 9907,
+      "n_train": 59428,
+      "auc": 0.5317,
+      "sharpe": 0.029,
+      "win_rate": 0.502,
+      "n_signals": 3930,
+      "w_lr": 0.648,
+      "w_lgbm": 0.352
+    }
+  ],
+  "aggregate": {
+    "mean_auc": 0.5196,
+    "std_auc": 0.006,
+    "mean_sharpe": 0.162,
+    "mean_win_rate": 0.511,
+    "deflated_sharpe_ratio": 0.0,
+    "dsr_interpretation": "⚠️ Edge débil, posible sobreajuste",
+    "total_signals": 20383
+  },
+  "meta": {
+    "n_splits": 6,
+    "embargo": 10,
+    "horizon": 5,
+    "n_features": 38
+  }
+}

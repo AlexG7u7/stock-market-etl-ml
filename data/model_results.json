@@ -1,0 +1,4795 @@
+{
+  "meta": {
+    "date": "2026-06-27 19:21",
+    "n_obs": 10355,
+    "n_tickers": 19,
+    "train_days": 252,
+    "test_days": 63,
+    "step_days": 21,
+    "horizon": 5,
+    "features": [
+      "williams_r",
+      "stoch_k",
+      "ret_10d",
+      "bb_pct",
+      "price_vs_sma20",
+      "cci_20",
+      "mfi_14",
+      "rsi_14"
+    ]
+  },
+  "aggregate": {
+    "n_folds": 11,
+    "mean_auc_lr": 0.5339,
+    "std_auc_lr": 0.023,
+    "mean_auc_lgbm": 0.5139,
+    "std_auc_lgbm": 0.017,
+    "mean_brier_lr": 0.251,
+    "mean_brier_lgbm": 0.2508,
+    "mean_event_rate": 0.5088
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "train_start": "2024-04-24",
+      "train_end": "2025-04-25",
+      "test_start": "2025-04-28",
+      "test_end": "2025-07-24",
+      "n_train": 4788,
+      "n_test": 1197,
+      "event_rate": 0.5088,
+      "auc_lr": 0.5104,
+      "auc_lgbm": 0.506,
+      "brier_lr": 0.2533,
+      "brier_lgbm": 0.2509
+    },
+    {
+      "fold": 1,
+      "train_start": "2024-04-24",
+      "train_end": "2025-05-27",
+      "test_start": "2025-05-28",
+      "test_end": "2025-08-22",
+      "n_train": 5187,
+      "n_test": 1197,
+      "event_rate": 0.4979,
+      "auc_lr": 0.5253,
+      "auc_lgbm": 0.5105,
+      "brier_lr": 0.2515,
+      "brier_lgbm": 0.2517
+    },
+    {
+      "fold": 2,
+      "train_start": "2024-04-24",
+      "train_end": "2025-06-25",
+      "test_start": "2025-06-26",
+      "test_end": "2025-09-23",
+      "n_train": 5586,
+      "n_test": 1197,
+      "event_rate": 0.5539,
+      "auc_lr": 0.5244,
+      "auc_lgbm": 0.5369,
+      "brier_lr": 0.2544,
+      "brier_lgbm": 0.2528
+    },
+    {
+      "fold": 3,
+      "train_start": "2024-04-24",
+      "train_end": "2025-07-24",
+      "test_start": "2025-07-25",
+      "test_end": "2025-10-22",
+      "n_train": 5985,
+      "n_test": 1197,
+      "event_rate": 0.5171,
+      "auc_lr": 0.5026,
+      "auc_lgbm": 0.4782,
+      "brier_lr": 0.2544,
+      "brier_lgbm": 0.2509
+    },
+    {
+      "fold": 4,
+      "train_start": "2024-04-24",
+      "train_end": "2025-08-22",
+      "test_start": "2025-08-25",
+      "test_end": "2025-11-21",
+      "n_train": 6384,
+      "n_test": 1197,
+      "event_rate": 0.5096,
+      "auc_lr": 0.5044,
+      "auc_lgbm": 0.5084,
+      "brier_lr": 0.252,
+      "brier_lgbm": 0.2504
+    },
+    {
+      "fold": 5,
+      "train_start": "2024-04-24",
+      "train_end": "2025-09-23",
+      "test_start": "2025-09-24",
+      "test_end": "2025-12-23",
+      "n_train": 6783,
+      "n_test": 1197,
+      "event_rate": 0.4787,
+      "auc_lr": 0.5258,
+      "auc_lgbm": 0.504,
+      "brier_lr": 0.2497,
+      "brier_lgbm": 0.2501
+    },
+    {
+      "fold": 6,
+      "train_start": "2024-04-24",
+      "train_end": "2025-10-22",
+      "test_start": "2025-10-23",
+      "test_end": "2026-01-23",
+      "n_train": 7182,
+      "n_test": 1197,
+      "event_rate": 0.5405,
+      "auc_lr": 0.5509,
+      "auc_lgbm": 0.5195,
+      "brier_lr": 0.2496,
+      "brier_lgbm": 0.2507
+    },
+    {
+      "fold": 7,
+      "train_start": "2024-04-24",
+      "train_end": "2025-11-21",
+      "test_start": "2025-11-24",
+      "test_end": "2026-02-24",
+      "n_train": 7581,
+      "n_test": 1197,
+      "event_rate": 0.5556,
+      "auc_lr": 0.5594,
+      "auc_lgbm": 0.5086,
+      "brier_lr": 0.2506,
+      "brier_lgbm": 0.2512
+    },
+    {
+      "fold": 8,
+      "train_start": "2024-04-24",
+      "train_end": "2025-12-23",
+      "test_start": "2025-12-24",
+      "test_end": "2026-03-26",
+      "n_train": 7980,
+      "n_test": 1197,
+      "event_rate": 0.5388,
+      "auc_lr": 0.5555,
+      "auc_lgbm": 0.5266,
+      "brier_lr": 0.2489,
+      "brier_lgbm": 0.2503
+    },
+    {
+      "fold": 9,
+      "train_start": "2024-04-24",
+      "train_end": "2026-01-23",
+      "test_start": "2026-01-26",
+      "test_end": "2026-04-29",
+      "n_train": 8379,
+      "n_test": 1197,
+      "event_rate": 0.4795,
+      "auc_lr": 0.5473,
+      "auc_lgbm": 0.5149,
+      "brier_lr": 0.2483,
+      "brier_lgbm": 0.2501
+    },
+    {
+      "fold": 10,
+      "train_start": "2024-04-24",
+      "train_end": "2026-02-24",
+      "test_start": "2026-02-25",
+      "test_end": "2026-05-29",
+      "n_train": 8778,
+      "n_test": 1197,
+      "event_rate": 0.416,
+      "auc_lr": 0.5668,
+      "auc_lgbm": 0.5397,
+      "brier_lr": 0.2484,
+      "brier_lgbm": 0.25
+    }
+  ],
+  "strategy": {
+    "logistic": {
+      "threshold": 0.55,
+      "n_signals": 1252,
+      "n_total": 13167,
+      "signal_pct": 9.5,
+      "win_rate": 0.5224,
+      "mean_ret": 0.5176,
+      "std_ret": 4.7418,
+      "sharpe": 0.775,
+      "calibration": [
+        {
+          "bucket": "0.40–0.45",
+          "mean_pred": 0.4297,
+          "actual_rate": 0.4742,
+          "n": 2771
+        },
+        {
+          "bucket": "0.45–0.50",
+          "mean_pred": 0.4757,
+          "actual_rate": 0.5098,
+          "n": 5477
+        },
+        {
+          "bucket": "0.50–0.55",
+          "mean_pred": 0.5207,
+          "actual_rate": 0.5298,
+          "n": 3511
+        },
+        {
+          "bucket": "0.55–0.60",
+          "mean_pred": 0.5697,
+          "actual_rate": 0.5307,
+          "n": 1076
+        },
+        {
+          "bucket": "0.60–0.65",
+          "mean_pred": 0.6108,
+          "actual_rate": 0.4751,
+          "n": 181
+        }
+      ],
+      "percentiles": {
+        "p5": -6.469,
+        "p25": -2.439,
+        "p50": 0.251,
+        "p75": 3.316,
+        "p95": 8.79
+      }
+    },
+    "lgbm": {
+      "threshold": 0.55,
+      "n_signals": 156,
+      "n_total": 13167,
+      "signal_pct": 1.2,
+      "win_rate": 0.5,
+      "mean_ret": 0.0856,
+      "std_ret": 4.9489,
+      "sharpe": 0.123,
+      "calibration": [
+        {
+          "bucket": "0.40–0.45",
+          "mean_pred": 0.432,
+          "actual_rate": 0.4931,
+          "n": 432
+        },
+        {
+          "bucket": "0.45–0.50",
+          "mean_pred": 0.4872,
+          "actual_rate": 0.512,
+          "n": 10091
+        },
+        {
+          "bucket": "0.50–0.55",
+          "mean_pred": 0.5067,
+          "actual_rate": 0.5028,
+          "n": 2311
+        },
+        {
+          "bucket": "0.55–0.60",
+          "mean_pred": 0.5682,
+          "actual_rate": 0.5094,
+          "n": 106
+        },
+        {
+          "bucket": "0.60–0.65",
+          "mean_pred": 0.6212,
+          "actual_rate": 0.4643,
+          "n": 28
+        },
+        {
+          "bucket": "0.65–0.70",
+          "mean_pred": 0.6752,
+          "actual_rate": 0.5,
+          "n": 18
+        }
+      ],
+      "percentiles": {
+        "p5": -7.437,
+        "p25": -2.657,
+        "p50": -0.102,
+        "p75": 2.943,
+        "p95": 9.387
+      }
+    }
+  },
+  "predictions_sample": [
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 0.1804,
+      "p_lr": 0.4098,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -6.8027,
+      "p_lr": 0.4648,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "GMEXICOB",
+      "y": 0,
+      "target_ret": -2.7851,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -1.3874,
+      "p_lr": 0.4074,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 5.1624,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 9.0889,
+      "p_lr": 0.4596,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 8.4227,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 1.625,
+      "p_lr": 0.53,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -0.7659,
+      "p_lr": 0.47,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 4.952,
+      "p_lr": 0.4226,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -6.477,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -16.2379,
+      "p_lr": 0.4041,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 10.1917,
+      "p_lr": 0.4378,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 0.806,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -9.6344,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 8.2947,
+      "p_lr": 0.4322,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "ALSEA",
+      "y": 0,
+      "target_ret": -1.983,
+      "p_lr": 0.4322,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.2296,
+      "p_lr": 0.4004,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-28",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 4.3179,
+      "p_lr": 0.4408,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 1.9603,
+      "p_lr": 0.4355,
+      "p_lgbm": 0.4849
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 12.4825,
+      "p_lr": 0.5973,
+      "p_lgbm": 0.4911
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 3.2306,
+      "p_lr": 0.4242,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 10.6429,
+      "p_lr": 0.4526,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -3.0681,
+      "p_lr": 0.4045,
+      "p_lgbm": 0.4701
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -0.3623,
+      "p_lr": 0.5196,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 1.2788,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -2.1086,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 9.9953,
+      "p_lr": 0.4522,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 0.6937,
+      "p_lr": 0.4816,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 4.913,
+      "p_lr": 0.4602,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 1.6918,
+      "p_lr": 0.4853,
+      "p_lgbm": 0.4861
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 5.0175,
+      "p_lr": 0.461,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -2.0887,
+      "p_lr": 0.4054,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.0959,
+      "p_lr": 0.4119,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -14.1636,
+      "p_lr": 0.4449,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.7183,
+      "p_lr": 0.3958,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 5.7983,
+      "p_lr": 0.4355,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-29",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 10.1003,
+      "p_lr": 0.4549,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 2.126,
+      "p_lr": 0.5262,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 11.7918,
+      "p_lr": 0.4303,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -7.8845,
+      "p_lr": 0.4704,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -1.5083,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 0.177,
+      "p_lr": 0.4389,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.3252,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -3.6662,
+      "p_lr": 0.468,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.4054,
+      "p_lr": 0.4057,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -1.8671,
+      "p_lr": 0.4209,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 6.3853,
+      "p_lr": 0.4164,
+      "p_lgbm": 0.4857
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 2.9583,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 0.3679,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -4.5252,
+      "p_lr": 0.447,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 3.7534,
+      "p_lr": 0.4165,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 5.9901,
+      "p_lr": 0.3817,
+      "p_lgbm": 0.4752
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -3.4709,
+      "p_lr": 0.4045,
+      "p_lgbm": 0.4701
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 2.7228,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "GMEXICOB",
+      "y": 0,
+      "target_ret": -0.4514,
+      "p_lr": 0.3738,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-04-30",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 7.3569,
+      "p_lr": 0.6058,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -8.4044,
+      "p_lr": 0.5165,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 4.7375,
+      "p_lr": 0.5742,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 4.7666,
+      "p_lr": 0.4434,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.4678,
+      "p_lr": 0.3953,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 3.1895,
+      "p_lr": 0.4253,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 4.3289,
+      "p_lr": 0.3999,
+      "p_lgbm": 0.4896
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -1.9231,
+      "p_lr": 0.5351,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 0.3912,
+      "p_lr": 0.4016,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -5.1902,
+      "p_lr": 0.5046,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 9.1057,
+      "p_lr": 0.4104,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -1.1071,
+      "p_lr": 0.5163,
+      "p_lgbm": 0.4861
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 7.5833,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 8.6886,
+      "p_lr": 0.4243,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -0.1541,
+      "p_lr": 0.5322,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 7.0583,
+      "p_lr": 0.5137,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 5.2021,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 0.7858,
+      "p_lr": 0.4883,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -0.0683,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-02",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -4.7619,
+      "p_lr": 0.4444,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -2.8543,
+      "p_lr": 0.4681,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 0.7212,
+      "p_lr": 0.4745,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 10.0,
+      "p_lr": 0.433,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 4.3229,
+      "p_lr": 0.4366,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.7582,
+      "p_lr": 0.4686,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 3.9765,
+      "p_lr": 0.4616,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 0.6895,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -0.8186,
+      "p_lr": 0.5038,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -0.5057,
+      "p_lr": 0.4876,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 1.7971,
+      "p_lr": 0.4068,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 0.254,
+      "p_lr": 0.4997,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 3.298,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -0.9438,
+      "p_lr": 0.5158,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 2.6301,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 0.1876,
+      "p_lr": 0.4729,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 4.8908,
+      "p_lr": 0.4937,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 10.9992,
+      "p_lr": 0.4526,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 7.2336,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-05",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.689,
+      "p_lr": 0.4557,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -7.89,
+      "p_lr": 0.4377,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -5.1813,
+      "p_lr": 0.4469,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.5989,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -4.1221,
+      "p_lr": 0.3938,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "GMEXICOB",
+      "y": 0,
+      "target_ret": -0.8227,
+      "p_lr": 0.4014,
+      "p_lgbm": 0.4857
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 5.6407,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 8.476,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -3.2847,
+      "p_lr": 0.4535,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -4.332,
+      "p_lr": 0.4733,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -1.6857,
+      "p_lr": 0.4812,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 1.2011,
+      "p_lr": 0.4331,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 4.4802,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -1.1314,
+      "p_lr": 0.4828,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 5.5844,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 3.8929,
+      "p_lr": 0.4984,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 3.1721,
+      "p_lr": 0.5063,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 8.4484,
+      "p_lr": 0.4255,
+      "p_lgbm": 0.4857
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 1.1062,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-06",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -2.2532,
+      "p_lr": 0.4472,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -2.2599,
+      "p_lr": 0.431,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -3.5682,
+      "p_lr": 0.459,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 0.3525,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 3.0846,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -1.3963,
+      "p_lr": 0.4892,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 5.2492,
+      "p_lr": 0.4581,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.7797,
+      "p_lr": 0.4658,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 2.4913,
+      "p_lr": 0.3999,
+      "p_lgbm": 0.4896
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 6.1807,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -4.0718,
+      "p_lr": 0.4075,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 2.7769,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -0.9482,
+      "p_lr": 0.4451,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -1.9385,
+      "p_lr": 0.4539,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -6.9006,
+      "p_lr": 0.485,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 5.1788,
+      "p_lr": 0.5142,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 2.3992,
+      "p_lr": 0.535,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.1147,
+      "p_lr": 0.4644,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 1.9205,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-07",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.1911,
+      "p_lr": 0.3999,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "GAPB",
+      "y": 0,
+      "target_ret": -0.2269,
+      "p_lr": 0.4114,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -1.6859,
+      "p_lr": 0.4899,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -0.4282,
+      "p_lr": 0.3999,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 2.7358,
+      "p_lr": 0.5331,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -0.5793,
+      "p_lr": 0.4451,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -0.0472,
+      "p_lr": 0.5273,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 6.4961,
+      "p_lr": 0.3999,
+      "p_lgbm": 0.4757
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 4.1638,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 2.0687,
+      "p_lr": 0.4575,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 8.613,
+      "p_lr": 0.4461,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.8318,
+      "p_lr": 0.4842,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 0.9872,
+      "p_lr": 0.5089,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 1.4885,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 6.6003,
+      "p_lr": 0.5246,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 5.6126,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -0.2515,
+      "p_lr": 0.4009,
+      "p_lgbm": 0.4744
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -3.9425,
+      "p_lr": 0.507,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -5.1948,
+      "p_lr": 0.4858,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-08",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 7.5331,
+      "p_lr": 0.4513,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.5171,
+      "p_lr": 0.4044,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 1.6913,
+      "p_lr": 0.5031,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -2.3921,
+      "p_lr": 0.3912,
+      "p_lgbm": 0.4744
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -2.4611,
+      "p_lr": 0.507,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 6.0137,
+      "p_lr": 0.4103,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -2.1023,
+      "p_lr": 0.4892,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -2.2826,
+      "p_lr": 0.4873,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 4.7028,
+      "p_lr": 0.4212,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 8.6684,
+      "p_lr": 0.4649,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 5.0022,
+      "p_lr": 0.4137,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 0.2787,
+      "p_lr": 0.5254,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -1.0371,
+      "p_lr": 0.5285,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 4.1558,
+      "p_lr": 0.4195,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 3.467,
+      "p_lr": 0.4447,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 3.2911,
+      "p_lr": 0.5246,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.6944,
+      "p_lr": 0.465,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 0.6691,
+      "p_lr": 0.5118,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 6.1014,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-09",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -4.2064,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -1.7035,
+      "p_lr": 0.4138,
+      "p_lgbm": 0.4906
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 4.4576,
+      "p_lr": 0.5472,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 5.6809,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.3089,
+      "p_lr": 0.4913,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 3.1659,
+      "p_lr": 0.4747,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 3.9232,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 3.4142,
+      "p_lr": 0.4022,
+      "p_lgbm": 0.4857
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -2.1563,
+      "p_lr": 0.5903,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 3.0321,
+      "p_lr": 0.4691,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -4.3996,
+      "p_lr": 0.5522,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -0.7477,
+      "p_lr": 0.4862,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 4.812,
+      "p_lr": 0.5097,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 2.7796,
+      "p_lr": 0.4284,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 0.9834,
+      "p_lr": 0.5514,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 1.7157,
+      "p_lr": 0.4791,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 1.9612,
+      "p_lr": 0.4036,
+      "p_lgbm": 0.4821
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -0.815,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -2.2063,
+      "p_lr": 0.4556,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-12",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 5.6093,
+      "p_lr": 0.5101,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -3.6135,
+      "p_lr": 0.4015,
+      "p_lgbm": 0.4896
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -4.3877,
+      "p_lr": 0.56,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 5.3388,
+      "p_lr": 0.4608,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 3.1915,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "VOLARA",
+      "y": 0,
+      "target_ret": -1.0714,
+      "p_lr": 0.4759,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 0.1549,
+      "p_lr": 0.4152,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 3.2713,
+      "p_lr": 0.446,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 1.4176,
+      "p_lr": 0.4653,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 3.6119,
+      "p_lr": 0.4663,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.2465,
+      "p_lr": 0.461,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -0.301,
+      "p_lr": 0.5612,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -3.0359,
+      "p_lr": 0.4792,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 2.0626,
+      "p_lr": 0.3896,
+      "p_lgbm": 0.4752
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -1.1234,
+      "p_lr": 0.5007,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -4.2469,
+      "p_lr": 0.5541,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 4.4862,
+      "p_lr": 0.5164,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 2.7243,
+      "p_lr": 0.4543,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 2.057,
+      "p_lr": 0.5291,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-13",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -1.1829,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "ALSEA",
+      "y": 0,
+      "target_ret": -0.5158,
+      "p_lr": 0.4424,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 3.4276,
+      "p_lr": 0.4587,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.8852,
+      "p_lr": 0.4642,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 0.5311,
+      "p_lr": 0.5449,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 2.9459,
+      "p_lr": 0.4462,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -2.1366,
+      "p_lr": 0.5062,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -1.1301,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -2.768,
+      "p_lr": 0.3851,
+      "p_lgbm": 0.4756
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "VOLARA",
+      "y": 0,
+      "target_ret": -3.0233,
+      "p_lr": 0.4694,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.3188,
+      "p_lr": 0.4835,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 0.1988,
+      "p_lr": 0.4502,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 0.6201,
+      "p_lr": 0.4082,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -4.6751,
+      "p_lr": 0.5715,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -0.3832,
+      "p_lr": 0.4959,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -9.3761,
+      "p_lr": 0.3948,
+      "p_lgbm": 0.4752
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 2.0347,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -6.7557,
+      "p_lr": 0.4197,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 3.8679,
+      "p_lr": 0.5294,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-14",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -0.682,
+      "p_lr": 0.5546,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 1.947,
+      "p_lr": 0.5262,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.3241,
+      "p_lr": 0.4934,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -0.9328,
+      "p_lr": 0.5169,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 2.3732,
+      "p_lr": 0.5128,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -9.8466,
+      "p_lr": 0.3963,
+      "p_lgbm": 0.4756
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 2.8316,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -1.3187,
+      "p_lr": 0.4609,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 3.6096,
+      "p_lr": 0.5277,
+      "p_lgbm": 0.4864
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.5788,
+      "p_lr": 0.4565,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 2.4525,
+      "p_lr": 0.4583,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 2.4527,
+      "p_lr": 0.4644,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "ALSEA",
+      "y": 0,
+      "target_ret": -2.381,
+      "p_lr": 0.4004,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -2.8676,
+      "p_lr": 0.4668,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.4426,
+      "p_lr": 0.4294,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -3.2982,
+      "p_lr": 0.5613,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -3.9025,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 0.1168,
+      "p_lr": 0.4223,
+      "p_lgbm": 0.4753
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -2.4832,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-15",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.5763,
+      "p_lr": 0.4255,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 0.1477,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -3.3494,
+      "p_lr": 0.5627,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 0.5841,
+      "p_lr": 0.3969,
+      "p_lgbm": 0.4753
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 1.9717,
+      "p_lr": 0.4275,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 1.5233,
+      "p_lr": 0.4696,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 5.1089,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.9264,
+      "p_lr": 0.4439,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 6.4655,
+      "p_lr": 0.4479,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -3.355,
+      "p_lr": 0.5135,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -9.0131,
+      "p_lr": 0.4501,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.4199,
+      "p_lr": 0.4338,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 2.3724,
+      "p_lr": 0.4676,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 0.3716,
+      "p_lr": 0.4849,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -1.7568,
+      "p_lr": 0.501,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.6323,
+      "p_lr": 0.4489,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "ALSEA",
+      "y": 0,
+      "target_ret": -1.174,
+      "p_lr": 0.4004,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -4.8599,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 3.1267,
+      "p_lr": 0.572,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-16",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -3.7037,
+      "p_lr": 0.4979,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 2.3909,
+      "p_lr": 0.473,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 1.3608,
+      "p_lr": 0.4275,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -3.5304,
+      "p_lr": 0.5358,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 1.7913,
+      "p_lr": 0.49,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -3.6586,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 7.1342,
+      "p_lr": 0.4215,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -0.5721,
+      "p_lr": 0.4074,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 4.3642,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.904,
+      "p_lr": 0.4597,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 2.2621,
+      "p_lr": 0.5364,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "GAPB",
+      "y": 0,
+      "target_ret": -0.1991,
+      "p_lr": 0.4308,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -2.4286,
+      "p_lr": 0.4444,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -0.4055,
+      "p_lr": 0.4782,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.2609,
+      "p_lr": 0.435,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 1.6338,
+      "p_lr": 0.4468,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -0.2865,
+      "p_lr": 0.5161,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -9.5804,
+      "p_lr": 0.4089,
+      "p_lgbm": 0.4756
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 3.9609,
+      "p_lr": 0.5499,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-19",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -1.8382,
+      "p_lr": 0.4404,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 3.0189,
+      "p_lr": 0.4324,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -0.4475,
+      "p_lr": 0.4169,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.5818,
+      "p_lr": 0.433,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -5.7263,
+      "p_lr": 0.4041,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -0.5596,
+      "p_lr": 0.572,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 3.7037,
+      "p_lr": 0.451,
+      "p_lgbm": 0.4706
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 3.0733,
+      "p_lr": 0.5438,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 0.0152,
+      "p_lr": 0.4551,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 2.2253,
+      "p_lr": 0.4529,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 4.0849,
+      "p_lr": 0.5683,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -1.339,
+      "p_lr": 0.4706,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 2.8523,
+      "p_lr": 0.4537,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -2.7304,
+      "p_lr": 0.471,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 3.2702,
+      "p_lr": 0.4795,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "MEGACPO",
+      "y": 0,
+      "target_ret": -4.1237,
+      "p_lr": 0.4022,
+      "p_lgbm": 0.4756
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -3.2391,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4757
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -0.5513,
+      "p_lr": 0.5137,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 7.9137,
+      "p_lr": 0.432,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-20",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 2.3792,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 1.7956,
+      "p_lr": 0.4581,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.2239,
+      "p_lr": 0.4694,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "OMAB",
+      "y": 0,
+      "target_ret": -3.3361,
+      "p_lr": 0.4421,
+      "p_lgbm": 0.4757
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 4.6991,
+      "p_lr": 0.4479,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 12.3337,
+      "p_lr": 0.3996,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 3.7399,
+      "p_lr": 0.4199,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 6.0,
+      "p_lr": 0.5482,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -0.0456,
+      "p_lr": 0.4542,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 0.0737,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -1.7103,
+      "p_lr": 0.5462,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.9236,
+      "p_lr": 0.4841,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -8.6074,
+      "p_lr": 0.403,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 0.8669,
+      "p_lr": 0.4412,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 6.1911,
+      "p_lr": 0.5425,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -2.6645,
+      "p_lr": 0.5006,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 3.2444,
+      "p_lr": 0.4472,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 2.9907,
+      "p_lr": 0.4979,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -0.2407,
+      "p_lr": 0.4554,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-21",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -0.0273,
+      "p_lr": 0.4992,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 1.7647,
+      "p_lr": 0.4868,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 5.2142,
+      "p_lr": 0.4705,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 12.8954,
+      "p_lr": 0.4008,
+      "p_lgbm": 0.47
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 0.3377,
+      "p_lr": 0.5105,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -2.3883,
+      "p_lr": 0.4564,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "GRUMAB",
+      "y": 1,
+      "target_ret": 0.3796,
+      "p_lr": 0.4433,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -1.2649,
+      "p_lr": 0.5282,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 4.6869,
+      "p_lr": 0.5183,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -1.9165,
+      "p_lr": 0.5425,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 0.5522,
+      "p_lr": 0.442,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -5.1359,
+      "p_lr": 0.4205,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.956,
+      "p_lr": 0.4322,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -0.3037,
+      "p_lr": 0.4689,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 0.5122,
+      "p_lr": 0.4363,
+      "p_lgbm": 0.4706
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 4.0381,
+      "p_lr": 0.4328,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 0.7017,
+      "p_lr": 0.4157,
+      "p_lgbm": 0.4605
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -0.8942,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4757
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 1.1882,
+      "p_lr": 0.4936,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-22",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 7.6332,
+      "p_lr": 0.5519,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -5.1338,
+      "p_lr": 0.3873,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 6.5037,
+      "p_lr": 0.5446,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.0116,
+      "p_lr": 0.4793,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 0.6532,
+      "p_lr": 0.3995,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -3.8957,
+      "p_lr": 0.4543,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 5.2421,
+      "p_lr": 0.4466,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -5.0889,
+      "p_lr": 0.5208,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "FEMSAUBD",
+      "y": 1,
+      "target_ret": 0.1812,
+      "p_lr": 0.4641,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.5222,
+      "p_lr": 0.4857,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.4654,
+      "p_lr": 0.4809,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 2.074,
+      "p_lr": 0.4607,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -6.8776,
+      "p_lr": 0.5245,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 7.0989,
+      "p_lr": 0.5056,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -5.6096,
+      "p_lr": 0.4155,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 4.3023,
+      "p_lr": 0.4369,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "GAPB",
+      "y": 0,
+      "target_ret": -0.3444,
+      "p_lr": 0.4184,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.1525,
+      "p_lr": 0.4577,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -1.2433,
+      "p_lr": 0.4196,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-23",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -3.6948,
+      "p_lr": 0.4917,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 4.875,
+      "p_lr": 0.4417,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 2.2807,
+      "p_lr": 0.4741,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "GAPB",
+      "y": 0,
+      "target_ret": -3.5326,
+      "p_lr": 0.4226,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.4857,
+      "p_lr": 0.4672,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 3.1515,
+      "p_lr": 0.537,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -1.4419,
+      "p_lr": 0.4542,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.6091,
+      "p_lr": 0.5109,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 0.3193,
+      "p_lr": 0.4775,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.0548,
+      "p_lr": 0.4602,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.5468,
+      "p_lr": 0.4757,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -4.0797,
+      "p_lr": 0.5021,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -1.2185,
+      "p_lr": 0.4143,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -8.6016,
+      "p_lr": 0.4372,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -5.9669,
+      "p_lr": 0.4114,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -3.2214,
+      "p_lr": 0.4775,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -0.4565,
+      "p_lr": 0.4749,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -1.5975,
+      "p_lr": 0.4198,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 4.1379,
+      "p_lr": 0.4284,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-26",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 6.4368,
+      "p_lr": 0.5522,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 2.7429,
+      "p_lr": 0.4508,
+      "p_lgbm": 0.4849
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 7.1282,
+      "p_lr": 0.5267,
+      "p_lgbm": 0.4889
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -1.9758,
+      "p_lr": 0.4082,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -3.0089,
+      "p_lr": 0.5422,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 4.1998,
+      "p_lr": 0.464,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -7.6931,
+      "p_lr": 0.4526,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 4.5118,
+      "p_lr": 0.5131,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -3.3795,
+      "p_lr": 0.445,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -0.5581,
+      "p_lr": 0.4341,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.7571,
+      "p_lr": 0.5011,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -3.2862,
+      "p_lr": 0.4806,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -2.3506,
+      "p_lr": 0.4347,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 3.9204,
+      "p_lr": 0.415,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "GMEXICOB",
+      "y": 0,
+      "target_ret": -0.4129,
+      "p_lr": 0.4485,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -6.3309,
+      "p_lr": 0.4537,
+      "p_lgbm": 0.4843
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -2.4027,
+      "p_lr": 0.4857,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -6.4243,
+      "p_lr": 0.5537,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -2.8377,
+      "p_lr": 0.4758,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-27",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.0585,
+      "p_lr": 0.4915,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.9097,
+      "p_lr": 0.4994,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 2.9326,
+      "p_lr": 0.4689,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -0.7903,
+      "p_lr": 0.4279,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -2.1017,
+      "p_lr": 0.4314,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 2.3307,
+      "p_lr": 0.4061,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "LABB",
+      "y": 1,
+      "target_ret": 0.1363,
+      "p_lr": 0.4498,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -3.4759,
+      "p_lr": 0.4997,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.3272,
+      "p_lr": 0.415,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.3514,
+      "p_lr": 0.4398,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -3.1063,
+      "p_lr": 0.4638,
+      "p_lgbm": 0.4857
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.69,
+      "p_lr": 0.5537,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -8.9701,
+      "p_lr": 0.445,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -0.7597,
+      "p_lr": 0.5227,
+      "p_lgbm": 0.4861
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -1.57,
+      "p_lr": 0.4613,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -5.9398,
+      "p_lr": 0.4755,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -5.225,
+      "p_lr": 0.4277,
+      "p_lgbm": 0.4906
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "ORBIA",
+      "y": 0,
+      "target_ret": -2.4336,
+      "p_lr": 0.49,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 4.8083,
+      "p_lr": 0.4463,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-28",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 4.8188,
+      "p_lr": 0.3946,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "ASURB",
+      "y": 1,
+      "target_ret": 0.7431,
+      "p_lr": 0.5213,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.6482,
+      "p_lr": 0.5271,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -2.1265,
+      "p_lr": 0.4022,
+      "p_lgbm": 0.4821
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -3.1084,
+      "p_lr": 0.4738,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 1.7354,
+      "p_lr": 0.3987,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 4.5612,
+      "p_lr": 0.4458,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -2.3824,
+      "p_lr": 0.4071,
+      "p_lgbm": 0.4756
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 0.2859,
+      "p_lr": 0.4097,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "GMEXICOB",
+      "y": 0,
+      "target_ret": -0.47,
+      "p_lr": 0.401,
+      "p_lgbm": 0.4752
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 3.0939,
+      "p_lr": 0.4919,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -0.0898,
+      "p_lr": 0.4279,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -8.4402,
+      "p_lr": 0.4189,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 0.1286,
+      "p_lr": 0.4802,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 0.0505,
+      "p_lr": 0.4885,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 5.8846,
+      "p_lr": 0.4653,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -5.0148,
+      "p_lr": 0.4407,
+      "p_lgbm": 0.4821
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 1.5209,
+      "p_lr": 0.4928,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -1.8558,
+      "p_lr": 0.4538,
+      "p_lgbm": 0.4705
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-29",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.5194,
+      "p_lr": 0.5537,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "Q",
+      "y": 0,
+      "target_ret": -2.0017,
+      "p_lr": 0.4975,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "KIMBERA",
+      "y": 1,
+      "target_ret": 0.9401,
+      "p_lr": 0.5038,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -10.6542,
+      "p_lr": 0.4149,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 1.6756,
+      "p_lr": 0.4613,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -5.803,
+      "p_lr": 0.606,
+      "p_lgbm": 0.5036
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "CEMEXCPO",
+      "y": 0,
+      "target_ret": -2.7883,
+      "p_lr": 0.4699,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 2.1575,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4618
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -3.3818,
+      "p_lr": 0.4269,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 1.2084,
+      "p_lr": 0.5113,
+      "p_lgbm": 0.4861
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 2.403,
+      "p_lr": 0.4822,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "PINFRA",
+      "y": 0,
+      "target_ret": -0.2427,
+      "p_lr": 0.4844,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 0.6717,
+      "p_lr": 0.4555,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -3.1111,
+      "p_lr": 0.4275,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -2.606,
+      "p_lr": 0.5416,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 7.8186,
+      "p_lr": 0.4901,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.5685,
+      "p_lr": 0.4774,
+      "p_lgbm": 0.4859
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 0.0092,
+      "p_lr": 0.4487,
+      "p_lgbm": 0.4655
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 2.85,
+      "p_lr": 0.4852,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-05-30",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 0.7089,
+      "p_lr": 0.4514,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -7.5113,
+      "p_lr": 0.5183,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -2.3823,
+      "p_lr": 0.6058,
+      "p_lgbm": 0.4912
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "GFNORTEO",
+      "y": 1,
+      "target_ret": 2.052,
+      "p_lr": 0.516,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 0.3442,
+      "p_lr": 0.4439,
+      "p_lgbm": 0.4775
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 0.4642,
+      "p_lr": 0.4525,
+      "p_lgbm": 0.471
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -0.3164,
+      "p_lr": 0.4902,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 1.0172,
+      "p_lr": 0.4872,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 2.2137,
+      "p_lr": 0.4555,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -4.6491,
+      "p_lr": 0.4319,
+      "p_lgbm": 0.4797
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 0.4556,
+      "p_lr": 0.4736,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "VOLARA",
+      "y": 1,
+      "target_ret": 3.8976,
+      "p_lr": 0.4495,
+      "p_lgbm": 0.485
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 1.8762,
+      "p_lr": 0.4603,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 5.6046,
+      "p_lr": 0.4901,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 6.5769,
+      "p_lr": 0.4685,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 1.1094,
+      "p_lr": 0.4731,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 2.4479,
+      "p_lr": 0.4889,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.8106,
+      "p_lr": 0.5023,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -2.9718,
+      "p_lr": 0.5416,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-02",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -2.0147,
+      "p_lr": 0.4341,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "GFNORTEO",
+      "y": 0,
+      "target_ret": -0.2548,
+      "p_lr": 0.4667,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "Q",
+      "y": 1,
+      "target_ret": 0.1636,
+      "p_lr": 0.4663,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "GCARSOA1",
+      "y": 1,
+      "target_ret": 3.3468,
+      "p_lr": 0.5139,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "ASURB",
+      "y": 0,
+      "target_ret": -2.7827,
+      "p_lr": 0.5025,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "PINFRA",
+      "y": 1,
+      "target_ret": 0.7798,
+      "p_lr": 0.4656,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "BIMBOA",
+      "y": 0,
+      "target_ret": -3.5417,
+      "p_lr": 0.5807,
+      "p_lgbm": 0.4827
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -1.3545,
+      "p_lr": 0.4829,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 2.3646,
+      "p_lr": 0.4882,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "FEMSAUBD",
+      "y": 0,
+      "target_ret": -0.9107,
+      "p_lr": 0.4535,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "GRUMAB",
+      "y": 0,
+      "target_ret": -6.9578,
+      "p_lr": 0.449,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "GAPB",
+      "y": 1,
+      "target_ret": 1.8284,
+      "p_lr": 0.4836,
+      "p_lgbm": 0.4601
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "GMEXICOB",
+      "y": 1,
+      "target_ret": 1.533,
+      "p_lr": 0.478,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "CEMEXCPO",
+      "y": 1,
+      "target_ret": 1.2251,
+      "p_lr": 0.5516,
+      "p_lgbm": 0.4788
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -0.8617,
+      "p_lr": 0.4598,
+      "p_lgbm": 0.4698
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "MEGACPO",
+      "y": 1,
+      "target_ret": 8.3546,
+      "p_lr": 0.4758,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "VOLARA",
+      "y": 0,
+      "target_ret": -2.0879,
+      "p_lr": 0.4203,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "ALSEA",
+      "y": 1,
+      "target_ret": 0.4971,
+      "p_lr": 0.4448,
+      "p_lgbm": 0.4727
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "WALMEX",
+      "y": 1,
+      "target_ret": 0.0471,
+      "p_lr": 0.5267,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-03",
+      "ticker": "OMAB",
+      "y": 1,
+      "target_ret": 5.6024,
+      "p_lr": 0.4897,
+      "p_lgbm": 0.4801
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "GCARSOA1",
+      "y": 0,
+      "target_ret": -0.1016,
+      "p_lr": 0.5041,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "KIMBERA",
+      "y": 0,
+      "target_ret": -2.1487,
+      "p_lr": 0.5169,
+      "p_lgbm": 0.4776
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "WALMEX",
+      "y": 0,
+      "target_ret": -1.6542,
+      "p_lr": 0.4462,
+      "p_lgbm": 0.4845
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "VOLARA",
+      "y": 0,
+      "target_ret": -3.0501,
+      "p_lr": 0.4203,
+      "p_lgbm": 0.4811
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "LABB",
+      "y": 0,
+      "target_ret": -1.6204,
+      "p_lr": 0.449,
+      "p_lgbm": 0.4696
+    },
+    {
+      "fold": 0,
+      "date": "2025-06-04",
+      "ticker": "ORBIA",
+      "y": 1,
+      "target_ret": 1.213,
+      "p_lr": 0.4619,
+      "p_lgbm": 0.4788
+    }
+  ]
+}

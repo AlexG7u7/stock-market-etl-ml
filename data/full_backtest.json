@@ -1,0 +1,747 @@
+{
+  "summary": {
+    "capital_init": 10000,
+    "capital_final": 9568.2,
+    "total_pnl": -431.8,
+    "return_pct": -4.32,
+    "annual_return_pct": -3.95,
+    "sharpe": -0.72,
+    "profit_factor": 0.78,
+    "win_rate": 0.503,
+    "n_trades": 173,
+    "n_wins": 87,
+    "max_drawdown_pct": -4.9,
+    "n_weeks": 57,
+    "n_weeks_active": 50
+  },
+  "equity_curve": [
+    {
+      "date": "2025-05-02",
+      "capital": 10023.49,
+      "weekly_pnl": 23.49,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-05-09",
+      "capital": 10023.49,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-05-16",
+      "capital": 10016.07,
+      "weekly_pnl": -7.42,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-05-23",
+      "capital": 10016.07,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-05-30",
+      "capital": 9921.29,
+      "weekly_pnl": -94.78,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-06-06",
+      "capital": 9875.27,
+      "weekly_pnl": -46.02,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-06-13",
+      "capital": 9759.77,
+      "weekly_pnl": -115.49,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-06-20",
+      "capital": 9787.09,
+      "weekly_pnl": 27.31,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-06-27",
+      "capital": 9840.04,
+      "weekly_pnl": 52.96,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-07-04",
+      "capital": 9840.82,
+      "weekly_pnl": 0.78,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-07-11",
+      "capital": 9802.87,
+      "weekly_pnl": -37.95,
+      "n_trades": 4
+    },
+    {
+      "date": "2025-07-18",
+      "capital": 9979.2,
+      "weekly_pnl": 176.33,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-07-25",
+      "capital": 9869.07,
+      "weekly_pnl": -110.13,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-08-01",
+      "capital": 9724.53,
+      "weekly_pnl": -144.54,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-08-08",
+      "capital": 9681.47,
+      "weekly_pnl": -43.06,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-08-15",
+      "capital": 9705.16,
+      "weekly_pnl": 23.69,
+      "n_trades": 4
+    },
+    {
+      "date": "2025-08-22",
+      "capital": 9705.16,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-08-29",
+      "capital": 9733.27,
+      "weekly_pnl": 28.11,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-09-05",
+      "capital": 9733.27,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-09-12",
+      "capital": 9703.24,
+      "weekly_pnl": -30.03,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-09-19",
+      "capital": 9703.24,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-09-26",
+      "capital": 9664.7,
+      "weekly_pnl": -38.54,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-10-03",
+      "capital": 9532.68,
+      "weekly_pnl": -132.01,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-10-10",
+      "capital": 9578.33,
+      "weekly_pnl": 45.64,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-10-17",
+      "capital": 9683.87,
+      "weekly_pnl": 105.54,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-10-24",
+      "capital": 9652.48,
+      "weekly_pnl": -31.39,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-10-31",
+      "capital": 9642.84,
+      "weekly_pnl": -9.64,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-11-07",
+      "capital": 9714.04,
+      "weekly_pnl": 71.2,
+      "n_trades": 5
+    },
+    {
+      "date": "2025-11-14",
+      "capital": 9732.25,
+      "weekly_pnl": 18.21,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-11-21",
+      "capital": 9731.38,
+      "weekly_pnl": -0.86,
+      "n_trades": 4
+    },
+    {
+      "date": "2025-11-28",
+      "capital": 9727.66,
+      "weekly_pnl": -3.72,
+      "n_trades": 1
+    },
+    {
+      "date": "2025-12-05",
+      "capital": 9757.52,
+      "weekly_pnl": 29.86,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-12-11",
+      "capital": 9757.52,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2025-12-19",
+      "capital": 9754.26,
+      "weekly_pnl": -3.25,
+      "n_trades": 2
+    },
+    {
+      "date": "2025-12-26",
+      "capital": 9742.67,
+      "weekly_pnl": -11.6,
+      "n_trades": 1
+    },
+    {
+      "date": "2026-01-02",
+      "capital": 9766.83,
+      "weekly_pnl": 24.17,
+      "n_trades": 3
+    },
+    {
+      "date": "2026-01-09",
+      "capital": 9795.97,
+      "weekly_pnl": 29.14,
+      "n_trades": 2
+    },
+    {
+      "date": "2026-01-16",
+      "capital": 9827.62,
+      "weekly_pnl": 31.65,
+      "n_trades": 1
+    },
+    {
+      "date": "2026-01-23",
+      "capital": 9760.14,
+      "weekly_pnl": -67.49,
+      "n_trades": 3
+    },
+    {
+      "date": "2026-01-30",
+      "capital": 9887.24,
+      "weekly_pnl": 127.1,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-02-06",
+      "capital": 9961.45,
+      "weekly_pnl": 74.21,
+      "n_trades": 3
+    },
+    {
+      "date": "2026-02-13",
+      "capital": 9961.45,
+      "weekly_pnl": 0,
+      "n_trades": 0
+    },
+    {
+      "date": "2026-02-20",
+      "capital": 9887.2,
+      "weekly_pnl": -74.25,
+      "n_trades": 4
+    },
+    {
+      "date": "2026-02-27",
+      "capital": 9611.76,
+      "weekly_pnl": -275.44,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-03-06",
+      "capital": 9568.15,
+      "weekly_pnl": -43.6,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-03-13",
+      "capital": 9655.53,
+      "weekly_pnl": 87.38,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-03-20",
+      "capital": 9804.54,
+      "weekly_pnl": 149.01,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-03-27",
+      "capital": 9859.09,
+      "weekly_pnl": 54.55,
+      "n_trades": 1
+    },
+    {
+      "date": "2026-04-01",
+      "capital": 9821.3,
+      "weekly_pnl": -37.79,
+      "n_trades": 3
+    },
+    {
+      "date": "2026-04-10",
+      "capital": 9853.22,
+      "weekly_pnl": 31.92,
+      "n_trades": 4
+    },
+    {
+      "date": "2026-04-17",
+      "capital": 9797.19,
+      "weekly_pnl": -56.03,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-04-24",
+      "capital": 9802.47,
+      "weekly_pnl": 5.27,
+      "n_trades": 5
+    },
+    {
+      "date": "2026-04-30",
+      "capital": 9826.65,
+      "weekly_pnl": 24.18,
+      "n_trades": 4
+    },
+    {
+      "date": "2026-05-08",
+      "capital": 9692.55,
+      "weekly_pnl": -134.1,
+      "n_trades": 2
+    },
+    {
+      "date": "2026-05-15",
+      "capital": 9718.8,
+      "weekly_pnl": 26.25,
+      "n_trades": 3
+    },
+    {
+      "date": "2026-05-22",
+      "capital": 9607.99,
+      "weekly_pnl": -110.81,
+      "n_trades": 4
+    },
+    {
+      "date": "2026-05-29",
+      "capital": 9568.2,
+      "weekly_pnl": -39.79,
+      "n_trades": 5
+    }
+  ],
+  "monthly_pnl": {
+    "2025-05": -78.71,
+    "2025-06": -81.24,
+    "2025-07": 29.03,
+    "2025-08": -135.8,
+    "2025-09": -68.57,
+    "2025-10": -21.86,
+    "2025-11": 84.83,
+    "2025-12": 15.01,
+    "2026-01": 144.57,
+    "2026-02": -275.48,
+    "2026-03": 247.34,
+    "2026-04": -32.45,
+    "2026-05": -258.45
+  },
+  "with_stops": {
+    "capital_final": 9866.61,
+    "total_pnl": -133.39,
+    "return_pct": -1.33,
+    "annual_return_pct": -1.22,
+    "sharpe": -0.3,
+    "profit_factor": 0.91,
+    "win_rate": 0.532,
+    "n_trades": 173,
+    "n_wins": 92,
+    "max_drawdown_pct": -5.22,
+    "monthly_pnl": {
+      "2025-05": -68.39,
+      "2025-06": -37.72,
+      "2025-07": -153.12,
+      "2025-08": -127.97,
+      "2025-09": -56.12,
+      "2025-10": 134.59,
+      "2025-11": 78.04,
+      "2025-12": 34.24,
+      "2026-01": 76.81,
+      "2026-02": -103.26,
+      "2026-03": 192.41,
+      "2026-04": 73.72,
+      "2026-05": -176.64
+    },
+    "equity_curve": [
+      {
+        "date": "2025-05-02",
+        "capital": 10002.13,
+        "weekly_pnl": 2.13,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-05-09",
+        "capital": 10002.13,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-05-16",
+        "capital": 9992.55,
+        "weekly_pnl": -9.58,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-05-23",
+        "capital": 9992.55,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-05-30",
+        "capital": 9931.6,
+        "weekly_pnl": -60.94,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-06-06",
+        "capital": 9916.61,
+        "weekly_pnl": -15.0,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-06-13",
+        "capital": 9831.51,
+        "weekly_pnl": -85.1,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-06-20",
+        "capital": 9847.17,
+        "weekly_pnl": 15.66,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-06-27",
+        "capital": 9893.88,
+        "weekly_pnl": 46.72,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-07-04",
+        "capital": 9900.18,
+        "weekly_pnl": 6.29,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-07-11",
+        "capital": 9871.66,
+        "weekly_pnl": -28.52,
+        "n_trades": 4
+      },
+      {
+        "date": "2025-07-18",
+        "capital": 9812.4,
+        "weekly_pnl": -59.27,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-07-25",
+        "capital": 9740.78,
+        "weekly_pnl": -71.62,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-08-01",
+        "capital": 9612.44,
+        "weekly_pnl": -128.34,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-08-08",
+        "capital": 9580.65,
+        "weekly_pnl": -31.79,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-08-15",
+        "capital": 9591.57,
+        "weekly_pnl": 10.92,
+        "n_trades": 4
+      },
+      {
+        "date": "2025-08-22",
+        "capital": 9591.57,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-08-29",
+        "capital": 9612.81,
+        "weekly_pnl": 21.24,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-09-05",
+        "capital": 9612.81,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-09-12",
+        "capital": 9581.9,
+        "weekly_pnl": -30.91,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-09-19",
+        "capital": 9581.9,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-09-26",
+        "capital": 9556.69,
+        "weekly_pnl": -25.21,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-10-03",
+        "capital": 9479.68,
+        "weekly_pnl": -77.01,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-10-10",
+        "capital": 9548.68,
+        "weekly_pnl": 69.0,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-10-17",
+        "capital": 9567.96,
+        "weekly_pnl": 19.28,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-10-24",
+        "capital": 9687.86,
+        "weekly_pnl": 119.9,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-10-31",
+        "capital": 9691.28,
+        "weekly_pnl": 3.42,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-11-07",
+        "capital": 9774.16,
+        "weekly_pnl": 82.88,
+        "n_trades": 5
+      },
+      {
+        "date": "2025-11-14",
+        "capital": 9772.61,
+        "weekly_pnl": -1.54,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-11-21",
+        "capital": 9780.11,
+        "weekly_pnl": 7.5,
+        "n_trades": 4
+      },
+      {
+        "date": "2025-11-28",
+        "capital": 9769.31,
+        "weekly_pnl": -10.8,
+        "n_trades": 1
+      },
+      {
+        "date": "2025-12-05",
+        "capital": 9801.44,
+        "weekly_pnl": 32.12,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-12-11",
+        "capital": 9801.44,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2025-12-19",
+        "capital": 9816.32,
+        "weekly_pnl": 14.88,
+        "n_trades": 2
+      },
+      {
+        "date": "2025-12-26",
+        "capital": 9803.56,
+        "weekly_pnl": -12.76,
+        "n_trades": 1
+      },
+      {
+        "date": "2026-01-02",
+        "capital": 9829.23,
+        "weekly_pnl": 25.67,
+        "n_trades": 3
+      },
+      {
+        "date": "2026-01-09",
+        "capital": 9847.62,
+        "weekly_pnl": 18.39,
+        "n_trades": 2
+      },
+      {
+        "date": "2026-01-16",
+        "capital": 9875.15,
+        "weekly_pnl": 27.53,
+        "n_trades": 1
+      },
+      {
+        "date": "2026-01-23",
+        "capital": 9807.8,
+        "weekly_pnl": -67.35,
+        "n_trades": 3
+      },
+      {
+        "date": "2026-01-30",
+        "capital": 9880.37,
+        "weekly_pnl": 72.57,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-02-06",
+        "capital": 9963.12,
+        "weekly_pnl": 82.74,
+        "n_trades": 3
+      },
+      {
+        "date": "2026-02-13",
+        "capital": 9963.12,
+        "weekly_pnl": 0,
+        "n_trades": 0
+      },
+      {
+        "date": "2026-02-20",
+        "capital": 9909.23,
+        "weekly_pnl": -53.89,
+        "n_trades": 4
+      },
+      {
+        "date": "2026-02-27",
+        "capital": 9777.12,
+        "weekly_pnl": -132.11,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-03-06",
+        "capital": 9696.73,
+        "weekly_pnl": -80.38,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-03-13",
+        "capital": 9748.71,
+        "weekly_pnl": 51.98,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-03-20",
+        "capital": 9935.16,
+        "weekly_pnl": 186.45,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-03-27",
+        "capital": 9969.52,
+        "weekly_pnl": 34.36,
+        "n_trades": 1
+      },
+      {
+        "date": "2026-04-01",
+        "capital": 9998.53,
+        "weekly_pnl": 29.01,
+        "n_trades": 3
+      },
+      {
+        "date": "2026-04-10",
+        "capital": 10013.63,
+        "weekly_pnl": 15.1,
+        "n_trades": 4
+      },
+      {
+        "date": "2026-04-17",
+        "capital": 10004.05,
+        "weekly_pnl": -9.59,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-04-24",
+        "capital": 10003.09,
+        "weekly_pnl": -0.95,
+        "n_trades": 5
+      },
+      {
+        "date": "2026-04-30",
+        "capital": 10043.24,
+        "weekly_pnl": 40.15,
+        "n_trades": 4
+      },
+      {
+        "date": "2026-05-08",
+        "capital": 9987.86,
+        "weekly_pnl": -55.38,
+        "n_trades": 2
+      },
+      {
+        "date": "2026-05-15",
+        "capital": 9991.25,
+        "weekly_pnl": 3.39,
+        "n_trades": 3
+      },
+      {
+        "date": "2026-05-22",
+        "capital": 9915.58,
+        "weekly_pnl": -75.67,
+        "n_trades": 4
+      },
+      {
+        "date": "2026-05-29",
+        "capital": 9866.61,
+        "weekly_pnl": -48.98,
+        "n_trades": 5
+      }
+    ]
+  }
+}

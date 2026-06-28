@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "date": "2026-06-27 22:08",
+    "version": "v2_hmm",
+    "cutoff_date": "2022-10-26",
+    "test_start": "2022-10-26",
+    "test_end": "2026-06-26",
+    "n_test": 16896,
+    "regime_current": "lateral",
+    "regime_proba": {
+      "bull": 0.4258585573156263,
+      "lateral": 0.572261034756152,
+      "bear": 0.0018804079282171615
+    },
+    "models": {
+      "woe_lr": {
+        "auc": 0.546,
+        "weight": 0.492
+      },
+      "lightgbm": {
+        "auc": 0.5431,
+        "weight": 0.4604
+      },
+      "minirocket": {
+        "auc": 0.5045,
+        "weight": 0.0476
+      }
+    }
+  },
+  "performance": {
+    "auc": 0.5422,
+    "brier": 0.2073,
+    "n_signals": 22,
+    "signal_pct": 0.1,
+    "win_rate": 0.3636,
+    "mean_ret": 1.553,
+    "sharpe": 2.277,
+    "profit_factor": 2.711
+  },
+  "calibration": [
+    {
+      "bucket": "0.40–0.45",
+      "n": 458,
+      "mean_pred": 0.4209,
+      "actual_rate": 0.393
+    },
+    {
+      "bucket": "0.45–0.50",
+      "n": 118,
+      "mean_pred": 0.4699,
+      "actual_rate": 0.4153
+    },
+    {
+      "bucket": "0.50–0.55",
+      "n": 44,
+      "mean_pred": 0.5177,
+      "actual_rate": 0.3409
+    },
+    {
+      "bucket": "0.55–0.60",
+      "n": 11,
+      "mean_pred": 0.5717,
+      "actual_rate": 0.6364
+    }
+  ],
+  "ticker_stats": [
+    {
+      "ticker": "GCARSOA1",
+      "n": 1,
+      "win_rate": 0.0,
+      "mean_ret": -3.77
+    },
+    {
+      "ticker": "GMEXICOB",
+      "n": 1,
+      "win_rate": 1.0,
+      "mean_ret": 10.47
+    },
+    {
+      "ticker": "MEGACPO",
+      "n": 4,
+      "win_rate": 0.5,
+      "mean_ret": 0.91
+    },
+    {
+      "ticker": "OMAB",
+      "n": 1,
+      "win_rate": 0.0,
+      "mean_ret": 0.29
+    },
+    {
+      "ticker": "ORBIA",
+      "n": 3,
+      "win_rate": 0.0,
+      "mean_ret": -0.91
+    },
+    {
+      "ticker": "VOLARA",
+      "n": 12,
+      "win_rate": 0.417,
+      "mean_ret": 2.19
+    }
+  ],
+  "individual_auc": {
+    "woe_lr": 0.546,
+    "lightgbm": 0.5431,
+    "minirocket": 0.5045,
+    "ensemble": 0.5422
+  }
+}
