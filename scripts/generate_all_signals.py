@@ -279,7 +279,7 @@ def generate_universe_signal(
     # ── Análisis Gemini por pick ────────────────────────────────────────────
     from src.api.gemini_analyst import analyze_batch
     tickers_map = cfg["tickers"]
-    gemini_analyses = analyze_batch(picks, tickers_map, universe_name)
+    gemini_analyses = analyze_batch(picks, tickers_map, universe_name, universe_slug=cfg["slug"])
     # Enriquecer cada pick con el análisis y noticias
     for p in picks:
         name = p["ticker"]

@@ -39,11 +39,137 @@ def fetch_news_yfinance(sym: str, max_items: int = 5) -> list[dict]:
                     "publisher": n.get("publisher") or n.get("content", {}).get("provider", {}).get("displayName", ""),
                     "link": n.get("link") or n.get("content", {}).get("canonicalUrl", {}).get("url", ""),
                     "ago": _ago(n.get("providerPublishTime")),
+                    "fuente": "Yahoo Finance",
                 })
         return out
     except Exception as e:
         logger.debug(f"yfinance news {sym}: {e}")
         return []
+
+
+# ─── Fetch noticias de DataBursátil (BMV — español, general de mercado) ───────
+
+def fetch_news_databursatil(ticker_mx: str, max_items: int = 5) -> list[dict]:
+    """
+    Obtiene noticias de DataBursátil para el mercado mexicano.
+    La API devuelve noticias generales (no filtra por emisora individual),
+    así que filtramos las que mencionan el ticker en el título.
+    Requiere DATABURSATIL_API_TOKEN.
+    """
+    token = os.getenv("DATABURSATIL_API_TOKEN")
+    if not token:
+        return []
+    try:
+        import requests
+        resp = requests.get(
+            "https://api.databursatil.com/v2/cables",
+            params={"token": token, "categorias": "top,generales,flash"},
+            timeout=8,
+        )
+        if not resp.ok:
+            return []
+        data = resp.json()
+        out  = []
+        # Intentar filtrar por ticker; si no hay resultados, devolver las top
+        ticker_upper = ticker_mx.upper()
+        all_news = []
+        for cat, items in (data.items() if isinstance(data, dict) else []):
+            for it in (items if isinstance(items, list) else []):
+                title = it.get("titulo") or it.get("t") or it.get("headline") or ""
+                if title:
+                    all_news.append({
+                        "title":     title,
+                        "publisher": "DataBursátil",
+                        "link":      it.get("url") or "",
+                        "ago":       it.get("fecha") or "",
+                        "fuente":    "DataBursátil",
+                        "_relevante": ticker_upper in title.upper(),
+                    })
+        # Primero las que mencionan el ticker, luego las generales
+        relevantes = [n for n in all_news if n.get("_relevante")]
+        generales  = [n for n in all_news if not n.get("_relevante")]
+        combined   = (relevantes + generales)[:max_items]
+        for n in combined:
+            n.pop("_relevante", None)
+        return combined
+    except Exception as e:
+        logger.debug(f"DataBursátil news {ticker_mx}: {e}")
+        return []
+
+
+# ─── Fetch noticias de CryptoPanic (cripto — requiere key) ────────────────────
+
+_CRYPTO_SYMBOL_MAP = {
+    "IBIT": "BTC", "FBTC": "BTC", "GBTC": "BTC",
+    "ETHA": "ETH",
+    "MSTR": "BTC", "COIN": "COIN", "MARA": "BTC", "RIOT": "BTC", "CLSK": "BTC",
+}
+
+def fetch_news_cryptopanic(ticker: str, max_items: int = 5) -> list[dict]:
+    """
+    Obtiene noticias de CryptoPanic para el activo cripto subyacente.
+    Requiere CRYPTOPANIC_API_KEY (registro gratuito en cryptopanic.com).
+    Sin key retorna [] para usar yfinance como fallback.
+    """
+    api_key = os.getenv("CRYPTOPANIC_API_KEY")
+    if not api_key:
+        return []
+    currency = _CRYPTO_SYMBOL_MAP.get(ticker, "BTC")
+    try:
+        import requests
+        resp = requests.get(
+            "https://cryptopanic.com/api/v1/posts/",
+            params={"auth_token": api_key, "currencies": currency, "kind": "news"},
+            timeout=8,
+        )
+        if not resp.ok:
+            return []
+        posts = resp.json().get("results", [])
+        out = []
+        for p in posts[:max_items]:
+            title = p.get("title", "")
+            if title:
+                out.append({
+                    "title":     title,
+                    "publisher": p.get("source", {}).get("title", "CryptoPanic"),
+                    "link":      p.get("url", ""),
+                    "ago":       "",
+                    "fuente":    "CryptoPanic",
+                })
+        return out
+    except Exception as e:
+        logger.debug(f"CryptoPanic {ticker}: {e}")
+        return []
+
+
+# ─── Router: elige la mejor fuente según el universo ─────────────────────────
+
+def fetch_news_for_ticker(
+    ticker: str,
+    sym: str,
+    universe_slug: str,
+    max_items: int = 5,
+) -> list[dict]:
+    """
+    Elige la mejor fuente de noticias según el universo:
+      - bmv/fibras   → DataBursátil primero, yfinance como fallback
+      - cripto       → CryptoPanic primero, yfinance como fallback
+      - usa/etfs     → yfinance (Yahoo Finance)
+    """
+    if universe_slug in ("bmv", "fibras"):
+        news = fetch_news_databursatil(ticker, max_items)
+        if not news:
+            news = fetch_news_yfinance(sym, max_items)
+        return news
+
+    if universe_slug == "cripto":
+        news = fetch_news_cryptopanic(ticker, max_items)
+        if not news:
+            news = fetch_news_yfinance(sym, max_items)
+        return news
+
+    # usa / etfs → Yahoo Finance
+    return fetch_news_yfinance(sym, max_items)
 
 
 def _ago(ts: int | None) -> str:
@@ -145,6 +271,7 @@ def analyze_batch(
     picks: list[dict],
     tickers_map: dict[str, str],   # nombre_corto → símbolo yfinance
     universe_name: str,
+    universe_slug: str = "",
 ) -> dict[str, dict]:
     """
     Analiza todos los picks del top-5 en batch.
@@ -158,7 +285,7 @@ def analyze_batch(
     for p in picks:
         name   = p["ticker"]
         sym    = tickers_map.get(name, name)
-        news   = fetch_news_yfinance(sym)
+        news   = fetch_news_for_ticker(name, sym, universe_slug)
         result = analyze_ticker(
             ticker=name,
             sym=sym,
@@ -205,13 +332,13 @@ NEWS_SOURCES = {
     },
     "₿ Cripto (proxies GBM)": {
         "fuentes": [
-            {"nombre": "CryptoPanic",     "tipo": "API",  "costo": "Gratis 1k/mes","url": "https://cryptopanic.com/developers/api/",   "cobertura": "Noticias cripto con sentimiento por coin"},
+            {"nombre": "CryptoPanic",     "tipo": "API",  "costo": "Gratis 1k/mes","url": "https://cryptopanic.com/developers/api/",   "cobertura": "Noticias cripto con sentimiento por coin (BTC, ETH, COIN...)"},
             {"nombre": "CoinGecko",       "tipo": "API",  "costo": "Gratis 30/min","url": "https://www.coingecko.com/api/v3",           "cobertura": "Precios + noticias cripto globales"},
-            {"nombre": "yfinance news",   "tipo": "SDK",  "costo": "Gratis",       "url": "https://pypi.org/project/yfinance/",         "cobertura": "Noticias de IBIT, MSTR, COIN"},
+            {"nombre": "yfinance news",   "tipo": "SDK",  "costo": "Gratis",       "url": "https://pypi.org/project/yfinance/",         "cobertura": "Noticias de IBIT, MSTR, COIN (fallback)"},
             {"nombre": "Decrypt RSS",     "tipo": "RSS",  "costo": "Gratis",       "url": "https://decrypt.co/feed",                    "cobertura": "Noticias BTC/ETH en tiempo real"},
         ],
-        "integrado": ["yfinance news"],
-        "proximos": ["CryptoPanic"],
+        "integrado": ["CryptoPanic", "yfinance news"],
+        "proximos":  ["CoinGecko"],
     },
     "🏢 FIBRAs (bienes raíces MX)": {
         "fuentes": [

@@ -334,7 +334,7 @@ if page.startswith("🏆"):
 # ══════════════════════════════════════════════════════════════════════════════
 
 if page.startswith("📰"):
-    from src.api.gemini_analyst import NEWS_SOURCES, fetch_news_yfinance
+    from src.api.gemini_analyst import NEWS_SOURCES, fetch_news_yfinance, fetch_news_for_ticker
     from src.data.universes import UNIVERSES, UNIVERSE_ORDER
 
     st.title("📰 Noticias & Gemini por universo")
@@ -376,10 +376,10 @@ if page.startswith("📰"):
             sample  = list(tickers.items())[:10]   # primeros 10 para no saturar
 
             if st.button(f"Cargar noticias ({uname})", key=f"news_{cfg['slug']}"):
-                with st.spinner("Obteniendo noticias de yfinance..."):
+                with st.spinner("Obteniendo noticias..."):
                     all_news = {}
                     for name, sym in sample:
-                        news = fetch_news_yfinance(sym, max_items=3)
+                        news = fetch_news_for_ticker(name, sym, cfg["slug"], max_items=3)
                         if news:
                             all_news[name] = news
 
@@ -409,8 +409,8 @@ if page.startswith("📰"):
             if st.button("Analizar con Gemini", key=f"analyze_{cfg['slug']}", disabled=not api_key_ok):
                 sym = tickers[ticker_input]
                 with st.spinner(f"Gemini analizando {ticker_input}..."):
-                    from src.api.gemini_analyst import analyze_ticker
-                    news = fetch_news_yfinance(sym, max_items=5)
+                    from src.api.gemini_analyst import analyze_ticker, fetch_news_for_ticker
+                    news = fetch_news_for_ticker(ticker_input, sym, cfg["slug"], max_items=5)
                     result = analyze_ticker(
                         ticker=ticker_input, sym=sym, rank=1, score=0.5,
                         razones=[], universe_name=uname, news=news,
