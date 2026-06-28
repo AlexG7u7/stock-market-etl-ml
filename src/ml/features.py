@@ -68,6 +68,9 @@ FEATURE_COLS = [
     "cs_mean_rev",    # z-score retorno 5d  (mean-reversion cross-seccional)
 ]
 
+# Features de momentum largo (>20d) — calculadas en compute_features, úsalas opcionalmente
+LONG_MOMENTUM_COLS = ["ret_60d", "ret_90d"]
+
 # Features que requieren datos macro externos (se añaden con add_macro_features)
 MACRO_FEATURE_COLS = [
     "usdmxn_ret5", "usdmxn_vs_ma20",
@@ -118,6 +121,8 @@ def compute_features(df: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     df["ret_5d"]  = c.pct_change(5)  * 100
     df["ret_10d"] = c.pct_change(10) * 100
     df["ret_20d"] = c.pct_change(20) * 100
+    df["ret_60d"] = c.pct_change(60) * 100   # momentum trimestral
+    df["ret_90d"] = c.pct_change(90) * 100   # momentum cuatrimestral
 
     # ── Medias móviles ────────────────────────────────────────────────────────
     sma20 = c.rolling(20).mean()

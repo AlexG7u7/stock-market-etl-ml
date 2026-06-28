@@ -41,15 +41,19 @@ from src.data import store
 from src.data.universes import UNIVERSES
 from src.ml.features import (
     compute_features, add_macro_features, add_cross_section_features,
-    compute_target, compute_signal_score, FEATURE_COLS,
+    compute_target, compute_signal_score, FEATURE_COLS, LONG_MOMENTUM_COLS,
 )
 
-# Sufijo rank-normalizado (percentil cross-seccional)
-RN_COLS = [f"rn_{c}" for c in FEATURE_COLS]
+# Conjunto extendido: features técnicas + momentum largo
+EXTENDED_FEATURE_COLS = FEATURE_COLS + LONG_MOMENTUM_COLS
 
+# Sufijo rank-normalizado (percentil cross-seccional) — sobre features extendidas
+RN_COLS = [f"rn_{c}" for c in EXTENDED_FEATURE_COLS]
+
+# Parámetros LGBM mejorados (menos regularización → más capacidad con pocos tickers)
 _LGBM_BASE = dict(
-    n_estimators=300, num_leaves=31, learning_rate=0.03, min_child_samples=40,
-    feature_fraction=0.7, bagging_fraction=0.8, bagging_freq=1, reg_lambda=5.0,
+    n_estimators=500, num_leaves=31, learning_rate=0.02, min_child_samples=20,
+    feature_fraction=0.8, bagging_fraction=0.8, bagging_freq=1, reg_lambda=3.0,
     n_jobs=2, random_state=42, verbosity=-1,
 )
 
@@ -164,7 +168,7 @@ class SuperModel:
             self._log(f"  [{uname}] insuficientes tickers ({len(frames)}) — skip")
             return []
 
-        feat_cols = [c for c in FEATURE_COLS if c in next(iter(frames.values())).columns]
+        feat_cols = [c for c in EXTENDED_FEATURE_COLS if c in next(iter(frames.values())).columns]
 
         # Panel completo para entrenamiento
         rows = []
@@ -182,15 +186,17 @@ class SuperModel:
         for c in feat_cols:
             full[f"rn_{c}"] = g[c].rank(pct=True)
         full["pct_fwd"] = g["fwd_ret"].rank(pct=True)
-        # target binario: ¿le gana a la mediana del universo ese día?
+        # target relativo: ¿le gana a la mediana del universo ese día?
         full["y_rel"] = (g["fwd_ret"].rank(pct=True) > 0.5).astype(int)
+        # target absoluto: ¿sube más de 0%? (igual que el modelo de producción)
+        full["y_abs"] = (full["fwd_ret"] > 0).astype(int)
 
         rn_avail = [f"rn_{c}" for c in feat_cols]
         full = full.dropna(subset=rn_avail + ["pct_fwd"])
         if len(full) < 200:
             return []
 
-        # Split temporal para medir edge (AUC) de cada modelo
+        # Split temporal 80/20 para medir edge (AUC) de cada modelo
         cut = full.index[int(len(full) * 0.80)]
         train, valid = full[full.index < cut], full[full.index >= cut]
         if len(valid) < 30 or train["y_rel"].nunique() < 2:
@@ -241,10 +247,27 @@ class SuperModel:
                 names = list(hscores.keys())
                 norm  = _minmax(np.array([hscores[n] for n in names]))
                 signals_by_model["heuristic"] = dict(zip(names, norm))
-                # AUC heurístico aproximado: score vs y_rel del set de validación
                 auc["heuristic"] = 0.52  # peso bajo fijo (screener débil pero independiente)
         except Exception as e:
             logger.debug(f"heuristic {uname}: {e}")
+
+        # ── Modelo 4: EnsembleModel con target ABSOLUTO (igual que producción) ─
+        # Este modelo predice P(subida > 0%) independientemente del universo.
+        # En el holdout de producción alcanza AUC ~0.54-0.55 — mucho mejor que y_rel.
+        try:
+            from src.ml.ensemble import EnsembleModel
+            base_feat_cols = [c for c in FEATURE_COLS if c in feat_cols]
+            if base_feat_cols and train["y_abs"].nunique() > 1:
+                ens_abs = EnsembleModel(top_features=min(12, len(base_feat_cols)), calibrate=True)
+                ens_abs.fit(train, feature_cols=base_feat_cols, target_col="y_abs")
+                p_val_abs = ens_abs.predict_proba(valid, base_feat_cols)
+                auc["woe_abs"] = self._safe_auc(valid["y_abs"].values, p_val_abs)
+                today = self._today_rows(frames, base_feat_cols)
+                if today is not None and not today.empty:
+                    preds = ens_abs.predict_proba(today, base_feat_cols)
+                    signals_by_model["woe_abs"] = dict(zip(today["ticker"], preds))
+        except Exception as e:
+            logger.debug(f"woe_abs {uname}: {e}")
 
         if not signals_by_model:
             return []
