@@ -114,15 +114,18 @@ def market_context(token: str) -> dict:
 
 def score_news_sentiment(news: list[dict]) -> dict | None:
     """
-    Puntúa el sentimiento de las noticias del día con un LLM.
-
-    Requiere OPENAI_API_KEY o ANTHROPIC_API_KEY en el entorno.
-    Devuelve None si no hay key o no hay noticias (degradación elegante).
+    Puntúa el sentimiento de las noticias del día con Gemini 2.5-flash.
+    Requiere GEMINI_API_KEY en el entorno.
+    Devuelve None si no hay key o no hay noticias.
 
     Returns:
         {"score": -1..1, "etiqueta": "...", "resumen": "...", "n": int}  o  None
     """
     if not news:
+        return None
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
         return None
 
     headlines = "\n".join(f"- {n.get('titulo','')}" for n in news if n.get("titulo"))
@@ -138,36 +141,23 @@ def score_news_sentiment(news: list[dict]) -> dict | None:
         f"Titulares:\n{headlines}"
     )
 
-    # Intentar Anthropic
-    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-    openai_key    = os.getenv("OPENAI_API_KEY")
-
+    import json as _json
     try:
-        if anthropic_key:
-            import anthropic, json as _json
-            client = anthropic.Anthropic(api_key=anthropic_key)
-            msg = client.messages.create(
-                model="claude-3-5-haiku-latest", max_tokens=300,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            txt = msg.content[0].text
-            res = _json.loads(txt[txt.find("{"):txt.rfind("}") + 1])
-            res["n"] = len(news)
-            return res
-        elif openai_key:
-            from openai import OpenAI
-            import json as _json
-            client = OpenAI(api_key=openai_key)
-            resp = client.chat.completions.create(
-                model="gpt-4o-mini", max_tokens=300,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            txt = resp.choices[0].message.content
-            res = _json.loads(txt[txt.find("{"):txt.rfind("}") + 1])
-            res["n"] = len(news)
-            return res
+        from google import genai                        # type: ignore[import]
+        from google.genai import types as genai_types   # type: ignore[import]
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=genai_types.GenerateContentConfig(
+                max_output_tokens=300,
+                temperature=0.2,
+            ),
+        )
+        txt = (response.text or "").strip()
+        res = _json.loads(txt[txt.find("{"):txt.rfind("}") + 1])
+        res["n"] = len(news)
+        return res
     except Exception as e:
-        logger.warning(f"Sentimiento LLM falló: {e}")
+        logger.warning(f"Sentimiento Gemini falló: {e}")
         return None
-
-    return None  # sin key disponible

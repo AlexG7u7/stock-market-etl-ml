@@ -361,7 +361,7 @@ if page.startswith("🎯"):
             s_icon = "🟢" if score > 0.2 else "🔴" if score < -0.2 else "🟡"
             st.info(f"{s_icon} **Sentimiento de noticias (LLM): {score:+.2f}** — {sent.get('etiqueta','')}. {sent.get('resumen','')}")
         else:
-            st.caption("💡 Sentimiento con LLM desactivado (sin `OPENAI_API_KEY`/`ANTHROPIC_API_KEY`). Agrega una key al `.env` para activar análisis de sentimiento de noticias.")
+            st.caption("💡 Sentimiento Gemini desactivado. Agrega `GEMINI_API_KEY` al `.env` (obtén tu key gratis en [aistudio.google.com](https://aistudio.google.com/app/apikey)).")
 
         news = mctx.get("news", [])
         if news:

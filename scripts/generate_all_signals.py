@@ -31,7 +31,8 @@ sys.path.insert(0, str(ROOT))
 
 from src.data.universes import UNIVERSES
 from src.ml.features import (compute_features, add_macro_features,
-                              add_cross_section_features, FEATURE_COLS)
+                              add_cross_section_features, FEATURE_COLS,
+                              TECH_FEATURE_COLS)
 from scripts.cross_sectional_v2 import add_rank_normalized, RN_COLS, _LGBM_BASE
 
 OUT_DIR = ROOT / "data" / "signals"
@@ -54,6 +55,39 @@ FEAT_LABELS = {
     "rn_wti_ret5":       "Precio del petróleo (WTI)",
     "rn_usdmxn_ret5":    "Movimiento del peso",
 }
+
+
+# ── Descarga de activos macro ─────────────────────────────────────────────────
+
+MACRO_SYMBOLS = {
+    "USDMXN":  "MXN=X",
+    "NAFTRAC": "NAFTRACISHRS.MX",
+    "WTI":     "CL=F",
+    "SP500":   "^GSPC",
+}
+
+def download_macro() -> dict[str, pd.DataFrame]:
+    """Descarga los 4 activos macro necesarios para add_macro_features()."""
+    out: dict[str, pd.DataFrame] = {}
+    symbols = list(MACRO_SYMBOLS.values())
+    try:
+        raw = yf.download(symbols, period="2y", auto_adjust=True, progress=False)
+        if isinstance(raw.columns, pd.MultiIndex):
+            for key, sym in MACRO_SYMBOLS.items():
+                try:
+                    df = raw.xs(sym, axis=1, level=1).dropna(how="all")
+                    if not df.empty:
+                        out[key] = df
+                except Exception:
+                    pass
+        else:
+            # Un solo símbolo descargado
+            first_key = list(MACRO_SYMBOLS.keys())[0]
+            if not raw.empty:
+                out[first_key] = raw
+    except Exception as e:
+        print(f"  ! Error descargando macro: {e}")
+    return out
 
 
 # ── Descarga de precios via yfinance ─────────────────────────────────────────
@@ -81,42 +115,49 @@ def download_prices(tickers: dict[str, str]) -> dict[str, pd.DataFrame]:
     return out
 
 
-# ── Sentimiento vía Vertex AI Gemini ─────────────────────────────────────────
+# ── Sentimiento vía Gemini (mismo patrón que TrabajadoresDomesticos) ──────────
 
 def score_sentiment_gemini(noticias: list[str], tickers: list[str]) -> dict[str, float]:
     """
-    Llama a Vertex AI Gemini para obtener un score de sentimiento por ticker.
-    Retorna {} si GCP_PROJECT_ID no está configurado.
+    Llama a Gemini 2.5-flash con API key para obtener sentimiento por ticker.
+    Usa el mismo patrón que TrabajadoresDomesticos: google.genai.Client(api_key=...).
+    Retorna {} si GEMINI_API_KEY no está configurado.
     """
-    project = os.environ.get("GCP_PROJECT_ID")
-    if not project or not noticias:
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key or not noticias:
         return {}
     try:
-        import vertexai
-        from vertexai.generative_models import GenerativeModel
-        vertexai.init(project=project, location="us-central1")
-        model = GenerativeModel("gemini-1.5-flash")
+        from google import genai                       # type: ignore[import]
+        from google.genai import types as genai_types  # type: ignore[import]
+
+        client = genai.Client(api_key=api_key)
 
         noticias_txt = "\n".join(f"- {n}" for n in noticias[:20])
         tickers_txt  = ", ".join(tickers)
-        prompt = f"""Analiza el sentimiento de estas noticias financieras mexicanas para las empresas listadas.
-Para cada empresa da un score del -1 (muy negativo) al +1 (muy positivo). Si no hay noticias relevantes, da 0.
+        prompt = f"""Analiza el sentimiento de estas noticias financieras para las empresas listadas.
+Para cada empresa asigna un score de -1 (muy negativo) a +1 (muy positivo). Si no hay noticias relevantes usa 0.
 Responde SOLO con JSON: {{"TICKER": score, ...}}
 
 Empresas: {tickers_txt}
 
-Noticias de hoy:
+Noticias:
 {noticias_txt}"""
 
-        resp = model.generate_content(prompt)
-        text = resp.text.strip()
-        # Extraer JSON de la respuesta
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=genai_types.GenerateContentConfig(
+                max_output_tokens=256,
+                temperature=0.2,
+            ),
+        )
+        text = (response.text or "").strip()
         start = text.find("{")
         end   = text.rfind("}") + 1
         if start >= 0 and end > start:
             return json.loads(text[start:end])
     except Exception as e:
-        print(f"  ! Gemini: {e}")
+        print(f"  ! Gemini sentimiento: {e}")
     return {}
 
 
@@ -164,11 +205,17 @@ def generate_universe_signal(
     if len(prices) < min_n:
         return {"error": f"Solo {len(prices)} tickers disponibles (mínimo {min_n})"}
 
-    # features técnicas
+    # datos macro (USD/MXN, NAFTRAC, WTI, SP500) — necesarios para FEATURE_COLS
+    print(f"  [{universe_name}]  descargando macro (USDMXN, NAFTRAC, WTI, SP500)...")
+    macro_data = download_macro()
+
+    # features técnicas + macro
     feat_frames = {}
     for name, df in prices.items():
         try:
             feat = compute_features(df)
+            if macro_data:
+                feat = add_macro_features(feat, macro_data)
             feat["ticker"] = name
             feat_frames[name] = feat
         except Exception:
@@ -179,14 +226,17 @@ def generate_universe_signal(
 
     feat_frames = add_cross_section_features(feat_frames)
 
+    # columnas de features disponibles en este run
+    available_feat_cols = [c for c in FEATURE_COLS if c in next(iter(feat_frames.values())).columns]
+
     # dataset con target para entrenar
     rows = []
     for name, df in feat_frames.items():
-        df = df.dropna(subset=FEATURE_COLS)
+        df = df.dropna(subset=available_feat_cols)
         if len(df) < 100:
             continue
         df["fwd_ret"] = df["Close"].pct_change(horizon).shift(-horizon) * 100
-        df = df.dropna(subset=FEATURE_COLS + ["fwd_ret"])
+        df = df.dropna(subset=available_feat_cols + ["fwd_ret"])
         rows.append(df)
 
     if not rows:
@@ -205,7 +255,7 @@ def generate_universe_signal(
     # recalcular ranks del universo de hoy
     last_vals = {}
     for name, df in feat_frames.items():
-        df_clean = df.dropna(subset=FEATURE_COLS)
+        df_clean = df.dropna(subset=available_feat_cols)
         if df_clean.empty:
             continue
         last_vals[name] = df_clean.iloc[-1]
@@ -215,7 +265,7 @@ def generate_universe_signal(
 
     for name, row in last_vals.items():
         rn_row = {}
-        for c in FEATURE_COLS:
+        for c in available_feat_cols:
             vals = [r[c] for r in last_vals.values() if c in r.index and not pd.isna(r[c])]
             rn_row[f"rn_{c}"] = sum(1 for v in vals if v <= row.get(c, 0)) / len(vals) if vals else 0.5
         rn_row["ticker"] = name
