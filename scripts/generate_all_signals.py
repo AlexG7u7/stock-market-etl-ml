@@ -147,15 +147,21 @@ Noticias:
             model="gemini-2.5-flash",
             contents=prompt,
             config=genai_types.GenerateContentConfig(
-                max_output_tokens=256,
+                max_output_tokens=1024,
                 temperature=0.2,
+                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
             ),
         )
-        text = (response.text or "").strip()
-        start = text.find("{")
-        end   = text.rfind("}") + 1
+        txt = (response.text or "").strip()
+        # Limpiar bloque markdown si viene envuelto en ```json ... ```
+        if txt.startswith("```"):
+            txt = txt.split("```")[1]
+            if txt.startswith("json"):
+                txt = txt[4:]
+        start = txt.find("{")
+        end   = txt.rfind("}") + 1
         if start >= 0 and end > start:
-            return json.loads(text[start:end])
+            return json.loads(txt[start:end])
     except Exception as e:
         print(f"  ! Gemini sentimiento: {e}")
     return {}

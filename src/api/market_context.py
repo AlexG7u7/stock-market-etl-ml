@@ -142,6 +142,19 @@ def score_news_sentiment(news: list[dict]) -> dict | None:
     )
 
     import json as _json
+
+    def _parse_json(text: str) -> dict:
+        """Extrae JSON de respuestas que pueden venir con bloques ```json ... ```."""
+        txt = text.strip()
+        # Quitar bloque markdown si viene envuelto
+        if txt.startswith("```"):
+            txt = txt.split("```")[1]
+            if txt.startswith("json"):
+                txt = txt[4:]
+        start = txt.find("{")
+        end   = txt.rfind("}") + 1
+        return _json.loads(txt[start:end])
+
     try:
         from google import genai                        # type: ignore[import]
         from google.genai import types as genai_types   # type: ignore[import]
@@ -150,12 +163,12 @@ def score_news_sentiment(news: list[dict]) -> dict | None:
             model="gemini-2.5-flash",
             contents=prompt,
             config=genai_types.GenerateContentConfig(
-                max_output_tokens=300,
+                max_output_tokens=1024,
                 temperature=0.2,
+                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
             ),
         )
-        txt = (response.text or "").strip()
-        res = _json.loads(txt[txt.find("{"):txt.rfind("}") + 1])
+        res = _parse_json(response.text or "")
         res["n"] = len(news)
         return res
     except Exception as e:
