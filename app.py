@@ -5,6 +5,7 @@ Correr: streamlit run app.py
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime
@@ -79,13 +80,13 @@ with st.sidebar:
 
     page = st.radio("Navegación", [
         "🏆  Ranking Mensual",
+        "📰  Noticias & Gemini",
         "🎯  Señales de hoy",
         "👀  Monitor",
         "📋  Paper Trading",
         "🕹️  Simulador",
         "🏦  GBM Broker",
         "🧠  Modelo",
-        "🔬  WoE Analysis",
         "🗄️  Base de datos",
         "📖  Documentación",
     ])
@@ -188,25 +189,71 @@ if page.startswith("🏆"):
 
             if picks:
                 medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
+                accion_colors = {
+                    "COMPRA FUERTE": "🟢", "COMPRA": "🟢",
+                    "ESPERA": "🟡", "EVITA": "🔴",
+                }
+                sent_icons = {"positivo": "📈", "neutral": "➡️", "negativo": "📉"}
+
                 for i, p in enumerate(picks):
-                    precio = p.get("precio_actual")
+                    precio     = p.get("precio_actual")
                     precio_str = f"{moneda_sym}{precio:,.2f}" if precio else "—"
                     acciones   = p.get("acciones_aprox")
                     accion_str = str(acciones) if acciones else "fraccionado"
+                    gem        = p.get("gemini", {})
+                    gem_accion = gem.get("accion", "")
+                    gem_icon   = accion_colors.get(gem_accion, "⚪")
 
                     with st.expander(
                         f"{medals[i]}  **{p['ticker']}**  —  confianza {p['score_pct']}  "
-                        f"|  {precio_str}  |  ≈ {accion_str} acciones/títulos",
+                        f"|  {precio_str}  |  ≈ {accion_str} acciones/títulos  "
+                        + (f"|  {gem_icon} Gemini: **{gem_accion}**" if gem_accion else ""),
                         expanded=(i < 3),
                     ):
+                        # ── Análisis Gemini (protagonista) ───────────────────
+                        if gem.get("resumen"):
+                            sent_ico = sent_icons.get(gem.get("sentimiento_news", ""), "")
+                            st.markdown(f"### {gem_icon} {gem.get('resumen', '')}")
+
+                            g1, g2 = st.columns(2)
+                            with g1:
+                                if gem.get("catalizador"):
+                                    st.success(f"**Catalizador:** {gem['catalizador']}")
+                            with g2:
+                                if gem.get("riesgo"):
+                                    st.warning(f"**Riesgo:** {gem['riesgo']}")
+
+                            if gem.get("sentimiento_news"):
+                                st.caption(f"{sent_ico} Noticias recientes: **{gem['sentimiento_news']}**")
+                        else:
+                            st.caption("_(Agrega GEMINI_API_KEY al .env para análisis ejecutivo)_")
+
+                        st.divider()
+
+                        # ── Métricas ──────────────────────────────────────────
                         cc1, cc2, cc3 = st.columns(3)
                         cc1.metric("Score del modelo", p["score_pct"])
                         cc2.metric(f"Monto ({cfg['moneda']})", f"${monto_por:,.0f}")
                         cc3.metric("Acciones aprox.", accion_str)
 
-                        st.markdown("**¿Por qué está en el top?**")
-                        for r in p.get("razones", []):
-                            st.markdown(f"- {r}")
+                        # ── Señales técnicas (detalles) ───────────────────────
+                        with st.expander("🔬 Señales técnicas", expanded=False):
+                            for r in p.get("razones", []):
+                                st.markdown(f"- {r}")
+
+                        # ── Noticias recientes ────────────────────────────────
+                        noticias = p.get("noticias", [])
+                        if noticias:
+                            with st.expander(f"📰 {len(noticias)} noticias recientes", expanded=False):
+                                for n in noticias:
+                                    link = n.get("link", "")
+                                    title = n.get("title", "")
+                                    pub   = n.get("publisher", "")
+                                    ago   = n.get("ago", "")
+                                    if link:
+                                        st.markdown(f"- [{title}]({link}) — *{pub}* {ago}")
+                                    else:
+                                        st.markdown(f"- {title} — *{pub}* {ago}")
 
             # ── Evitar ───────────────────────────────────────────────────────
             evitar = sig.get("evitar", [])
@@ -231,9 +278,9 @@ if page.startswith("🏆"):
                 )
 
                 def _color_row(row):
-                    if row["rank"] in top5_ranks:
+                    if row["#"] in top5_ranks:
                         return ["background-color: #1a472a; color: white"] * len(row)
-                    if row["rank"] in bot5_ranks:
+                    if row["#"] in bot5_ranks:
                         return ["background-color: #4a1a1a; color: white"] * len(row)
                     return [""] * len(row)
 
@@ -281,6 +328,106 @@ if page.startswith("🏆"):
                 f"Modelo: LGBMRegressor · features rank-normalizadas · horizonte {cfg['horizonte']}d"
                 + (" · validación 2016-2024: +7.7% anual (7/9 años)" if slug == "bmv" else "")
             )
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PÁGINA — NOTICIAS & GEMINI por clase de activo
+# ══════════════════════════════════════════════════════════════════════════════
+
+if page.startswith("📰"):
+    from src.api.gemini_analyst import NEWS_SOURCES, fetch_news_yfinance
+    from src.data.universes import UNIVERSES, UNIVERSE_ORDER
+
+    st.title("📰 Noticias & Gemini por universo")
+    st.caption("Noticias en tiempo real por clase de activo · análisis ejecutivo con Gemini 2.5-flash")
+
+    api_key_ok = bool(os.environ.get("GEMINI_API_KEY"))
+    if not api_key_ok:
+        st.warning("⚠️ **GEMINI_API_KEY** no configurada. Agrega tu key al `.env` para análisis ejecutivo. "
+                   "Puedes obtenerla gratis en [aistudio.google.com](https://aistudio.google.com/app/apikey).", icon="⚠️")
+
+    news_tabs = st.tabs(list(UNIVERSE_ORDER))
+
+    for tab, uname in zip(news_tabs, UNIVERSE_ORDER):
+        cfg     = UNIVERSES[uname]
+        sources = NEWS_SOURCES.get(uname, {})
+
+        with tab:
+            st.caption(f"*{cfg['descripcion']}*")
+
+            # ── Fuentes de noticias disponibles ─────────────────────────────
+            st.subheader("🔌 Fuentes de noticias")
+            fuentes = sources.get("fuentes", [])
+            integradas = set(sources.get("integrado", []))
+            proximas   = set(sources.get("proximos", []))
+
+            for f in fuentes:
+                nombre = f["nombre"]
+                estado = "✅ Activa" if nombre in integradas else ("🔜 Próxima" if nombre in proximas else "⬜ Disponible")
+                st.markdown(
+                    f"**{nombre}** — {estado} &nbsp;·&nbsp; {f['tipo']} &nbsp;·&nbsp; "
+                    f"💰 {f['costo']} &nbsp;·&nbsp; {f['cobertura']}"
+                )
+
+            st.divider()
+
+            # ── Noticias live por ticker (top-10 del universo) ───────────────
+            st.subheader("📡 Noticias en tiempo real")
+            tickers = cfg["tickers"]
+            sample  = list(tickers.items())[:10]   # primeros 10 para no saturar
+
+            if st.button(f"Cargar noticias ({uname})", key=f"news_{cfg['slug']}"):
+                with st.spinner("Obteniendo noticias de yfinance..."):
+                    all_news = {}
+                    for name, sym in sample:
+                        news = fetch_news_yfinance(sym, max_items=3)
+                        if news:
+                            all_news[name] = news
+
+                if not all_news:
+                    st.info("No se encontraron noticias recientes para este universo.")
+                else:
+                    for name, news_list in all_news.items():
+                        with st.expander(f"**{name}** — {len(news_list)} artículos"):
+                            for n in news_list:
+                                link  = n.get("link", "")
+                                title = n.get("title", "")
+                                pub   = n.get("publisher", "")
+                                ago   = n.get("ago", "")
+                                if link:
+                                    st.markdown(f"- [{title}]({link}) — *{pub}* {ago}")
+                                else:
+                                    st.markdown(f"- {title} — *{pub}* {ago}")
+
+            st.divider()
+
+            # ── Análisis ejecutivo Gemini en tiempo real ─────────────────────
+            st.subheader("🤖 Análisis Gemini en tiempo real")
+            ticker_input = st.selectbox(
+                "Selecciona un instrumento", list(tickers.keys()),
+                key=f"sel_{cfg['slug']}"
+            )
+            if st.button("Analizar con Gemini", key=f"analyze_{cfg['slug']}", disabled=not api_key_ok):
+                sym = tickers[ticker_input]
+                with st.spinner(f"Gemini analizando {ticker_input}..."):
+                    from src.api.gemini_analyst import analyze_ticker
+                    news = fetch_news_yfinance(sym, max_items=5)
+                    result = analyze_ticker(
+                        ticker=ticker_input, sym=sym, rank=1, score=0.5,
+                        razones=[], universe_name=uname, news=news,
+                    )
+
+                if result:
+                    accion = result.get("accion", "")
+                    color  = {"COMPRA FUERTE": "success", "COMPRA": "success",
+                              "ESPERA": "warning", "EVITA": "error"}.get(accion, "info")
+                    getattr(st, color)(f"**{accion}** — {result.get('resumen', '')}")
+                    c1, c2 = st.columns(2)
+                    c1.success(f"**Catalizador:** {result.get('catalizador', '—')}")
+                    c2.warning(f"**Riesgo:** {result.get('riesgo', '—')}")
+                    st.caption(f"Noticias: {result.get('sentimiento_news','—')}")
+                else:
+                    st.error("No se pudo obtener análisis de Gemini.")
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PÁGINA 1 — SEÑALES DE HOY

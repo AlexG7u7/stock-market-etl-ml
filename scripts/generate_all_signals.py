@@ -115,58 +115,6 @@ def download_prices(tickers: dict[str, str]) -> dict[str, pd.DataFrame]:
     return out
 
 
-# ── Sentimiento vía Gemini (mismo patrón que TrabajadoresDomesticos) ──────────
-
-def score_sentiment_gemini(noticias: list[str], tickers: list[str]) -> dict[str, float]:
-    """
-    Llama a Gemini 2.5-flash con API key para obtener sentimiento por ticker.
-    Usa el mismo patrón que TrabajadoresDomesticos: google.genai.Client(api_key=...).
-    Retorna {} si GEMINI_API_KEY no está configurado.
-    """
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key or not noticias:
-        return {}
-    try:
-        from google import genai                       # type: ignore[import]
-        from google.genai import types as genai_types  # type: ignore[import]
-
-        client = genai.Client(api_key=api_key)
-
-        noticias_txt = "\n".join(f"- {n}" for n in noticias[:20])
-        tickers_txt  = ", ".join(tickers)
-        prompt = f"""Analiza el sentimiento de estas noticias financieras para las empresas listadas.
-Para cada empresa asigna un score de -1 (muy negativo) a +1 (muy positivo). Si no hay noticias relevantes usa 0.
-Responde SOLO con JSON: {{"TICKER": score, ...}}
-
-Empresas: {tickers_txt}
-
-Noticias:
-{noticias_txt}"""
-
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=genai_types.GenerateContentConfig(
-                max_output_tokens=1024,
-                temperature=0.2,
-                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
-            ),
-        )
-        txt = (response.text or "").strip()
-        # Limpiar bloque markdown si viene envuelto en ```json ... ```
-        if txt.startswith("```"):
-            txt = txt.split("```")[1]
-            if txt.startswith("json"):
-                txt = txt[4:]
-        start = txt.find("{")
-        end   = txt.rfind("}") + 1
-        if start >= 0 and end > start:
-            return json.loads(txt[start:end])
-    except Exception as e:
-        print(f"  ! Gemini sentimiento: {e}")
-    return {}
-
-
 # ── Régimen de mercado ────────────────────────────────────────────────────────
 
 def market_regime(benchmark_sym: str) -> dict:
@@ -328,6 +276,23 @@ def generate_universe_signal(
         if d_rebal.weekday() < 5:
             bdays += 1
 
+    # ── Análisis Gemini por pick ────────────────────────────────────────────
+    from src.api.gemini_analyst import analyze_batch
+    tickers_map = cfg["tickers"]
+    gemini_analyses = analyze_batch(picks, tickers_map, universe_name)
+    # Enriquecer cada pick con el análisis y noticias
+    for p in picks:
+        name = p["ticker"]
+        a = gemini_analyses.get(name, {})
+        p["gemini"] = {
+            "resumen":          a.get("resumen", ""),
+            "accion":           a.get("accion", ""),
+            "riesgo":           a.get("riesgo", ""),
+            "catalizador":      a.get("catalizador", ""),
+            "sentimiento_news": a.get("sentimiento_news", ""),
+        }
+        p["noticias"] = a.get("noticias", [])
+
     return {
         "universe": universe_name,
         "descripcion": cfg["descripcion"],
@@ -344,7 +309,6 @@ def generate_universe_signal(
             for i, (_, row) in enumerate(today_df.iterrows())
         ],
         "n_tickers_analizados": len(today_df),
-        "sentiment": {},  # se rellena si Gemini está configurado
     }
 
 
