@@ -95,6 +95,7 @@ with st.sidebar:
     st.divider()
 
     page = st.radio("Navegación", [
+        "🏆  Ranking Mensual",
         "🎯  Señales de hoy",
         "👀  Monitor",
         "📋  Paper Trading",
@@ -110,6 +111,163 @@ with st.sidebar:
     if st.button("🔄 Actualizar datos", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PÁGINA 0 — RANKING MENSUAL (nuevo modelo cross-seccional v2a)
+# ══════════════════════════════════════════════════════════════════════════════
+
+if page.startswith("🏆"):
+    import os as _os
+
+    st.title("🏆 Ranking Mensual de Inversión")
+    st.caption("Modelo cross-seccional · rebalanceo cada ~20 días hábiles · long-only top-5")
+
+    # ── Cargar señal mensual ────────────────────────────────────────────────
+    @st.cache_data(ttl=300)
+    def load_monthly() -> dict:
+        p = ROOT / "data" / "monthly_signal.json"
+        return json.loads(p.read_text()) if p.exists() else {}
+
+    sig = load_monthly()
+
+    # ── Panel de generación si no hay señal ────────────────────────────────
+    col_gen1, col_gen2 = st.columns([3, 1])
+    with col_gen1:
+        capital_input = st.number_input("Capital disponible (MXN)", value=50_000,
+                                         step=10_000, min_value=10_000)
+    with col_gen2:
+        st.write("")
+        st.write("")
+        gen_btn = st.button("🔄 Generar señal", type="primary", use_container_width=True)
+
+    if gen_btn:
+        with st.spinner("Entrenando modelo y calculando ranking (~25 seg)..."):
+            rc, out = run_script(["scripts/generate_monthly_signal.py",
+                                  "--capital", str(int(capital_input))])
+        if rc == 0:
+            st.cache_data.clear()
+            st.success("✅ Señal mensual generada")
+            st.rerun()
+        else:
+            st.error("Error al generar señal")
+            st.code(out[-2000:])
+
+    if not sig:
+        st.info("Aún no hay señal mensual. Haz clic en **Generar señal** arriba.")
+        st.stop()
+
+    # ── Header: régimen y fechas ────────────────────────────────────────────
+    mercado = sig.get("mercado", {})
+    reg_emoji = mercado.get("emoji", "⚪")
+    reg_est   = mercado.get("estado", "desconocido").upper()
+    reg_desc  = mercado.get("descripcion", "")
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("📅 Generado", sig.get("fecha_generacion", "—"))
+    c2.metric("⏰ Próximo rebalanceo", sig.get("proximo_rebalanceo", "—"))
+    c3.metric(f"{reg_emoji} Régimen de mercado", reg_est)
+
+    if mercado.get("estado") == "alcista":
+        st.success(f"🟢 {reg_desc}")
+    elif mercado.get("estado") == "bajista":
+        st.warning(f"🔴 {reg_desc}")
+    else:
+        st.info(f"🟡 {reg_desc}")
+
+    st.divider()
+
+    # ── Sección 1: Top-5 a comprar ─────────────────────────────────────────
+    st.subheader("📋 ¿Qué comprar este mes?")
+
+    capital_sig = sig.get("capital_total", capital_input)
+    monto_por  = sig.get("monto_por_nombre", capital_sig / 5)
+
+    picks = sig.get("top5", [])
+    if picks:
+        for i, p in enumerate(picks):
+            with st.expander(
+                f"{'🥇' if i==0 else '🥈' if i==1 else '🥉' if i==2 else '  '} "
+                f"**{p['ticker']}** — confianza {p['score_pct']}   "
+                f"${p.get('precio_actual', '—')} MXN   "
+                f"≈ {p.get('acciones_aprox', '?')} acciones",
+                expanded=(i < 3),
+            ):
+                cc1, cc2, cc3 = st.columns(3)
+                cc1.metric("Score del modelo", p["score_pct"])
+                cc2.metric("Monto a invertir", f"${monto_por:,.0f} MXN")
+                cc3.metric("Acciones aprox.", str(p.get("acciones_aprox", "—")))
+
+                st.markdown("**¿Por qué está en el top?**")
+                for r in p.get("razones", []):
+                    st.markdown(f"- {r}")
+
+    # ── Sección 2: Acciones a evitar ───────────────────────────────────────
+    evitar = sig.get("evitar", [])
+    if evitar:
+        st.markdown(f"⛔ **Evitar este mes:** {' · '.join(evitar)}")
+
+    st.divider()
+
+    # ── Sección 3: Ranking completo del universo ───────────────────────────
+    st.subheader("📊 Ranking completo del universo (31 acciones)")
+
+    universo = sig.get("universo_completo", [])
+    if universo:
+        df_u = pd.DataFrame(universo)
+        df_u["Barra"] = df_u["score"].apply(lambda s: "█" * int(s * 20))
+        df_u.columns = ["Ticker", "Score", "Rank", "  "]
+        df_u["Rank"] = df_u["Rank"].astype(int)
+        df_u["Score %"] = (df_u["Score"] * 100).round(1).astype(str) + "%"
+
+        def color_row(row):
+            if row["Rank"] <= 5:
+                return ["background-color: #1a472a; color: white"] * len(row)
+            elif row["Rank"] >= len(df_u) - 4:
+                return ["background-color: #4a1a1a; color: white"] * len(row)
+            return [""] * len(row)
+
+        st.dataframe(
+            df_u[["Rank", "Ticker", "Score %", "  "]].style.apply(color_row, axis=1),
+            use_container_width=True, hide_index=True, height=700,
+        )
+
+    st.divider()
+
+    # ── Sección 4: Plan de acción ──────────────────────────────────────────
+    st.subheader("🗓️ Plan de acción")
+    st.markdown(f"""
+| Paso | Acción |
+|---|---|
+| **Hoy** | Vende las posiciones del mes anterior (si las tienes) |
+| **Hoy** | Compra {" + ".join([p['ticker'] for p in picks])} — ${monto_por:,.0f} MXN cada una |
+| **{sig.get('proximo_rebalanceo', '~20 días')}** | Vuelve a correr el modelo y rota si cambió el ranking |
+| **Siempre** | No toques las posiciones entre rebalanceos — el ruido diario es normal |
+""")
+
+    # ── Sección 5: Contexto del mercado ───────────────────────────────────
+    st.divider()
+    st.subheader("🌡️ Contexto del mercado")
+
+    try:
+        from src.data.store import get as _store_get
+        naf = _store_get("NAFTRAC")
+        if naf is not None and len(naf) > 60:
+            c = naf["Close"].tail(60)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=c.index, y=c.values, name="NAFTRAC (IPC)",
+                                     line=dict(color="#00d4aa", width=2)))
+            ma20 = c.rolling(20).mean()
+            fig.add_trace(go.Scatter(x=ma20.index, y=ma20.values, name="MA 20d",
+                                     line=dict(color="#ffa500", width=1, dash="dash")))
+            fig.update_layout(title="IPC últimos 60 días", height=300,
+                              plot_bgcolor="#0e1117", paper_bgcolor="#0e1117",
+                              font_color="white", margin=dict(t=40, b=20, l=20, r=20))
+            st.plotly_chart(fig, use_container_width=True)
+    except Exception:
+        st.caption("(carga el gráfico del IPC despues de generar la señal)")
+
+    st.caption(f"Modelo: LGBMRegressor · features rank-normalizadas · horizonte 20d · "
+               f"validación 2016-2024: +7.7% anual promedio, 7/9 años positivos")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PÁGINA 1 — SEÑALES DE HOY

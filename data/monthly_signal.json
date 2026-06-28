@@ -1,0 +1,242 @@
+{
+  "fecha_generacion": "2026-06-28",
+  "proximo_rebalanceo": "24 Jul 2026",
+  "capital_total": 50000.0,
+  "monto_por_nombre": 10000.0,
+  "mercado": {
+    "estado": "lateral",
+    "emoji": "🟡",
+    "descripcion": "IPC sin tendencia clara (+0.6% en 10d) — mantener posiciones con precaución"
+  },
+  "top5": [
+    {
+      "ticker": "HOTEL",
+      "score": 0.671,
+      "score_pct": "67%",
+      "precio_actual": 4.56,
+      "monto_mxn": 10000.0,
+      "acciones_aprox": 2192,
+      "razones": [
+        "✅ pos 52w — top 20% del universo",
+        "⚠️ Tendencia del mercado IPC — bottom 3% del universo",
+        "✅ sma20 vs sma50 — top 23% del universo"
+      ]
+    },
+    {
+      "ticker": "POSADAS",
+      "score": 0.654,
+      "score_pct": "65%",
+      "precio_actual": 29.3,
+      "monto_mxn": 10000.0,
+      "acciones_aprox": 341,
+      "razones": [
+        "✅ pos 52w — top 23% del universo",
+        "✅ Tendencia del mercado IPC — top 0% del universo",
+        "✅ sma20 vs sma50 — top 10% del universo"
+      ]
+    },
+    {
+      "ticker": "GMEXICOB",
+      "score": 0.615,
+      "score_pct": "61%",
+      "precio_actual": 200.13,
+      "monto_mxn": 10000.0,
+      "acciones_aprox": 49,
+      "razones": [
+        "✅ pos 52w — top 13% del universo",
+        "✅ Tendencia del mercado IPC — top 0% del universo",
+        "✅ sma20 vs sma50 — top 7% del universo"
+      ]
+    },
+    {
+      "ticker": "ALSEA",
+      "score": 0.592,
+      "score_pct": "59%",
+      "precio_actual": 44.46,
+      "monto_mxn": 10000.0,
+      "acciones_aprox": 224,
+      "razones": [
+        "⚠️ pos 52w — bottom 3% del universo",
+        "✅ Tendencia del mercado IPC — top 0% del universo",
+        "⚠️ sma20 vs sma50 — bottom 12% del universo"
+      ]
+    },
+    {
+      "ticker": "CEMEXCPO",
+      "score": 0.583,
+      "score_pct": "58%",
+      "precio_actual": 21.54,
+      "monto_mxn": 10000.0,
+      "acciones_aprox": 464,
+      "razones": [
+        "✅ pos 52w — top 7% del universo",
+        "✅ Tendencia del mercado IPC — top 0% del universo",
+        "✅ sma20 vs sma50 — top 20% del universo"
+      ]
+    }
+  ],
+  "evitar": [
+    "ASURB",
+    "CUERVO",
+    "GAPB",
+    "OMAB",
+    "VOLARA"
+  ],
+  "universo_completo": [
+    {
+      "ticker": "HOTEL",
+      "score": 0.671,
+      "rank": 1
+    },
+    {
+      "ticker": "POSADAS",
+      "score": 0.654,
+      "rank": 2
+    },
+    {
+      "ticker": "GMEXICOB",
+      "score": 0.615,
+      "rank": 3
+    },
+    {
+      "ticker": "ALSEA",
+      "score": 0.592,
+      "rank": 4
+    },
+    {
+      "ticker": "CEMEXCPO",
+      "score": 0.583,
+      "rank": 5
+    },
+    {
+      "ticker": "GCARSOA1",
+      "score": 0.573,
+      "rank": 6
+    },
+    {
+      "ticker": "VESTA",
+      "score": 0.566,
+      "rank": 7
+    },
+    {
+      "ticker": "GCC",
+      "score": 0.566,
+      "rank": 8
+    },
+    {
+      "ticker": "AC",
+      "score": 0.563,
+      "rank": 9
+    },
+    {
+      "ticker": "PINFRA",
+      "score": 0.562,
+      "rank": 10
+    },
+    {
+      "ticker": "LABB",
+      "score": 0.561,
+      "rank": 11
+    },
+    {
+      "ticker": "ORBIA",
+      "score": 0.555,
+      "rank": 12
+    },
+    {
+      "ticker": "BOLSAA",
+      "score": 0.549,
+      "rank": 13
+    },
+    {
+      "ticker": "VISTA",
+      "score": 0.548,
+      "rank": 14
+    },
+    {
+      "ticker": "GRUMAB",
+      "score": 0.544,
+      "rank": 15
+    },
+    {
+      "ticker": "WALMEX",
+      "score": 0.541,
+      "rank": 16
+    },
+    {
+      "ticker": "TLEVISA",
+      "score": 0.52,
+      "rank": 17
+    },
+    {
+      "ticker": "Q",
+      "score": 0.516,
+      "rank": 18
+    },
+    {
+      "ticker": "GFNORTEO",
+      "score": 0.514,
+      "rank": 19
+    },
+    {
+      "ticker": "BIMBOA",
+      "score": 0.513,
+      "rank": 20
+    },
+    {
+      "ticker": "FUNO11",
+      "score": 0.508,
+      "rank": 21
+    },
+    {
+      "ticker": "HERDEZ",
+      "score": 0.504,
+      "rank": 22
+    },
+    {
+      "ticker": "FEMSAUBD",
+      "score": 0.502,
+      "rank": 23
+    },
+    {
+      "ticker": "KIMBERA",
+      "score": 0.499,
+      "rank": 24
+    },
+    {
+      "ticker": "GENTERA",
+      "score": 0.479,
+      "rank": 25
+    },
+    {
+      "ticker": "MEGACPO",
+      "score": 0.464,
+      "rank": 26
+    },
+    {
+      "ticker": "ASURB",
+      "score": 0.458,
+      "rank": 27
+    },
+    {
+      "ticker": "CUERVO",
+      "score": 0.456,
+      "rank": 28
+    },
+    {
+      "ticker": "GAPB",
+      "score": 0.439,
+      "rank": 29
+    },
+    {
+      "ticker": "OMAB",
+      "score": 0.411,
+      "rank": 30
+    },
+    {
+      "ticker": "VOLARA",
+      "score": 0.373,
+      "rank": 31
+    }
+  ]
+}
