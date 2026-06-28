@@ -65,32 +65,15 @@ def run_script(cmd: list[str]) -> tuple[int, str]:
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.title("📈 BMV Trading")
+    st.title("📈 GBM Trading Hub")
     st.caption(f"Actualizado: {datetime.now().strftime('%H:%M:%S')}")
 
-    # ── Semáforo HMM de régimen ───────────────────────────────────────────────
-    _signals_meta = load_json("signals_today.json")
-    _regime = _signals_meta.get("regime", {})
-    _state  = _regime.get("state", "unknown")
-    _proba  = _regime.get("proba", {})
-
-    _icon  = {"bull": "🟢", "lateral": "🟡", "bear": "🔴", "unknown": "⚪"}.get(_state, "⚪")
-    _label = {"bull": "Mercado alcista", "lateral": "Mercado lateral",
-              "bear": "Mercado bajista", "unknown": "Régimen desconocido"}.get(_state, "—")
-    _color = {"bull": "success", "lateral": "warning", "bear": "danger", "unknown": "neutral"}.get(_state, "neutral")
-
-    st.markdown(f"**Régimen actual: {_icon} {_state.upper()}**")
-    if _proba:
-        _bull_p = _proba.get("bull", 0)
-        _bear_p = _proba.get("bear", 0)
-        _lat_p  = _proba.get("lateral", 0)
-        st.caption(f"Bull {_bull_p:.0%}  ·  Lateral {_lat_p:.0%}  ·  Bear {_bear_p:.0%}")
-        if _state == "bear":
-            st.warning("⚠️ Mercado en modo BEAR — umbral de señales subido a 0.56", icon="⚠️")
-        elif _state == "bull":
-            st.success("✅ Mercado alcista — buenas condiciones para operar")
-    else:
-        st.caption("Genera señales para detectar régimen")
+    # ── Capital global ─────────────────────────────────────────────────────────
+    capital_global = st.number_input(
+        "Capital disponible", value=50_000, step=10_000, min_value=5_000,
+        help="Se divide equitativamente entre el top-5 del universo seleccionado",
+    )
+    st.caption(f"≈ ${capital_global/5:,.0f} por posición")
 
     st.divider()
 
@@ -113,161 +96,191 @@ with st.sidebar:
         st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PÁGINA 0 — RANKING MENSUAL (nuevo modelo cross-seccional v2a)
+# PÁGINA 0 — RANKING MENSUAL (multi-universo: BMV, USA, ETFs, Cripto, FIBRAs)
 # ══════════════════════════════════════════════════════════════════════════════
 
 if page.startswith("🏆"):
-    import os as _os
+    from src.data.universes import UNIVERSES, UNIVERSE_ORDER
 
-    st.title("🏆 Ranking Mensual de Inversión")
-    st.caption("Modelo cross-seccional · rebalanceo cada ~20 días hábiles · long-only top-5")
+    st.title("🏆 Ranking Mensual — GBM Universe")
+    st.caption("Modelo cross-seccional · rebalanceo ~20 días hábiles · long-only top-5")
 
-    # ── Cargar señal mensual ────────────────────────────────────────────────
+    # ── Helper: carga señal de un universo ─────────────────────────────────────
     @st.cache_data(ttl=300)
-    def load_monthly() -> dict:
-        p = ROOT / "data" / "monthly_signal.json"
+    def load_universe_signal(slug: str) -> dict:
+        p = ROOT / "data" / "signals" / f"{slug}.json"
         return json.loads(p.read_text()) if p.exists() else {}
 
-    sig = load_monthly()
-
-    # ── Panel de generación si no hay señal ────────────────────────────────
-    col_gen1, col_gen2 = st.columns([3, 1])
-    with col_gen1:
-        capital_input = st.number_input("Capital disponible (MXN)", value=50_000,
-                                         step=10_000, min_value=10_000)
+    # ── Botón de regeneración (genera TODOS los universos) ──────────────────────
+    col_gen1, col_gen2 = st.columns([4, 1])
     with col_gen2:
-        st.write("")
-        st.write("")
-        gen_btn = st.button("🔄 Generar señal", type="primary", use_container_width=True)
-
-    if gen_btn:
-        with st.spinner("Entrenando modelo y calculando ranking (~25 seg)..."):
-            rc, out = run_script(["scripts/generate_monthly_signal.py",
-                                  "--capital", str(int(capital_input))])
+        gen_all = st.button("🔄 Generar señales", type="primary", use_container_width=True,
+                            help="Entrena el modelo para todos los universos (~2 min)")
+    if gen_all:
+        with st.spinner("Generando señales para todos los universos (~2 min)..."):
+            rc, out = run_script(["scripts/generate_all_signals.py",
+                                  "--capital", str(int(capital_global))])
         if rc == 0:
             st.cache_data.clear()
-            st.success("✅ Señal mensual generada")
+            st.success("✅ Señales generadas para todos los universos")
             st.rerun()
         else:
-            st.error("Error al generar señal")
+            st.error("Error al generar señales")
             st.code(out[-2000:])
 
-    if not sig:
-        st.info("Aún no hay señal mensual. Haz clic en **Generar señal** arriba.")
-        st.stop()
+    # ── Tabs por clase de activo ────────────────────────────────────────────────
+    tab_labels = list(UNIVERSE_ORDER)
+    tabs = st.tabs(tab_labels)
 
-    # ── Header: régimen y fechas ────────────────────────────────────────────
-    mercado = sig.get("mercado", {})
-    reg_emoji = mercado.get("emoji", "⚪")
-    reg_est   = mercado.get("estado", "desconocido").upper()
-    reg_desc  = mercado.get("descripcion", "")
+    for tab, uname in zip(tabs, UNIVERSE_ORDER):
+        cfg  = UNIVERSES[uname]
+        slug = cfg["slug"]
+        sig  = load_universe_signal(slug)
 
-    c1, c2, c3 = st.columns(3)
-    c1.metric("📅 Generado", sig.get("fecha_generacion", "—"))
-    c2.metric("⏰ Próximo rebalanceo", sig.get("proximo_rebalanceo", "—"))
-    c3.metric(f"{reg_emoji} Régimen de mercado", reg_est)
+        with tab:
+            if not sig:
+                st.info(f"Sin señal para **{uname}**. Haz clic en **Generar señales** arriba.")
 
-    if mercado.get("estado") == "alcista":
-        st.success(f"🟢 {reg_desc}")
-    elif mercado.get("estado") == "bajista":
-        st.warning(f"🔴 {reg_desc}")
-    else:
-        st.info(f"🟡 {reg_desc}")
+                # Botón para generar solo este universo
+                if st.button(f"Generar solo {uname}", key=f"gen_{slug}"):
+                    with st.spinner(f"Generando {uname}..."):
+                        rc, out = run_script(["scripts/generate_all_signals.py",
+                                              "--capital", str(int(capital_global)),
+                                              "--universe", uname])
+                    if rc == 0:
+                        st.cache_data.clear()
+                        st.rerun()
+                    else:
+                        st.code(out[-1500:])
+                continue
 
-    st.divider()
+            if "error" in sig:
+                st.error(f"⚠️ {sig['error']}")
+                continue
 
-    # ── Sección 1: Top-5 a comprar ─────────────────────────────────────────
-    st.subheader("📋 ¿Qué comprar este mes?")
+            # ── Régimen del mercado ──────────────────────────────────────────
+            mercado   = sig.get("mercado", {})
+            reg_emoji = mercado.get("emoji", "⚪")
+            reg_est   = mercado.get("estado", "—").upper()
+            reg_desc  = mercado.get("descripcion", "")
 
-    capital_sig = sig.get("capital_total", capital_input)
-    monto_por  = sig.get("monto_por_nombre", capital_sig / 5)
+            m1, m2, m3, m4 = st.columns(4)
+            m1.metric("📅 Fecha", sig.get("fecha", "—"))
+            m2.metric("⏰ Rebalanceo", sig.get("proximo_rebalanceo", "—"))
+            m3.metric(f"{reg_emoji} Mercado", reg_est)
+            m4.metric("🔢 Universo", f"{sig.get('n_tickers_analizados', '—')} tickers · {cfg['moneda']}")
 
-    picks = sig.get("top5", [])
-    if picks:
-        for i, p in enumerate(picks):
-            with st.expander(
-                f"{'🥇' if i==0 else '🥈' if i==1 else '🥉' if i==2 else '  '} "
-                f"**{p['ticker']}** — confianza {p['score_pct']}   "
-                f"${p.get('precio_actual', '—')} MXN   "
-                f"≈ {p.get('acciones_aprox', '?')} acciones",
-                expanded=(i < 3),
-            ):
-                cc1, cc2, cc3 = st.columns(3)
-                cc1.metric("Score del modelo", p["score_pct"])
-                cc2.metric("Monto a invertir", f"${monto_por:,.0f} MXN")
-                cc3.metric("Acciones aprox.", str(p.get("acciones_aprox", "—")))
+            if mercado.get("estado") == "alcista":
+                st.success(f"🟢 {reg_desc}")
+            elif mercado.get("estado") == "bajista":
+                st.warning(f"🔴 {reg_desc} — considera reducir posiciones")
+            else:
+                st.info(f"🟡 {reg_desc}")
 
-                st.markdown("**¿Por qué está en el top?**")
-                for r in p.get("razones", []):
-                    st.markdown(f"- {r}")
+            st.caption(f"*{cfg['descripcion']}*")
+            st.divider()
 
-    # ── Sección 2: Acciones a evitar ───────────────────────────────────────
-    evitar = sig.get("evitar", [])
-    if evitar:
-        st.markdown(f"⛔ **Evitar este mes:** {' · '.join(evitar)}")
+            # ── Top-5 picks ──────────────────────────────────────────────────
+            st.subheader("📋 ¿Qué comprar este mes?")
+            picks      = sig.get("top5", [])
+            monto_por  = sig.get("monto_por_nombre", capital_global / 5)
+            moneda_sym = "$" if cfg["moneda"] == "MXN" else "USD "
 
-    st.divider()
+            if picks:
+                medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
+                for i, p in enumerate(picks):
+                    precio = p.get("precio_actual")
+                    precio_str = f"{moneda_sym}{precio:,.2f}" if precio else "—"
+                    acciones   = p.get("acciones_aprox")
+                    accion_str = str(acciones) if acciones else "fraccionado"
 
-    # ── Sección 3: Ranking completo del universo ───────────────────────────
-    st.subheader("📊 Ranking completo del universo (31 acciones)")
+                    with st.expander(
+                        f"{medals[i]}  **{p['ticker']}**  —  confianza {p['score_pct']}  "
+                        f"|  {precio_str}  |  ≈ {accion_str} acciones/títulos",
+                        expanded=(i < 3),
+                    ):
+                        cc1, cc2, cc3 = st.columns(3)
+                        cc1.metric("Score del modelo", p["score_pct"])
+                        cc2.metric(f"Monto ({cfg['moneda']})", f"${monto_por:,.0f}")
+                        cc3.metric("Acciones aprox.", accion_str)
 
-    universo = sig.get("universo_completo", [])
-    if universo:
-        df_u = pd.DataFrame(universo)
-        df_u["Barra"] = df_u["score"].apply(lambda s: "█" * int(s * 20))
-        df_u.columns = ["Ticker", "Score", "Rank", "  "]
-        df_u["Rank"] = df_u["Rank"].astype(int)
-        df_u["Score %"] = (df_u["Score"] * 100).round(1).astype(str) + "%"
+                        st.markdown("**¿Por qué está en el top?**")
+                        for r in p.get("razones", []):
+                            st.markdown(f"- {r}")
 
-        def color_row(row):
-            if row["Rank"] <= 5:
-                return ["background-color: #1a472a; color: white"] * len(row)
-            elif row["Rank"] >= len(df_u) - 4:
-                return ["background-color: #4a1a1a; color: white"] * len(row)
-            return [""] * len(row)
+            # ── Evitar ───────────────────────────────────────────────────────
+            evitar = sig.get("evitar", [])
+            if evitar:
+                st.markdown(f"⛔ **Evitar este ciclo:** {' · '.join(evitar)}")
 
-        st.dataframe(
-            df_u[["Rank", "Ticker", "Score %", "  "]].style.apply(color_row, axis=1),
-            use_container_width=True, hide_index=True, height=700,
-        )
+            st.divider()
 
-    st.divider()
+            # ── Ranking completo ─────────────────────────────────────────────
+            universo = sig.get("universo_completo", [])
+            if universo:
+                st.subheader(f"📊 Ranking completo ({len(universo)} instrumentos)")
 
-    # ── Sección 4: Plan de acción ──────────────────────────────────────────
-    st.subheader("🗓️ Plan de acción")
-    st.markdown(f"""
+                df_u = pd.DataFrame(universo)
+                n    = len(df_u)
+                top5_ranks = set(range(1, 6))
+                bot5_ranks = set(range(n - 3, n + 1))
+
+                df_u["Score %"] = (df_u["score"] * 100).round(1).astype(str) + "%"
+                df_u["Barra"]   = df_u["score"].apply(
+                    lambda s: "█" * max(1, int(s * 25))
+                )
+
+                def _color_row(row):
+                    if row["rank"] in top5_ranks:
+                        return ["background-color: #1a472a; color: white"] * len(row)
+                    if row["rank"] in bot5_ranks:
+                        return ["background-color: #4a1a1a; color: white"] * len(row)
+                    return [""] * len(row)
+
+                st.dataframe(
+                    df_u[["rank", "ticker", "Score %", "Barra"]].rename(
+                        columns={"rank": "#", "ticker": "Instrumento"}
+                    ).style.apply(_color_row, axis=1),
+                    use_container_width=True,
+                    hide_index=True,
+                    height=min(700, 38 * n + 40),
+                )
+
+                # Mini gráfico de barras con scores
+                fig_bar = px.bar(
+                    df_u.sort_values("score", ascending=True),
+                    x="score", y="ticker", orientation="h",
+                    color="score",
+                    color_continuous_scale=["#ff4b4b", "#ffa500", "#00d4aa"],
+                    labels={"score": "Score", "ticker": ""},
+                    height=max(300, 20 * n),
+                )
+                fig_bar.update_layout(
+                    plot_bgcolor="#0e1117", paper_bgcolor="#0e1117",
+                    font_color="white", showlegend=False,
+                    coloraxis_showscale=False,
+                    margin=dict(t=10, b=10, l=10, r=10),
+                )
+                st.plotly_chart(fig_bar, use_container_width=True)
+
+            # ── Plan de acción ───────────────────────────────────────────────
+            if picks:
+                st.divider()
+                st.subheader("🗓️ Plan de acción")
+                tickers_comprar = " + ".join(p["ticker"] for p in picks)
+                st.markdown(f"""
 | Paso | Acción |
 |---|---|
-| **Hoy** | Vende las posiciones del mes anterior (si las tienes) |
-| **Hoy** | Compra {" + ".join([p['ticker'] for p in picks])} — ${monto_por:,.0f} MXN cada una |
-| **{sig.get('proximo_rebalanceo', '~20 días')}** | Vuelve a correr el modelo y rota si cambió el ranking |
-| **Siempre** | No toques las posiciones entre rebalanceos — el ruido diario es normal |
+| **Hoy** | Vende posiciones del ciclo anterior (si las tienes) |
+| **Hoy** | Compra **{tickers_comprar}** — ${monto_por:,.0f} {cfg['moneda']} c/u |
+| **{sig.get('proximo_rebalanceo', '~20d hábiles')}** | Re-corre el modelo y rota si cambió el top-5 |
+| **Siempre** | No toques entre rebalanceos — el ruido diario es normal |
 """)
 
-    # ── Sección 5: Contexto del mercado ───────────────────────────────────
-    st.divider()
-    st.subheader("🌡️ Contexto del mercado")
-
-    try:
-        from src.data.store import get as _store_get
-        naf = _store_get("NAFTRAC")
-        if naf is not None and len(naf) > 60:
-            c = naf["Close"].tail(60)
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=c.index, y=c.values, name="NAFTRAC (IPC)",
-                                     line=dict(color="#00d4aa", width=2)))
-            ma20 = c.rolling(20).mean()
-            fig.add_trace(go.Scatter(x=ma20.index, y=ma20.values, name="MA 20d",
-                                     line=dict(color="#ffa500", width=1, dash="dash")))
-            fig.update_layout(title="IPC últimos 60 días", height=300,
-                              plot_bgcolor="#0e1117", paper_bgcolor="#0e1117",
-                              font_color="white", margin=dict(t=40, b=20, l=20, r=20))
-            st.plotly_chart(fig, use_container_width=True)
-    except Exception:
-        st.caption("(carga el gráfico del IPC despues de generar la señal)")
-
-    st.caption(f"Modelo: LGBMRegressor · features rank-normalizadas · horizonte 20d · "
-               f"validación 2016-2024: +7.7% anual promedio, 7/9 años positivos")
+            st.caption(
+                f"Modelo: LGBMRegressor · features rank-normalizadas · horizonte {cfg['horizonte']}d"
+                + (" · validación 2016-2024: +7.7% anual (7/9 años)" if slug == "bmv" else "")
+            )
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PÁGINA 1 — SEÑALES DE HOY
