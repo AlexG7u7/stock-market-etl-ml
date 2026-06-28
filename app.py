@@ -104,7 +104,7 @@ if page.startswith("🏆"):
     from src.data.universes import UNIVERSES, UNIVERSE_ORDER
 
     st.title("🏆 Ranking Mensual — GBM Universe")
-    st.caption("Modelo cross-seccional · rebalanceo ~20 días hábiles · long-only top-5")
+    st.caption("Modelo cross-seccional · 4 horizontes (1/2/3/4 semanas) · long-only top-5 · Gemini por ticker")
 
     # ── Helper: carga señal de un universo ─────────────────────────────────────
     @st.cache_data(ttl=300)
@@ -112,22 +112,81 @@ if page.startswith("🏆"):
         p = ROOT / "data" / "signals" / f"{slug}.json"
         return json.loads(p.read_text()) if p.exists() else {}
 
-    # ── Botón de regeneración (genera TODOS los universos) ──────────────────────
-    col_gen1, col_gen2 = st.columns([4, 1])
-    with col_gen2:
-        gen_all = st.button("🔄 Generar señales", type="primary", use_container_width=True,
-                            help="Entrena el modelo para todos los universos (~2 min)")
-    if gen_all:
-        with st.spinner("Generando señales para todos los universos (~2 min)..."):
-            rc, out = run_script(["scripts/generate_all_signals.py",
-                                  "--capital", str(int(capital_global))])
-        if rc == 0:
+    # ── Panel de control ───────────────────────────────────────────────────────
+    with st.expander("⚙️ Generar / actualizar señales", expanded=not any(
+        (ROOT / "data" / "signals" / f"{UNIVERSES[u]['slug']}.json").exists()
+        for u in UNIVERSE_ORDER
+    )):
+        ctrl1, ctrl2, ctrl3 = st.columns([2, 2, 1])
+        with ctrl1:
+            universo_sel = st.selectbox(
+                "Universo a generar",
+                ["🌐 Todos los universos"] + list(UNIVERSE_ORDER),
+                help="Selecciona un universo específico o genera todos (~8-10 min total)",
+            )
+        with ctrl2:
+            capital_gen = st.number_input(
+                "Capital", value=int(capital_global), step=10_000, min_value=5_000,
+                label_visibility="visible",
+            )
+        with ctrl3:
+            st.write("")
+            st.write("")
+            run_btn = st.button("▶️ Correr modelo", type="primary", use_container_width=True)
+
+        # Info de tiempos estimados
+        est = {
+            "🌐 Todos los universos": "~8-10 min (5 universos × 4 horizontes cada uno)",
+            **{u: "~2-3 min (4 horizontes)" for u in UNIVERSE_ORDER},
+        }
+        st.caption(f"⏱ Estimado: {est.get(universo_sel, '~3 min')}")
+
+        if run_btn:
+            universo_arg = None if universo_sel.startswith("🌐") else universo_sel
+            universos_a_correr = list(UNIVERSE_ORDER) if universo_arg is None else [universo_arg]
+
+            # Mostrar progreso por universo en tiempo real
+            progress_bar = st.progress(0)
+            status_box   = st.empty()
+
+            all_ok = True
+            for idx, uname in enumerate(universos_a_correr):
+                slug = UNIVERSES[uname]["slug"]
+                status_box.info(f"⏳ Procesando **{uname}** ({idx+1}/{len(universos_a_correr)})...")
+                progress_bar.progress((idx) / len(universos_a_correr))
+
+                rc, out = run_script([
+                    "scripts/generate_all_signals.py",
+                    "--capital", str(int(capital_gen)),
+                    "--universe", uname,
+                ])
+
+                if rc == 0:
+                    # Leer el JSON recién generado para mostrar el resultado
+                    try:
+                        sig_new = json.loads((ROOT / "data" / "signals" / f"{slug}.json").read_text())
+                        cons = [c["ticker"] for c in sig_new.get("consensus", []) if c["n_horizontes"] >= 3]
+                        mercado_nuevo = sig_new.get("mercado", {})
+                        emoji_m = mercado_nuevo.get("emoji", "⚪")
+                        status_box.success(
+                            f"✅ **{uname}** — {emoji_m} {mercado_nuevo.get('estado','').upper()}"
+                            + (f" · Consenso: **{' · '.join(cons)}**" if cons else "")
+                        )
+                    except Exception:
+                        status_box.success(f"✅ **{uname}** generado")
+                else:
+                    status_box.error(f"❌ Error en **{uname}**")
+                    with st.expander("Ver log de error"):
+                        st.code(out[-1500:])
+                    all_ok = False
+
+                progress_bar.progress((idx + 1) / len(universos_a_correr))
+
+            if all_ok:
+                progress_bar.progress(1.0)
+                status_box.success(f"🎉 ¡Listo! {len(universos_a_correr)} universo(s) generados correctamente.")
             st.cache_data.clear()
-            st.success("✅ Señales generadas para todos los universos")
             st.rerun()
-        else:
-            st.error("Error al generar señales")
-            st.code(out[-2000:])
 
     # ── Tabs por clase de activo ────────────────────────────────────────────────
     tab_labels = list(UNIVERSE_ORDER)
@@ -140,19 +199,9 @@ if page.startswith("🏆"):
 
         with tab:
             if not sig:
-                st.info(f"Sin señal para **{uname}**. Haz clic en **Generar señales** arriba.")
-
-                # Botón para generar solo este universo
-                if st.button(f"Generar solo {uname}", key=f"gen_{slug}"):
-                    with st.spinner(f"Generando {uname}..."):
-                        rc, out = run_script(["scripts/generate_all_signals.py",
-                                              "--capital", str(int(capital_global)),
-                                              "--universe", uname])
-                    if rc == 0:
-                        st.cache_data.clear()
-                        st.rerun()
-                    else:
-                        st.code(out[-1500:])
+                st.info(
+                    f"Sin señal para **{uname}**. Usa el panel **⚙️ Generar / actualizar señales** arriba."
+                )
                 continue
 
             if "error" in sig:
