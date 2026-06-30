@@ -1,0 +1,417 @@
+[
+  {
+    "ticker": "WALMEX",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.8125,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.4917,
+    "news_esg_score": 0.0,
+    "n_articles": 5,
+    "sources": [
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "FEMSAUBD",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5594,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "GMEXICOB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5933,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "CEMEXCPO",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5594,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "GFNORTEO",
+    "news_sent_score": 0.5,
+    "news_count_7d": 1.5038,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "BIMBOA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "ALSEA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.6276,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.27,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "expansion",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "KIMBERA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.7743,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.3686,
+    "news_esg_score": 0.0,
+    "n_articles": 5,
+    "sources": [
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "PINFRA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "ORBIA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "GRUMAB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.7573,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.4372,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "expansion",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "ASURB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "OMAB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 1.6066,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.9335,
+    "news_esg_score": 0.0,
+    "n_articles": 6,
+    "sources": [
+      "expansion",
+      "databursatil",
+      "elfinanciero"
+    ]
+  },
+  {
+    "ticker": "GAPB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.9968,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.6272,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "databursatil",
+      "elfinanciero"
+    ]
+  },
+  {
+    "ticker": "GCARSOA1",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "MEGACPO",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "LABB",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "VOLARA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "CUERVO",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "AC",
+    "news_sent_score": 0.0,
+    "news_count_7d": 1.9458,
+    "news_sent_delta": 0.1667,
+    "news_sent_vol": 0.3727,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
+    "n_articles": 8,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "VESTA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "VISTA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5595,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "BOLSAA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 3.3538,
+    "news_sent_delta": 0.2259,
+    "news_sent_vol": 0.456,
+    "news_relevance_avg": 0.9834,
+    "news_esg_score": 0.0,
+    "n_articles": 35,
+    "sources": [
+      "expansion",
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "GCC",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "HOTEL",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.7372,
+    "news_sent_delta": -0.0677,
+    "news_sent_vol": 0.2512,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 6,
+    "sources": [
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "POSADAS",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "TLEVISA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.7043,
+    "news_sent_delta": 0.2666,
+    "news_sent_vol": 0.4422,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 4,
+    "sources": [
+      "google_news",
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "HERDEZ",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "GENTERA",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "FUNO11",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  },
+  {
+    "ticker": "Q",
+    "news_sent_score": 0.0,
+    "news_count_7d": 0.5596,
+    "news_sent_delta": 0.0,
+    "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
+    "n_articles": 3,
+    "sources": [
+      "databursatil"
+    ]
+  }
+]

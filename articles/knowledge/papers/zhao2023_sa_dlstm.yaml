@@ -1,0 +1,98 @@
+id: zhao2023_sa_dlstm
+citation:
+  title: "Deep Learning-based Integrated Framework for stock price movement prediction"
+  authors: ["Zhao, Y.", "Yang, G."]
+  year: 2023
+  journal: "Applied Soft Computing"
+  doi: "10.1016/j.asoc.2022.109921"
+  url: "https://doi.org/10.1016/j.asoc.2022.109921"
+
+problem:
+  task: "Predicción de movimiento de precio + simulación de trading"
+  horizon: "Daily, series temporales con sentiment index diario"
+  market: "Mercado chino (Shanghai/Shenzhen indices y acciones individuales)"
+  target: "Dirección/movimiento de precio con simulación de retorno"
+
+data:
+  sources:
+    - "Datos OHLCV históricos"
+    - "Comentarios de usuarios en Internet (foros, social media)"
+  modalities:
+    - ohlcv_day
+    - text_user_comments
+    - sentiment_index_daily
+  features:
+    - "Key features extraídas por Denoising Autoencoder (DAE)"
+    - "Sentiment indexes agregados diariamente (ECNN)"
+    - "Features técnicas post-DAE"
+  preprocessing:
+    - "ECNN para sentiment representation de comentarios"
+    - "DAE para denoising y feature extraction de datos financieros ruidosos"
+    - "Agregación diaria de contenido textual por acción"
+
+methods:
+  primary:
+    - "SA-DLSTM: ECNN + DAE + LSTM integrado"
+  architecture:
+    steps:
+      - "ECNN extrae representación de sentimiento de comentarios web"
+      - "DAE extrae key features de datos de mercado ruidosos"
+      - "Sentiment indexes con consideración de timeliness (decaimiento temporal)"
+      - "Features de mercado + sentiment → LSTM para predicción"
+  secondary:
+    - "Comparación vs WPCA-NN, WNN, LSTM, SVM, LR, LS_RF"
+  validation:
+    - "Accuracy de predicción + simulación de mercado (return, Sharpe, volatilidad)"
+
+results:
+  metrics:
+    simulation_trading:
+      SA-DLSTM: {annual_return: "27.63%", sharpe: 4.43, volatility: "7.32%"}
+      LSTM: {annual_return: "19.81%", sharpe: 1.86, volatility: "9.36%"}
+      LR: {annual_return: "8.75%", sharpe: 3.32, volatility: "1.83%"}
+      LS_RF: {annual_return: "18.29%", sharpe: 1.72, volatility: "9.81%"}
+  key_findings:
+    - "Combinar sentiment index con datos de mercado mejora predicción"
+    - "DAE ayuda a filtrar ruido de datos financieros no estacionarios"
+    - "Arquitectura integrada supera modelos single-network"
+    - "Sentiment como indicador clave del valor fundamental percibido"
+  limitations:
+    - "Datos de comentarios web — difícil replicar para BMV (poca liquidez en foros)"
+    - "Simulación sin costos de transacción explícitos"
+    - "Mercado chino — transferibilidad a BMV no probada"
+
+applicability_to_bmv:
+  relevance_score: 4
+  already_in_stack:
+    - "src/ml/news.py — sentiment de noticias (equivalente funcional a ECNN+SA)"
+    - "src/ml/shared/models/lstm_model.py — LSTM base"
+    - "src/ml/super_model.py — fusión multi-modal L1+L3"
+  gaps:
+    - id: GAP-DAE-DENOISING
+      description: "Sin DAE/autoencoder para denoising de features financieras"
+      priority: P3
+      ticket: KB-042
+    - id: GAP-SENTIMENT-TIMELINESS
+      description: "Sin decay temporal en sentiment (timeliness index de Zhao)"
+      priority: P2
+      ticket: KB-043
+    - id: GAP-SOCIAL-COMMENTS
+      description: "Solo noticias profesionales, no comentarios retail/foros BMV"
+      priority: P4
+  actionable_items:
+    - ticket: KB-043
+      action: "Añadir decay exponencial a news_sent_score según antigüedad del artículo"
+    - ticket: KB-042
+      action: "Evaluar DAE como preprocessor opcional en pipeline LSTM"
+    - ticket: KB-004
+      action: "Patrón SA-DLSTM mapea directamente a news features + LGBM/LSTM"
+
+architecture_analog:
+  their_stack: "ECNN(sentiment) + DAE(features) → LSTM"
+  our_stack: "Gemini(news) + features.py(25+) → Ensemble/SuperModel"
+  integration: "Añadir capa DAE opcional entre features y LSTM; decay en news.py"
+
+key_quotes:
+  - "Combining sentiment index with stock market data can improve performance to predict stock market trend."
+  - "DAE models can help the model focus on the most contribution information of the current task."
+  - "SA-DLSTM: 27.63% annual return, Sharpe 4.43 vs LSTM alone 19.81%, Sharpe 1.86."

@@ -1,0 +1,132 @@
+# Protocolo de decisión del agente de apuestas BMV
+# Versión: 1.0 | 2026-06-28
+
+meta:
+  agent_role: "Ejecutor de apuestas direccionales long-only BMV"
+  horizon_default: 5d
+  code_entrypoints:
+    signals: scripts/generate_signals.py
+    pipeline: src/ml/signal_pipeline.py
+    super_model: scripts/run_super_model.py
+    risk: src/ml/risk_engine.py
+    validator: src/ml/gemini_validator.py
+    analyst: src/api/gemini_analyst.py
+    paper: src/ml/paper_trading.py
+    live: scripts/execute_orders.py
+
+decision_pipeline:
+  - step: 1
+    name: gate_mercado
+    source: scripts/generate_signals.py / pipeline.py
+    rules:
+      - id: GATE-RISKOFF
+        condition: "NAFTRAC bajo MA20 OR regime.state == bear con prob > 0.5"
+        action: NO_BET
+        reason: "Mercado risk-off — sin señales"
+      - id: GATE-HMM-BULL
+        condition: "regime.state == bull"
+        action: LOWER_THRESHOLD
+        params: { prob_thresh: 0.54 }
+      - id: GATE-HMM-BEAR
+        condition: "regime.state == bear"
+        action: RAISE_THRESHOLD
+        params: { prob_thresh: 0.58 }
+      - id: GATE-PAPER-ONLY
+        condition: "backtest sharpe neto robusto < 0"
+        action: PAPER_ONLY
+        note: "Sin live hasta validación broker real"
+
+  - step: 2
+    name: ranking_cross_section
+    source: src/ml/super_model.py / generate_all_signals.py
+    rules:
+      - id: RANK-SELECT
+        description: "Seleccionar top-K por convicción / P(up) vs universo"
+        literature: ghosh2022_intraday_lstm_rf
+        params:
+          max_signals: 2
+          min_p_up: 0.56  # base post-exp P0; ajustado por régimen en step 1
+          use_stacking: true
+          prefer_consenso: "n_consenso >= 3 en horizontes 1s-4s"
+      - id: RANK-META
+        description: "Si meta-modelo disponible, priorizar take=True y p_meta alto"
+        source: src/ml/meta_model.py
+
+  - step: 3
+    name: sizing
+    source: src/ml/risk_engine.py
+    rules:
+      - id: SIZE-KELLY
+        method: "Kelly fraccionario 25%, max 10% por posición"
+        params: { kelly_frac: 0.25, max_position: 0.10 }
+      - id: SIZE-CORR
+        method: "correlation_penalty vs tickers ya seleccionados"
+        window: 63
+      - id: SIZE-EV
+        condition: "expected_value(p_up) <= 0"
+        action: SKIP
+      - id: SIZE-LEVELS
+        outputs: [entry, stop, target_1, target_2]
+        method: "ATR(14): stop=1.5R, T1=1.5R, T2=3R"
+
+  - step: 4
+    name: validacion_gemini
+    source: src/ml/gemini_validator.py
+    rules:
+      - id: VAL-CONFIRMA
+        veredicto: CONFIRMA
+        acciones: [COMPRA_FUERTE, COMPRA]
+        bet_action: PROCEED
+      - id: VAL-DEGRADA
+        veredicto: DEGRADA
+        acciones: [ESPERA]
+        bet_action: REDUCE_SIZE_50pct OR SKIP
+      - id: VAL-VETA
+        veredicto: VETA
+        acciones: [EVITA]
+        bet_action: NO_BET
+      - id: VAL-NEWS-ALERT
+        condition: "news_alerta == true"
+        bet_action: NO_BET_OR_ESPERA
+
+  - step: 5
+    name: ejecucion
+    source: src/ml/paper_trading.py / scripts/execute_orders.py
+    rules:
+      - id: EXEC-PAPER
+        mode: paper
+        timing: "Señal viernes → entrada lunes open → settle día 5"
+      - id: EXEC-LIVE
+        mode: live
+        requires: [human_confirm_if_dry_run_false, sufficient_buying_power]
+        slippage_limit: "+0.1% sobre cierre para limit fill"
+
+bet_sizing_matrix:
+  # Convicción del modelo × veredicto Gemini → % capital máximo
+  - conviction: ">= 0.65"
+    gemini: CONFIRMA
+    max_pct: 10
+    label: "Apuesta fuerte"
+  - conviction: "0.55-0.65"
+    gemini: CONFIRMA
+    max_pct: 7
+    label: "Apuesta estándar"
+  - conviction: "0.53-0.55"
+    gemini: CONFIRMA
+    max_pct: 5
+    label: "Apuesta táctica"
+  - conviction: ">= 0.55"
+    gemini: DEGRADA
+    max_pct: 3
+    label: "Solo si consenso 3+/4 horizontes"
+  - conviction: any
+    gemini: VETA
+    max_pct: 0
+    label: "No apostar"
+
+horizon_selection:
+  # Del modo agente gemini_analyst — horizonte_optimo
+  prefer:
+    - "Si consenso 3+/4 horizontes → apostar en 1s (5d) con hold 5d"
+    - "Si solo fuerte en 3s/4s → hold más largo o skip si capital rotativo"
+  paper_trading_default: 5d

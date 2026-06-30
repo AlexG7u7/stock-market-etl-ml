@@ -1,0 +1,49 @@
+name: Refresh Market Data
+
+on:
+  schedule:
+    # 13:00 UTC ≈ 07:00 CST — antes de apertura BMV
+    - cron: '0 13 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Qué refrescar'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - news
+          - intraday
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  refresh:
+    name: Refresh news + intraday
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Refresh market data
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_NEWS_ENABLED: 'true'
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+        run: |
+          MODE="${{ github.event.inputs.mode || 'all' }}"
+          python scripts/refresh_market_data.py --${MODE}

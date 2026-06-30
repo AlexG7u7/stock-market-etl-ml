@@ -18,6 +18,7 @@ class LSTMConfig:
     hidden_units: int = 128
     dropout_rate: float = 0.2
     dense_activation: str = 'linear'
+    task_type: str = 'regression'  # 'regression' | 'classification'
     
     # Training
     learning_rate: float = 0.001
@@ -92,6 +93,9 @@ class LSTMConfig:
         
         if not 0 < self.validation_split < 1:
             errors.append("validation_split debe estar en (0, 1)")
+
+        if self.task_type not in ('regression', 'classification'):
+            errors.append("task_type debe ser 'regression' o 'classification'")
         
         if errors:
             raise ValueError(f"Errores de validación: {', '.join(errors)}")

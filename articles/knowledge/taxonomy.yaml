@@ -1,0 +1,145 @@
+# Taxonomía de técnicas SOTA en predicción de mercados — derivada de literatura Scopus
+
+techniques:
+  machine_learning:
+    algorithms: [SVM, RandomForest, XGBoost, LightGBM, LogisticRegression, kNN, ARIMA, GBT]
+    best_for: "Features tabulares, clasificación direccional, interpretabilidad"
+    our_status: implemented  # ensemble.py, super_model xs_lgbm
+    modules: [src/ml/ensemble.py, src/ml/woe.py, src/ml/super_model.py]
+
+  deep_learning:
+    algorithms: [LSTM, GRU, CNN, RNN, MLP, Transformer, BiLSTM]
+    best_for: "Dependencias temporales largas, patrones no lineales en secuencias"
+    our_status: partial  # lstm_model.py existe, no en producción SuperModel
+    modules: [src/ml/shared/models/lstm_model.py]
+
+  reinforcement_learning:
+    algorithms: [DQN, DDQN, A3C, PPO, DeepDirectRL, MultiAgentRL]
+    best_for: "Decisiones secuenciales: cuándo comprar/vender/cuánto"
+    our_status: not_implemented
+    modules: []
+    reference: "FinRL (Liu 2021)"
+
+  hybrid:
+    patterns:
+      - name: "LSTM + RF"
+        literature_pct: "~5%"
+        our_analog: "SuperModel fusion L1 (pendiente LSTM)"
+      - name: "Ensemble tabular + régimen HMM"
+        literature_pct: "novel"
+        our_analog: "SuperModel L1+L3 — ya implementado"
+      - name: "DL + NLP sentiment"
+        literature_pct: "~15%"
+        our_analog: "news.py + SuperModel L3"
+      - name: "CNN candlestick + LSTM"
+        literature_pct: "~3%"
+        our_analog: null
+
+  econophysics:
+    algorithms: [IsingModel, AgentBasedSimulation]
+    best_for: "Regímenes de mercado, synthetic data augmentation, tail risk"
+    our_status: experimental
+    modules: [src/ml/ising_market.py]
+
+data_modalities:
+  ohlcv_daily:
+    prevalence: "80%+ papers"
+    our_status: implemented
+    source: "yfinance / store"
+
+  technical_indicators:
+    prevalence: "60%+ papers"
+    our_status: implemented
+    count: 25
+    module: src/ml/features.py
+
+  macro_context:
+    prevalence: "~20% papers"
+    our_status: implemented
+    features: [usdmxn, naftrac, wti, sp500]
+    module: src/ml/features.py
+
+  cross_sectional:
+    prevalence: "~10% papers (ranking)"
+    our_status: implemented
+    module: src/ml/features.py
+
+  news_sentiment:
+    prevalence: "~25% papers"
+    our_status: implemented
+    module: src/ml/news.py
+
+  fundamentals:
+    prevalence: "~15% papers"
+    our_status: not_implemented
+
+  tick_intraday:
+    prevalence: "~10% papers"
+    our_status: partial
+    module: src/ml/intraday_features.py
+
+  candlestick_images:
+    prevalence: "~5% papers"
+    our_status: not_implemented
+
+validation_methods:
+  walk_forward:
+    description: "Ventana deslizante train→test temporal"
+    our_status: partial
+    module: src/ml/shared/evaluators/backtester.py
+
+  purged_cv:
+    description: "CV temporal con embargo entre folds (López de Prado)"
+    our_status: implemented
+    module: src/ml/purged_cv.py
+
+  ab_testing:
+    description: "Challenger vs production model"
+    our_status: implemented
+    module: src/ml/shared/evaluators/ab_tester.py
+
+  paper_trading:
+    description: "Simulación en vivo sin capital real"
+    our_status: partial
+    module: src/ml/paper_trading.py
+
+  live_trading:
+    description: "Validación en mercado real"
+    our_status: not_implemented
+
+metrics:
+  prediction:
+    - {name: AUC, use: "Clasificación direccional", our_primary: true}
+    - {name: accuracy, use: "Win rate direccional"}
+    - {name: RMSE, use: "Regresión de precio"}
+    - {name: MAPE, use: "Error porcentual precio"}
+    - {name: R2, use: "Varianza explicada regresión"}
+    - {name: precision, use: "Meta-labeling filter"}
+
+  portfolio:
+    - {name: sharpe_ratio, use: "Retorno ajustado por riesgo", our_primary: false}
+    - {name: max_drawdown, use: "Peor caída desde pico"}
+    - {name: accumulated_return, use: "Retorno total período"}
+    - {name: win_rate, use: "% trades ganadores"}
+    - {name: calmar_ratio, use: "Return / MDD"}
+
+  risk:
+    - {name: skewness, use: "Asimetría retornos"}
+    - {name: kurtosis, use: "Colas gordas"}
+    - {name: var_cvar, use: "Value at Risk"}
+
+optimization:
+  genetic_algorithm:
+    our_status: implemented
+    module: src/ml/shared/optimizers/genetic_algorithm.py
+    literature: "Mencionado en surveys; Cuckoo Search + GRU en [20]"
+
+  grid_search:
+    our_status: partial
+
+  automl:
+    our_status: not_implemented
+    literature_recommendation: "Sahu 2023 §8.4 — prioridad alta para DRL y DL"
+
+  manual_search:
+    literature_note: "A veces supera grid search en NN (Quadir 2023 cita [19])"

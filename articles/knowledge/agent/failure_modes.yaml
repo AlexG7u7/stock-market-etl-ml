@@ -1,0 +1,61 @@
+# Modos de fallo — cuándo el agente debe dejar de apostar o degradar confianza
+
+edge_decay:
+  description: "Ventaja algorítmica se erosiona cuando todos usan ML"
+  source: ghosh2022_intraday_lstm_rf
+  evidence: "Performance cae en sub-periodo 2010-2018 vs 1993-2000"
+  mitigation:
+    - "Enfocarse en BMV (menos competencia que S&P 500)"
+    - "Combinar señal cuant + noticias locales (El Financiero, Expansión)"
+    - "Recalibrar umbrales trimestralmente"
+  agent_action: "Si AUC rolling 3m cae > 5% → subir prob_thresh + revisar features"
+
+overconfidence:
+  description: "P(up) > 0.70 rara vez calibrado en finanzas"
+  source: [ashtiani2023_news_slr, kumbure2022_ml_data_review]
+  evidence: "Papers reportan accuracy 95%+ sospechosa"
+  mitigation:
+    - "Cap convicción display a 0.75 para sizing"
+    - "Kelly max 10% sin excepción"
+  agent_action: "Nunca escalar posición solo porque P(up) > 0.70"
+
+regime_shift:
+  description: "Modelo entrenado en bull no funciona en bear"
+  source: [sahu2023_qf_survey, src/ml/regime.py]
+  mitigation:
+    - "HMM régimen modula umbral y Kelly"
+    - "NO_BET en risk-off"
+  agent_action: "bear prob > 0.5 → max 2 posiciones, thresh 0.56"
+
+news_whipsaw:
+  description: "Sentiment contradictorio vs precio"
+  source: [leone2025_roberta_nhits, zhao2023_sa_dlstm]
+  mitigation:
+    - "Gemini VETA/DEGRADA"
+    - "news_alerta flag"
+  agent_action: "Si accion Gemini == EVITA → skip sin override"
+
+liquidity_trap:
+  description: "Señal en ticker illíquido BMV — slippage real >> modelo"
+  source: bmv_market_rules.yaml
+  mitigation:
+    - "Filtro volumen mínimo (pendiente implementar)"
+    - "Limit orders + buffer slippage"
+  agent_action: "Tickers con vol_ratio_20 < 0.3 → skip"
+
+data_staleness:
+  description: "Features calculados con datos desactualizados"
+  source: calibration.yaml
+  agent_action: "Si último OHLCV > 2 días hábiles → NO_BET ese ticker"
+
+model_disagreement:
+  description: "SuperModel L1 models divergen"
+  source: src/ml/super_model.py disagreement metric
+  threshold: 0.20
+  agent_action: "disagreement > 0.20 → DEGRADA tamaño 50% o skip"
+
+cost_underestimate:
+  description: "Edge bruto positivo pero neto negativo tras comisiones BMV"
+  source: ghosh2022_intraday_lstm_rf
+  evidence: "Sharpe cae ~30-40% post-costos"
+  agent_action: "KB-003 obligatorio antes de live; simular 0.55% round-trip"

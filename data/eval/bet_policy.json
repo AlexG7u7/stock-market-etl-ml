@@ -1,0 +1,15 @@
+{
+  "source": "experiments P0 2026-06-29",
+  "paper_only": true,
+  "live_trading_allowed": false,
+  "use_stacking_default": true,
+  "use_news_features": false,
+  "max_signals": 2,
+  "prob_thresh_base": 0.56,
+  "prob_thresh_bull": 0.54,
+  "prob_thresh_bear": 0.58,
+  "min_conviction": 0.56,
+  "backtest_top_k": 2,
+  "backtest_min_p_up": 0.56,
+  "recommendation": "K=2 min_p=0.56 stacking ON paper only"
+}

@@ -81,6 +81,7 @@ with st.sidebar:
     page = st.radio("Navegación", [
         "🦾  Super Modelo",
         "🏆  Ranking Mensual",
+        "📊  Research & Eval",
         "👀  Monitor",
         "📋  Paper Trading",
         "🏦  GBM Broker",
@@ -113,7 +114,7 @@ with st.sidebar:
 
 if page.startswith("🦾"):
     st.title("🦾 Super Modelo — Meta-orquestador")
-    st.caption("Fusiona 3 modelos base + régimen + noticias · ranking maestro de 88 tickers · Gemini como comité de riesgo")
+    st.caption("Fusiona 4 modelos base (LGBM + ensemble + heurístico + LSTM) + régimen + noticias · KB operativa en Gemini · ranking maestro ~87 tickers")
 
     sm_path = ROOT / "data" / "super_signals.json"
 
@@ -121,10 +122,13 @@ if page.startswith("🦾"):
     with col_b:
         top_g = st.number_input("Top a validar con Gemini", 3, 20, 10, step=1)
         use_gem = st.toggle("Usar Gemini", value=True)
+        use_stack = st.toggle("Stacking LR (KB-060)", value=True)
         if st.button("🦾 Correr Super Modelo", type="primary", use_container_width=True):
             cmd = ["scripts/run_super_model.py", "--top-gemini", str(int(top_g))]
             if not use_gem:
                 cmd.append("--no-gemini")
+            if not use_stack:
+                cmd.append("--no-stacking")
             with st.spinner("Entrenando modelos base, fusionando y validando… (~30s)"):
                 rc, out = run_script(cmd)
             if rc == 0:
@@ -769,6 +773,235 @@ elif page.startswith("📋"):
         } for t in sorted(closed, key=lambda x: x.get("exit_date",""))]
         df_hist = pd.DataFrame(rows)
         st.dataframe(df_hist, use_container_width=True, hide_index=True)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PÁGINA — RESEARCH & EVAL (literatura → código, backtest neto, LSTM, agent KB)
+# ══════════════════════════════════════════════════════════════════════════════
+
+elif page.startswith("📊"):
+    st.title("📊 Research & Eval — Literatura → Código")
+    st.caption(
+        "KB-001/003/081 backtest con costos BMV · news dedup/decay · LSTM en SuperModel · "
+        "Gemini + agent knowledge · export: data/eval/dashboard_eval.json"
+    )
+
+    eval_path = DATA / "eval" / "dashboard_eval.json"
+
+    col_run, col_info = st.columns([1, 2])
+    with col_run:
+        skip_lstm = st.toggle("Omitir LSTM compare (rápido)", value=True)
+        if st.button("▶️ Correr evaluaciones", type="primary", use_container_width=True):
+            cmd = ["scripts/run_all_evaluations.py"]
+            if skip_lstm:
+                cmd.append("--skip-lstm")
+            with st.spinner("Backtest top-K + grid search + calibración… (~1-2 min)"):
+                rc, out = run_script(cmd)
+            if rc == 0:
+                st.success("Evaluaciones actualizadas")
+                st.cache_data.clear()
+            else:
+                st.error("Error en evaluaciones")
+            with st.expander("Log"):
+                st.code(out[-3000:])
+            st.rerun()
+        if st.button("🧪 Correr experimentos P0", use_container_width=True):
+            with st.spinner("News A/B + Stacking + Grid umbrales… (~30s)"):
+                rc, out = run_script(["scripts/run_experiments.py"])
+            if rc == 0:
+                st.success("Experimentos guardados")
+                st.cache_data.clear()
+            else:
+                st.error("Error en experimentos")
+            with st.expander("Log"):
+                st.code(out[-3000:])
+            st.rerun()
+
+    dash = {}
+    if eval_path.exists():
+        dash = json.loads(eval_path.read_text())
+    else:
+        st.warning("Sin datos aún. Pulsa **Correr evaluaciones**.")
+        st.stop()
+
+    summary = dash.get("summary", {})
+    portfolio = dash.get("default_backtest", {})
+    dual = portfolio.get("portfolio_dual", {})
+    bench = portfolio.get("benchmark_naftrac", {})
+    costs = portfolio.get("costs", {})
+    grid = dash.get("grid_search", [])
+    lstm = dash.get("lstm_vs_lgbm") or {}
+    agent = dash.get("agent_knowledge", {})
+    kbs = dash.get("implemented_kbs", [])
+
+    verdict = summary.get("verdict", "?")
+    v_icon = "🔴" if verdict == "NO_BET_LIVE" else "🟢"
+    st.info(f"{v_icon} **{verdict}** — {summary.get('message', '')}")
+
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
+    c1.metric("Sharpe bruto", f"{summary.get('sharpe_gross', 0):.2f}")
+    c2.metric("Sharpe neto", f"{summary.get('sharpe_net', 0):.2f}",
+              delta=f"vs NAFTRAC {summary.get('benchmark_sharpe', 0):.2f}")
+    c3.metric("Retorno neto", f"{summary.get('total_return_net_pct', 0):+.1f}%")
+    c4.metric("Retorno NAFTRAC", f"{summary.get('benchmark_return_pct', 0):+.1f}%")
+    c5.metric("Costo RT", f"{summary.get('round_trip_cost_pct', 0):.2f}%")
+    c6.metric("AUC OOS", f"{summary.get('auc', 0):.3f}" if summary.get("auc") else "—")
+
+    st.caption(f"Generado: {dash.get('generated_at', '?')[:19]} · "
+               f"Test: {summary.get('test_range', ['?','?'])[0]} → {summary.get('test_range', ['?','?'])[1]} · "
+               f"{summary.get('n_periods', '?')} períodos rebalance")
+
+    experiments = dash.get("experiments") or {}
+
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        "Backtest top-K", "Grid search", "LSTM vs LGBM", "Experimentos P0", "Agent KB", "Tickets KB"
+    ])
+
+    with tab1:
+        st.subheader("Top-K long-only (Ghosh 2022) — neto de costos BMV")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.markdown("**Estrategia (neto)**")
+            for label, key in [
+                ("Sharpe", "sharpe_net"), ("Max DD", "max_drawdown"),
+                ("Win rate", "win_rate_net"), ("Calmar", "calmar_ratio"),
+                ("Retorno total", "total_return_net"),
+            ]:
+                val = dual.get(key, 0)
+                if "rate" in key:
+                    st.metric(label, f"{val*100:.1f}%")
+                elif key == "total_return_net":
+                    st.metric(label, f"{val*100:+.1f}%")
+                elif key == "max_drawdown":
+                    st.metric(label, f"{val*100:.1f}%")
+                else:
+                    st.metric(label, f"{val:.2f}")
+        with col_b:
+            st.markdown("**Benchmark NAFTRAC B&H**")
+            st.metric("Sharpe", f"{bench.get('sharpe_ratio', 0):.2f}")
+            st.metric("Retorno", f"{bench.get('total_return', 0)*100:+.1f}%")
+            st.metric("Max DD", f"{bench.get('max_drawdown', 0)*100:.1f}%")
+            st.caption(
+                f"Comisión {costs.get('commission_pct', 0)*100:.2f}%/lado · "
+                f"Slippage {costs.get('slippage_pct', 0)*100:.3f}%/lado"
+            )
+
+        curves = dash.get("equity_curves", {})
+        if curves.get("net") and curves.get("naftrac"):
+            df_eq = pd.DataFrame({
+                "Período": range(len(curves["net"])),
+                "Estrategia neto (k)": [v / 1000 for v in curves["net"]],
+                "NAFTRAC (k)": [v / 1000 for v in curves["naftrac"]],
+            })
+            fig = px.line(df_eq, x="Período", y=["Estrategia neto (k)", "NAFTRAC (k)"],
+                          labels={"value": "Capital (k MXN)", "variable": ""})
+            fig.update_layout(height=320, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig, use_container_width=True)
+
+    with tab2:
+        st.subheader("Grid search — mejores parámetros top-K")
+        if grid:
+            df_g = pd.DataFrame(grid)
+            st.dataframe(
+                df_g[[
+                    "top_k", "score_mode", "weight_mode",
+                    "sharpe_net", "sharpe_gross", "total_return_net",
+                    "max_drawdown", "win_rate_net", "auc", "vs_naftrac_sharpe",
+                ]],
+                use_container_width=True, hide_index=True,
+            )
+            best = dash.get("best_variant")
+            if best:
+                st.success(
+                    f"Mejor variante: K={best['top_k']}, score={best['score_mode']}, "
+                    f"weight={best['weight_mode']} → Sharpe neto {best['sharpe_net']}"
+                )
+        else:
+            st.caption("Corre evaluaciones sin omitir grid.")
+
+    with tab3:
+        st.subheader("LSTM-seq vs xs_lgbm (purged CV)")
+        lstm_sum = (lstm or {}).get("summary", [])
+        if lstm_sum:
+            df_l = pd.DataFrame(lstm_sum)
+            st.dataframe(df_l, use_container_width=True, hide_index=True)
+            st.caption(f"Generado: {(lstm or {}).get('generated_at', '?')[:19]}")
+            if any(
+                f.get("lstm_error") == "tensorflow_not_available"
+                for t in (lstm or {}).get("tickers", {}).values()
+                for f in t.get("folds", [])[:1]
+            ):
+                st.warning("Último run sin TensorFlow. Re-correr compare_lstm_lgbm.py.")
+        else:
+            st.info("Sin resultados LSTM. Desactiva 'Omitir LSTM' o corre: scripts/compare_lstm_lgbm.py")
+
+    with tab4:
+        st.subheader("Experimentos P0 — News / Stacking / Umbrales")
+        if not experiments:
+            st.info("Pulsa **🧪 Correr experimentos P0** en la barra lateral.")
+        else:
+            ex_sum = experiments.get("summary", {})
+            e1, e2, e3 = st.columns(3)
+            e1.metric("News ΔAUC≥0.01", "✅" if ex_sum.get("news_helps") else "❌")
+            e2.metric("Stacking > AUC-wt", "✅" if ex_sum.get("stacking_beats_auc_weight") else "❌")
+            e3.metric("Sharpe neto > 0 (≥20p)", "✅" if ex_sum.get("positive_sharpe_found") else "❌")
+            if ex_sum.get("low_n_warning"):
+                st.warning("El mejor Sharpe bruto usa muy pocos períodos (<20) — no es confiable.")
+
+            exp1 = experiments.get("exp1_news_ab", {})
+            st.markdown("**1. News A/B**")
+            st.caption(
+                f"Baseline AUC {exp1.get('baseline_auc')} → +News {exp1.get('with_news_auc')} "
+                f"(Δ {exp1.get('delta_auc'):+.4f}) · cache={exp1.get('news_cache_available')}"
+            )
+
+            exp2 = experiments.get("exp2_stacking_ab", {})
+            st.markdown("**2. Stacking vs AUC-weight**")
+            st.caption(
+                f"Sharpe neto stacking {exp2.get('sharpe_net_stacking')} vs "
+                f"auc-weight {exp2.get('sharpe_net_auc_weight')} → "
+                f"ganador **{exp2.get('winner_sharpe')}**"
+            )
+
+            exp3 = experiments.get("exp3_threshold_grid", {})
+            st.markdown("**3. Grid K × min P(up)**")
+            if exp3.get("variants"):
+                df_e3 = pd.DataFrame(exp3["variants"])
+                st.dataframe(df_e3, use_container_width=True, hide_index=True)
+            st.caption(exp3.get("recommendation", ""))
+            st.caption(f"Generado: {experiments.get('generated_at', '?')[:19]}")
+
+    with tab5:
+        st.subheader("Agent Knowledge Layer")
+        cal = agent.get("calibration") or {}
+        live = cal.get("live_stats") or cal.get("model_performance") or {}
+        st.markdown(f"**Reglas literatura cargadas:** {agent.get('literature_rules_count', '?')}")
+        if live:
+            st.json(live)
+        perf_path = ROOT / "articles" / "knowledge" / "agent" / "performance_log.yaml"
+        if perf_path.exists():
+            st.caption(f"Performance log: `{perf_path.relative_to(ROOT)}`")
+        verdicts_path = DATA / "gemini_verdicts.jsonl"
+        if verdicts_path.exists():
+            n_v = len([l for l in verdicts_path.read_text().splitlines() if l.strip()])
+            st.metric("Veredictos Gemini registrados", n_v)
+
+    with tab6:
+        st.subheader("Tickets implementados (P1–P2)")
+        st.markdown(" ".join(f"`{k}`" for k in kbs))
+        st.markdown("""
+| Área | Módulos |
+|------|---------|
+| Costos + backtest | `backtester.py`, `scripts/backtest_topk.py` |
+| News pipeline | `news.py` dedup TF-IDF + decay, `NEWS_FEATURE_COLS` |
+| LSTM | `lstm_seq.py`, integrado en `super_model.py` |
+| Stacking | `SuperModel(use_stacking=True)` |
+| Agent KB | `knowledge_loader.py` → `gemini_validator.py` |
+        """)
+        with st.expander("JSON completo"):
+            st.json(dash)
+
+    st.stop()
 
 
 elif page.startswith("🏦"):

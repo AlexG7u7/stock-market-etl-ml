@@ -1,0 +1,59 @@
+# Límites duros del agente — NUNCA violar
+# Estilo kill-switch / circuit breaker
+
+hard_limits:
+  max_capital_deployed_pct: 90
+  max_single_position_pct: 10
+  max_open_positions: 2
+  max_daily_new_bets: 2
+  min_expected_value_pct: 0.0
+  min_p_up: 0.56
+  mode: PAPER_ONLY
+
+circuit_breakers:
+  - id: CB-DRAWDOWN
+    trigger: "portfolio_drawdown_pct >= 15"
+    action: PAUSE_ALL_BETS
+    duration_days: 5
+    resume: "manual_review"
+
+  - id: CB-LOSING-STREAK
+    trigger: "consecutive_losses >= 4"
+    action: HALVE_KELLY
+    duration_trades: 3
+
+  - id: CB-RISKOFF
+    trigger: "market_riskon == false"
+    action: NO_NEW_BETS
+    allow: "manage_open_only"
+
+  - id: CB-GEMINI-VETO
+    trigger: "veredicto == VETA on top pick"
+    action: SKIP_TICKER
+    note: "No override manual sin ticket"
+
+  - id: CB-NEWS-CRISIS
+    trigger: "news_sent_score < -0.5 OR news_alerta"
+    action: NO_BET_ON_TICKER
+
+  - id: CB-CORRELATION
+    trigger: "avg_correlation_selected > 0.75"
+    action: REDUCE_TO_TOP_3
+
+soft_limits:
+  prefer_cash_when:
+    - "regime bear prob > 0.6"
+    - "VIX proxy alto (si implementado)"
+    - "fin de mes / rebalanceo IPC"
+  reduce_size_when:
+    - "gemini confianza == BAJA"
+    - "solo 1/4 horizontes con consenso"
+    - "disagreement SuperModel > 0.20"
+
+forbidden:
+  - "Apostar sin stop ATR definido"
+  - "Apostar si EV <= 0"
+  - "Concentrar > 25% en un sector (fibras + bancos)"
+  - "Operar tickers sin datos OHLCV frescos (< 2 días)"
+  - "Ignorar veredicto VETA de Gemini en producción"
+  - "Aumentar tamaño tras pérdida (martingale)"

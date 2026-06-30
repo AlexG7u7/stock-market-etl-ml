@@ -1,0 +1,149 @@
+id: sahu2023_qf_survey
+citation:
+  title: "An Overview of Machine Learning, Deep Learning, and Reinforcement Learning-Based Techniques in Quantitative Finance: Recent Progress and Challenges"
+  authors: ["Sahu, S.K.", "Mokhade, A.", "Bokde, N.D."]
+  year: 2023
+  journal: "Applied Sciences (MDPI)"
+  doi: "10.3390/app13031956"
+  url: "https://doi.org/10.3390/app13031956"
+
+problem:
+  task: "Survey — predicción de mercados, trading algorítmico, gestión de riesgo, optimización de cartera"
+  horizon: "Variado: day-wise, tick/intraday, portfolio rebalancing"
+  market: "70+ papers: US (S&P, NASDAQ), Asia (NIFTY, CSI), Europa (DAX, FTSE). **No incluye BMV/IPC** — gap geográfico."
+  target: "Regresión (precio), clasificación (BUY/SELL/HOLD), RL (acción de trading), portfolio weights"
+
+data:
+  sources:
+    - "Yahoo Finance (citado en 25/72 papers)"
+    - "Kaggle, NSE India, Investing.com"
+    - "Twitter/social media para sentimiento"
+  modalities:
+    - ohlcv_day
+    - ohlcv_tick
+    - text_tweets
+    - fundamental_reports
+    - image_candlestick
+  features:
+    - "OHLCV histórico"
+    - "Indicadores técnicos (RSI, MACD, BB, SMA, OBV, etc.)"
+    - "Texto + precio (híbrido)"
+    - "Fundamentales (balance, P&L, competencia)"
+    - "Imágenes de candlestick para CNN"
+  preprocessing:
+    - "Normalización MinMax/Standard"
+    - "Ventanas deslizantes para secuencias"
+    - "Labeling BUY/SELL/HOLD (clases desbalanceadas)"
+
+methods:
+  distribution_in_literature:
+    ml_only: "7%"
+    dl_only: "20%"
+    rl_only: "39%"
+    hybrid: "25%"
+  primary:
+    - "SVM, RF, XGBoost, LR, kNN, ARIMA"
+    - "LSTM, GRU, CNN, RNN, MLP"
+    - "DQN, DDQN, Deep Direct RL, multi-agent RL"
+    - "Híbridos: LSTM+RF, ARMA+LSTM, CNN+DRL, NLP+ML"
+  optimization:
+    - "Grid search, manual search"
+    - "Cuckoo Search + GRU (paper [20])"
+    - "Auto-ML (feature selection, NAS, hyperparameter tuning) — recomendado como futuro"
+  validation:
+    - "Walk-forward backtesting"
+    - "Métricas de predicción + métricas de portfolio"
+
+results:
+  consensus_findings:
+    - "EMH/random walk cuestionados — predicción parcial es posible"
+    - "Modelos multi-modal (precio + noticias + técnicos) superan unimodal"
+    - "DL (LSTM/GRU) mejor que ML clásico en series no lineales"
+    - "DRL domina literatura reciente pero sufre de data scarcity y simulación poco realista"
+    - "Clases desbalanceadas (HOLD >> BUY/SELL) son un desafío central"
+  metrics_prediction:
+    - "RMSE, MAE, MAPE, MSE, R²"
+    - "Accuracy, AUC, TPR, FPR"
+    - "Direction accuracy / win rate"
+  metrics_portfolio:
+    - "Sharpe ratio, max drawdown, accumulated return"
+    - "Average daily return, skewness, kurtosis, std dev"
+  limitations:
+    - "Backtesting sin costos de transacción realistas"
+    - "Market impact ignorado en simulaciones"
+    - "Pocos papers con live trading vs backtest"
+    - "Reproducibilidad limitada"
+
+applicability_to_bmv:
+  relevance_score: 5
+  already_in_stack:
+    - "src/ml/features.py — 25+ indicadores técnicos + macro + cross-section"
+    - "src/ml/ensemble.py — WoE + LR + LGBM (ML tabular SOTA)"
+    - "src/ml/regime.py — HMM bull/lateral/bear"
+    - "src/ml/news.py — sentimiento Gemini sobre noticias"
+    - "src/ml/risk_engine.py — Kelly, ATR, correlación"
+    - "src/ml/super_model.py — fusión multi-modelo"
+    - "src/ml/purged_cv.py — validación temporal"
+    - "src/ml/shared/optimizers/genetic_algorithm.py — GA para LSTM"
+    - "src/ml/shared/models/lstm_model.py — LSTM framework"
+  gaps:
+    - id: GAP-DRL
+      description: "Sin agente DRL para sizing/execution (39% de literatura)"
+      priority: P3
+    - id: GAP-CNN-VISUAL
+      description: "Sin CNN sobre candlestick charts como input"
+      priority: P4
+    - id: GAP-FUNDAMENTALS
+      description: "Sin features fundamentales (P/E, revenue, balance sheet)"
+      priority: P2
+    - id: GAP-INTRADAY
+      description: "Solo day-wise; tick data no en pipeline producción"
+      priority: P3
+    - id: GAP-AUTOML
+      description: "GA manual para LSTM; sin AutoML sistemático en ensemble"
+      priority: P2
+    - id: GAP-SIMULATION
+      description: "Backtest sin market impact / slippage realista"
+      priority: P2
+    - id: GAP-BMV-LITERATURE
+      description: "Cero papers sobre mercado mexicano en survey — somos pioneros en este nicho"
+      priority: info
+  actionable_items:
+    - ticket: "KB-001"
+      action: "Formalizar métricas duales: predicción (AUC) + portfolio (Sharpe, MDD) en evaluate_model"
+      module: "src/ml/shared/evaluators/metrics.py"
+    - ticket: "KB-002"
+      action: "Integrar LSTM como 4º modelo base en SuperModel (capa L1)"
+      module: "src/ml/super_model.py"
+    - ticket: "KB-003"
+      action: "Añadir costos de transacción BMV al backtester"
+      module: "src/ml/shared/evaluators/backtester.py"
+    - ticket: "KB-004"
+      action: "Extender news.py con features de volumen de noticias como regressor"
+      module: "src/ml/news.py"
+    - ticket: "KB-005"
+      action: "Evaluar FinRL como PoC de DRL para paper trading"
+      module: "src/ml/paper_trading.py"
+
+future_research_from_paper:
+  - "Multi-agent DRL con tolerancia al riesgo configurable"
+  - "Model-based DRL para data scarcity"
+  - "High-fidelity market simulation (fees, slippage, market impact)"
+  - "Auto-ML para hyperparameter tuning en DRL"
+  - "Live trading validation vs backtest only"
+  - "Pairs trading e intraday con DRL"
+
+key_quotes:
+  - "Taking into account several elements, such as news, data from social media, and historical pricing, raises the level of precision achieved by the model."
+  - "About 39% of researchers used reinforcement learning, while 25% used hybrid models."
+  - "Auto-ML approaches can considerably increase the efficiency of constructing Deep RL-based Quantitative Trading methods."
+
+references_of_interest:
+  - ref: "Jiang 2021 — DL in stock market survey"
+    doi: "10.1016/j.eswa.2021.115537"
+  - ref: "Liu 2021 — FinRL framework"
+    url: "https://github.com/AI4Finance-Foundation/FinRL"
+  - ref: "Hoseinzade 2019 — CNNpred"
+    doi: "10.1016/j.eswa.2019.03.022"
+  - ref: "Carta 2021 — multi-layer multi-ensemble DRL trader"
+    doi: "10.1007/s10489-020-01865-8"

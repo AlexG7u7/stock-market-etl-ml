@@ -1,0 +1,165 @@
+{
+  "generated_at": "2026-06-29T04:47:00.982440+00:00",
+  "config": {
+    "n_splits": 2,
+    "lstm_epochs": 6,
+    "lstm_max_samples": 5000,
+    "fast_mode": true,
+    "embargo": 10,
+    "horizon": 5
+  },
+  "tickers": {
+    "WALMEX": {
+      "ticker": "WALMEX",
+      "meta": {
+        "n_splits": 2,
+        "horizon": 5,
+        "embargo": 10,
+        "sequence_length": 30,
+        "n_features": 38,
+        "universe_size": 31
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "test_start": "2022-05-20",
+          "test_end": "2026-06-18",
+          "n_test_ticker": 990,
+          "n_train": 89016,
+          "xs_lgbm_auc": 0.5511,
+          "lstm_seq_auc": 0.4978,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        },
+        {
+          "fold": 2,
+          "test_start": "2018-04-10",
+          "test_end": "2022-05-19",
+          "n_test_ticker": 1021,
+          "n_train": 59340,
+          "xs_lgbm_auc": 0.5284,
+          "lstm_seq_auc": 0.5015,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        }
+      ],
+      "aggregate": {
+        "xs_lgbm_mean_auc": 0.5397,
+        "xs_lgbm_std_auc": 0.0114,
+        "lstm_seq_mean_auc": 0.4996,
+        "lstm_seq_std_auc": 0.0018,
+        "lstm_wins": 0,
+        "n_folds": 2
+      }
+    },
+    "ALSEA": {
+      "ticker": "ALSEA",
+      "meta": {
+        "n_splits": 2,
+        "horizon": 5,
+        "embargo": 10,
+        "sequence_length": 30,
+        "n_features": 38,
+        "universe_size": 31
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "test_start": "2022-05-20",
+          "test_end": "2026-06-18",
+          "n_test_ticker": 989,
+          "n_train": 89016,
+          "xs_lgbm_auc": 0.4848,
+          "lstm_seq_auc": 0.5243,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        },
+        {
+          "fold": 2,
+          "test_start": "2018-04-10",
+          "test_end": "2022-05-19",
+          "n_test_ticker": 984,
+          "n_train": 59340,
+          "xs_lgbm_auc": 0.4963,
+          "lstm_seq_auc": 0.5096,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        }
+      ],
+      "aggregate": {
+        "xs_lgbm_mean_auc": 0.4906,
+        "xs_lgbm_std_auc": 0.0058,
+        "lstm_seq_mean_auc": 0.517,
+        "lstm_seq_std_auc": 0.0073,
+        "lstm_wins": 2,
+        "n_folds": 2
+      }
+    },
+    "GMEXICOB": {
+      "ticker": "GMEXICOB",
+      "meta": {
+        "n_splits": 2,
+        "horizon": 5,
+        "embargo": 10,
+        "sequence_length": 30,
+        "n_features": 38,
+        "universe_size": 31
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "test_start": "2022-05-19",
+          "test_end": "2026-06-18",
+          "n_test_ticker": 1002,
+          "n_train": 89016,
+          "xs_lgbm_auc": 0.5753,
+          "lstm_seq_auc": 0.533,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        },
+        {
+          "fold": 2,
+          "test_start": "2018-04-10",
+          "test_end": "2022-05-18",
+          "n_test_ticker": 986,
+          "n_train": 59340,
+          "xs_lgbm_auc": 0.5115,
+          "lstm_seq_auc": 0.5394,
+          "lstm_error": null,
+          "xs_lgbm_error": null
+        }
+      ],
+      "aggregate": {
+        "xs_lgbm_mean_auc": 0.5434,
+        "xs_lgbm_std_auc": 0.0319,
+        "lstm_seq_mean_auc": 0.5362,
+        "lstm_seq_std_auc": 0.0032,
+        "lstm_wins": 1,
+        "n_folds": 2
+      }
+    }
+  },
+  "summary": [
+    {
+      "ticker": "WALMEX",
+      "xs_lgbm_mean_auc": 0.5397,
+      "lstm_seq_mean_auc": 0.4996,
+      "lstm_wins": 0,
+      "n_folds": 2
+    },
+    {
+      "ticker": "ALSEA",
+      "xs_lgbm_mean_auc": 0.4906,
+      "lstm_seq_mean_auc": 0.517,
+      "lstm_wins": 2,
+      "n_folds": 2
+    },
+    {
+      "ticker": "GMEXICOB",
+      "xs_lgbm_mean_auc": 0.5434,
+      "lstm_seq_mean_auc": 0.5362,
+      "lstm_wins": 1,
+      "n_folds": 2
+    }
+  ]
+}

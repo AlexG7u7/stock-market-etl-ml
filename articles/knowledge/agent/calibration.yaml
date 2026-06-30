@@ -1,0 +1,81 @@
+meta:
+  last_updated: '2026-06-29'
+  sample: Walk-forward ~19 tickers BMV, 2.5 años (risk_engine constants)
+  disclaimer: Stats históricos ≠ garantía futura. Recalibrar con paper_trading.
+model_performance:
+  horizon_days: 5
+  prob_threshold: 0.56
+  win_rate: 0.522
+  avg_win_pct: 3.32
+  avg_loss_pct: 2.44
+  payoff_ratio: 1.36
+  edge_at_threshold: ~2.2% EV por trade antes de costos
+probability_interpretation:
+  bands:
+  - range: < 0.50
+    action: NO_BET
+    meaning: Sin edge; modelo no favorece
+  - range: 0.50-0.56
+    action: NO_BET
+    meaning: Edge marginal; costos BMV lo comen (exp P0)
+  - range: 0.56-0.62
+    action: STANDARD_BET
+    meaning: Umbral operativo post-grid (K=2, 67 períodos)
+  - range: '> 0.62'
+    action: STRONG_BET
+    meaning: Alta convicción; verificar overconfidence (max 10%)
+regime_adjustments:
+  bull:
+    prob_thresh: 0.54
+    kelly_multiplier: 1.0
+    note: Más permisivo
+  lateral:
+    prob_thresh: 0.56
+    kelly_multiplier: 0.85
+  bear:
+    prob_thresh: 0.58
+    kelly_multiplier: 0.7
+    note: Solo mejores setups; preferir cash
+cross_section:
+  target_definition: ret_5d > mediana universo
+  ranking_method: master_ranking por convicción
+  top_k: 2
+features_high_signal:
+  oversold:
+  - williams_r < -80
+  - stoch_k < 20
+  - bb_pct < 15
+  momentum:
+  - cs_ret5_rank alto
+  - rn_ret_5d positivo vs pares
+  macro_tailwind:
+  - sp500_ret5 positivo
+  - usdmxn estable (no depreciación fuerte)
+recalibration_triggers:
+- Win rate < 48% rolling 20 trades → subir prob_thresh +0.02
+- Max drawdown > 15% → pausar agente 1 semana
+- Sharpe neto < 0.5 rolling 3 meses → revisar features (KB-004)
+- Edge decay post-2020 (Ghosh 2022) — monitorear AUC mensual
+paper_trading:
+  journal: data/paper_trades.json
+  settlement_rules:
+    stop_hit: Low <= stop → exit
+    t1_hit: High >= T1 → sell 50%, stop a breakeven
+    t2_hit: High >= T2 → exit 100%
+    expired: Día 5 close si no tocó niveles
+  metrics_to_track:
+  - win_rate
+  - avg_pnl_pct
+  - sharpe
+  - max_dd
+  - model_correct
+live_stats:
+  source: estimated_from_risk_engine
+  updated_at: '2026-06-29'
+  n_closed: 0
+  win_rate: 0.522
+  avg_win_pct: 3.32
+  avg_loss_pct: 2.44
+  payoff_ratio: 1.36
+  sharpe_approx: null
+  note: No closed paper trades yet; using walk-forward constants from risk_engine

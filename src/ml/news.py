@@ -1,28 +1,22 @@
 """
 Módulo de noticias financieras — scraping + NLP sentiment + features.
 
-Fuentes (en orden de prioridad):
-  1. Yahoo Finance  — últimos ~30 artículos por ticker (yfinance .news)
-  2. Google News RSS — búsqueda por ticker/empresa, muy fresco
-  3. El Financiero RSS — noticias BMV en español
-  4. Expansión RSS   — mercados MX en español
-  5. GDELT Project   — historial desde 2015 (para backfill de entrenamiento)
+Fuentes BMV (prioridad):
+  1. DataBursátil   — cables BMV en español (DATABURSATIL_API_TOKEN)
+  2. Yahoo Finance  — yfinance .news
+  3. Google News RSS
+  4. El Financiero / Expansión RSS
+  5. Alpha Vantage  — si ALPHA_VANTAGE_API_KEY (sentimiento incluido)
+  6. GDELT          — opcional backfill histórico
 
 Sentiment:
-  - Primario: Gemini 2.5-flash via google-genai (si GEMINI_API_KEY está disponible)
-  - Fallback: scoring por keywords en español + inglés (siempre disponible)
+  - Alpha Vantage overall_sentiment_score cuando disponible
+  - Fallback: keywords ES/EN
+  - Gemini 2.5-flash ON por defecto si GEMINI_API_KEY (opt-out: GEMINI_NEWS_ENABLED=false)
 
-Features generadas por ticker:
-  news_sent_score   — sentimiento promedio últimos N días  [-1, +1]
-  news_count_7d     — log(1 + n_artículos)
-  news_sent_delta   — cambio de sentimiento vs ventana anterior
-  news_sent_vol     — std de sentimientos (incertidumbre)
-
-Uso rápido:
-  from src.ml.news import get_news_features, batch_news_features
-
-  feat = get_news_features("ALSEA", "ALSEA.MX", "Alsea restaurantes Mexico", days_back=7)
-  df   = batch_news_features(tickers_dict, days_back=7)
+Features (NEWS_FEATURE_COLS):
+  news_sent_score, news_count_7d, news_sent_delta, news_sent_vol,
+  news_relevance_avg, news_esg_score
 """
 from __future__ import annotations
 
@@ -34,14 +28,45 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
-import xml.etree.ElementTree as ET
 
 import numpy as np
 import pandas as pd
-import requests
-import yfinance as yf
+
+from src.ml.news_sources import (
+    fetch_alpha_vantage_articles,
+    fetch_cryptopanic as _fetch_cryptopanic_source,
+    fetch_databursatil_articles,
+    fetch_elfinanciero,
+    fetch_expansion,
+    fetch_gdelt as _fetch_gdelt_source,
+    fetch_google_rss,
+    fetch_yfinance_articles,
+    get_entity_aliases,
+    is_esg_headline,
+)
+
+try:
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    _SKLEARN_AVAILABLE = True
+except ImportError:
+    _SKLEARN_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
+
+# KB-004 — features de noticias (features.py importará esta lista después)
+NEWS_FEATURE_COLS = [
+    "news_sent_score",
+    "news_count_7d",
+    "news_sent_delta",
+    "news_sent_vol",
+    "news_relevance_avg",
+    "news_esg_score",
+]
+
+LOW_RELEVANCE_THRESHOLD = 0.4
+LOW_RELEVANCE_WEIGHT    = 0.3
 
 ROOT     = Path(__file__).parent.parent.parent
 NEWS_DIR = ROOT / "data" / "news"
@@ -52,6 +77,11 @@ REQUEST_TIMEOUT  = 10   # segundos por request HTTP
 MAX_ARTICLES     = 30   # máx artículos por fuente por ticker
 GEMINI_BATCH     = 20   # artículos por llamada a Gemini
 RATE_LIMIT_SLEEP = 0.3  # segundos entre requests RSS
+
+# KB-041 / KB-043 — deduplicación y decay temporal
+DEDUP_COSINE_THRESHOLD = 0.5   # similitud TF-IDF para marcar duplicado
+DEDUP_DECAY_BASE       = 0.5   # peso *= 0.5^n_dup por titular similar
+TEMPORAL_DECAY_LAMBDA  = 0.3   # weight = exp(-lambda * days_ago)
 
 # ── Keywords para scoring de fallback ────────────────────────────────────────
 _POS_KEYWORDS = {
@@ -78,13 +108,16 @@ _NEG_KEYWORDS = {
 
 @dataclass
 class Article:
-    ticker:       str
-    title:        str
-    summary:      str
-    url:          str
-    published_ts: int    # Unix timestamp UTC
-    source:       str
-    sentiment:    float = 0.0   # −1 a +1, se rellena después
+    ticker:           str
+    title:            str
+    summary:          str
+    url:              str
+    published_ts:     int    # Unix timestamp UTC
+    source:           str
+    sentiment:        float = 0.0   # −1 a +1, se rellena después
+    weight:           float = 1.0   # peso compuesto (dedup × decay × relevance)
+    relevance_score:  float = 1.0
+    av_sentiment:     Optional[float] = None
 
     @property
     def published_dt(self) -> datetime:
@@ -99,191 +132,69 @@ class Article:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# SCRAPERS
+# SCRAPERS (delegates to news_sources.py)
 # ─────────────────────────────────────────────────────────────────────────────
+
+def _dict_to_article(raw: dict, ticker: str) -> Article:
+    return Article(
+        ticker=ticker,
+        title=raw.get("title", ""),
+        summary=raw.get("summary", "") or "",
+        url=raw.get("url", ""),
+        published_ts=int(raw.get("published_ts") or 0),
+        source=raw.get("source", "unknown"),
+        relevance_score=float(raw.get("relevance_score", 1.0)),
+        av_sentiment=raw.get("av_sentiment"),
+    )
+
 
 def fetch_yfinance(yf_symbol: str, ticker: str) -> list[Article]:
     """Descarga noticias via yfinance .news (últimas ~30 noticias)."""
-    try:
-        items = yf.Ticker(yf_symbol).news or []
-        articles = []
-        for item in items[:MAX_ARTICLES]:
-            ts = item.get("providerPublishTime") or item.get("publisher_time", 0)
-            articles.append(Article(
-                ticker       = ticker,
-                title        = item.get("title", ""),
-                summary      = item.get("summary", "") or item.get("description", ""),
-                url          = item.get("link", "") or item.get("url", ""),
-                published_ts = int(ts) if ts else 0,
-                source       = "yfinance",
-            ))
-        return [a for a in articles if a.published_ts > 0]
-    except Exception as e:
-        logger.debug(f"yfinance news {yf_symbol}: {e}")
-        return []
-
-
-def _parse_rss_feed(url: str, ticker: str, source: str,
-                    keyword_filter: Optional[str] = None) -> list[Article]:
-    """Helper genérico para parsear feeds RSS."""
-    try:
-        resp = requests.get(url, timeout=REQUEST_TIMEOUT,
-                            headers={"User-Agent": "Mozilla/5.0"})
-        resp.raise_for_status()
-        root = ET.fromstring(resp.content)
-        ns   = {"atom": "http://www.w3.org/2005/Atom"}
-        articles = []
-
-        # RSS 2.0
-        for item in root.iter("item"):
-            title   = item.findtext("title", "")
-            summary = item.findtext("description", "") or item.findtext("summary", "")
-            link    = item.findtext("link", "")
-            pub_raw = item.findtext("pubDate", "")
-
-            if keyword_filter and keyword_filter.lower() not in (title + summary).lower():
-                continue
-
-            # parsear fecha
-            ts = 0
-            if pub_raw:
-                try:
-                    from email.utils import parsedate_to_datetime
-                    ts = int(parsedate_to_datetime(pub_raw).timestamp())
-                except Exception:
-                    pass
-
-            if title:
-                articles.append(Article(
-                    ticker=ticker, title=title,
-                    summary=_strip_html(summary or ""),
-                    url=link, published_ts=ts, source=source,
-                ))
-
-        return articles[:MAX_ARTICLES]
-    except Exception as e:
-        logger.debug(f"RSS {url}: {e}")
-        return []
-
-
-def _strip_html(text: str) -> str:
-    """Elimina tags HTML básicos."""
-    import re
-    return re.sub(r"<[^>]+>", " ", text).strip()
+    return [
+        _dict_to_article(d, ticker)
+        for d in fetch_yfinance_articles(yf_symbol, ticker, max_items=MAX_ARTICLES)
+    ]
 
 
 def fetch_google_news_rss(query: str, ticker: str, lang: str = "es-MX") -> list[Article]:
-    """
-    Busca en Google News RSS.
-    query: texto de búsqueda, e.g. "ALSEA BMV Mexico"
-    """
-    encoded = requests.utils.quote(query)
-    region  = "MX" if "MX" in lang.upper() else "US"
-    ceid    = f"{region}:{lang.split('-')[0]}"
-    url     = (f"https://news.google.com/rss/search"
-               f"?q={encoded}&hl={lang}&gl={region}&ceid={ceid}")
-    time.sleep(RATE_LIMIT_SLEEP)
-    return _parse_rss_feed(url, ticker, "google_news")
+    """Busca en Google News RSS."""
+    return [
+        _dict_to_article(d, ticker)
+        for d in fetch_google_rss(query, ticker, max_items=MAX_ARTICLES, lang=lang)
+    ]
 
 
 def fetch_elfinanciero_rss(ticker: str, keyword: str) -> list[Article]:
-    """Parsea El Financiero RSS filtrando por keyword (nombre empresa/ticker)."""
-    feeds = [
-        "https://www.elfinanciero.com.mx/rss/mercados.xml",
-        "https://www.elfinanciero.com.mx/rss/economia.xml",
+    """Parsea El Financiero RSS filtrando por keyword."""
+    return [
+        _dict_to_article(d, ticker)
+        for d in fetch_elfinanciero(ticker, keyword, max_items=MAX_ARTICLES)
     ]
-    articles = []
-    for feed_url in feeds:
-        articles += _parse_rss_feed(feed_url, ticker, "elfinanciero", keyword_filter=keyword)
-        time.sleep(RATE_LIMIT_SLEEP)
-    return articles[:MAX_ARTICLES]
 
 
 def fetch_expansion_rss(ticker: str, keyword: str) -> list[Article]:
     """Parsea Expansión RSS filtrando por keyword."""
-    feeds = [
-        "https://expansion.mx/rss/empresas",
-        "https://expansion.mx/rss/mercados",
+    return [
+        _dict_to_article(d, ticker)
+        for d in fetch_expansion(ticker, keyword, max_items=MAX_ARTICLES)
     ]
-    articles = []
-    for feed_url in feeds:
-        articles += _parse_rss_feed(feed_url, ticker, "expansion", keyword_filter=keyword)
-        time.sleep(RATE_LIMIT_SLEEP)
-    return articles[:MAX_ARTICLES]
 
 
 def fetch_gdelt(query: str, ticker: str, days_back: int = 7) -> list[Article]:
-    """
-    GDELT Project — historial hasta 2015.
-    Ideal para backfill de datos de entrenamiento.
-    query: e.g. "ALSEA Mexico BMV"
-    """
-    try:
-        timespan = f"{days_back}d"
-        encoded  = requests.utils.quote(query)
-        url = (f"https://api.gdeltproject.org/api/v2/doc/doc"
-               f"?query={encoded}&mode=artlist&maxrecords={MAX_ARTICLES}"
-               f"&format=json&timespan={timespan}&sourcelang=spanish+english")
-        resp = requests.get(url, timeout=REQUEST_TIMEOUT,
-                            headers={"User-Agent": "Mozilla/5.0"})
-        resp.raise_for_status()
-        data     = resp.json()
-        articles_raw = data.get("articles") or []
-        articles = []
-        for art in articles_raw:
-            title   = art.get("title", "")
-            url_art = art.get("url", "")
-            seen    = art.get("seendate", "")  # e.g. "20240628T143000Z"
-            ts      = 0
-            if seen:
-                try:
-                    dt = datetime.strptime(seen, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
-                    ts = int(dt.timestamp())
-                except Exception:
-                    pass
-            if title:
-                articles.append(Article(
-                    ticker=ticker, title=title, summary="",
-                    url=url_art, published_ts=ts, source="gdelt",
-                ))
-        return articles
-    except Exception as e:
-        logger.debug(f"GDELT {query}: {e}")
-        return []
+    """GDELT Project — historial para backfill."""
+    return [
+        _dict_to_article(d, ticker)
+        for d in _fetch_gdelt_source(query, ticker, days_back=days_back, max_items=MAX_ARTICLES)
+    ]
 
 
 def fetch_cryptopanic(ticker: str, currency: str = "BTC") -> list[Article]:
     """CryptoPanic API — noticias cripto (requiere CRYPTOPANIC_API_KEY)."""
-    api_key = os.environ.get("CRYPTOPANIC_API_KEY")
-    if not api_key:
-        return []
-    try:
-        url  = f"https://cryptopanic.com/api/v1/posts/?auth_token={api_key}&currencies={currency}&public=true"
-        resp = requests.get(url, timeout=REQUEST_TIMEOUT)
-        resp.raise_for_status()
-        data = resp.json()
-        articles = []
-        for post in (data.get("results") or [])[:MAX_ARTICLES]:
-            ts = 0
-            pub = post.get("published_at", "")
-            if pub:
-                try:
-                    dt = datetime.fromisoformat(pub.replace("Z", "+00:00"))
-                    ts = int(dt.timestamp())
-                except Exception:
-                    pass
-            articles.append(Article(
-                ticker=ticker,
-                title=post.get("title", ""),
-                summary=post.get("body") or "",
-                url=post.get("url", ""),
-                published_ts=ts,
-                source="cryptopanic",
-            ))
-        return articles
-    except Exception as e:
-        logger.debug(f"CryptoPanic {currency}: {e}")
-        return []
+    del currency  # currency resolved inside news_sources
+    return [
+        _dict_to_article(d, ticker)
+        for d in _fetch_cryptopanic_source(ticker, max_items=MAX_ARTICLES)
+    ]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -304,22 +215,30 @@ def _score_keywords(text: str) -> float:
     return round((pos - neg) / total, 3)
 
 
+def _gemini_news_enabled() -> bool:
+    """ON by default when GEMINI_API_KEY is set unless GEMINI_NEWS_ENABLED=false."""
+    if os.environ.get("GEMINI_NEWS_ENABLED", "").lower() == "false":
+        return False
+    return bool(os.environ.get("GEMINI_API_KEY"))
+
+
 def score_with_gemini(articles: list[Article], company_name: str) -> list[Article]:
     """
     Asigna sentimiento a cada artículo.
-    Siempre usa keyword scoring (instante, sin cuota).
-    Llama a Gemini solo si GEMINI_NEWS_ENABLED=true en el entorno.
+    Alpha Vantage sentiment tiene prioridad; fallback a keywords.
+    Gemini se activa por defecto si hay GEMINI_API_KEY (opt-out con GEMINI_NEWS_ENABLED=false).
     """
-    # Keyword scoring siempre (rápido, sin cuota)
     for a in articles:
-        a.sentiment = _score_keywords(a.text())
+        if a.av_sentiment is not None:
+            a.sentiment = round(float(a.av_sentiment), 3)
+        else:
+            a.sentiment = _score_keywords(a.text())
 
-    # Gemini opcional — activar con GEMINI_NEWS_ENABLED=true
-    if os.environ.get("GEMINI_NEWS_ENABLED", "").lower() != "true":
+    if not _gemini_news_enabled() or not articles:
         return articles
 
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key or not articles:
+    if not api_key:
         return articles
 
     try:
@@ -358,7 +277,7 @@ Titulares:
                         try:
                             art.sentiment = float(scores_map[key])
                         except (ValueError, TypeError):
-                            pass  # mantener keyword score
+                            pass  # mantener score previo (AV o keyword)
             time.sleep(1.5)
 
     except Exception as e:
@@ -367,9 +286,37 @@ Titulares:
     return articles
 
 
+def _articles_in_window(articles: list[Article], days_back: int) -> list[Article]:
+    """Artículos dentro de la ventana days_back (requiere published_ts válido)."""
+    now = datetime.now(tz=timezone.utc)
+    cutoff = now - timedelta(days=days_back)
+    out: list[Article] = []
+    for a in articles:
+        if not a.published_ts:
+            continue
+        if a.published_dt >= cutoff:
+            out.append(a)
+    return out
+
+
+def _neutral_news_features(n_articles: int = 0, sources: Optional[list[str]] = None) -> dict[str, float]:
+    """Features neutras cuando no hay evidencia de noticias en la ventana."""
+    return {
+        "news_sent_score":     0.0,
+        "news_count_7d":       0.0,
+        "news_sent_delta":     0.0,
+        "news_sent_vol":       0.0,
+        "news_relevance_avg":  0.0,
+        "news_esg_score":      0.0,
+        "n_articles":          n_articles,
+        "sources":             sources or [],
+    }
+
+
 def batch_score_gemini(
     tickers_articles: dict[str, list[Article]],
     top_n_headlines: int = 3,
+    days_back: int = 7,
 ) -> dict[str, float]:
     """
     Calcula sentimiento promedio para múltiples tickers en UNA sola llamada a Gemini.
@@ -381,10 +328,11 @@ def batch_score_gemini(
     if not api_key:
         return {}
 
-    # Construir resumen compacto: ticker → top-N headlines
+    # Construir resumen compacto: ticker → top-N headlines (solo ventana reciente)
     ticker_headlines: dict[str, list[str]] = {}
     for ticker, arts in tickers_articles.items():
-        headlines = [a.title for a in arts if a.title][:top_n_headlines]
+        recent = _articles_in_window(arts, days_back)
+        headlines = [a.title for a in recent if a.title][:top_n_headlines]
         if headlines:
             ticker_headlines[ticker] = headlines
 
@@ -434,40 +382,173 @@ Noticias:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# DEDUP (KB-041) + TEMPORAL DECAY (KB-043)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _deduplicate_tfidf(
+    articles: list[Article],
+    threshold: float = DEDUP_COSINE_THRESHOLD,
+) -> list[Article]:
+    """
+    Asigna pesos de deduplicación via TF-IDF + cosine similarity.
+
+    Artículos del mismo ticker y día con cosine > threshold reciben
+    peso *= DEDUP_DECAY_BASE^n_dup (n_dup = nº de similares previos).
+    """
+    if not articles or not _SKLEARN_AVAILABLE:
+        return articles
+
+    groups: dict[tuple[str, str], list[Article]] = {}
+    for art in articles:
+        day = art.published_dt.strftime("%Y-%m-%d") if art.published_ts else "unknown"
+        groups.setdefault((art.ticker, day), []).append(art)
+
+    for group in groups.values():
+        if len(group) < 2:
+            continue
+
+        texts = [a.title or " " for a in group]
+        try:
+            tfidf = TfidfVectorizer().fit_transform(texts)
+            sim = cosine_similarity(tfidf)
+        except ValueError:
+            continue
+
+        for i, art in enumerate(group):
+            n_dup = sum(1 for j in range(i) if sim[i, j] > threshold)
+            if n_dup > 0:
+                art.weight *= DEDUP_DECAY_BASE ** n_dup
+
+    return articles
+
+
+def _temporal_weight(
+    art: Article,
+    now: datetime,
+    lambda_decay: float = TEMPORAL_DECAY_LAMBDA,
+) -> float:
+    """Peso por antigüedad: exp(-lambda * days_ago)."""
+    if not art.published_ts:
+        return 1.0
+    days_ago = max(0.0, (now - art.published_dt).total_seconds() / 86400.0)
+    return float(np.exp(-lambda_decay * days_ago))
+
+
+def _effective_weights(
+    articles: list[Article],
+    now: datetime,
+    lambda_decay: float = TEMPORAL_DECAY_LAMBDA,
+) -> list[float]:
+    """Combina peso de dedup (art.weight) con decay temporal."""
+    return [art.weight * _temporal_weight(art, now, lambda_decay) for art in articles]
+
+
+def _weighted_mean(values: list[float], weights: list[float]) -> float:
+    if not values:
+        return 0.0
+    w = np.asarray(weights, dtype=float)
+    v = np.asarray(values, dtype=float)
+    total = w.sum()
+    if total <= 0:
+        return float(np.mean(v))
+    return float(np.average(v, weights=w))
+
+
+def _weighted_std(values: list[float], weights: list[float]) -> float:
+    if len(values) < 2:
+        return 0.0
+    w = np.asarray(weights, dtype=float)
+    v = np.asarray(values, dtype=float)
+    total = w.sum()
+    if total <= 0:
+        return float(np.std(v))
+    mean = np.average(v, weights=w)
+    variance = np.average((v - mean) ** 2, weights=w)
+    return float(np.sqrt(max(variance, 0.0)))
+
+
+def apply_dedup_and_decay(
+    articles: list[Article],
+    lambda_decay: float = TEMPORAL_DECAY_LAMBDA,
+    dedup_threshold: float = DEDUP_COSINE_THRESHOLD,
+) -> list[Article]:
+    """
+    Pipeline KB-041 + KB-043: resetea pesos, deduplica TF-IDF, aplica decay.
+
+    Llamar después de asignar .sentiment y antes de agregar features.
+    """
+    for art in articles:
+        art.weight = 1.0
+    _deduplicate_tfidf(articles, threshold=dedup_threshold)
+    now = datetime.now(tz=timezone.utc)
+    for art in articles:
+        art.weight *= _temporal_weight(art, now, lambda_decay)
+    return articles
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # FEATURE COMPUTATION
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _compute_features_from_articles(
     articles: list[Article],
     days_back: int = 7,
+    lambda_decay: float = TEMPORAL_DECAY_LAMBDA,
+    apply_dedup: bool = True,
 ) -> dict[str, float]:
     """
     Calcula las 4 features de noticias a partir de una lista de artículos
     con .sentiment ya asignado.
+
+    KB-041: deduplicación TF-IDF antes de agregar (peso *= 0.5^n_dup).
+    KB-043: decay temporal weight = exp(-lambda * days_ago) en agregación.
     """
     now     = datetime.now(tz=timezone.utc)
     cutoff  = now - timedelta(days=days_back)
     cutoff2 = now - timedelta(days=days_back * 2)
 
+    for art in articles:
+        art.weight = 1.0
+        if art.relevance_score < LOW_RELEVANCE_THRESHOLD:
+            art.weight *= LOW_RELEVANCE_WEIGHT
+    if apply_dedup:
+        _deduplicate_tfidf(articles)
+    for art in articles:
+        art.weight *= _temporal_weight(art, now, lambda_decay)
+
     recent  = [a for a in articles if a.published_dt >= cutoff]
     prior   = [a for a in articles if cutoff2 <= a.published_dt < cutoff]
 
-    sent_recent = [a.sentiment for a in recent] or [0.0]
-    sent_prior  = [a.sentiment for a in prior]  or [0.0]
+    w_recent = [a.weight for a in recent]
+    w_prior  = [a.weight for a in prior]
 
-    sent_score  = float(np.mean(sent_recent))
-    sent_prior_mean = float(np.mean(sent_prior))
-    sent_vol    = float(np.std(sent_recent)) if len(sent_recent) > 1 else 0.0
-    count_7d    = float(np.log1p(len(recent)))
-    sent_delta  = round(sent_score - sent_prior_mean, 4)
+    sent_recent = [a.sentiment for a in recent]
+    sent_prior  = [a.sentiment for a in prior]
+
+    rel_recent = [a.relevance_score for a in recent]
+
+    esg_recent = [a for a in recent if is_esg_headline(a.title)]
+    w_esg = [a.weight for a in esg_recent]
+    sent_esg = [a.sentiment for a in esg_recent]
+
+    sent_score      = _weighted_mean(sent_recent, w_recent) if sent_recent else 0.0
+    sent_prior_mean = _weighted_mean(sent_prior, w_prior) if sent_prior else 0.0
+    sent_vol        = _weighted_std(sent_recent, w_recent) if len(sent_recent) > 1 else 0.0
+    relevance_avg   = _weighted_mean(rel_recent, w_recent) if rel_recent else 0.0
+    esg_score       = _weighted_mean(sent_esg, w_esg) if sent_esg else 0.0
+    eff_count       = sum(w_recent) if w_recent else 0.0
+    count_7d        = float(np.log1p(eff_count))
+    sent_delta      = round(sent_score - sent_prior_mean, 4)
 
     return {
-        "news_sent_score":  round(sent_score, 4),
-        "news_count_7d":    round(count_7d, 4),
-        "news_sent_delta":  round(sent_delta, 4),
-        "news_sent_vol":    round(sent_vol, 4),
-        "n_articles":       len(recent),
-        "sources":          list({a.source for a in recent}),
+        "news_sent_score":     round(sent_score, 4),
+        "news_count_7d":       round(count_7d, 4),
+        "news_sent_delta":     sent_delta,
+        "news_sent_vol":       round(sent_vol, 4),
+        "news_relevance_avg":  round(relevance_avg, 4),
+        "news_esg_score":      round(esg_score, 4),
+        "n_articles":          len(recent),
+        "sources":             list({a.source for a in recent}),
     }
 
 
@@ -572,10 +653,17 @@ def _scrape_articles(
     query_info = _SEARCH_QUERIES.get(ticker, (f"{ticker} stock", ticker))
     google_q   = query_info[0]
     keyword_mx = query_info[1] if len(query_info) > 1 else ticker
+    aliases    = get_entity_aliases(ticker, extra=[keyword_mx])
 
     articles: list[Article] = []
     is_mx = yf_symbol.endswith(".MX") or ticker in ("AMX", "FMX")
     lang  = "es-MX" if is_mx else "en-US"
+
+    if is_mx:
+        articles.extend(
+            _dict_to_article(d, ticker)
+            for d in fetch_databursatil_articles(ticker, aliases=aliases, max_items=MAX_ARTICLES)
+        )
 
     articles.extend(fetch_yfinance(yf_symbol, ticker))
     articles.extend(fetch_google_news_rss(google_q, ticker, lang=lang))
@@ -584,10 +672,15 @@ def _scrape_articles(
         articles.extend(fetch_elfinanciero_rss(ticker, keyword_mx))
         articles.extend(fetch_expansion_rss(ticker, keyword_mx))
 
-    crypto_tickers = {"IBIT","FBTC","ETHA","GBTC","MSTR","COIN","MARA","RIOT","CLSK"}
+    if os.environ.get("ALPHA_VANTAGE_API_KEY"):
+        articles.extend(
+            _dict_to_article(d, ticker)
+            for d in fetch_alpha_vantage_articles(ticker, max_items=MAX_ARTICLES, aliases=aliases)
+        )
+
+    crypto_tickers = {"IBIT", "FBTC", "ETHA", "GBTC", "MSTR", "COIN", "MARA", "RIOT", "CLSK"}
     if ticker in crypto_tickers:
-        currency = "ETH" if ticker == "ETHA" else "BTC"
-        articles.extend(fetch_cryptopanic(ticker, currency))
+        articles.extend(fetch_cryptopanic(ticker))
 
     if use_gdelt:
         articles.extend(fetch_gdelt(google_q, ticker, days_back=days_back * 2))
@@ -639,7 +732,10 @@ def get_news_features(
     # Keyword scoring (siempre) + Gemini individual si GEMINI_NEWS_ENABLED=true
     scored = score_with_gemini(articles, cname)
 
-    return _compute_features_from_articles(scored, days_back=days_back)
+    feat = _compute_features_from_articles(scored, days_back=days_back)
+    if feat.get("n_articles", 0) == 0:
+        return _neutral_news_features()
+    return feat
 
 
 def batch_news_features(
@@ -679,14 +775,15 @@ def batch_news_features(
             if verbose:
                 print(f"ERROR: {e}")
 
-    # ── Fase 2: keyword scoring (siempre) + Gemini batch (si hay API key) ──
-    # Keyword scoring individual
+    # ── Fase 2: sentiment (AV > keywords) + Gemini batch (si hay API key) ──
     for name, arts in tickers_articles.items():
         for a in arts:
-            a.sentiment = _score_keywords(a.text())
+            if a.av_sentiment is not None:
+                a.sentiment = round(float(a.av_sentiment), 3)
+            else:
+                a.sentiment = _score_keywords(a.text())
 
-    # Gemini: una sola llamada para todos los tickers con noticias
-    gemini_scores = batch_score_gemini(tickers_articles, top_n_headlines=3)
+    gemini_scores = batch_score_gemini(tickers_articles, top_n_headlines=3, days_back=days_back)
     if gemini_scores and verbose:
         print(f"\n  Gemini batch: {len(gemini_scores)} tickers con score NLP\n")
 
@@ -694,10 +791,12 @@ def batch_news_features(
     results = []
     for name, arts in tickers_articles.items():
         try:
-            # Si tenemos score Gemini, aplicarlo como override del promedio
             feat = _compute_features_from_articles(arts, days_back=days_back)
-            if name in gemini_scores:
+            # Gemini solo si hay artículos reales en ventana (DATA-001)
+            if feat.get("n_articles", 0) > 0 and name in gemini_scores:
                 feat["news_sent_score"] = round(gemini_scores[name], 4)
+            elif feat.get("n_articles", 0) == 0:
+                feat = _neutral_news_features()
             feat["ticker"] = name
             results.append(feat)
             if verbose:
@@ -709,16 +808,21 @@ def batch_news_features(
         except Exception as e:
             logger.warning(f"{name}: error en news features — {e}")
             results.append({
-                "ticker":          name,
-                "news_sent_score": 0.0,
-                "news_count_7d":   0.0,
-                "news_sent_delta": 0.0,
-                "news_sent_vol":   0.0,
-                "n_articles":      0,
-                "sources":         [],
+                "ticker":              name,
+                "news_sent_score":     0.0,
+                "news_count_7d":       0.0,
+                "news_sent_delta":     0.0,
+                "news_sent_vol":       0.0,
+                "news_relevance_avg":  0.0,
+                "news_esg_score":      0.0,
+                "n_articles":          0,
+                "sources":             [],
             })
 
     df = pd.DataFrame(results).set_index("ticker")
+    for col in NEWS_FEATURE_COLS:
+        if col not in df.columns:
+            df[col] = 0.0
 
     if save_cache:
         today = datetime.now().strftime("%Y-%m-%d")
@@ -751,13 +855,7 @@ def load_cached_news_features(date: Optional[str] = None) -> Optional[pd.DataFra
     df   = pd.DataFrame(data)
     if "ticker" in df.columns:
         df = df.set_index("ticker")
+    for col in NEWS_FEATURE_COLS:
+        if col not in df.columns:
+            df[col] = 0.0
     return df
-
-
-# Columnas de features de noticias (para añadir a FEATURE_COLS si se desea)
-NEWS_FEATURE_COLS = [
-    "news_sent_score",
-    "news_count_7d",
-    "news_sent_delta",
-    "news_sent_vol",
-]

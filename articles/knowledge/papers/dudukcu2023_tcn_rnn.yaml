@@ -1,0 +1,82 @@
+id: dudukcu2023_tcn_rnn
+citation:
+  title: "Temporal Convolutional Networks with RNN approach for chaotic time series prediction"
+  authors: ["Dudukcu, H.V.", "Taskiran, M.", "Cam Taskiran, Z.G.", "Yildirim, T."]
+  year: 2023
+  journal: "Applied Soft Computing"
+  doi: "10.1016/j.asoc.2022.109945"
+  url: "https://doi.org/10.1016/j.asoc.2022.109945"
+  source: web-of-science
+
+problem:
+  task: "Predicción de series temporales caóticas (regresión RMSE)"
+  horizon: "Multi-step ahead en sistemas caóticos"
+  market: "NO evalúa mercados — Lorenz, Rössler, ECG arrhythmia. Stock mencionado como aplicación futura."
+  target: "Valor continuo de serie caótica"
+
+data:
+  datasets:
+    - "9 series caóticas (Lorenz, Rössler, Lorenz-like)"
+    - "21 ECG recordings con arritmias"
+  modalities:
+    - synthetic_chaotic
+    - biomedical_ecg
+  note: "Mercados financieros citados como dominio de aplicación pero NO benchmarked"
+
+methods:
+  primary:
+    - "Hybrid TCN (Temporal Convolutional Network) + RNN (LSTM/GRU)"
+  architecture:
+    - "TCN extrae low-level features del input"
+    - "RNN layers capturan información temporal"
+    - "Variantes: TCN-LSTM, TCN-GRU"
+  benchmarks:
+    - "12 métodos: ML clásico, DNN solo, híbridos"
+    - "Comparación vs TCN solo, LSTM solo, GRU solo"
+  validation:
+    - "RMSE promedio"
+    - "Friedman test para significancia estadística"
+
+results:
+  metrics:
+    rmse_chaotic_avg: 0.0022
+    rmse_ecg_avg: 0.0082
+    vs_lstm_gru_tcn_solo: "TCN-RNN híbrido supera métodos individuales en 9/9 datasets caóticos"
+  key_findings:
+    - "Híbridos TCN+RNN > TCN o RNN solos para series caóticas ruidosas"
+    - "TCN captura features locales; RNN captura dependencias temporales largas"
+    - "Aplicable a dominios con dinámica caótica: weather, finance, traffic (claim)"
+  limitations:
+    - "Cero experimentos en datos financieros reales"
+    - "Regresión de valor continuo — no clasificación direccional"
+    - "Relevancia para BMV es arquitectural, no empírica directa"
+
+applicability_to_bmv:
+  relevance_score: 2
+  already_in_stack:
+    - "src/ml/shared/models/lstm_model.py — RNN component exists"
+  gaps:
+    - id: GAP-TCN
+      description: "Sin Temporal Convolutional Network en pipeline"
+      priority: P4
+      ticket: KB-070
+  actionable_items:
+    - ticket: KB-070
+      action: "PoC TCN-LSTM en features OHLCV como alternativa a MLS-LSTM — baja prioridad"
+    - note: "Mercados financieros son caóticos (Ising/econofísica) — complementa src/ml/ising_market.py conceptualmente"
+
+architecture_analog:
+  their_stack: "TCN (local features) → LSTM/GRU (temporal)"
+  our_options:
+    - "TCN sobre ventana OHLCV → LSTM classifier P(up 5d)"
+    - "Combinar con ising_market.py para synthetic augmentation"
+  priority: low
+
+key_quotes:
+  - "Hybrid deep neural network methods give better performance in solving time series prediction problems."
+  - "TCN to extract low level features + RNN layers such as LSTM and GRU to capture temporal information."
+  - "Can be applied in many fields such as weather forecasting, finance and stock markets."
+
+references_of_interest:
+  - ref: "Tsantekidis 2017 — CNN on limit order book for stock prices"
+  - ref: "Tian 2018 — CNN-LSTM for load forecasting (architecture pattern)"

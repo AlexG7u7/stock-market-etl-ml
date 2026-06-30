@@ -1,0 +1,230 @@
+# Roadmap de investigación — priorizado por literatura Scopus + gaps del stack
+# Horizonte: Q3-Q4 2026
+
+meta:
+  created: 2026-06-28
+  sources: [sahu2023_qf_survey, quadir2023_mls_lstm]
+  principle: "Clasificación direccional + Sharpe neto > RMSE de precio"
+
+phases:
+  - id: P1-quick-wins
+    name: "Quick wins — cerrar gaps de bajo esfuerzo"
+    timeline: "2-3 semanas"
+    priority: critical
+    literature_support: [ashtiani2023_news_slr, leone2025_roberta_nhits]
+    items:
+      - ticket: KB-001
+        title: "Métricas duales en evaluación"
+        description: |
+          Añadir Sharpe, max drawdown, Calmar y win rate neto de costos
+          junto a AUC en evaluate_model y backtester.
+        literature: "Sahu 2023 Table 14; Zhao 2023 SA-DLSTM simulation metrics"
+        modules: [src/ml/shared/evaluators/metrics.py, src/ml/shared/evaluators/backtester.py]
+        acceptance:
+          - "Script evaluate_model reporta AUC + Sharpe + MDD"
+          - "Métricas exportadas a JSON para canvases"
+
+      - ticket: KB-003
+        title: "Costos de transacción BMV en backtest"
+        description: |
+          Modelar comisión (~0.25-0.35% round-trip BMV) + slippage estimado.
+        modules: [src/ml/shared/evaluators/backtester.py, src/ml/risk_engine.py]
+        acceptance:
+          - "Backtest resta costos por trade"
+          - "Sharpe neto vs bruto reportado"
+
+      - ticket: KB-004
+        title: "News features como input de LGBM"
+        description: |
+          Pasar news_sent_score, news_sent_delta, n_articles de news.py
+          a FEATURE_COLS del ensemble. Confirmado por Ashtiani SLR + Zhao SA-DLSTM.
+        literature: "Ashtiani 2023: multi-modal precio+sentiment+técnicos es estándar"
+        modules: [src/ml/features.py, src/ml/news.py, scripts/generate_signals.py]
+        acceptance:
+          - "Features de noticias en pipeline de entrenamiento"
+          - "AUC walk-forward vs baseline sin noticias"
+
+      - ticket: KB-041
+        title: "Deduplicación TF-IDF de noticias repetidas"
+        description: |
+          Antes de scoring Gemini: TF-IDF en titulares, cosine > 0.5 → exponential decay.
+          Leone 2025 demuestra que noticias repetidas distorsionan sentiment.
+        literature: "Leone 2025 §2.2"
+        modules: [src/ml/news.py]
+        acceptance:
+          - "Noticias duplicadas mismo día no inflan sentiment"
+          - "Test unitario con 3 titulares idénticos"
+
+      - ticket: KB-043
+        title: "Decay temporal en sentiment score"
+        description: |
+          Ponderar noticias por antigüedad (exponential decay).
+          Zhao 2023 enfatiza timeliness del sentiment.
+        literature: "Zhao 2023 SA-DLSTM"
+        modules: [src/ml/news.py]
+        acceptance:
+          - "Noticia de hace 5d pesa menos que de hoy"
+
+      - ticket: KB-081
+        title: "Backtest top-K long-only estilo Ghosh 2022"
+        description: |
+          Long top-5 convicción SuperModel vs mediana universo.
+          Modelar costos 0.2-0.35%/trade. Sharpe neto vs IPC.
+        literature: "Ghosh 2022 — statistical arbitrage top-10/bottom-10"
+        modules: [src/ml/shared/evaluators/backtester.py, src/ml/super_model.py]
+        acceptance:
+          - "Sharpe neto reportado con costos BMV"
+          - "Comparación vs buy-and-hold NAFTRAC"
+
+      - ticket: KB-060
+        title: "Stacking meta-learner (LR/Lasso) sobre preds base"
+        description: |
+          Kumbure 2022 / Jiang 2020: RF+XGBoost+RNN/LSTM con meta LR supera single models.
+          Comparar vs fusión AUC-weight actual en SuperModel.
+        literature: "Kumbure 2022 Table 10 — Jiang 2020 stacking"
+        modules: [src/ml/super_model.py]
+        acceptance:
+          - "Walk-forward: stacking vs AUC-weight en 3 universos"
+          - "Decisión documentada en knowledge base"
+
+  - id: P2-lstm-integration
+    name: "Integrar MLS-LSTM en SuperModel"
+    timeline: "3-4 semanas"
+    priority: high
+    items:
+      - ticket: KB-010
+        title: "Arquitectura MLS-LSTM (2-3 capas, Adam)"
+        description: |
+          Implementar variante multi-layer sequential LSTM según Quadir 2023.
+          Usar sequence_length=30, hidden_units tunable vía GA existente.
+        literature: "Quadir 2023 — MAPE 2.18%, R² 0.98 (regresión precio)"
+        modules: [src/ml/shared/models/lstm_model.py]
+        acceptance:
+          - "LSTMConfig soporta num_layers >= 2"
+          - "Entrenamiento converge en WALMEX 5d"
+
+      - ticket: KB-011
+        title: "Re-target LSTM: clasificación P(up 5d)"
+        description: |
+          Cambiar output de regresión (precio) a clasificación binaria direccional.
+          Alinear con objetivo del proyecto, no con métricas del paper original.
+        modules: [src/ml/pipelines/train_pipeline.py, src/ml/shared/models/lstm_model.py]
+        acceptance:
+          - "LSTM output sigmoid → P(up 5d)"
+          - "AUC > 0.50 en purged CV"
+
+      - ticket: KB-012
+        title: "LSTM como modelo L1 en SuperModel"
+        description: |
+          Añadir 'lstm_seq' como 4º predictor en capa L1.
+          Peso en fusión L2 proporcional a edge histórico (AUC-0.5).
+        literature: "Sahu 2023 — 25% papers usan híbridos DL+ML"
+        modules: [src/ml/super_model.py]
+        acceptance:
+          - "SuperModel.run() incluye lstm_seq si AUC > umbral"
+          - "master_ranking refleja fusión 4-modelos"
+
+      - ticket: KB-013
+        title: "Validación purged CV LSTM vs LGBM"
+        description: |
+          Comparar xs_lgbm vs lstm_seq en purged_cv.py.
+          Criterio de producción: AUC lstm > 0.52 O mejora Sharpe combinado.
+        modules: [src/ml/purged_cv.py]
+        acceptance:
+          - "Notebook/report con comparación side-by-side"
+          - "Decisión documentada en knowledge base"
+
+  - id: P3-automl-fundamentals
+    name: "AutoML + fundamentales"
+    timeline: "4-6 semanas"
+    priority: medium
+    items:
+      - ticket: KB-020
+        title: "Features fundamentales BMV"
+        description: |
+          Ingestar P/E, market cap, dividend yield vía yfinance o BMV filings.
+          Sahu 2023: precio + fundamentales mejora precisión.
+        modules: [src/ml/features.py, src/data/store.py]
+        acceptance:
+          - "5+ features fundamentales en FEATURE_COLS"
+          - "NaN handling documentado"
+
+      - ticket: KB-021
+        title: "AutoML para ensemble (Optuna/GA extendido)"
+        description: |
+          Extender GA de LSTM a hiperparámetros LGBM + LR + thresholds.
+          Sahu 2023 §8.4: Auto-ML como dirección futura clave.
+        modules: [src/ml/shared/optimizers/genetic_algorithm.py, src/ml/ensemble.py]
+        acceptance:
+          - "Pipeline optimize_hyperparams cubre ensemble completo"
+          - "Mejora AUC > 1% vs defaults en 3+ tickers"
+
+      - ticket: KB-022
+        title: "Metaheurística feature selection"
+        description: |
+          Evaluar cuttlefish algorithm (Gupta 2018) o similar para subset de FEATURE_COLS.
+          Reducir overfitting con 31+ features.
+        literature: "Gupta 2018 cuttlefish — transferible de Parkinson a finance"
+        modules: [src/ml/features.py]
+        acceptance:
+          - "Subset óptimo de features identificado"
+          - "AUC estable o mejor con menos features"
+
+  - id: P4-drl-exploration
+    name: "Deep Reinforcement Learning — exploración"
+    timeline: "Q4 2026+"
+    priority: low
+    items:
+      - ticket: KB-005
+        title: "PoC FinRL para paper trading"
+        description: |
+          Evaluar FinRL (Liu 2021) con datos BMV para sizing y timing.
+          39% de literatura usa RL — gap estratégico pero alto esfuerzo.
+        literature: "Sahu 2023, Alameer 2022 RL survey, FinRL GitHub"
+        modules: [src/ml/paper_trading.py]
+        acceptance:
+          - "Agente DRL entrenado en 1 universo BMV"
+          - "Sharpe vs SuperModel baseline comparado"
+
+      - ticket: KB-006
+        title: "Market simulator con impact"
+        description: |
+          Simulador con fees, slippage, market impact para DRL y backtest.
+          Sahu 2023 §8.3: high-fidelity simulation es prerrequisito de DRL serio.
+        acceptance:
+          - "Simulador parametrizable"
+          - "Integrado en paper_trading.py"
+
+  - id: P5-research-output
+    name: "Contribución original — BMV niche"
+    timeline: "2026 H2"
+    priority: strategic
+    items:
+      - ticket: KB-030
+        title: "Paper propio: SuperModel BMV"
+        description: |
+          El survey no incluye BMV/IPC. Tenemos stack único (HMM + ensemble + Gemini validator).
+          Objetivo: publicar resultados walk-forward BMV como contribución original.
+        acceptance:
+          - "Backtest 3 años, 5 universos, métricas duales"
+          - "Comparación vs buy-and-hold IPC"
+
+      - ticket: KB-031
+        title: "Ampliar watchlist Scopus"
+        description: |
+          Descargar papers de watchlist en corpus.yaml:
+          Jiang 2021, FinRL, CNNpred, Carta 2021 multi-layer DRL.
+        acceptance:
+          - "4+ papers nuevos en articles/scopus/"
+          - "Fichas en papers/"
+
+success_criteria:
+  short_term:
+    - "Knowledge base con 2+ fichas completas y corpus actualizable"
+    - "KB-001 y KB-003 implementados"
+  medium_term:
+    - "LSTM integrado en SuperModel con AUC > 0.52"
+    - "News features en ensemble con mejora medible"
+  long_term:
+    - "DRL PoC funcional"
+    - "Paper/draft sobre SuperModel BMV"

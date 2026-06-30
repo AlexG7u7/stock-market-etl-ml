@@ -1,0 +1,70 @@
+id: mukherjee2021_cnn_ann
+citation:
+  title: "Stock market prediction using deep learning algorithms"
+  authors: ["Mukherjee, S.", "Sadhukhan, B.", "Sarkar, N.", "Roy, D.", "De, S."]
+  year: 2021
+  journal: "CAAI Transactions on Intelligence Technology"
+  doi: "10.1049/cit2.12059"
+  url: "https://doi.org/10.1049/cit2.12059"
+
+problem:
+  task: "Regresión — predicción de valor de precio próximos días"
+  horizon: "Recursivo día a día desde últimos N días"
+  market: "NIFTY (India), BSE — probado también en COVID-19 crash"
+  target: "Nivel de precio futuro (regresión)"
+
+data:
+  sources:
+    - "Datos históricos NIFTY index"
+  modalities:
+    - ohlcv_day
+    - image_2d_histogram  # representación visual cuantizada
+  features:
+    - "Secuencias numéricas para ANN/FFNN"
+    - "Histogramas 2D generados de dataset cuantizado (input CNN)"
+  preprocessing:
+    - "Quantización de dataset en time frames"
+    - "Generación de histogramas 2D para CNN"
+
+methods:
+  primary:
+    - "ANN / Deep Feedforward Neural Network"
+    - "CNN sobre histogramas 2D"
+  secondary:
+    - "Comparación ANN vs CNN"
+  validation:
+    - "Accuracy de predicción de precio"
+    - "Test en crash COVID-19 (marzo 2020)"
+
+results:
+  metrics:
+    ann_accuracy: "97.66%"
+    cnn_accuracy: "98.92%"
+    covid_crash_accuracy: "91%"
+  key_findings:
+    - "CNN sobre histogramas 2D supera ANN en datos cuantizados"
+    - "Enfoque visual/novel — histogramas como imagen no usado antes en este contexto"
+    - "Resiliencia decente en crash COVID (91%)"
+  limitations:
+    - "Predice nivel de precio, no dirección — misma limitación que Quadir 2023"
+    - "Accuracy >97% sospechosa (posible overfitting o data leakage)"
+    - "Mercado indio NIFTY — no BMV"
+    - "Sin noticias, macro, ni cross-section"
+
+applicability_to_bmv:
+  relevance_score: 3
+  already_in_stack:
+    - "src/ml/shared/models/lstm_model.py — DL alternativo"
+  gaps:
+    - id: GAP-CNN-VISUAL
+      description: "Sin CNN sobre representaciones visuales de precio"
+      priority: P4
+      ticket: KB-050
+  actionable_items:
+    - ticket: KB-050
+      action: "PoC: convertir OHLCV window a candlestick/histogram image → CNN classifier P(up 5d)"
+    - note: "Prioridad baja — enfoque diferente a nuestro pipeline tabular+ensemble"
+
+key_quotes:
+  - "CNN model achieved an accuracy of 98.92% using 2-D histograms generated out of the quantised dataset."
+  - "This approach has not been implemented earlier for the analysis of such datasets."

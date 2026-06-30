@@ -1,10 +1,12 @@
 [
   {
     "ticker": "WALMEX",
-    "news_sent_score": 0.0,
-    "news_count_7d": 1.0986,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.4978,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
     "n_articles": 2,
     "sources": [
       "google_news"
@@ -12,10 +14,12 @@
   },
   {
     "ticker": "FEMSAUBD",
-    "news_sent_score": 0.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.1331,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
     "n_articles": 1,
     "sources": [
       "google_news"
@@ -23,10 +27,12 @@
   },
   {
     "ticker": "GMEXICOB",
-    "news_sent_score": 0.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.0743,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
     "n_articles": 1,
     "sources": [
       "google_news"
@@ -34,37 +40,45 @@
   },
   {
     "ticker": "CEMEXCPO",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.8,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "GFNORTEO",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.9,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "BIMBOA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "ALSEA",
-    "news_sent_score": 0.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.1466,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
     "n_articles": 1,
     "sources": [
       "expansion"
@@ -72,10 +86,12 @@
   },
   {
     "ticker": "KIMBERA",
-    "news_sent_score": 0.0,
-    "news_count_7d": 1.0986,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.4296,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.7594,
+    "news_esg_score": 0.0,
     "n_articles": 2,
     "sources": [
       "google_news"
@@ -83,28 +99,34 @@
   },
   {
     "ticker": "PINFRA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "ORBIA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "GRUMAB",
-    "news_sent_score": 0.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.3987,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
     "n_articles": 1,
     "sources": [
       "expansion"
@@ -112,134 +134,160 @@
   },
   {
     "ticker": "ASURB",
-    "news_sent_score": 0.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.7,
+    "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
-    "n_articles": 1,
-    "sources": [
-      "google_news"
-    ]
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
+    "n_articles": 0,
+    "sources": []
   },
   {
     "ticker": "OMAB",
-    "news_sent_score": 0.0,
-    "news_count_7d": 1.9459,
+    "news_sent_score": 0.7,
+    "news_count_7d": 1.5202,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.8585,
+    "news_esg_score": 0.0,
     "n_articles": 6,
     "sources": [
-      "elfinanciero",
-      "expansion"
+      "expansion",
+      "elfinanciero"
     ]
   },
   {
     "ticker": "GAPB",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "GCARSOA1",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "MEGACPO",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "LABB",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "VOLARA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "CUERVO",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "AC",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "VESTA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "VISTA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "BOLSAA",
-    "news_sent_score": -0.3974,
-    "news_count_7d": 3.2958,
-    "news_sent_delta": 0.1026,
-    "news_sent_vol": 0.4806,
-    "n_articles": 26,
+    "news_sent_score": 0.7,
+    "news_count_7d": 2.1432,
+    "news_sent_delta": 0.1151,
+    "news_sent_vol": 0.4864,
+    "news_relevance_avg": 1.0,
+    "news_esg_score": 0.0,
+    "n_articles": 24,
     "sources": [
       "google_news"
     ]
   },
   {
     "ticker": "GCC",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "HOTEL",
-    "news_sent_score": -1.0,
-    "news_count_7d": 0.6931,
+    "news_sent_score": 0.9,
+    "news_count_7d": 0.0612,
     "news_sent_delta": -1.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.15,
+    "news_esg_score": 0.0,
     "n_articles": 1,
     "sources": [
       "google_news"
@@ -247,55 +295,67 @@
   },
   {
     "ticker": "POSADAS",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "TLEVISA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "HERDEZ",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "GENTERA",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "FUNO11",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   },
   {
     "ticker": "Q",
-    "news_sent_score": 0.0,
+    "news_sent_score": 0.7,
     "news_count_7d": 0.0,
     "news_sent_delta": 0.0,
     "news_sent_vol": 0.0,
+    "news_relevance_avg": 0.0,
+    "news_esg_score": 0.0,
     "n_articles": 0,
     "sources": []
   }

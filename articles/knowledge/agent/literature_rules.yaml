@@ -1,0 +1,95 @@
+# Reglas destiladas de la literatura → políticas del agente de apuestas
+# Cada regla cita paper_id y mapea a módulo de código
+
+rules:
+  - id: LR-001
+    paper: ghosh2022_intraday_lstm_rf
+    rule: "Apostar solo si P(outperform mediana) > umbral; ranking cross-seccional, no absoluto"
+    agent_policy: "Usar master_ranking + prob_thresh por régimen"
+    code: [src/ml/super_model.py, scripts/generate_all_signals.py]
+    priority: critical
+
+  - id: LR-002
+    paper: ghosh2022_intraday_lstm_rf
+    rule: "Modelar costos antes de apostar; Sharpe neto es la métrica de éxito"
+    agent_policy: "Rechazar apuesta si EV neto de costos <= 0"
+    code: [src/ml/risk_engine.py, KB-003]
+    priority: critical
+
+  - id: LR-003
+    paper: sahu2023_qf_survey
+    rule: "Multi-modal (precio + técnicos + noticias) > unimodal"
+    agent_policy: "No apostar fuerte si noticias contradicen momentum técnico"
+    code: [src/ml/news.py, src/ml/gemini_validator.py]
+    priority: high
+
+  - id: LR-004
+    paper: ashtiani2023_news_slr
+    rule: "Headlines suficientes; no requiere cuerpo completo del artículo"
+    agent_policy: "RSS/yfinance headlines OK para Gemini validator"
+    code: [src/ml/news.py]
+    priority: info
+
+  - id: LR-005
+    paper: leone2025_roberta_nhits
+    rule: "Deduplicar noticias repetidas antes de usar sentiment"
+    agent_policy: "Peso decay si mismo headline TF-IDF > 0.5"
+    code: [KB-041]
+    priority: high
+
+  - id: LR-006
+    paper: zhao2023_sa_dlstm
+    rule: "Sentiment con decay temporal; noticias viejas pesan menos"
+    agent_policy: "Preferir news_sent_delta reciente vs score estático"
+    code: [KB-043, src/ml/news.py]
+    priority: medium
+
+  - id: LR-007
+    paper: kumbure2022_ml_data_review
+    rule: "Ensemble/stacking > single model; feature selection mejora robustez"
+    agent_policy: "Confiar más cuando LGBM + heurístico + régimen concuerdan (bajo disagreement)"
+    code: [src/ml/super_model.py]
+    priority: high
+
+  - id: LR-008
+    paper: quadir2023_mls_lstm
+    rule: "Target = dirección P(up), NO precio absoluto"
+    agent_policy: "Nunca interpretar predicciones como 'precio llegará a X'"
+    code: [src/ml/ensemble.py]
+    priority: critical
+
+  - id: LR-009
+    paper: ghosh2022_intraday_lstm_rf
+    rule: "Edge decae cuando ML se democratiza (post-2010)"
+    agent_policy: "BMV niche = ventaja; monitorear AUC decay mensual"
+    code: [failure_modes.yaml]
+    priority: medium
+
+  - id: LR-010
+    paper: sahu2023_qf_survey
+    rule: "Walk-forward OOS obligatorio; backtest in-sample engaña"
+    agent_policy: "Paper trading > backtest para calibrar agente"
+    code: [src/ml/paper_trading.py, src/ml/purged_cv.py]
+    priority: critical
+
+  - id: LR-011
+    paper: kumbure2022_ml_data_review
+    rule: "Crude oil (WTI) es macro variable #1 en literatura"
+    agent_policy: "Red flag si WTI cae fuerte + long en sector energía MX"
+    code: [src/ml/features.py — wti_ret5]
+    priority: medium
+
+  - id: LR-012
+    paper: ghosh2022_intraday_lstm_rf
+    rule: "Multi-feature (retornos múltiples horizontes) > single lag"
+    agent_policy: "Preferir tickers con consenso 3+/4 horizontes (1s-4s)"
+    code: [scripts/generate_all_signals.py, gemini_analyst n_consenso]
+    priority: high
+
+agent_never_do:
+  - rule: "Optimizar RMSE de precio (Quadir, Mukherjee)"
+    do_instead: "Optimizar AUC direccional + Sharpe neto"
+  - rule: "Apostar en risk-off sin edge excepcional"
+    literature: ghosh2022 + pipeline market_is_riskon
+  - rule: "Confiar en accuracy >95% de papers (overfitting)"
+    literature: ashtiani2023 SLR Table 12

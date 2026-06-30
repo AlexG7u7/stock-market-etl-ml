@@ -27,21 +27,29 @@ class Backtester:
         self,
         initial_train_days: int = 252,  # 1 año
         retrain_frequency: int = 21,    # Reentrenar cada mes
-        test_days: int = 5              # Predecir 5 días adelante
+        test_days: int = 5,             # Predecir 5 días adelante
+        commission_pct: float = Metrics.DEFAULT_COMMISSION_PCT,
+        slippage_pct: float = Metrics.DEFAULT_SLIPPAGE_PCT,
     ):
         """
         Args:
             initial_train_days: Días iniciales de entrenamiento
             retrain_frequency: Cada cuántos días reentrenar
             test_days: Días a predecir en cada ventana
+            commission_pct: Comisión por lado (default 0.25% BMV)
+            slippage_pct: Slippage por lado (default 0.05%)
         """
         self.initial_train_days = initial_train_days
         self.retrain_frequency = retrain_frequency
         self.test_days = test_days
+        self.commission_pct = commission_pct
+        self.slippage_pct = slippage_pct
         
         self.results: List[Dict] = []
         self.all_predictions = []
         self.all_actuals = []
+        self.trade_returns_gross: List[float] = []
+        self.trade_returns_net: List[float] = []
     
     def run_backtest(
         self,
@@ -68,6 +76,11 @@ class Backtester:
         logger.info(f"Train inicial: {self.initial_train_days} días")
         logger.info(f"Reentrenar cada: {self.retrain_frequency} días")
         logger.info(f"Predecir: {self.test_days} días adelante")
+        logger.info(
+            f"Costos BMV: comisión={self.commission_pct*100:.2f}%/lado, "
+            f"slippage={self.slippage_pct*100:.3f}%/lado, "
+            f"round-trip≈{Metrics.round_trip_cost(self.commission_pct, self.slippage_pct)*100:.2f}%"
+        )
         logger.info("")
         
         # Ordenar por fecha
@@ -77,6 +90,8 @@ class Backtester:
         self.results = []
         self.all_predictions = []
         self.all_actuals = []
+        self.trade_returns_gross = []
+        self.trade_returns_net = []
         
         # Variables de control
         current_pos = self.initial_train_days
@@ -106,6 +121,11 @@ class Backtester:
                 # Guardar predicciones
                 self.all_predictions.extend(predictions)
                 self.all_actuals.extend(actuals)
+
+                # Simular trades direccionales long-only con costos BMV
+                gross, net = self._simulate_directional_returns(actuals, predictions)
+                self.trade_returns_gross.extend(gross.tolist())
+                self.trade_returns_net.extend(net.tolist())
                 
                 # Calcular métricas para esta ventana
                 window_metrics = Metrics.calculate_all_metrics(
@@ -160,15 +180,28 @@ class Backtester:
         all_preds = np.array(self.all_predictions)
         all_actuals = np.array(self.all_actuals)
         
-        # Calcular métricas globales
+        # Calcular métricas globales (regresión + dirección)
         aggregate = Metrics.calculate_all_metrics(
             y_true=all_actuals,
             y_pred=all_preds
         )
         
+        # Métricas duales de portafolio con costos BMV (KB-001 / KB-003)
+        gross, net = self.get_trade_returns()
+        if len(gross) > 0:
+            dual = Metrics.calculate_dual_metrics(gross, net)
+            aggregate.update(dual)
+            aggregate['sharpe_ratio'] = dual['sharpe_gross']
+            aggregate['win_rate_net'] = dual['win_rate_net']
+
         # Agregar info de ventanas
         aggregate['num_windows'] = len(self.results)
         aggregate['total_predictions'] = len(self.all_predictions)
+        aggregate['commission_pct'] = self.commission_pct
+        aggregate['slippage_pct'] = self.slippage_pct
+        aggregate['round_trip_cost'] = Metrics.round_trip_cost(
+            self.commission_pct, self.slippage_pct
+        )
         
         # Calcular estabilidad (std de métricas entre ventanas)
         if len(self.results) > 1:
@@ -176,6 +209,41 @@ class Backtester:
             aggregate['rmse_stability'] = np.std(window_rmse)
         
         return aggregate
+
+    def _simulate_directional_returns(
+        self,
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Simula trades long-only: entra si predicción sube, aplica costos round-trip.
+
+        Returns:
+            (returns_gross, returns_net) por período con señal activa
+        """
+        y_true = np.asarray(y_true, dtype=float)
+        y_pred = np.asarray(y_pred, dtype=float)
+        if len(y_true) < 2:
+            return np.array([]), np.array([])
+
+        pred_up = np.diff(y_pred) > 0
+        true_rets = np.diff(y_true) / y_true[:-1]
+
+        gross = np.where(pred_up, true_rets, 0.0)
+        net = Metrics.apply_costs_to_returns(
+            gross,
+            commission_pct=self.commission_pct,
+            slippage_pct=self.slippage_pct,
+            trade_mask=pred_up,
+        )
+        return gross, net
+
+    def get_trade_returns(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Retornos brutos y netos de trades simulados."""
+        return (
+            np.array(self.trade_returns_gross, dtype=float),
+            np.array(self.trade_returns_net, dtype=float),
+        )
     
     def get_predictions_df(self) -> pd.DataFrame:
         """

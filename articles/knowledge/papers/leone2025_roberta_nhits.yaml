@@ -1,0 +1,101 @@
+id: leone2025_roberta_nhits
+citation:
+  title: "What's news with you: Price forecasting with global and ESG sentiment scores"
+  authors: ["Leone, F.", "Marazzina, D.", "Rosamilia, N."]
+  year: 2025
+  journal: "Finance Research Open (Elsevier)"
+  doi: null  # verificar al publicar
+  url: "https://www.sciencedirect.com/journal/finance-research-open"
+  file: articles/scopus/leone2025_news_esg_nhits.pdf
+
+problem:
+  task: "Forecasting de precio de cierre DJIA next-day"
+  horizon: "1 día (next-day close)"
+  market: "Dow Jones Industrial Average (US)"
+  target: "Precio de cierre normalizado → denormalizado para evaluación"
+
+data:
+  sources:
+    - "LSEG Data & Analytics (Refinitiv) — news API Python"
+    - "Precios históricos DJIA"
+  modalities:
+    - news_all: "17,382 artículos (Ene 2023 – Feb 2024)"
+    - news_esg: "7,226 artículos ESG-specific"
+    - ohlcv_daily
+  features:
+    - "DistilRoBERTa fine-tuned — sentiment scores diarios"
+    - "Precios normalizados"
+    - "Pesos por market cap de empresa DJIA"
+    - "TF-IDF deduplicación de noticias repetidas (cosine > 0.5)"
+    - "Exponential decay para artículos similares mismo día"
+  preprocessing:
+    - "Limpieza HTML, stopwords, lowercase"
+    - "Normalización precios → denormalización post-predicción"
+    - "Sentiment agregado diario con pesos"
+
+methods:
+  primary:
+    - "DistilRoBERTa fine-tuned para sentiment de noticias financieras"
+    - "N-HiTS (Neural Hierarchical Interpolation for Time Series) para forecasting"
+  pipeline:
+    - "RoBERTa → daily sentiment time series"
+    - "N-HiTS(sentiment + historical prices) → next-day close"
+  secondary:
+    - "Comparación: all news vs ESG-only news"
+    - "Análisis especial en movimientos bajistas con ESG sentiment"
+  validation:
+    - "Extended dataset cuando más news disponible"
+    - "Stress testing con denormalización"
+
+results:
+  key_findings:
+    - "Sentiment de noticias mejora significativamente accuracy predictiva"
+    - "Modelos con sentiment comprehensivo (all news) > solo precios históricos"
+    - "ESG sentiment tiene poder predictivo especialmente en movimientos bajistas"
+    - "Deduplicación TF-IDF es crítica — noticias repetidas distorsionan señal"
+    - "Peso por market cap mejora relevancia de noticias por empresa"
+  limitations:
+    - "Solo DJIA index-level, no stock picking"
+    - "Next-day horizon (1d) vs nuestro 5d"
+    - "Requiere LSEG (datos premium) — nosotros usamos RSS/yfinance"
+
+applicability_to_bmv:
+  relevance_score: 5
+  already_in_stack:
+    - "src/ml/news.py — sentiment scoring (Gemini vs RoBERTa)"
+    - "src/ml/features.py — macro context"
+  gaps:
+    - id: GAP-NEWS-DEDUP
+      description: "Sin deduplicación TF-IDF de titulares repetidos"
+      priority: P1
+      ticket: KB-041
+    - id: GAP-NEWS-WEIGHT
+      description: "Sin peso por market cap / relevancia ticker"
+      priority: P2
+      ticket: KB-044
+    - id: GAP-ESG-SENTIMENT
+      description: "Sin filtro ESG en noticias BMV"
+      priority: P3
+      ticket: KB-045
+    - id: GAP-NHITS
+      description: "Sin N-HiTS u otro modelo SOTA de time series forecasting"
+      priority: P3
+      ticket: KB-046
+  actionable_items:
+    - ticket: KB-041
+      action: "Implementar TF-IDF dedup en news.py antes de Gemini scoring"
+    - ticket: KB-044
+      action: "Pesar noticias por market cap del ticker BMV"
+    - ticket: KB-045
+      action: "Tag ESG keywords en noticias; feature esg_sent_score separado"
+    - ticket: KB-040
+      action: "Benchmark Gemini vs DistilRoBERTa en subset noticias BMV"
+
+key_quotes:
+  - "News sentiment plays a crucial role in stock price forecasting."
+  - "Models trained on comprehensive sentiment data significantly improving predictive accuracy."
+  - "ESG-related sentiment particularly in relation to downward price movements."
+
+references_of_interest:
+  - ref: "Bollen, Mao & Zeng 2011 — SOFNN + Twitter mood for DJIA"
+  - ref: "Lu et al. 2021 — CNN+BiLSTM hybrid"

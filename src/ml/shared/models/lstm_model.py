@@ -83,20 +83,28 @@ class LSTMModel:
                 ))
         
         # Dense output layer
+        is_classification = self._is_classification()
+        output_activation = 'sigmoid' if is_classification else self.config.dense_activation
         model.add(layers.Dense(
             units=1,
-            activation=self.config.dense_activation,
+            activation=output_activation,
             name='output'
         ))
         
         # Compilar modelo
         optimizer = self._get_optimizer()
-        
-        model.compile(
-            optimizer=optimizer,
-            loss='mse',
-            metrics=['mae', 'mape']
-        )
+        if is_classification:
+            model.compile(
+                optimizer=optimizer,
+                loss='binary_crossentropy',
+                metrics=[keras.metrics.AUC(name='auc')],
+            )
+        else:
+            model.compile(
+                optimizer=optimizer,
+                loss='mse',
+                metrics=['mae', 'mape'],
+            )
         
         self.model = model
         
@@ -104,6 +112,13 @@ class LSTMModel:
         
         return self
     
+    def _is_classification(self) -> bool:
+        """True si el modelo predice P(up) binaria."""
+        return (
+            self.config.task_type == 'classification'
+            or self.config.dense_activation == 'sigmoid'
+        )
+
     def _get_optimizer(self):
         """Obtener optimizador configurado"""
         if self.config.optimizer == 'adam':
@@ -167,20 +182,36 @@ class LSTMModel:
         logger.success("✅ Entrenamiento completado")
         
         # Log final metrics
-        final_metrics = {
-            'train_loss': self.history.history['loss'][-1],
-            'train_mae': self.history.history['mae'][-1]
-        }
-        
+        final_metrics: dict[str, float] = {'train_loss': self.history.history['loss'][-1]}
+        if self._is_classification():
+            if 'auc' in self.history.history:
+                final_metrics['train_auc'] = self.history.history['auc'][-1]
+        else:
+            final_metrics['train_mae'] = self.history.history['mae'][-1]
+
         if validation_data:
             final_metrics['val_loss'] = self.history.history['val_loss'][-1]
-            final_metrics['val_mae'] = self.history.history['val_mae'][-1]
-        
+            if self._is_classification() and 'val_auc' in self.history.history:
+                final_metrics['val_auc'] = self.history.history['val_auc'][-1]
+            elif not self._is_classification():
+                final_metrics['val_mae'] = self.history.history['val_mae'][-1]
+
         logger.info("📊 Métricas finales:")
         for metric, value in final_metrics.items():
             logger.info(f"   {metric}: {value:.4f}")
         
         return self.history
+
+    def fit(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: Optional[np.ndarray] = None,
+        y_val: Optional[np.ndarray] = None,
+        verbose: int = 1,
+    ):
+        """Alias de train() para API sklearn-like."""
+        return self.train(X_train, y_train, X_val, y_val, verbose=verbose)
     
     def _get_callbacks(self) -> list:
         """Crear callbacks para entrenamiento"""
@@ -193,7 +224,7 @@ class LSTMModel:
                 patience=self.config.early_stopping_patience,
                 min_delta=self.config.early_stopping_min_delta,
                 restore_best_weights=self.config.restore_best_weights,
-                verbose=1
+                verbose=0,
             )
             callback_list.append(early_stop)
         
@@ -203,7 +234,7 @@ class LSTMModel:
             factor=0.5,
             patience=10,
             min_lr=1e-7,
-            verbose=1
+            verbose=0,
         )
         callback_list.append(reduce_lr)
         
@@ -224,6 +255,17 @@ class LSTMModel:
         
         predictions = self.model.predict(X, verbose=0)
         return predictions.flatten()
+
+    def predict_proba(self, X: np.ndarray) -> np.ndarray:
+        """
+        Probabilidades P(up) en [0, 1] para clasificación binaria.
+
+        Returns:
+            Array 1D de probabilidades (samples,)
+        """
+        if not self._is_classification():
+            logger.warning("predict_proba() en modelo de regresión — devuelve predict() sin calibrar")
+        return self.predict(X)
     
     def evaluate(
         self,
@@ -241,35 +283,38 @@ class LSTMModel:
             Dict con métricas
         """
         logger.info("📊 Evaluando modelo en test set...")
-        
-        # Evaluar con Keras
+
         test_metrics = self.model.evaluate(X_test, y_test, verbose=0)
-        
-        # Predicciones
         y_pred = self.predict(X_test)
-        
-        # Calcular métricas adicionales
-        from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-        
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        
-        # MAPE
-        mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
-        
-        metrics = {
-            'loss': test_metrics[0],
-            'rmse': rmse,
-            'mae': mae,
-            'mape': mape,
-            'r2': r2
-        }
-        
+
+        if self._is_classification():
+            from sklearn.metrics import roc_auc_score, log_loss
+
+            auc = roc_auc_score(y_test, y_pred) if len(np.unique(y_test)) > 1 else 0.5
+            metrics = {
+                'loss': test_metrics[0],
+                'auc': auc,
+                'log_loss': log_loss(y_test, np.clip(y_pred, 1e-7, 1 - 1e-7)),
+            }
+        else:
+            from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+            rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+            mae = mean_absolute_error(y_test, y_pred)
+            r2 = r2_score(y_test, y_pred)
+            mape = np.mean(np.abs((y_test - y_pred) / (y_test + 1e-8))) * 100
+            metrics = {
+                'loss': test_metrics[0],
+                'rmse': rmse,
+                'mae': mae,
+                'mape': mape,
+                'r2': r2,
+            }
+
         logger.info("   Métricas de test:")
         for metric, value in metrics.items():
             logger.info(f"      {metric}: {value:.4f}")
-        
+
         return metrics
     
     def save(self, filepath: str):

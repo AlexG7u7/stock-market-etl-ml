@@ -25,9 +25,19 @@ import logging
 import os
 import time
 
+from src.ml.knowledge_loader import get_knowledge_prompt
+from src.ml.verdict_tracker import log_verdict
+
 logger = logging.getLogger(__name__)
 
 _MODEL = "gemini-2.5-flash"
+_SYSTEM_PROMPT = (
+    "Eres el comité de riesgo de un fondo cuantitativo BMV long-only. "
+    "Validas recomendaciones del modelo cuantitativo; NO predices precios. "
+    "Debes seguir el protocolo de decisión (step 4: validacion_gemini) y "
+    "citar reglas LR-xxx de la literatura cuando apliquen en evidencia_a_favor o red_flags.\n\n"
+    + get_knowledge_prompt(role="validator")
+)
 
 
 def _fallback_verdict(item: dict) -> dict:
@@ -69,8 +79,13 @@ def _build_prompt(item: dict) -> str:
     news_sent = item.get("news_sent")
     news_sent_txt = f"{news_sent:+.2f}" if news_sent is not None else "n/d"
 
-    return f"""Eres el comité de riesgo de un fondo cuantitativo. El modelo recomienda
-evaluar {item['ticker']} ({item.get('universe_slug','?')}, {item.get('moneda','?')}).
+    return f"""Valida la recomendación del modelo para {item['ticker']} ({item.get('universe_slug','?')}, {item.get('moneda','?')}).
+
+PROTOCOLO (step 4 — validacion_gemini):
+  - CONFIRMA → acciones COMPRA FUERTE / COMPRA → bet_action PROCEED
+  - DEGRADA → ESPERA → REDUCE_SIZE_50pct o SKIP
+  - VETA → EVITA → NO_BET (circuit breaker CB-GEMINI-VETO)
+  - Si news_alerta → NO_BET_OR_ESPERA (LR-003, LR-005)
 
 DECISIÓN DEL MODELO (no la cuestiones sin evidencia):
   Ranking global: #{item.get('rank_global','?')} de {item.get('n_total','?')}
@@ -89,15 +104,17 @@ CONTEXTO:
 
 Tu trabajo NO es predecir el precio. Es VALIDAR la recomendación del modelo:
   - Si la evidencia la respalda → CONFIRMA
-  - Si hay señales mixtas o desacuerdo alto → DEGRADA y explica
+  - Si hay señales mixtas o desacuerdo alto → DEGRADA y explica (LR-007 si disagreement > 0.20)
   - Si ves un riesgo grave que el modelo no captura → VETA
+
+En evidencia_a_favor y red_flags, cita reglas LR-xxx cuando apliquen (ej. "LR-003: noticias contradicen momentum").
 
 Responde SOLO con JSON (sin markdown):
 {{"veredicto": "CONFIRMA|DEGRADA|VETA",
   "confianza_gemini": <0-100>,
   "tesis": "<2-3 frases de tesis de inversión basada en la evidencia>",
-  "evidencia_a_favor": ["<punto citando los datos>", "..."],
-  "red_flags": ["<riesgo concreto>", "..."],
+  "evidencia_a_favor": ["<punto citando datos y LR-xxx si aplica>", "..."],
+  "red_flags": ["<riesgo concreto con LR-xxx si aplica>", "..."],
   "accion_final": "COMPRA FUERTE|COMPRA|ESPERA|EVITA"}}"""
 
 
@@ -115,7 +132,9 @@ def validate_item(item: dict, client=None, genai_types=None) -> dict:
     """Valida un solo ticker con Gemini (o fallback)."""
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key or client is None:
-        return _fallback_verdict(item)
+        verdict = _fallback_verdict(item)
+        log_verdict(item["ticker"], item, verdict)
+        return verdict
 
     try:
         prompt = _build_prompt(item)
@@ -123,6 +142,7 @@ def validate_item(item: dict, client=None, genai_types=None) -> dict:
             model=_MODEL,
             contents=prompt,
             config=genai_types.GenerateContentConfig(
+                system_instruction=_SYSTEM_PROMPT,
                 max_output_tokens=800, temperature=0.2,
                 # gemini-2.5-flash activa "thinking" por defecto y consume el
                 # presupuesto de tokens; lo desactivamos para obtener el JSON completo.
@@ -138,11 +158,14 @@ def validate_item(item: dict, client=None, genai_types=None) -> dict:
         if start >= 0 and end > start:
             verdict = json.loads(txt[start:end])
             verdict["_fallback"] = False
+            log_verdict(item["ticker"], item, verdict)
             return verdict
     except Exception as e:
         logger.warning(f"Gemini validate {item['ticker']}: {e}")
 
-    return _fallback_verdict(item)
+    verdict = _fallback_verdict(item)
+    log_verdict(item["ticker"], item, verdict)
+    return verdict
 
 
 def validate_ranking(

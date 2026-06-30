@@ -26,19 +26,10 @@ sys.path.insert(0, str(ROOT))
 from dotenv import load_dotenv
 load_dotenv(ROOT / ".env")
 
-from src.ml.super_model import SuperModel
-from src.ml.gemini_validator import validate_ranking
-from src.data.universes import UNIVERSES
+from src.ml.signal_pipeline import run_super_pipeline
+
 
 OUT = ROOT / "data" / "super_signals.json"
-
-
-def _tickers_map() -> dict[str, str]:
-    """nombre_corto → símbolo yfinance (todos los universos)."""
-    m = {}
-    for cfg in UNIVERSES.values():
-        m.update(cfg["tickers"])
-    return m
 
 
 def main():
@@ -47,44 +38,40 @@ def main():
                         help="Cuántos tickers del top valida Gemini (default 10)")
     parser.add_argument("--no-gemini", action="store_true",
                         help="Saltar la validación Gemini (solo cuantitativo)")
+    parser.add_argument("--no-stacking", action="store_true",
+                        help="Desactivar meta-LR stacking (default: ON, KB-060)")
     args = parser.parse_args()
 
     t0 = datetime.now()
 
-    # ── Capas 1-3: cuantitativo ──────────────────────────────────────────────
-    sm = SuperModel(top_gemini=args.top_gemini, verbose=True)
-    result = sm.run()
-
-    # ── Capa 4: Gemini validador ─────────────────────────────────────────────
-    if not args.no_gemini:
-        print("\n" + "═" * 62)
-        print("  CAPA 4 — Gemini validador (comité de riesgo)")
-        print("═" * 62)
-        result = validate_ranking(result, tickers_map=_tickers_map(),
-                                  top_n=args.top_gemini)
-        gs = result.get("gemini_summary", {})
-        print(f"\n  Modo: {gs.get('modo','?')}  |  "
-              f"CONFIRMA {gs.get('confirma',0)} · "
-              f"DEGRADA {gs.get('degrada',0)} · VETA {gs.get('veta',0)}")
-
-        # Mostrar veredictos del top
-        print("\n  Veredictos del top:")
-        for item in result["master_ranking"][:args.top_gemini]:
-            g = item.get("gemini", {})
-            print(f"    #{item['rank_global']:<2} {item['ticker']:<10} "
-                  f"{g.get('veredicto','?'):<9} → {g.get('accion_final','?'):<13} "
-                  f"({g.get('confianza_gemini','?')}%)")
-            if g.get("tesis"):
-                print(f"        {g['tesis'][:90]}")
-    else:
-        result["gemini_summary"] = {"modo": "skip"}
-
-    # ── Guardar ──────────────────────────────────────────────────────────────
+    result = run_super_pipeline(
+        top_gemini_global=args.top_gemini,
+        top_gemini_bmv=args.top_gemini,
+        use_gemini=not args.no_gemini,
+        use_stacking=not args.no_stacking,
+        verbose=True,
+    )
     result["generated_at"] = datetime.now().isoformat()
     result["elapsed_sec"] = round((datetime.now() - t0).total_seconds(), 1)
+
+    gs = result.get("gemini_summary", {})
+    if gs.get("modo") != "skip":
+        print("\n" + "═" * 62)
+        print("  CAPA 4 — Gemini validador")
+        print("═" * 62)
+        print(f"  CONFIRMA {gs.get('confirma',0)} · DEGRADA {gs.get('degrada',0)} · VETA {gs.get('veta',0)}")
+        print("\n  Veredictos del top global:")
+        for item in result["master_ranking"][:args.top_gemini]:
+            g = item.get("gemini", {})
+            if not g:
+                continue
+            print(f"    #{item['rank_global']:<2} {item['ticker']:<10} "
+                  f"{g.get('veredicto','?'):<9} → {g.get('accion_final','?')}")
     OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2))
 
-    print(f"\n  Guardado en: {OUT}")
+    print(f"\n  Apuestas paper BMV (K=2, conv≥0.56): {len(result.get('actionable_bets_bmv', []))}")
+    print(f"  Apuestas paper global: {len(result.get('actionable_bets', []))}")
+    print(f"  Guardado en: {OUT}")
     print(f"  Tiempo total: {result['elapsed_sec']}s\n")
 
 

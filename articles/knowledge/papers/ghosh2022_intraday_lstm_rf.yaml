@@ -1,0 +1,159 @@
+id: ghosh2022_intraday_lstm_rf
+citation:
+  title: "Forecasting directional movements of stock prices for intraday trading using LSTM and random forests"
+  authors: ["Ghosh, P.", "Neufeld, A.", "Sahoo, J.K."]
+  year: 2022
+  journal: "Finance Research Letters"
+  doi: "10.1016/j.frl.2022.106662"
+  arxiv: "2004.10178v2"
+  url: "https://arxiv.org/abs/2004.10178v2"
+  file: articles/web-of-science/2004.10178v2.pdf
+  source: web-of-science
+
+problem:
+  task: "Clasificación cross-seccional + statistical arbitrage intraday"
+  horizon: "Intraday (open-to-close); predicción al inicio del día"
+  market: "S&P 500 constituents, Bloomberg, Ene 1990 – Dic 2018"
+  target: "P(stock outperform median intraday return) — binario vs mediana cross-seccional"
+
+data:
+  sources: [Bloomberg]
+  modalities: [ohlcv_daily, open_prices, adjusted_close]
+  features:
+    single_feature_baseline: "cr(s)_{t,m} — close-to-close returns con lags m=1..30"
+    multi_feature_proposed:
+      - "ir(s)_{t,m} — intraday return (open-to-close)"
+      - "cr(s)_{t,m} — close-to-close return"
+      - "or(s)_{t,m} — open-to-open return"
+    rf_features: "93 features (30 lags × 3 tipos de retorno)"
+    lstm_input: "Secuencias 240 días × 3 features estandarizados (Robust Scaler)"
+  preprocessing:
+    - "Robust Scaler (mediana + IQR) por feature en training period"
+    - "Ventanas rolling 4 años, stride 1 año"
+    - "26 study periods con trading part NO overlapping"
+
+methods:
+  primary:
+    - "CuDNNLSTM: 25 cells, dropout 0.1, softmax 2-class"
+    - "Random Forest: 1000 trees, max_depth=10, m=sqrt(p) features"
+  target_definition: |
+    Class 1 si intraday return > mediana cross-seccional del día;
+    Class 0 si ≤ mediana. Idéntico espíritu a nuestro ranking cross-seccional.
+  trading_strategy:
+    description: "Long top 10 P(outperform), short bottom 10 — equal weight"
+    benchmark: "Krauss 2017 (RF next-day), Fischer & Krauss 2018 (LSTM next-day)"
+    transaction_costs: "0.05% slippage por half-turn → 0.2% total por día long+short"
+  validation:
+    - "Walk-forward: 756 días train (~3y) + 252 días test (~1y) por period"
+    - "26 periodos out-of-sample no solapados"
+    - "Métricas antes y después de costos"
+
+results:
+  before_costs:
+    lstm_3feature_intraday:
+      daily_return: "0.64%"
+      share_positive: "69.67%"
+      sharpe_annual: 6.34
+      max_drawdown: 0.223
+    rf_3feature_intraday:
+      daily_return: "0.54%"
+      share_positive: "65.85%"
+      sharpe_annual: 5.20
+      max_drawdown: 0.198
+    benchmarks:
+      fischer2018_lstm_nextday: "0.41% daily"
+      krauss2017_rf_nextday: "0.39% daily"
+  after_costs:
+    lstm_3feature:
+      daily_return: "0.44%"
+      sharpe_annual: 4.32
+      max_drawdown: 0.392
+    rf_3feature:
+      daily_return: "0.34%"
+      sharpe_annual: 3.22
+      max_drawdown: 0.401
+    sp500_benchmark:
+      daily_return: "0.033%"
+      sharpe_annual: 0.25
+  key_findings:
+    - "Multi-feature (intraday + close + open) >> single-feature close-only"
+    - "LSTM > RF en ambos settings — consistente con Fischer & Krauss 2018"
+    - "Intraday features > next-day horizon para statistical arbitrage"
+    - "Edge decae post-2010 conforme ML se democratiza (Fig 5-7 sub-periods)"
+    - "Costos de transacción reducen Sharpe ~30-40% pero estrategia sigue viable"
+  limitations:
+    - "S&P 500 large-cap US — liquidez alta vs BMV"
+    - "Intraday, no horizonte 5d como nuestro pipeline"
+    - "Long-short 10+10 equal weight — no Kelly ni ATR stops"
+    - "Sin noticias, macro, ni features técnicos clásicos (RSI, etc.)"
+
+applicability_to_bmv:
+  relevance_score: 5
+  already_in_stack:
+    - "src/ml/features.py — cs_ret5_rank, cs_mean_rev (cross-section vs mediana)"
+    - "src/ml/super_model.py — master_ranking cross-universo (análogo top-K selection)"
+    - "src/ml/purged_cv.py — walk-forward temporal"
+    - "src/ml/ensemble.py — RF/LGBM tabular"
+    - "src/ml/shared/models/lstm_model.py — LSTM base"
+    - "src/ml/risk_engine.py — sizing (Kelly vs equal weight del paper)"
+  gaps:
+    - id: GAP-INTRADAY-FEATURES
+      description: "Sin features open-to-close intraday (ir, or) — solo daily close"
+      priority: P3
+      ticket: KB-080
+    - id: GAP-LSTM-CROSS-SECTION
+      description: "LSTM no entrenado con target cross-sectional median como Ghosh"
+      priority: P1
+      ticket: KB-011
+    - id: GAP-LONG-SHORT-BACKTEST
+      description: "Backtest long top-K / evitar bottom-K no formalizado como Ghosh"
+      priority: P2
+      ticket: KB-081
+    - id: GAP-TRANSACTION-COSTS
+      description: "Paper modela 0.2%/día — refuerza KB-003 para BMV"
+      priority: P1
+      ticket: KB-003
+  actionable_items:
+    - ticket: KB-081
+      action: "Backtest: long top-5 convicción SuperModel, medir vs buy-and-hold IPC con costos BMV"
+    - ticket: KB-011
+      action: "Target LSTM: y = 1 si ret_5d > mediana cross-seccional (como Ghosh pero 5d daily)"
+    - ticket: KB-003
+      action: "Implementar 0.25-0.35% round-trip BMV — paper usa 0.2%/día como referencia"
+    - ticket: KB-013
+      action: "Comparar LSTM multi-feature (ret_1d, ret_5d, open gap) vs xs_lgbm en purged CV"
+
+architecture_notes:
+  ghosh_lstm:
+    cells: 25
+    sequence_length: 240
+    features_per_step: 3
+    dropout: 0.1
+    optimizer: RMSProp
+    batch_size: 512
+  ghosh_rf:
+    n_trees: 1000
+    max_depth: 10
+    n_features: 93
+  our_analog:
+    target: "P(up 5d) vs mediana universo — extensión natural del Class 0/1 de Ghosh"
+    ranking: "master_ranking → top-N señales en vez de long 10 / short 10"
+
+key_quotes:
+  - "Multi-feature setting provides a daily return of 0.64% using LSTM, and 0.54% using random forests."
+  - "We buy the 10 stocks with the highest probability and sell short the 10 stocks with the lowest probability."
+  - "Each long and short transaction are subjected to 0.05% slippage cost on each half-turn, total of 0.2% per day."
+  - "Class 1 if intraday return is bigger than the cross-sectional median intraday return of all stocks."
+
+references_of_interest:
+  - ref: "Fischer & Krauss 2018 — LSTM financial market predictions (EJOR)"
+  - ref: "Krauss et al. 2017 — RF/DNN statistical arbitrage S&P 500"
+  - ref: "Lohrmann & Luukka 2019 — RF intraday S&P 500 (IJF)"
+
+future_work_from_paper:
+  - "Formulate as reinforcement learning problem (model-free and model-based)"
+  - "Apply to cryptocurrencies"
+
+cross_references:
+  complements: [kumbure2022_ml_data_review, quadir2023_mls_lstm, sahu2023_qf_survey]
+  kumbure_cites: "Lohrmann & Luukka 2019 same authors as Kumbure 2022 review"

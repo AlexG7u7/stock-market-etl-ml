@@ -1,0 +1,55 @@
+# Reglas de mercado BMV para el agente de apuestas
+# TODO: validar con broker real antes de live trading
+
+market:
+  exchange: BMV
+  currency: MXN
+  benchmark: NAFTRAC / IPC
+
+session:
+  regular_hours: "08:30 - 15:00 CDMX"
+  signal_generation: "Post-cierre (17:00+) o pre-apertura"
+  entry_preference: "Lunes open si señal generada viernes"
+  avoid: "Operar en días festivos BMV sin liquidez"
+
+costs:
+  # Ghosh 2022 usa 0.2%/día long+short; nosotros long-only BMV
+  commission_round_trip_pct: 0.30  # estimado retail BMV (validar)
+  slippage_entry_pct: 0.25         # risk_engine usa +0.25% en entry
+  slippage_exit_pct: 0.10
+  total_round_trip_estimate_pct: 0.55  # KB-003 target
+  literature_reference: ghosh2022_intraday_lstm_rf  # 0.2% ref long-short US
+
+liquidity:
+  min_daily_volume_mxn: 500_000   # filtro sugerido — no implementado
+  prefer: "Tickers IPC componentes y ADRs líquidos"
+  avoid: "Micro-cap con spread > 1%"
+
+universes:
+  bmv:
+    tickers: ~30
+    liquidity: alta
+    agent_priority: 1
+  usa:
+    note: "ADRs en USD — conversión FX"
+    agent_priority: 2
+  etfs:
+    note: "Menor idiosincrasia, más beta macro"
+    agent_priority: 2
+  fibras:
+    note: "Yield + macro tasas; régimen sensible"
+    agent_priority: 3
+  cripto:
+    note: "Alta vol — reducir max_position a 5%"
+    agent_priority: 4
+    max_position_override: 0.05
+
+position_constraints:
+  max_open_positions: 5
+  max_single_name_pct: 10
+  max_sector_correlation: 0.70  # penalty ya en risk_engine
+  cash_buffer_pct: 10           # no desplegar 100% del capital
+
+regulatory:
+  note: "Sin apalancamiento en fase paper; short no soportado en pipeline actual"
+  long_only: true

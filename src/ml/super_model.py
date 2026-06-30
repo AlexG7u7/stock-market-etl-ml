@@ -11,9 +11,17 @@ Capas:
         · xs_lgbm   : LGBMRegressor sobre features rank-normalizadas (cross-seccional)
         · ensemble  : EnsembleModel (WoE + LR + LGBM) → P(le gana a la mediana)
         · heuristic : compute_signal_score (screener técnico) normalizado
-  L2 — Fusión: peso de cada modelo ∝ su edge histórico (AUC − 0.5) por universo.
+        · lstm_seq  : LSTMSeqPredictor → P(outperform) sobre ventanas secuenciales
+  L2 — Fusión: peso de cada modelo ∝ su edge histórico (AUC − 0.5) por universo,
+        O stacking LR meta-learner si ``use_stacking=True`` y supera AUC-weight.
   L3 — Moduladores: régimen (RegimeDetector HMM) × sentimiento de noticias.
   L4 — Ranking masivo cross-universo + insights (lo consume gemini_validator).
+
+Fusión L2 — cuándo usar cada modo:
+  - **Stacking LR (``use_stacking=True``, default)**: meta-LogisticRegression sobre preds
+    [xs_lgbm, ensemble, heuristic, lstm_seq]; preferido post-experimentos P0 (KB-060).
+  - **AUC-weight (``use_stacking=False``)**: fallback interpretable; cada modelo aporta
+    según su edge medido en holdout temporal.
 
 Diseño: cuantitativo primero. Gemini (capa 4, en gemini_validator.py) solo
 valida y narra lo que este modelo decide; nunca genera la recomendación.
@@ -23,6 +31,9 @@ Uso:
     sm = SuperModel()
     result = sm.run()          # entrena, predice, fusiona, rankea
     # result["master_ranking"] → lista de dicts ordenada por convicción
+
+    # Con stacking meta-learner (experimental):
+    sm = SuperModel(use_stacking=True)
 """
 from __future__ import annotations
 
@@ -32,6 +43,7 @@ from datetime import date
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
 warnings.filterwarnings("ignore")
@@ -41,11 +53,38 @@ from src.data import store
 from src.data.universes import UNIVERSES
 from src.ml.features import (
     compute_features, add_macro_features, add_cross_section_features,
-    compute_target, compute_signal_score, FEATURE_COLS, LONG_MOMENTUM_COLS,
+    add_fundamental_features, add_news_features,
+    compute_target, compute_signal_score,
+    FEATURE_COLS, LONG_MOMENTUM_COLS, FUNDAMENTAL_FEATURE_COLS, NEWS_FEATURE_COLS,
 )
 
-# Conjunto extendido: features técnicas + momentum largo
-EXTENDED_FEATURE_COLS = FEATURE_COLS + LONG_MOMENTUM_COLS
+try:
+    from src.ml.intraday_features import INTRADAY_FEATURE_COLS, add_intraday_features
+    _INTRADAY_AVAILABLE = True
+except ImportError:
+    try:
+        from src.ml.intraday_features import INTRADAY_COLS as INTRADAY_FEATURE_COLS, add_intraday_features
+        _INTRADAY_AVAILABLE = True
+    except ImportError:
+        INTRADAY_FEATURE_COLS = []  # type: ignore[misc, assignment]
+        add_intraday_features = None  # type: ignore[misc, assignment]
+        _INTRADAY_AVAILABLE = False
+
+try:
+    from src.ml.lstm_seq import LSTMSeqPredictor, AUC_THRESHOLD as LSTM_AUC_THRESHOLD
+    _LSTM_AVAILABLE = True
+except ImportError:
+    LSTMSeqPredictor = None  # type: ignore[misc, assignment]
+    LSTM_AUC_THRESHOLD = 0.50
+    _LSTM_AVAILABLE = False
+
+# Modelos base para fusión L2 / stacking (KB-012, KB-060)
+STACK_BASE_MODELS = ("xs_lgbm", "ensemble", "heuristic", "lstm_seq")
+
+# Conjunto extendido base (news se añade dinámicamente si hay cache)
+EXTENDED_FEATURE_COLS = (
+    FEATURE_COLS + LONG_MOMENTUM_COLS + FUNDAMENTAL_FEATURE_COLS + list(INTRADAY_FEATURE_COLS)
+)
 
 # Sufijo rank-normalizado (percentil cross-seccional) — sobre features extendidas
 RN_COLS = [f"rn_{c}" for c in EXTENDED_FEATURE_COLS]
@@ -73,9 +112,26 @@ def _minmax(x: np.ndarray) -> np.ndarray:
 class SuperModel:
     """Meta-orquestador de los modelos del sistema."""
 
-    def __init__(self, top_gemini: int = 10, verbose: bool = True):
+    def __init__(
+        self,
+        top_gemini: int = 10,
+        verbose: bool = True,
+        use_stacking: bool = True,
+        include_intraday: bool = True,
+    ):
+        """
+        Parameters
+        ----------
+        top_gemini   : cuántos tickers del ranking enviar a Gemini validator.
+        verbose      : imprimir progreso en stdout.
+        use_stacking : si True, entrena meta-LR sobre preds base y la usa cuando
+                       supere AUC-weight en holdout temporal (KB-060).
+        include_intraday : añade microestructura 5m→diario cuando hay parquet cache.
+        """
         self.top_gemini = top_gemini
         self.verbose = verbose
+        self.use_stacking = use_stacking
+        self.include_intraday = include_intraday and _INTRADAY_AVAILABLE
         self._macro: dict[str, pd.DataFrame] = {}
         self._regime_cache: dict[str, dict] = {}
         self._news: pd.DataFrame | None = None
@@ -93,6 +149,10 @@ class SuperModel:
                 self._macro[key] = df
 
     def _load_news(self) -> None:
+        from src.ml.bet_policy import USE_NEWS_FEATURES
+        if not USE_NEWS_FEATURES:
+            self._news = None
+            return
         try:
             from src.ml.news import load_cached_news_features
             self._news = load_cached_news_features()
@@ -133,8 +193,41 @@ class SuperModel:
 
     # ── Construcción del dataset por universo ───────────────────────────────
 
+    def _extended_cols(self, available: set[str]) -> list[str]:
+        """Features extendidas: técnicas + momentum + fundamentales + intraday + news."""
+        base = list(EXTENDED_FEATURE_COLS)
+        if self._news is not None:
+            news_cols = list(NEWS_FEATURE_COLS)
+            base.extend(c for c in news_cols if c not in base)
+        return [c for c in base if c in available]
+
+    @staticmethod
+    def _impute_intraday_cross_section(
+        frames: dict[str, pd.DataFrame],
+        cols: list[str],
+    ) -> None:
+        """Rellena NaN intradía con mediana cross-seccional por fecha."""
+        avail_cols = [c for c in cols if any(c in df.columns for df in frames.values())]
+        if not avail_cols:
+            return
+
+        date_medians: dict[str, pd.Series] = {}
+        for col in avail_cols:
+            stacked = pd.DataFrame(
+                {name: df[col] for name, df in frames.items() if col in df.columns}
+            )
+            date_medians[col] = stacked.median(axis=1)
+
+        for name, df in frames.items():
+            for col in avail_cols:
+                if col not in df.columns:
+                    continue
+                med = date_medians[col].reindex(df.index)
+                fallback = date_medians[col].median()
+                df[col] = df[col].fillna(med).fillna(fallback if pd.notna(fallback) else 0.0)
+
     def _build_universe_frames(self, tickers: dict[str, str], horizon: int):
-        """Carga precios del store, computa features+macro+cross-section."""
+        """Carga precios del store, computa features+macro+fundamentales+intraday+news."""
         frames: dict[str, pd.DataFrame] = {}
         for name, sym in tickers.items():
             df = store.load(sym)
@@ -144,14 +237,20 @@ class SuperModel:
                 feat = compute_features(df)
                 if self._macro:
                     feat = add_macro_features(feat, self._macro)
+                feat = add_fundamental_features(feat, symbol=sym)
+                if self.include_intraday and add_intraday_features is not None:
+                    feat = add_intraday_features(feat, name)
                 feat["ticker"] = name
-                # target forward para entrenar
                 feat["fwd_ret"] = compute_target(df, horizon=horizon)
+                if self._news is not None:
+                    feat = add_news_features(feat, self._news, ticker_col="ticker")
                 frames[name] = feat
             except Exception as e:
                 logger.debug(f"{name}: {e}")
         if frames:
             frames = add_cross_section_features(frames)
+            if self.include_intraday and INTRADAY_FEATURE_COLS:
+                self._impute_intraday_cross_section(frames, list(INTRADAY_FEATURE_COLS))
         return frames
 
     # ── Modelos base por universo ───────────────────────────────────────────
@@ -168,7 +267,15 @@ class SuperModel:
             self._log(f"  [{uname}] insuficientes tickers ({len(frames)}) — skip")
             return []
 
-        feat_cols = [c for c in EXTENDED_FEATURE_COLS if c in next(iter(frames.values())).columns]
+        feat_cols = self._extended_cols(set(next(iter(frames.values())).columns))
+
+        # Imputar fundamentales (yfinance/trimestral) para no perder filas
+        for name in list(frames.keys()):
+            df = frames[name]
+            for col in FUNDAMENTAL_FEATURE_COLS:
+                if col in df.columns:
+                    med = df[col].median()
+                    frames[name][col] = df[col].fillna(med if pd.notna(med) else 0.0)
 
         # Panel completo para entrenamiento
         rows = []
@@ -186,9 +293,7 @@ class SuperModel:
         for c in feat_cols:
             full[f"rn_{c}"] = g[c].rank(pct=True)
         full["pct_fwd"] = g["fwd_ret"].rank(pct=True)
-        # target relativo: ¿le gana a la mediana del universo ese día?
         full["y_rel"] = (g["fwd_ret"].rank(pct=True) > 0.5).astype(int)
-        # target absoluto: ¿sube más de 0%? (igual que el modelo de producción)
         full["y_abs"] = (full["fwd_ret"] > 0).astype(int)
 
         rn_avail = [f"rn_{c}" for c in feat_cols]
@@ -196,7 +301,6 @@ class SuperModel:
         if len(full) < 200:
             return []
 
-        # Split temporal 80/20 para medir edge (AUC) de cada modelo
         cut = full.index[int(len(full) * 0.80)]
         train, valid = full[full.index < cut], full[full.index >= cut]
         if len(valid) < 30 or train["y_rel"].nunique() < 2:
@@ -204,15 +308,19 @@ class SuperModel:
 
         signals_by_model: dict[str, dict[str, float]] = {}
         auc: dict[str, float] = {}
+        valid_preds: dict[str, np.ndarray] = {}
+        meta_lr: LogisticRegression | None = None
+        use_stack_fusion = False
+        stack_auc = fusion_auc = 0.5
 
-        # ── Modelo 1: xs_lgbm (regresor sobre percentil cross-seccional) ─────
+        # ── Modelo 1: xs_lgbm ─────────────────────────────────────────────────
         try:
             import lightgbm as lgb
             reg = lgb.LGBMRegressor(**_LGBM_BASE)
             reg.fit(train[rn_avail].values, train["pct_fwd"].values)
             p_val = reg.predict(valid[rn_avail].values)
             auc["xs_lgbm"] = self._safe_auc(valid["y_rel"].values, p_val)
-            # Predecir hoy
+            valid_preds["xs_lgbm"] = p_val
             today = self._today_rn(frames, feat_cols)
             if today is not None and not today.empty:
                 preds = reg.predict(today[rn_avail].fillna(0.5).values)
@@ -220,13 +328,14 @@ class SuperModel:
         except Exception as e:
             logger.debug(f"xs_lgbm {uname}: {e}")
 
-        # ── Modelo 2: EnsembleModel (WoE + LR + LGBM) ────────────────────────
+        # ── Modelo 2: EnsembleModel ─────────────────────────────────────────
         try:
             from src.ml.ensemble import EnsembleModel
             ens = EnsembleModel(top_features=min(12, len(feat_cols)), calibrate=True)
             ens.fit(train, feature_cols=feat_cols, target_col="y_rel")
             p_val = ens.predict_proba(valid, feat_cols)
             auc["ensemble"] = self._safe_auc(valid["y_rel"].values, p_val)
+            valid_preds["ensemble"] = p_val
             today = self._today_rows(frames, feat_cols)
             if today is not None and not today.empty:
                 preds = ens.predict_proba(today, feat_cols)
@@ -234,9 +343,18 @@ class SuperModel:
         except Exception as e:
             logger.debug(f"ensemble {uname}: {e}")
 
-        # ── Modelo 3: heurística técnica (screener) ──────────────────────────
+        # ── Modelo 3: heurística ────────────────────────────────────────────
         try:
-            hscores = {}
+            hscores: dict[str, float] = {}
+            h_val_raw = []
+            for _, row in valid.iterrows():
+                s, _ = compute_signal_score(row)
+                h_val_raw.append(s)
+            if h_val_raw:
+                valid_preds["heuristic"] = _minmax(np.array(h_val_raw))
+                auc["heuristic"] = self._safe_auc(
+                    valid["y_rel"].values, valid_preds["heuristic"]
+                )
             for name, df in frames.items():
                 clean = df.dropna(subset=feat_cols)
                 if clean.empty:
@@ -245,15 +363,47 @@ class SuperModel:
                 hscores[name] = s
             if hscores:
                 names = list(hscores.keys())
-                norm  = _minmax(np.array([hscores[n] for n in names]))
+                norm = _minmax(np.array([hscores[n] for n in names]))
                 signals_by_model["heuristic"] = dict(zip(names, norm))
-                auc["heuristic"] = 0.52  # peso bajo fijo (screener débil pero independiente)
+                if "heuristic" not in auc:
+                    auc["heuristic"] = 0.52
         except Exception as e:
             logger.debug(f"heuristic {uname}: {e}")
 
-        # ── Modelo 4: EnsembleModel con target ABSOLUTO (igual que producción) ─
-        # Este modelo predice P(subida > 0%) independientemente del universo.
-        # En el holdout de producción alcanza AUC ~0.54-0.55 — mucho mejor que y_rel.
+        # ── Modelo 4: lstm_seq (KB-012) ─────────────────────────────────────
+        lstm_predictor = None
+        if _LSTM_AVAILABLE and LSTMSeqPredictor is not None:
+            try:
+                lstm_predictor = LSTMSeqPredictor(sequence_length=30, epochs=12)
+                lstm_predictor.fit(train, feature_cols=feat_cols, target_col="y_rel")
+                if lstm_predictor.is_fitted:
+                    p_val_lstm = lstm_predictor.predict_proba(valid, feat_cols)
+                    mask = np.isfinite(p_val_lstm)
+                    if mask.sum() >= 30:
+                        auc_lstm = self._safe_auc(
+                            valid["y_rel"].values[mask], p_val_lstm[mask]
+                        )
+                        auc["lstm_seq"] = auc_lstm
+                        valid_preds["lstm_seq"] = p_val_lstm
+                        today_lstm = lstm_predictor.predict_proba_today(frames, feat_cols)
+                        if today_lstm:
+                            signals_by_model["lstm_seq"] = today_lstm
+                        if auc_lstm < LSTM_AUC_THRESHOLD:
+                            logger.info(
+                                f"[{uname}] lstm_seq excluido de fusión: "
+                                f"AUC={auc_lstm:.3f} < {LSTM_AUC_THRESHOLD}"
+                            )
+                            signals_by_model.pop("lstm_seq", None)
+                            valid_preds.pop("lstm_seq", None)
+                            auc.pop("lstm_seq", None)
+                    else:
+                        logger.info(f"[{uname}] lstm_seq: pocas preds válidas en holdout")
+                else:
+                    logger.info(f"[{uname}] lstm_seq no fitted — excluido de fusión")
+            except Exception as e:
+                logger.debug(f"lstm_seq {uname}: {e}")
+
+        # ── Modelo extra: woe_abs (producción) ──────────────────────────────
         try:
             from src.ml.ensemble import EnsembleModel
             base_feat_cols = [c for c in FEATURE_COLS if c in feat_cols]
@@ -272,6 +422,32 @@ class SuperModel:
         if not signals_by_model:
             return []
 
+        # ── Stacking meta-LR vs AUC-weight (KB-060) ──────────────────────────
+        stack_models = [
+            m for m in STACK_BASE_MODELS
+            if m in valid_preds and m in signals_by_model
+        ]
+        if self.use_stacking and len(stack_models) >= 2:
+            X_meta = np.column_stack([valid_preds[m] for m in stack_models])
+            mask = np.all(np.isfinite(X_meta), axis=1)
+            if mask.sum() >= 30 and len(np.unique(valid["y_rel"].values[mask])) >= 2:
+                meta_lr = LogisticRegression(max_iter=500, random_state=42)
+                meta_lr.fit(X_meta[mask], valid["y_rel"].values[mask])
+                stack_auc = self._safe_auc(
+                    valid["y_rel"].values[mask],
+                    meta_lr.predict_proba(X_meta[mask])[:, 1],
+                )
+                fusion_scores = self._auc_weight_blend(
+                    {m: valid_preds[m][mask] for m in stack_models}, auc, stack_models
+                )
+                fusion_auc = self._safe_auc(valid["y_rel"].values[mask], fusion_scores)
+                use_stack_fusion = stack_auc >= fusion_auc
+                self._log(
+                    f"  [{uname}] stacking AUC={stack_auc:.3f} vs "
+                    f"AUC-weight={fusion_auc:.3f} → "
+                    f"{'stacking' if use_stack_fusion else 'AUC-weight'}"
+                )
+
         # ── Fusión por ticker ────────────────────────────────────────────────
         regime_factor, regime_info = self._regime_factor(currency)
         all_tickers = set().union(*[set(d.keys()) for d in signals_by_model.values()])
@@ -284,19 +460,31 @@ class SuperModel:
             if not sigs:
                 continue
 
-            # pesos por edge (AUC − 0.5)
-            weights = {m: max(auc.get(m, 0.5) - 0.5, 0.0) for m in sigs}
-            wsum = sum(weights.values())
-            if wsum <= 0:
-                weights = {m: 1.0 for m in sigs}
-                wsum = len(sigs)
-            conviction = sum(sigs[m] * weights[m] / wsum for m in sigs)
-            disagreement = float(np.std(list(sigs.values()))) if len(sigs) > 1 else 0.0
+            base_sigs = {m: sigs[m] for m in STACK_BASE_MODELS if m in sigs}
+            extra_sigs = {m: sigs[m] for m in sigs if m not in STACK_BASE_MODELS}
 
-            # modular régimen
+            if use_stack_fusion and meta_lr is not None and len(base_sigs) >= 2:
+                ordered = [m for m in stack_models if m in base_sigs]
+                X_t = np.array([[base_sigs[m] for m in ordered]])
+                conviction = float(meta_lr.predict_proba(X_t)[0, 1])
+                weights = {m: 1.0 / len(ordered) for m in ordered}
+                for m, v in extra_sigs.items():
+                    w = max(auc.get(m, 0.5) - 0.5, 0.0)
+                    if w > 0:
+                        conviction = 0.85 * conviction + 0.15 * v
+                wsum = len(ordered)
+            else:
+                weights = {m: max(auc.get(m, 0.5) - 0.5, 0.0) for m in sigs}
+                wsum = sum(weights.values())
+                if wsum <= 0:
+                    weights = {m: 1.0 for m in sigs}
+                    wsum = len(sigs)
+                conviction = sum(sigs[m] * weights[m] / wsum for m in sigs)
+
+            stack_sigs = {**base_sigs, **extra_sigs}
+            disagreement = float(np.std(list(stack_sigs.values()))) if len(stack_sigs) > 1 else 0.0
             conviction_adj = conviction * regime_factor
 
-            # modular noticias
             news_sent = self._news_sent(tk)
             news_alerta = news_sent is not None and news_sent < -0.3
             if news_alerta:
@@ -313,7 +501,8 @@ class SuperModel:
                 "conviction": round(float(np.clip(conviction_adj, 0, 1.5)), 4),
                 "disagreement": round(disagreement, 4),
                 "signals": {m: round(v, 4) for m, v in sigs.items()},
-                "model_weights": {m: round(weights[m] / wsum, 3) for m in sigs},
+                "model_weights": {m: round(weights.get(m, 0) / max(wsum, 1), 3) for m in sigs},
+                "fusion_mode": "stacking" if use_stack_fusion else "auc_weight",
                 "regime": regime_info["estado"],
                 "regime_factor": regime_factor,
                 "news_sent": round(news_sent, 3) if news_sent is not None else None,
@@ -321,12 +510,18 @@ class SuperModel:
                 "horizonte_d": horizon,
             })
 
-        # AUC del universo (para el reporte)
         for r in results:
             r["model_auc"] = {m: round(auc.get(m, 0.5), 4) for m in r["signals"]}
+            if self.use_stacking:
+                r["stack_auc"] = round(stack_auc, 4)
+                r["fusion_auc"] = round(fusion_auc, 4)
 
-        self._log(f"  [{uname}] {len(results)} tickers · régimen {regime_info['estado']} "
-                  f"(×{regime_factor}) · AUC {auc}")
+        auc_log = {k: round(v, 3) for k, v in auc.items()}
+        lstm_tag = " +lstm" if "lstm_seq" in auc else ""
+        self._log(
+            f"  [{uname}] {len(results)} tickers · régimen {regime_info['estado']} "
+            f"(×{regime_factor}) · AUC {auc_log}{lstm_tag}"
+        )
         return results
 
     # ── Helpers de predicción "hoy" ─────────────────────────────────────────
@@ -360,6 +555,23 @@ class SuperModel:
                                 if vals else 0.5)
             rows.append(rn)
         return pd.DataFrame(rows)
+
+    @staticmethod
+    def _auc_weight_blend(
+        preds: dict[str, np.ndarray],
+        auc: dict[str, float],
+        models: list[str],
+    ) -> np.ndarray:
+        """Fusión AUC-weight fila a fila (para comparar vs stacking en holdout)."""
+        weights = {m: max(auc.get(m, 0.5) - 0.5, 0.0) for m in models}
+        wsum = sum(weights.values()) or len(models)
+        if wsum <= 0:
+            weights = {m: 1.0 for m in models}
+            wsum = len(models)
+        out = np.zeros(len(next(iter(preds.values()))))
+        for m in models:
+            out += preds[m] * weights[m] / wsum
+        return out
 
     @staticmethod
     def _safe_auc(y, p) -> float:

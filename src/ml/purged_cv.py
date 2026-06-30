@@ -24,9 +24,13 @@ Uso:
 """
 from __future__ import annotations
 
+import logging
+from typing import Iterator
+
 import numpy as np
 import pandas as pd
-from typing import Iterator
+
+logger = logging.getLogger(__name__)
 
 
 def purged_walk_forward_splits(
@@ -132,3 +136,230 @@ def deflated_sharpe_ratio(
         (sharpe_obs - sr_max) / np.sqrt(var_sr + 1e-12)
     )
     return float(dsr)
+
+
+# ─── LSTM vs LGBM comparison (KB-013) ────────────────────────────────────────
+
+_LGBM_BASE = dict(
+    n_estimators=300,
+    num_leaves=31,
+    learning_rate=0.03,
+    min_child_samples=20,
+    feature_fraction=0.8,
+    bagging_fraction=0.8,
+    bagging_freq=1,
+    reg_lambda=3.0,
+    n_jobs=2,
+    random_state=42,
+    verbosity=-1,
+)
+
+
+def _safe_auc(y_true: np.ndarray, y_score: np.ndarray) -> float:
+    if len(np.unique(y_true)) < 2:
+        return 0.5
+    from sklearn.metrics import roc_auc_score
+    return float(roc_auc_score(y_true, y_score))
+
+
+def build_universe_panel(
+    universe: dict[str, str],
+    feature_cols: list[str],
+    horizon: int = 5,
+) -> pd.DataFrame:
+    """
+    Panel cross-seccional con features, rank-normalización y targets.
+
+    Returns:
+        DataFrame multi-index por fecha con columnas de features, rn_*, y_rel, ticker.
+    """
+    from src.data import store
+    from src.data.store import MACRO_TICKERS
+    from src.ml.features import (
+        add_cross_section_features,
+        add_macro_features,
+        compute_features,
+        compute_target,
+    )
+
+    macro = {name: store.get(name) for name in MACRO_TICKERS}
+    macro = {k: v for k, v in macro.items() if v is not None}
+
+    frames: dict[str, pd.DataFrame] = {}
+    for name, sym in universe.items():
+        raw = store.load(sym)
+        if raw is None or len(raw) < 150:
+            continue
+        try:
+            feat = compute_features(raw)
+            feat = add_macro_features(feat, macro)
+            feat["ticker"] = name
+            feat["Open"] = raw["Open"].reindex(feat.index)
+            feat["Close"] = raw["Close"].reindex(feat.index)
+            feat["fwd_ret"] = compute_target(raw, horizon=horizon)
+            frames[name] = feat
+        except Exception:
+            continue
+
+    if not frames:
+        raise RuntimeError("Sin datos para el universo")
+
+    frames = add_cross_section_features(frames)
+    avail = [c for c in feature_cols if c in next(iter(frames.values())).columns]
+
+    rows = []
+    for df in frames.values():
+        clean = df.dropna(subset=avail + ["fwd_ret"]).copy()
+        if len(clean) >= 100:
+            rows.append(clean)
+
+    if not rows:
+        raise RuntimeError("Panel vacío tras dropna")
+
+    full = pd.concat(rows).sort_index()
+    g = full.groupby(full.index)
+    for c in avail:
+        full[f"rn_{c}"] = g[c].rank(pct=True)
+    full["pct_fwd"] = g["fwd_ret"].rank(pct=True)
+    full["y_rel"] = (g["fwd_ret"].rank(pct=True) > 0.5).astype(int)
+    full["target_up"] = full["y_rel"]
+
+    rn_avail = [f"rn_{c}" for c in avail]
+    full = full.dropna(subset=rn_avail + ["pct_fwd", "target_up"])
+    return full
+
+
+def compare_lstm_vs_lgbm(
+    ticker: str,
+    universe: dict[str, str],
+    feature_cols: list[str] | None = None,
+    n_splits: int = 6,
+    horizon: int = 5,
+    embargo: int = 10,
+    sequence_length: int = 30,
+    lstm_epochs: int = 40,
+    lstm_max_samples: int | None = None,
+    lstm_num_layers: int = 2,
+    lstm_hidden_units: int = 64,
+    lstm_batch_size: int = 32,
+) -> dict:
+    """
+    Comparación side-by-side AUC walk-forward: xs_lgbm vs lstm_seq.
+
+    Args:
+        ticker:   Ticker BMV a evaluar (ej. WALMEX, ALSEA, GMEXICOB).
+        universe: dict nombre → símbolo yfinance del universo cross-seccional.
+        feature_cols: columnas de features (default FEATURE_COLS disponibles).
+
+    Returns:
+        Dict con folds y agregados por modelo.
+    """
+    from src.ml.features import FEATURE_COLS
+    from src.ml.lstm_seq import LSTMSeqPredictor
+
+    if ticker not in universe:
+        raise ValueError(f"Ticker {ticker!r} no está en el universo")
+
+    feat_cols = feature_cols or FEATURE_COLS
+    panel = build_universe_panel(universe, feat_cols, horizon=horizon)
+    avail = [c for c in feat_cols if c in panel.columns]
+    rn_avail = [f"rn_{c}" for c in avail]
+
+    df_reset = panel.reset_index()
+
+    fold_results: list[dict] = []
+
+    for fold_i, (tr_idx, te_idx) in enumerate(
+        purged_walk_forward_splits(df_reset, n_splits=n_splits, horizon=horizon, embargo=embargo)
+    ):
+        train_df = panel.iloc[tr_idx].copy()
+        test_df = panel.iloc[te_idx].copy()
+        test_ticker = test_df[test_df["ticker"] == ticker]
+
+        if len(test_ticker) < 5 or test_ticker["y_rel"].nunique() < 2:
+            continue
+
+        # ── xs_lgbm: regresor sobre pct_fwd, AUC vs y_rel ────────────────────
+        xs_auc = 0.5
+        xs_error = ""
+        try:
+            import lightgbm as lgb
+
+            reg = lgb.LGBMRegressor(**_LGBM_BASE)
+            reg.fit(train_df[rn_avail].values, train_df["pct_fwd"].values)
+            p_te = reg.predict(test_ticker[rn_avail].values)
+            xs_auc = _safe_auc(test_ticker["y_rel"].values, p_te)
+        except Exception as exc:
+            xs_error = str(exc)
+
+        # ── lstm_seq: clasificación P(up) secuencial ───────────────────────
+        lstm_auc = 0.5
+        lstm_error = ""
+        try:
+            pred = LSTMSeqPredictor(
+                sequence_length=sequence_length,
+                num_layers=lstm_num_layers,
+                hidden_units=lstm_hidden_units,
+                batch_size=lstm_batch_size,
+                epochs=lstm_epochs,
+            )
+            pred.fit(
+                train_df, feature_cols=avail, target_col="target_up",
+                max_samples=lstm_max_samples,
+            )
+            if pred.is_fitted:
+                eval_df = pd.concat([train_df, test_df]).sort_index()
+                lstm_auc = pred.evaluate_auc(
+                    eval_df,
+                    avail,
+                    target_col="target_up",
+                    ticker_filter=ticker,
+                    eval_dates=test_ticker.index,
+                )
+            else:
+                lstm_error = pred._last_metrics.get("error", "not_fitted")
+        except Exception as exc:
+            lstm_error = str(exc)
+
+        test_start = str(test_ticker.index.min())[:10]
+        test_end = str(test_ticker.index.max())[:10]
+
+        fold_results.append({
+            "fold": fold_i + 1,
+            "test_start": test_start,
+            "test_end": test_end,
+            "n_test_ticker": int(len(test_ticker)),
+            "n_train": int(len(tr_idx)),
+            "xs_lgbm_auc": round(xs_auc, 4),
+            "lstm_seq_auc": round(lstm_auc, 4),
+            "lstm_error": lstm_error or None,
+            "xs_lgbm_error": xs_error or None,
+        })
+
+    if not fold_results:
+        return {"ticker": ticker, "error": "Sin folds válidos", "folds": []}
+
+    xs_aucs = [f["xs_lgbm_auc"] for f in fold_results]
+    lstm_aucs = [f["lstm_seq_auc"] for f in fold_results]
+
+    return {
+        "ticker": ticker,
+        "meta": {
+            "n_splits": n_splits,
+            "horizon": horizon,
+            "embargo": embargo,
+            "sequence_length": sequence_length,
+            "n_features": len(avail),
+            "universe_size": len(universe),
+        },
+        "folds": fold_results,
+        "aggregate": {
+            "xs_lgbm_mean_auc": round(float(np.mean(xs_aucs)), 4),
+            "xs_lgbm_std_auc": round(float(np.std(xs_aucs)), 4),
+            "lstm_seq_mean_auc": round(float(np.mean(lstm_aucs)), 4),
+            "lstm_seq_std_auc": round(float(np.std(lstm_aucs)), 4),
+            "lstm_wins": int(sum(l > x for l, x in zip(lstm_aucs, xs_aucs))),
+            "n_folds": len(fold_results),
+        },
+    }
+

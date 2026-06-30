@@ -1,0 +1,133 @@
+id: quadir2023_mls_lstm
+citation:
+  title: "Novel optimization approach for stock price forecasting using multi-layered sequential LSTM"
+  authors: ["Abdul Quadir Md", "Sanjit Kapoor", "Chris Junni A.V.", "Arun Kumar Sivaraman", "Kong Fah Tee", "Sabireen H.", "Janakiraman N."]
+  year: 2023
+  journal: "Applied Soft Computing"
+  doi: "10.1016/j.asoc.2022.109830"
+  url: "https://doi.org/10.1016/j.asoc.2022.109830"
+
+problem:
+  task: "Regresión — forecasting de nivel de precio (no dirección)"
+  horizon: "Secuencias de time steps sobre datos normalizados"
+  market: "Acciones individuales (Samsung, Maruti, HCL, Axis Bank — mercados asiáticos/indios)"
+  target: "Precio de cierre futuro (regresión continua)"
+
+data:
+  sources:
+    - "Datos históricos OHLCV de acciones individuales"
+  modalities:
+    - ohlcv_day
+  features:
+    - "Serie temporal normalizada de precios"
+    - "Time steps secuenciales (lookback window)"
+  preprocessing:
+    - "Normalización MinMax de time series"
+    - "División en time steps secuenciales"
+    - "Missing values: forward fill (mejorable con running average según autores)"
+
+methods:
+  primary:
+    - "Multi-Layer Sequential LSTM (MLS-LSTM)"
+    - "Adam optimizer"
+    - "Múltiples capas LSTM apiladas (vs single-layer LSTM)"
+  secondary:
+    - "Comparación vs Linear Regression, SVM, RNN, CNN, MLP, single LSTM"
+  optimization:
+    - "Adam optimizer (learning rate scheduling implícito)"
+    - "Epoch tuning (5-100 epochs evaluados)"
+  validation:
+    - "Train/test split temporal"
+    - "R² y MAPE como métricas principales"
+
+results:
+  metrics:
+    r2_test: 0.98
+    r2_train_comparison:
+      linear_regression: 0.72
+      svm: 0.92
+      mls_lstm: 0.98
+    mape_test: 2.18
+    mape_comparison:
+      rnn: 7.62
+      single_lstm: 5.47
+      cnn: 4.55
+      mlp: 4.72
+      mls_lstm: 2.18
+    accuracy_claim: "95.9% prediction accuracy on testing set"
+  benchmarks:
+    - "Supera LR, SVM, RNN, CNN, MLP y single-layer LSTM"
+    - "Más capas → mejor ajuste pero riesgo de overfitting (autores lo reconocen)"
+  limitations:
+    - "Predice nivel de precio, no dirección — menos útil directamente para señales BUY/SELL"
+    - "Sin costos de transacción ni evaluación de Sharpe"
+    - "Mercados asiáticos — transferibilidad a BMV no probada"
+    - "Sin features técnicos externos (solo precio normalizado)"
+    - "Overfitting posible con muchas capas"
+    - "Training time y recursos elevados"
+
+applicability_to_bmv:
+  relevance_score: 4
+  already_in_stack:
+    - "src/ml/shared/models/lstm_model.py — arquitectura LSTM parametrizable"
+    - "src/ml/shared/preprocessors/sequence_generator.py — ventanas deslizantes"
+    - "src/ml/shared/preprocessors/scaler.py — normalización"
+    - "src/ml/shared/optimizers/genetic_algorithm.py — optimización de hiperparámetros LSTM"
+    - "docs/ML_FRAMEWORK_ARCHITECTURE.md — pipeline LSTM+GA documentado"
+  gaps:
+    - id: GAP-MLS-ARCH
+      description: "LSTM actual es single/multi configurable pero no integrado en SuperModel"
+      priority: P1
+    - id: GAP-PRICE-VS-DIRECTION
+      description: "Paper predice precio; nosotros necesitamos P(up 5d) — re-targeting necesario"
+      priority: P1
+    - id: GAP-MULTIMODAL
+      description: "Autores proponen añadir sentiment + fundamentals — no implementado en paper"
+      priority: P2
+  actionable_items:
+    - ticket: "KB-010"
+      action: "Implementar MLS-LSTM (2-3 capas) con Adam en lstm_model.py como variante 'sequential'"
+      module: "src/ml/shared/models/lstm_model.py"
+      params:
+        num_layers: [2, 3]
+        optimizer: adam
+        sequence_length: 30  # paper usa ~30-day sequences
+        hidden_units: [64, 128, 256]  # GA search space
+    - ticket: "KB-011"
+      action: "Re-target LSTM: clasificación binaria P(up 5d) en vez de regresión de precio"
+      module: "src/ml/pipelines/train_pipeline.py"
+    - ticket: "KB-012"
+      action: "Fusionar output LSTM con ensemble en SuperModel L1 como 'lstm_seq'"
+      module: "src/ml/super_model.py"
+    - ticket: "KB-013"
+      action: "Comparar MLS-LSTM vs xs_lgbm en purged CV — criterio de inclusión: AUC > 0.52"
+      module: "src/ml/purged_cv.py"
+
+architecture_notes:
+  mls_lstm_design:
+    input: "(batch, sequence_length, num_features_normalized)"
+    layers:
+      - "LSTM layer 1 (return_sequences=True)"
+      - "Dropout"
+      - "LSTM layer 2 (return_sequences=True/False)"
+      - "Dropout"
+      - "Dense(1, linear) para regresión — cambiar a sigmoid para clasificación"
+    optimizer: "Adam"
+    key_insight: "Multi-layer > single-layer porque cada capa refina pesos hacia solución óptima"
+
+future_work_from_paper:
+  - "Incluir fundamental analysis + sentiment analysis"
+  - "Missing data con running averages"
+  - "Reducir training time y recursos"
+  - "Mitigar overfitting con regularización adicional"
+
+key_quotes:
+  - "MLS LSTM can produce more precise stock price predictions when compared to simple machine learning approaches such as SVM and linear regression."
+  - "The MAPE of the proposed MLS LSTM is lower than any of the other deep learning architectures, with a mean error percentage of only 2.18%."
+  - "In the future, fundamental analysis and sentiment analysis will be included in the prediction process."
+
+references_of_interest:
+  - ref: "Hoseinzade 2019 — CNNpred diverse variables"
+    doi: "10.1016/j.eswa.2019.03.022"
+  - ref: "Chen 2015 — LSTM Chinese stocks (+27.2% vs random)"
+  - ref: "Hiransha 2018 — NSE deep learning models"

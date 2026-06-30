@@ -13,7 +13,11 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-# ─── Lista canónica de features (25) ─────────────────────────────────────────
+from src.ml.intraday_features import (
+    INTRADAY_FEATURE_COLS,
+    add_intraday_features,
+)
+from src.ml.news import NEWS_FEATURE_COLS
 # Organizados en 5 grupos funcionales.  Todos son causales (sin look-ahead).
 FEATURE_COLS = [
     # ── A: Osciladores mean-reversion ────────────────────────────────────────
@@ -80,6 +84,89 @@ MACRO_FEATURE_COLS = [
 
 # Features puramente técnicas (calculables con solo OHLCV del ticker)
 TECH_FEATURE_COLS = [f for f in FEATURE_COLS if f not in MACRO_FEATURE_COLS]
+
+
+def add_news_features(
+    df: pd.DataFrame,
+    news_df: pd.DataFrame,
+    ticker_col: str = "ticker",
+) -> pd.DataFrame:
+    """
+    Merge de features de noticias por ticker.
+
+    Parameters
+    ----------
+    df       : DataFrame con columna `ticker_col` (OHLCV + features técnicos)
+    news_df  : DataFrame con ticker index o columna ticker y las 4 columnas
+               NEWS_FEATURE_COLS (salida de batch_news_features / cache)
+    ticker_col : nombre de la columna ticker en df
+
+    Returns
+    -------
+    DataFrame con NEWS_FEATURE_COLS añadidas. Tickers sin noticias → 0.0.
+
+    Uso en ensemble
+    ---------------
+    El EnsembleModel (WoE + LR + LightGBM) puede incluir news features
+    pasando get_all_feature_cols(include_news=True) como feature_cols.
+    news_sent_score captura tono agregado; news_count_7d volumen informativo;
+    news_sent_delta cambio vs ventana anterior; news_sent_vol incertidumbre.
+    """
+    out = df.copy()
+    news = news_df.copy()
+
+    if news is None or news.empty:
+        for col in NEWS_FEATURE_COLS:
+            out[col] = 0.0
+        return out
+
+    if "ticker" not in news.columns:
+        news = news.reset_index()
+        if news.columns[0] != "ticker":
+            news = news.rename(columns={news.columns[0]: "ticker"})
+
+    available = [c for c in NEWS_FEATURE_COLS if c in news.columns]
+    news_sub = news.drop_duplicates(subset=["ticker"]).set_index("ticker")
+
+    for col in NEWS_FEATURE_COLS:
+        if col in available:
+            out[col] = out[ticker_col].map(news_sub[col]).fillna(0.0)
+        else:
+            out[col] = 0.0
+
+    return out
+
+
+def add_intraday_features_to_panel(
+    ticker: str,
+    feat_df: pd.DataFrame,
+    cs_medians: dict[str, float] | None = None,
+) -> pd.DataFrame:
+    """Añade INTRADAY_FEATURE_COLS a un panel diario ya con features técnicos."""
+    return add_intraday_features(feat_df, ticker, cs_medians=cs_medians)
+
+
+def add_all_optional_features(
+    ticker_df: pd.DataFrame,
+    ticker: str,
+    *,
+    include_intraday: bool = False,
+    intraday_cs_medians: dict[str, float] | None = None,
+) -> pd.DataFrame:
+    """
+    Punto único para features opcionales (intradía, etc.) sobre OHLCV + técnicos.
+
+    Parameters
+    ----------
+    include_intraday       : activa microestructura 5m agregada a diario
+    intraday_cs_medians    : medianas cross-seccional para imputar NaN restantes
+    """
+    df = ticker_df
+    if include_intraday:
+        df = add_intraday_features_to_panel(
+            ticker, df, cs_medians=intraday_cs_medians,
+        )
+    return df
 
 
 def compute_features(df: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
@@ -405,9 +492,9 @@ CROSS_SECTION_COLS = [
 ]
 
 
-# ─── Features fundamentales (estados financieros, DataBursátil) ──────────────
+# ─── Features fundamentales (DataBursátil + yfinance) ────────────────────────
 
-FUNDAMENTAL_FEATURE_COLS = [
+_FUND_QUARTERLY_COLS = [
     "fund_gross_margin",
     "fund_oper_margin",
     "fund_net_margin",
@@ -415,50 +502,129 @@ FUNDAMENTAL_FEATURE_COLS = [
     "fund_earnings_yoy",
 ]
 
+_YFINANCE_FUND_COLS = [
+    "pe_ratio",
+    "market_cap_log",
+    "dividend_yield",
+    "profit_margin",
+]
+
+FUNDAMENTAL_FEATURE_COLS = _FUND_QUARTERLY_COLS + _YFINANCE_FUND_COLS
+
+
+def _fetch_yfinance_fundamentals(symbol: str) -> dict[str, float]:
+    """Ratios fundamentales estáticos vía yfinance.info."""
+    out = {c: np.nan for c in _YFINANCE_FUND_COLS}
+    try:
+        import yfinance as yf
+        info = yf.Ticker(symbol).info or {}
+        pe = info.get("trailingPE") or info.get("forwardPE")
+        mcap = info.get("marketCap")
+        div_y = info.get("dividendYield") or info.get("yield")
+        margin = info.get("profitMargins")
+        if pe is not None and np.isfinite(pe) and pe > 0:
+            out["pe_ratio"] = float(pe)
+        if mcap is not None and mcap > 0:
+            out["market_cap_log"] = float(np.log(mcap))
+        if div_y is not None and np.isfinite(div_y):
+            out["dividend_yield"] = float(div_y * 100 if div_y < 1 else div_y)
+        if margin is not None and np.isfinite(margin):
+            out["profit_margin"] = float(margin * 100 if abs(margin) < 1 else margin)
+    except Exception:
+        pass
+    return out
+
+
+def get_all_feature_cols(
+    include_news: bool = False,
+    include_fundamentals: bool = False,
+    include_intraday: bool = False,
+) -> list[str]:
+    """
+    Lista canónica de columnas de features para entrenamiento/inferencia.
+
+    Parameters
+    ----------
+    include_news         : añade NEWS_FEATURE_COLS (sentiment NLP)
+    include_fundamentals : añade FUNDAMENTAL_FEATURE_COLS (DataBursátil)
+    include_intraday     : añade INTRADAY_FEATURE_COLS (microestructura 5m)
+
+    Returns
+    -------
+    Lista ordenada sin duplicados. FEATURE_COLS base no se modifica;
+    SuperModel agent puede activar news con include_news=True.
+    """
+    cols = list(FEATURE_COLS)
+    if include_news:
+        cols.extend(c for c in NEWS_FEATURE_COLS if c not in cols)
+    if include_fundamentals:
+        cols.extend(c for c in FUNDAMENTAL_FEATURE_COLS if c not in cols)
+    if include_intraday:
+        cols.extend(c for c in INTRADAY_FEATURE_COLS if c not in cols)
+    return cols
+
 
 def add_fundamental_features(
     ticker_df: pd.DataFrame,
-    fund_df: pd.DataFrame | None,
+    fund_df: pd.DataFrame | None = None,
+    *,
+    ticker: str | None = None,
+    symbol: str | None = None,
 ) -> pd.DataFrame:
     """
-    Añade features fundamentales (márgenes + crecimiento YoY) a un DataFrame diario.
+    Añade features fundamentales a un DataFrame diario.
 
-    Usa merge_asof sobre `available_date` (= fin de trimestre + lag de publicación),
-    de modo que cada fila diaria solo ve los fundamentales YA PUBLICADOS a esa fecha.
-    Esto evita look-ahead: el cierre de un trimestre no se "conoce" hasta semanas después.
+    Fuentes:
+      - ``fund_df``: trimestrales DataBursátil vía merge_asof (sin look-ahead).
+      - ``symbol`` / ``ticker``: P/E, market cap log, dividend yield, profit margin
+        vía yfinance (snapshot constante en el panel).
+
+    NaN handling: trimestrales sin publicación → NaN; yfinance sin dato → NaN
+    por columna. El caller (SuperModel) puede imputar mediana antes de entrenar.
 
     Parameters
     ----------
     ticker_df : DataFrame diario con DatetimeIndex.
-    fund_df   : DataFrame de fundamentales del ticker, con columnas
-                FUNDAMENTAL_FEATURE_COLS + 'available_date'. Si es None/vacío,
-                las columnas se rellenan con NaN.
+    fund_df   : DataFrame trimestral opcional (legacy scripts/fundamentals_backtest).
+    ticker    : nombre corto (informativo).
+    symbol    : símbolo yfinance (ej. ``WALMEX.MX``, ``AAPL``).
 
     Returns
     -------
-    DataFrame con FUNDAMENTAL_FEATURE_COLS añadidas (forward-filled entre trimestres).
+    DataFrame con FUNDAMENTAL_FEATURE_COLS añadidas.
     """
     df = ticker_df.copy()
     df.index = pd.to_datetime(df.index)
 
-    if fund_df is None or len(fund_df) == 0:
-        for col in FUNDAMENTAL_FEATURE_COLS:
+    quarterly_cols = [
+        c for c in _FUND_QUARTERLY_COLS
+        if fund_df is not None and len(fund_df) > 0 and c in fund_df.columns
+    ]
+    if fund_df is not None and len(fund_df) > 0 and quarterly_cols:
+        fund = fund_df.copy()
+        if "available_date" in fund.columns:
+            fund["available_date"] = pd.to_datetime(fund["available_date"])
+            fund = fund.sort_values("available_date")
+            left = pd.DataFrame({"_date": df.index}).sort_values("_date")
+            merged = pd.merge_asof(
+                left, fund[["available_date"] + quarterly_cols],
+                left_on="_date", right_on="available_date",
+                direction="backward",
+            )
+            merged.index = merged["_date"].values
+            for col in quarterly_cols:
+                df[col] = merged[col].reindex(df.index).values
+        else:
+            for col in quarterly_cols:
+                df[col] = fund[col].iloc[-1]
+    for col in _FUND_QUARTERLY_COLS:
+        if col not in df.columns:
             df[col] = np.nan
-        return df
 
-    fund = fund_df.copy()
-    fund["available_date"] = pd.to_datetime(fund["available_date"])
-    fund = fund.sort_values("available_date")
-
-    left = pd.DataFrame({"_date": df.index}).sort_values("_date")
-    merged = pd.merge_asof(
-        left, fund[["available_date"] + FUNDAMENTAL_FEATURE_COLS],
-        left_on="_date", right_on="available_date",
-        direction="backward",
-    )
-    merged.index = merged["_date"].values
-    for col in FUNDAMENTAL_FEATURE_COLS:
-        df[col] = merged[col].reindex(df.index).values
+    yf_sym = symbol or ticker
+    yf_vals = _fetch_yfinance_fundamentals(yf_sym) if yf_sym else {}
+    for col in _YFINANCE_FUND_COLS:
+        df[col] = yf_vals.get(col, np.nan)
 
     return df
 

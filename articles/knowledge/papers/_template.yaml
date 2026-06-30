@@ -1,0 +1,42 @@
+# Plantilla para fichas de papers — copiar y renombrar a papers/<id>.yaml
+
+id: paper_id_here
+citation:
+  title: ""
+  authors: []
+  year: 0
+  journal: ""
+  doi: ""
+  url: ""
+
+problem:
+  task: ""          # classification | regression | ranking | portfolio | execution
+  horizon: ""       # e.g. "5d", "intraday"
+  market: ""        # e.g. "BMV", "S&P500", "multi-index"
+  target: ""        # e.g. "P(up 5d)", "price level", "STRONG BUY/SELL"
+
+data:
+  sources: []
+  modalities: []    # ohlcv | tick | text | fundamental | image
+  features: []
+  preprocessing: []
+
+methods:
+  primary: []
+  secondary: []
+  optimization: []  # GA, grid search, AutoML, etc.
+  validation: []    # walk-forward, purged CV, backtest
+
+results:
+  metrics: {}       # auc, rmse, mape, sharpe, win_rate, etc.
+  benchmarks: []
+  limitations: []
+
+applicability_to_bmv:
+  relevance_score: 0   # 0-5
+  already_in_stack: []   # módulos src/ml/* que ya cubren esto
+  gaps: []
+  actionable_items: [] # tickets concretos
+
+key_quotes: []
+references_of_interest: []

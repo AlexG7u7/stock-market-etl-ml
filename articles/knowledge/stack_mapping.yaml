@@ -1,0 +1,188 @@
+# Gap analysis: literatura Scopus/SOTA vs stack BMV actual
+# Generado: 2026-06-28
+
+project:
+  name: stock-market BMV
+  problem: "P(up 5d) cross-seccional + ranking + risk engine"
+  horizon: 5d
+  universes: 5
+  tickers: ~87
+
+coverage_matrix:
+  # score: 0=missing, 1=partial, 2=implemented, 3=production
+  ohlcv_features:
+    literature: "required — Kumbure 2022 Top 30 technical indicators overlap fuerte"
+    score: 3
+    module: src/ml/features.py
+    notes: "25 indicadores + macro + cross-section — alineado con 60%+ papers"
+    new_refs: [kumbure2022_ml_data_review]
+
+  ml_ensemble:
+    literature: "RF, XGBoost, LR, SVM — tabular SOTA"
+    score: 3
+    module: src/ml/ensemble.py
+    notes: "WoE+LR+LGBM con meta-labeling"
+
+  lstm_sequences:
+    literature: "LSTM/GRU — 20% papers DL-only"
+    score: 2
+    module: src/ml/lstm_seq.py
+    notes: "KB-010/011/012 — MLS-LSTM clasificación P(up), integrado en SuperModel L1"
+
+  mls_lstm_multi_layer:
+    literature: "Quadir 2023 — multi-layer sequential LSTM"
+    score: 2
+    module: src/ml/shared/models/lstm_model.py
+    notes: "KB-010 num_layers>=2, Adam, sigmoid P(up)"
+
+  regime_detection:
+    literature: "HMM mencionado en surveys"
+    score: 3
+    module: src/ml/regime.py
+    notes: "HMM bull/lateral/bear — diferenciador vs literatura genérica"
+
+  news_sentiment:
+    literature: "25% papers; SLR Ashtiani 2023 + Leone 2025 confirman tendencia"
+    score: 3
+    module: src/ml/news.py
+    notes: "KB-004/041/043 — dedup TF-IDF, decay temporal, NEWS_FEATURE_COLS"
+
+  transaction_costs:
+    literature: "Crítico para simulación realista (§8.3 Sahu 2023)"
+    score: 2
+    module: src/ml/shared/evaluators/backtester.py
+    notes: "KB-003 — commission + slippage, Sharpe bruto/neto"
+
+  portfolio_metrics:
+    literature: "Sharpe, MDD, accumulated return (Table 14 Sahu 2023)"
+    score: 2
+    module: src/ml/shared/evaluators/metrics.py
+    notes: "KB-001 calculate_dual_metrics + backtest_topk + evaluate_portfolio"
+
+  meta_fusion:
+    literature: "Ghosh 2022: top-10/bottom-10 por P(outperform mediana); Kumbure: stacking RF+LSTM"
+    score: 3
+    module: src/ml/super_model.py
+    notes: "4-model fusion + stacking LR opcional + scripts/backtest_topk.py Ghosh-style"
+    new_refs: [ghosh2022_intraday_lstm_rf, kumbure2022_ml_data_review]
+
+  reinforcement_learning:
+    literature: "39% papers — dominante en literatura 2019-2022"
+    score: 0
+    module: null
+    notes: "Gap más grande vs SOTA. FinRL como referencia."
+
+  purged_cv:
+    literature: "Best practice cuant (López de Prado)"
+    score: 2
+    module: src/ml/purged_cv.py
+    notes: "compare_lstm_vs_lgbm + --purged-cv flag en generate_all_signals"
+
+  fundamentals:
+    literature: "~15% papers"
+    score: 2
+    module: src/ml/features.py
+    notes: "KB-020 add_fundamental_features via yfinance"
+
+  cnn_candlestick:
+    literature: "~5% papers (CNNpred)"
+    score: 0
+    module: null
+
+  automl:
+    literature: "Recomendado §8.4 Sahu 2023"
+    score: 1
+    module: src/ml/shared/optimizers/genetic_algorithm.py
+    notes: "Solo GA para LSTM; no AutoML en ensemble"
+
+  ising_econophysics:
+    literature: "Nicho — no en surveys mainstream"
+    score: 1
+    module: src/ml/ising_market.py
+    notes: "Diferenciador propio; synthetic data + régimen"
+
+  gemini_validation:
+    literature: "No está en literatura académica"
+    score: 3
+    module: src/ml/gemini_validator.py
+    notes: "KB wired — knowledge_loader inyecta decision_protocol + literature_rules"
+
+  agent_knowledge_layer:
+    literature: "Operacional — no académico"
+    score: 2
+    module: src/ml/knowledge_loader.py
+    notes: "calibrate_agent, verdict_tracker, performance_log.yaml"
+
+overall_coverage:
+  implemented_or_production: 11
+  partial: 4
+  missing: 3
+  coverage_pct: 78
+  news_pipeline_gap: "Resuelto KB-004/041/043 — pendiente medir AUC uplift en walk-forward"
+
+new_literature_consensus:
+  - source: ghosh2022_intraday_lstm_rf
+    finding: "LSTM+RF con target vs mediana cross-seccional + top-K long/short. Sharpe 4.32 neto con costos 0.2%/día. Mapeo directo a SuperModel ranking."
+  - source: kumbure2022_ml_data_review
+    finding: "2173 variables catalogadas; crude oil+gold top commodities; stacking ensembles > single classifiers; feature selection creciente."
+  - source: ashtiani2023_news_slr
+    finding: "Headlines suficientes; cuerpo no mejora. Transformers (BERT) subutilizados."
+  - source: leone2025_roberta_nhits
+    finding: "TF-IDF dedup + market cap weighting + ESG filter mejoran forecasting."
+  - source: zhao2023_sa_dlstm
+    finding: "Sentiment + DAE denoising + LSTM > single model. Sharpe 4.43 en simulación."
+  - source: mukherjee2021_cnn_ann
+    finding: "CNN visual alternativo — baja prioridad vs pipeline tabular actual."
+
+competitive_advantages:
+  - "SuperModel multi-capa con fusión adaptativa — pocos papers lo hacen end-to-end"
+  - "HMM régimen + macro BMV-specific (USD/MXN, NAFTRAC, WTI)"
+  - "Cross-sectional ranking 87 tickers — mayoría de papers predicen 1 ticker"
+  - "Gemini como capa de validación (no decisión) — diseño prudente"
+  - "Mercado BMV poco estudiado — oportunidad de publicar resultados propios"
+
+critical_gaps_vs_sota:
+  - rank: 1
+    gap: "LSTM no en pipeline producción"
+    impact: high
+    effort: medium
+    ticket: KB-010..KB-013
+
+  - rank: 2
+    gap: "Métricas portfolio (Sharpe, MDD) no en evaluación principal"
+    impact: high
+    effort: low
+    ticket: KB-001
+
+  - rank: 3
+    gap: "Costos de transacción ausentes en backtest"
+    impact: high
+    effort: low
+    ticket: KB-003
+
+  - rank: 4
+    gap: "Sin DRL (39% literatura)"
+    impact: medium
+    effort: high
+    ticket: KB-005
+
+  - rank: 5
+    gap: "Sin fundamentales"
+    impact: medium
+    effort: medium
+    ticket: KB-020
+
+  - rank: 6
+    gap: "AutoML limitado a GA-LSTM"
+    impact: medium
+    effort: medium
+    ticket: KB-021
+
+literature_vs_our_target:
+  note: |
+    La literatura mezcla dos tareas distintas:
+    (A) Regresión de precio (RMSE, MAPE) — Quadir 2023, mayoría DL papers
+    (B) Clasificación direccional / señales (AUC, Sharpe) — RL papers, nuestro enfoque
+
+    Nuestro proyecto está alineado con (B), que es más accionable para trading.
+    No debemos optimizar RMSE de precio — debemos optimizar AUC direccional y Sharpe neto de costos.

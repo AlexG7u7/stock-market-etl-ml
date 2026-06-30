@@ -34,9 +34,15 @@ from src.ml.features import (compute_features, add_macro_features,
                               add_cross_section_features, FEATURE_COLS)
 from src.ml.news import load_cached_news_features, get_news_features
 from scripts.cross_sectional_v2 import add_rank_normalized, RN_COLS, _LGBM_BASE
+from sklearn.metrics import roc_auc_score
+from src.ml.purged_cv import purged_walk_forward_splits
+from src.ml.bet_policy import MAX_SIGNALS as POLICY_MAX_SIGNALS
 
 OUT_DIR = ROOT / "data" / "signals"
 OUT_DIR.mkdir(exist_ok=True)
+
+PURGED_CV_SPLITS = 4
+PURGED_CV_EMBARGO = 10
 
 # ── Horizontes disponibles ────────────────────────────────────────────────────
 
@@ -156,6 +162,69 @@ def _last_price(name: str, prices: dict) -> float | None:
     return float(df["Close"].iloc[-1])
 
 
+def log_purged_cv_auc(
+    feat_frames: dict[str, pd.DataFrame],
+    available_feat_cols: list[str],
+    horizon_d: int = 5,
+    universe_name: str = "",
+) -> None:
+    """Evalúa AUC OOS con purged walk-forward CV (opcional, solo logging)."""
+    rows = []
+    for name, df in feat_frames.items():
+        df = df.dropna(subset=available_feat_cols).copy()
+        if len(df) < 150:
+            continue
+        df["fwd_ret"] = df["Close"].pct_change(horizon_d).shift(-horizon_d) * 100
+        df["y"] = (df["fwd_ret"] > 0).astype(int)
+        df = df.dropna(subset=available_feat_cols + ["y"])
+        if len(df) >= 80:
+            rows.append(df)
+
+    if not rows:
+        print(f"  [{universe_name}] purged CV: sin datos suficientes")
+        return
+
+    panel = pd.concat(rows).sort_index()
+    panel = add_rank_normalized(panel)
+    panel = panel.dropna(subset=RN_COLS + ["y"])
+    if len(panel) < 100:
+        print(f"  [{universe_name}] purged CV: panel muy pequeño ({len(panel)})")
+        return
+
+    df_reset = panel.reset_index(drop=False)
+    X_cols = [c for c in RN_COLS if c in df_reset.columns]
+    aucs: list[float] = []
+
+    for fold_i, (tr_idx, te_idx) in enumerate(
+        purged_walk_forward_splits(
+            df_reset, n_splits=PURGED_CV_SPLITS,
+            horizon=horizon_d, embargo=PURGED_CV_EMBARGO,
+        )
+    ):
+        y_te = df_reset.iloc[te_idx]["y"].values
+        if len(np.unique(y_te)) < 2:
+            continue
+        reg = lgb.LGBMRegressor(**_LGBM_BASE, verbose=-1)
+        reg.fit(
+            df_reset.iloc[tr_idx][X_cols].values,
+            df_reset.iloc[tr_idx]["pct_fwd"].values,
+        )
+        p_te = reg.predict(df_reset.iloc[te_idx][X_cols].values)
+        try:
+            aucs.append(float(roc_auc_score(y_te, p_te)))
+        except Exception:
+            pass
+
+    if aucs:
+        mean_auc = float(np.mean(aucs))
+        print(
+            f"  [{universe_name}] purged CV ({len(aucs)} folds, h={horizon_d}d): "
+            f"AUC OOS mean={mean_auc:.3f}  folds={[round(a, 3) for a in aucs]}"
+        )
+    else:
+        print(f"  [{universe_name}] purged CV: no se pudo calcular AUC OOS")
+
+
 def rank_at_horizon(
     feat_frames: dict[str, pd.DataFrame],
     last_vals: dict,
@@ -250,7 +319,8 @@ def rank_at_horizon(
 def generate_universe_signal(
     universe_name: str,
     capital: float = 50_000.0,
-    top_n: int = 5,
+    top_n: int = POLICY_MAX_SIGNALS,
+    purged_cv: bool = False,
 ) -> dict:
     cfg     = UNIVERSES[universe_name]
     tickers = cfg["tickers"]
@@ -290,6 +360,13 @@ def generate_universe_signal(
 
     if not last_vals:
         return {"error": "Sin datos recientes"}
+
+    if purged_cv:
+        default_h = cfg.get("horizonte", 20)
+        log_purged_cv_auc(
+            feat_frames, available_feat_cols,
+            horizon_d=default_h, universe_name=universe_name,
+        )
 
     # ── Entrenar modelo por horizonte ─────────────────────────────────────────
     by_horizon: dict[str, dict] = {}
@@ -450,15 +527,29 @@ def generate_universe_signal(
     }
 
 
-def main(capital: float = 50_000.0, target_universe: str | None = None):
+def main(
+    capital: float = 50_000.0,
+    target_universe: str | None = None,
+    purged_cv: bool = False,
+    refresh_data: bool = False,
+):
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
+
+    if refresh_data:
+        import subprocess
+        print("\n  Refrescando datos de mercado (news + intradía)...")
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "refresh_market_data.py"), "--all"],
+            check=True,
+            cwd=str(ROOT),
+        )
 
     universes = ([target_universe] if target_universe and target_universe in UNIVERSES
                  else list(UNIVERSES.keys()))
 
     for uname in universes:
-        result = generate_universe_signal(uname, capital=capital)
+        result = generate_universe_signal(uname, capital=capital, purged_cv=purged_cv)
         slug   = UNIVERSES[uname]["slug"]
         (OUT_DIR / f"{slug}.json").write_text(
             json.dumps(result, ensure_ascii=False, indent=2)
@@ -488,5 +579,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--capital",   type=float, default=50_000.0)
     parser.add_argument("--universe",  type=str,   default=None)
+    parser.add_argument(
+        "--purged-cv", action="store_true",
+        help="Log AUC OOS con purged walk-forward CV antes de generar señales",
+    )
+    parser.add_argument(
+        "--refresh-data", action="store_true",
+        help="Refrescar news + intradía antes de generar señales",
+    )
     args = parser.parse_args()
-    main(capital=args.capital, target_universe=args.universe)
+    main(
+        capital=args.capital,
+        target_universe=args.universe,
+        purged_cv=args.purged_cv,
+        refresh_data=args.refresh_data,
+    )

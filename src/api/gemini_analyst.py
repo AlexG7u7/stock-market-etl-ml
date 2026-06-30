@@ -16,7 +16,17 @@ import json
 import logging
 from datetime import datetime, timedelta
 
+from src.ml.knowledge_loader import get_knowledge_prompt
+
 logger = logging.getLogger(__name__)
+
+_ANALYST_SYSTEM_PROMPT = (
+    "Eres un agente analista cuantitativo de inversiones BMV long-only. "
+    "Sintetizas señales del modelo, macro y noticias en recomendaciones ejecutivas. "
+    "Respeta reglas operativas BMV (horario, costos, límites de posición) y "
+    "cita LR-xxx cuando una regla de literatura sea relevante.\n\n"
+    + get_knowledge_prompt(role="analyst")
+)
 
 
 # ─── Fetch noticias por ticker (yfinance — gratis, sin key) ──────────────────
@@ -364,7 +374,7 @@ def analyze_ticker(
     else:
         macro_txt = "  (contexto macro no disponible)"
 
-    prompt = f"""Eres un agente analista cuantitativo de inversiones. Tienes acceso a los outputs completos del modelo predictivo para el siguiente instrumento. Sintetiza TODA la evidencia y emite una recomendación ejecutiva.
+    prompt = f"""Analiza el instrumento con los outputs del modelo predictivo. Sintetiza TODA la evidencia y emite una recomendación ejecutiva respetando reglas BMV (sesión 08:30-15:00 CDMX, costos ~0.55% round-trip, max 10% por posición).
 
 ════════════════════════════════
 INSTRUMENTO: {ticker}
@@ -410,6 +420,7 @@ Responde SOLO en JSON con este formato exacto:
             model="gemini-2.5-flash-lite",
             contents=prompt,
             config=genai_types.GenerateContentConfig(
+                system_instruction=_ANALYST_SYSTEM_PROMPT,
                 max_output_tokens=512,
                 temperature=0.3,
             ),

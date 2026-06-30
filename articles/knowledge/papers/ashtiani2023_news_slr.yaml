@@ -1,0 +1,114 @@
+id: ashtiani2023_news_slr
+citation:
+  title: "News-based intelligent prediction of financial markets using text mining and machine learning: A systematic literature review"
+  authors: ["Ashtiani, M.N.", "Raahemi, B."]
+  year: 2023
+  journal: "Expert Systems With Applications"
+  doi: "10.1016/j.eswa.2023.119509"
+  url: "https://doi.org/10.1016/j.eswa.2023.119509"
+
+problem:
+  task: "Systematic literature review (SLR) — predicción de mercados con noticias + ML"
+  horizon: "Variado (day-wise predominante)"
+  market: "61 estudios 2015-2022; mercados globales, sin BMV"
+  target: "Dirección, precio, retorno — según estudio revisado"
+
+data:
+  sources:
+    - "Custom crawlers (mayoría)"
+    - "Bases de datos financieras (poco usadas — gap identificado)"
+    - "Headlines vs cuerpo de artículo"
+  modalities:
+    - news_headlines
+    - news_body
+    - sentiment_scores
+    - ohlcv
+    - technical_indicators
+  features:
+    - "TF-IDF, BOW, Word2Vec, GloVe, FastText"
+    - "Sentiment polarity (lexicon-based)"
+    - "BERT, BiLSTM, BiGRU (tendencia 2018-2021)"
+  preprocessing:
+    - "Headlines más usados que cuerpo completo"
+    - "Integrar cuerpo NO mejora performance vs solo headlines (hallazgo clave)"
+    - "Combinación: precio + sentiment + indicadores técnicos"
+
+methods:
+  primary:
+    - "SVM (más frecuente en estudios clásicos)"
+    - "LSTM, BiLSTM, BiGRU"
+    - "Random Forest, XGBoost"
+    - "BERT, Transformers (emergente 2020-2022)"
+    - "Ensemble RNN"
+  trends:
+    - "2018-2021: crecimiento de ANN/RNN/DL"
+    - "Gradient boosting en últimos 4 años"
+    - "Transformers subutilizados — gran oportunidad"
+  validation:
+    - "61 estudios con Kitchenham SLR methodology"
+    - "Métricas heterogéneas: accuracy, AUC, RMSE, MAPE, F1"
+
+results:
+  key_findings:
+    - "Noticias son críticas pero subutilizadas vs social media en literatura"
+    - "Multi-modal (precio + sentiment + técnicos) es el estándar emergente"
+    - "Headlines suficientes — cuerpo del artículo no aporta ventaja consistente"
+    - "BiLSTM/BiGRU tienen ventaja potencial sobre LSTM unidireccional"
+    - "BERT alcanza 90-95% accuracy en algunos estudios revisados"
+    - "Datasets <100K registros en mayoría — DL puede escalar mejor"
+  best_models_surveyed:
+    - {ref: "Case & Clements 2021", model: BERT, metric: "accuracy 94.92%"}
+    - {ref: "Mishev 2020", model: LSTM+Transformers, metric: "accuracy 94.7%"}
+    - {ref: "Gite 2021", model: LSTM, metric: "accuracy 96.2%"}
+    - {ref: "Weng 2018", model: BRT, metric: "MAPE 1.89%"}
+  limitations:
+    - "Métricas no comparables entre estudios"
+    - "Accuracies infladas (>95%) sospechosas de overfitting"
+    - "Pocos usan bases de datos financieras autorizadas (LSEG, Bloomberg)"
+    - "Transformers aún no adoptados masivamente"
+
+applicability_to_bmv:
+  relevance_score: 5
+  already_in_stack:
+    - "src/ml/news.py — scraping RSS + Gemini sentiment (equivalente moderno a BERT)"
+    - "src/ml/features.py — indicadores técnicos"
+    - "src/ml/super_model.py — modulación por sentimiento L3"
+  gaps:
+    - id: GAP-NEWS-AS-FEATURE
+      description: "Sentimiento modula pero no entra como feature en LGBM ensemble"
+      priority: P1
+      ticket: KB-004
+    - id: GAP-HEADLINE-ONLY
+      description: "Usamos titulares — alineado con hallazgo SLR (headlines suficientes)"
+      priority: info
+    - id: GAP-TRANSFORMER-NLP
+      description: "Gemini es LLM moderno; evaluar vs DistilRoBERTa fine-tuned finanzas"
+      priority: P2
+      ticket: KB-040
+    - id: GAP-TFIDF-DEDUP
+      description: "Sin deduplicación TF-IDF de noticias repetidas (Leone 2025 lo hace)"
+      priority: P2
+      ticket: KB-041
+  actionable_items:
+    - ticket: KB-004
+      action: "Integrar news_sent_score, news_sent_delta, n_articles en FEATURE_COLS"
+    - ticket: KB-040
+      action: "Benchmark Gemini vs RoBERTa fine-tuned en noticias BMV"
+    - ticket: KB-041
+      action: "Deduplicar noticias repetidas con TF-IDF cosine > 0.5 antes de scoring"
+
+future_research_from_paper:
+  - "Adoptar transformers (BERT, ELMo, XLNet) para representación textual"
+  - "Usar MD&A de reportes trimestrales/anuales como fuente textual"
+  - "Bases de datos financieras autorizadas para news (LSEG, Refinitiv)"
+  - "Sistemas en tiempo real con streaming de noticias"
+
+key_quotes:
+  - "News content has gained limited attention in predicting the stock market."
+  - "Integrating the extra information from the news article bodies did not lead to better performance than merely using the news headlines."
+  - "Stock market prediction has not yet taken full advantage of NLP techniques, particularly transformers like BERT."
+
+references_of_interest:
+  - ref: "Case & Clements 2021 — BERT for stock prediction"
+  - ref: "Daradkeh 2022 — sentiment convergence + multi-feature fusion"
+  - ref: "Mishev 2020 — Transformers for financial sentiment"

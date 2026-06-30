@@ -1,0 +1,26 @@
+meta:
+  schema_version: '1.0'
+  description: Weekly performance history for agent calibration
+  fields:
+    week: ISO week label (YYYY-Www)
+    updated_at: date of last calibration run
+    source: paper_trades | estimated_from_risk_engine
+    n_closed: count of settled trades (T2_HIT, STOP_HIT, EXPIRED)
+    n_open_pending: trades still PENDING/OPEN/T1_HIT
+    win_rate: fraction of closed trades with pnl_pct > 0
+    avg_win_pct: mean pnl_pct on winners
+    avg_loss_pct: mean abs(pnl_pct) on losers
+    sharpe_approx: annualized Sharpe from weekly trade returns (null if n_closed <
+      2)
+    payoff_ratio: avg_win_pct / avg_loss_pct
+entries:
+- week: 2026-W26
+  updated_at: '2026-06-29'
+  source: estimated_from_risk_engine
+  n_closed: 0
+  n_open_pending: 4
+  win_rate: 0.522
+  avg_win_pct: 3.32
+  avg_loss_pct: 2.44
+  sharpe_approx: null
+  payoff_ratio: 1.36

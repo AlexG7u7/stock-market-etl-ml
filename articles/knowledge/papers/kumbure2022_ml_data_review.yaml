@@ -1,0 +1,122 @@
+id: kumbure2022_ml_data_review
+citation:
+  title: "Machine learning techniques and data for stock market forecasting: A literature review"
+  authors: ["Kumbure, M.M.", "Lohrmann, C.", "Luukka, P.", "Porras, J."]
+  year: 2022
+  journal: "Expert Systems With Applications"
+  doi: "10.1016/j.eswa.2022.116659"
+  url: "https://doi.org/10.1016/j.eswa.2022.116659"
+  source: web-of-science
+
+problem:
+  task: "Literature review — ML para forecasting de mercados + taxonomía de datos"
+  horizon: "Variado (daily predominante; intraday mencionado)"
+  market: "138 artículos 2000-2019; índices US/Asia/Europa. Sin BMV/IPC."
+  target: "Precio, dirección, tendencia, volatilidad — según estudio"
+
+data:
+  catalogued:
+    unique_variables: 2173
+    categories:
+      - technical_indicators
+      - macro_economic
+      - fundamental
+      - exchange_rates
+      - commodities
+      - sentiment_news_social
+  top_technical_indicators: "RSI, MACD, SMA, EMA, Bollinger, OBV, etc. (Top 30 catalogados Fig. 20)"
+  top_commodities:
+    - "Crude oil (42.6% mentions) — %-change y lag-1"
+    - "Gold (29.8%)"
+    - "Silver, gas, copper (minoría)"
+  exchange_rates: "USD/JPY, USD/GBP, USD/CAD frecuentes"
+  macro_categories: [national_productivity, trade, income_investment, labor_market, sector_performance]
+  social_media: "Twitter, StockTwits, Guba (China), financial news — tendencia creciente post-2019"
+
+methods:
+  taxonomy:
+    ann_mlp: "Reducción de share vs DL"
+    svm_svr: "Todavía presente pero cediendo a DL"
+    deep_learning: "LSTM, CNN, RNN, GRU — crecimiento rápido 2018+"
+    fuzzy: "FTS, TSK fuzzy systems — nicho"
+    ensembles: "Stacking (RF+ERT+XGBoost+LightGBM + RNN/LSTM meta) — tendencia reciente"
+    feature_selection: "Creciente últimos 5 años — PSO, GA, REF, PCA"
+  best_performers_table9:
+    - {study: "Hu et al. 2018", model: "Optimized ANN + Google Trends", metric: "Hit ratio 88.98% DJIA"}
+    - {study: "Weng et al. 2017", model: "Multi-source (wiki + news + technical)", metric: "Accuracy 85.8% AAPL"}
+    - {study: "Chang & Liu 2008", model: "TSK fuzzy + technical", metric: "Accuracy 98.08%"}
+    - {study: "Sedighi 2019", model: "SVM", metric: "RMSE 0.0092 avg indices"}
+  recent_2020_2021_table10:
+    - "Jiang 2020: stacking RF/XGBoost + RNN/LSTM/GRU → S&P, DOW, Nasdaq"
+    - "Carta 2021b: decision tree + news aggregation → S&P 500"
+    - "Lu 2020: CNN+LSTM → Shanghai Composite"
+    - "Lee & Kim 2020: ConvLSTM + CNN + LSTM"
+
+results:
+  key_findings:
+    - "Interés creciente en predicción de mercados últimos 5 años"
+    - "DL (LSTM, CNN, RNN) reemplaza progresivamente ANN/SVM clásicos"
+    - "Classifier ensembles > single classifiers en estudios recientes"
+    - "Feature selection/extraction cada vez más común en preprocesamiento"
+    - "Datos textuales (news, social media) en ascenso — complementa precio+técnicos"
+    - "Crude oil y gold son commodities macro más citados — relevante para WTI feature"
+    - "78% de stocks estudiados solo aparecen en 1 paper — generalización limitada en literatura"
+    - "Apple, Microsoft, GE son stocks más referenciados (large cap US)"
+  validation_metrics: "Hit ratio, accuracy, RMSE, MAPE, AUC, Sharpe (menos frecuente)"
+  limitations_of_literature:
+    - "Período review hasta 2019 — no incluye papers 2020+ en análisis principal"
+    - "Métricas heterogéneas dificultan comparación"
+    - "Pocos mercados emergentes/LatAm"
+
+applicability_to_bmv:
+  relevance_score: 5
+  already_in_stack:
+    - "src/ml/features.py — overlap fuerte con Top 30 technical indicators"
+    - "src/ml/features.py — wti_ret5, sp500_ret5, usdmxn (commodities + FX)"
+    - "src/ml/super_model.py — stacking/fusión análoga a Jiang 2020"
+    - "src/ml/news.py — tendencia textual confirmada"
+    - "src/ml/ensemble.py — XGBoost/LGBM en línea con literatura reciente"
+  gaps:
+    - id: GAP-STACKING-FORMAL
+      description: "SuperModel fusiona pero no usa stacking meta-learner LR/Lasso como Jiang 2020"
+      priority: P2
+      ticket: KB-060
+    - id: GAP-GOOGLE-TRENDS
+      description: "Hu 2018 usa Google Trends — no implementado"
+      priority: P3
+      ticket: KB-061
+    - id: GAP-FUNDAMENTALS
+      description: "Review confirma fundamental data como input común — gap persistente"
+      priority: P2
+      ticket: KB-020
+    - id: GAP-FEATURE-SELECTION
+      description: "2173 variables en literatura; nosotros 31+ sin selection sistemática"
+      priority: P2
+      ticket: KB-022
+  actionable_items:
+    - ticket: KB-060
+      action: "Evaluar stacking LR meta-learner sobre preds LGBM+LSTM+heuristic vs fusión AUC-weight"
+    - ticket: KB-004
+      action: "Weng 2017 valida multi-source news+technical — priorizar news en FEATURE_COLS"
+    - ticket: KB-022
+      action: "Feature selection (PSO/GA) sobre FEATURE_COLS — Kumbure confirma tendencia"
+
+cross_references:
+  complements: [sahu2023_qf_survey, ashtiani2023_news_slr]
+  difference: "Kumbure cataloga 2173 variables y mercados; Sahu cubre RL/DRL; Ashtiani enfoca NLP/noticias"
+
+key_quotes:
+  - "We examined 138 journal articles published between 2000 and 2019."
+  - "2173 unique variables used for stock market predictions, including technical indicators, macro-economic variables, and fundamental indicators."
+  - "LSTM networks have witnessed a growing interest in stock market predictions among the variations of deep learning models."
+  - "The use of classifier ensembles instead of single classifiers also seems to be common in recent research works."
+
+references_of_interest:
+  - ref: "Jiang 2020 — stacking framework RF+XGBoost+RNN/LSTM"
+    doi: "10.1016/j.physa.2019.122272"
+  - ref: "Weng 2017 — Wikipedia + Google news + technical for AAPL"
+    doi: "10.1016/j.eswa.2018.06.016"
+  - ref: "Picasso 2019 — technical + sentiment embeddings"
+    doi: "10.1016/j.eswa.2019.06.014"
+  - ref: "Jing 2021 — hybrid DL + investor sentiment"
+    doi: "10.1016/j.eswa.2021.115019"

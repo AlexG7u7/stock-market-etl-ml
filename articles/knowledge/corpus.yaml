@@ -1,0 +1,202 @@
+meta:
+  source_dirs:
+    - articles/scopus
+    - articles/web-of-science
+  last_updated: '2026-06-28'
+  total_pdfs: 9
+  relevant: 7
+  partial: 2
+  not_relevant: 0
+  curated_fichas: 9
+  note: Entradas con ficha= son curadas manualmente; resto auto-escaneadas
+papers:
+- id: ghosh2022_intraday_lstm_rf
+  file: articles/web-of-science/2004.10178v2.pdf
+  source: web-of-science
+  title: "Forecasting directional movements of stock prices for intraday trading using LSTM and random forests"
+  authors: ["Ghosh, P.", "Neufeld, A.", "Sahoo, J.K."]
+  year: 2022
+  journal: "Finance Research Letters"
+  doi: "10.1016/j.frl.2022.106662"
+  arxiv: "2004.10178v2"
+  type: empirical
+  relevance: high
+  relevance_score: 5
+  keywords: [lstm, random_forest, intraday, cross_sectional, statistical_arbitrage, sp500, transaction_costs]
+  ficha: articles/knowledge/papers/ghosh2022_intraday_lstm_rf.yaml
+  pages: 11
+  notes: "LSTM 0.64%/día (pre-costos), RF 0.54%. Top-10/bottom-10 vs mediana cross-secc. Costos 0.2%/día."
+
+- id: kumbure2022_ml_data_review
+  file: articles/web-of-science/1-s2.0-S0957417422001452-main.pdf
+  source: web-of-science
+  title: "Machine learning techniques and data for stock market forecasting: A literature review"
+  authors: ["Kumbure, M.M.", "Lohrmann, C.", "Luukka, P.", "Porras, J."]
+  year: 2022
+  journal: "Expert Systems With Applications"
+  doi: "10.1016/j.eswa.2022.116659"
+  type: review
+  relevance: high
+  relevance_score: 5
+  keywords: [machine_learning, data_taxonomy, technical_indicators, commodities, ensembles, stacking]
+  ficha: articles/knowledge/papers/kumbure2022_ml_data_review.yaml
+  pages: 41
+  notes: "Review 138 papers, 2173 variables catalogadas. LSTM+stacking en ascenso. Crude oil #1 commodity."
+
+- id: dudukcu2023_tcn_rnn
+  file: articles/web-of-science/1-s2.0-S1568494622009942-main.pdf
+  source: web-of-science
+  title: "Temporal Convolutional Networks with RNN approach for chaotic time series prediction"
+  authors: ["Dudukcu, H.V.", "Taskiran, M.", "Cam Taskiran, Z.G.", "Yildirim, T."]
+  year: 2023
+  journal: "Applied Soft Computing"
+  doi: "10.1016/j.asoc.2022.109945"
+  type: empirical
+  relevance: partial
+  relevance_score: 2
+  keywords: [tcn, lstm, gru, chaotic, time_series]
+  ficha: articles/knowledge/papers/dudukcu2023_tcn_rnn.yaml
+  pages: 14
+  notes: "TCN+RNN para series caóticas (Lorenz/ECG). Finance citado pero no evaluado. Prioridad baja."
+
+- id: ashtiani2023_news_slr
+  file: articles/scopus/1-s2.0-S0957417423000106-main.pdf
+  title: "News-based intelligent prediction of financial markets using text mining and machine learning: A systematic literature review"
+  authors: ["Ashtiani, M.N.", "Raahemi, B."]
+  year: 2023
+  journal: "Expert Systems With Applications"
+  doi: "10.1016/j.eswa.2023.119509"
+  type: slr
+  relevance: high
+  relevance_score: 5
+  keywords: [news, nlp, sentiment, systematic_review, transformers, bert]
+  ficha: articles/knowledge/papers/ashtiani2023_news_slr.yaml
+  pages: 23
+  notes: "SLR 61 estudios 2015-2022. Headlines > body. Transformers subutilizados."
+
+- id: quadir2023_mls_lstm
+  file: articles/scopus/1-s2.0-S1568494622008791-main.pdf
+  title: Novel optimization approach for stock price forecasting using multi-layered
+    sequential LSTM
+  authors:
+  - Abdul Quadir Md
+  - Sanjit Kapoor
+  - Chris Junni A.V.
+  - Arun Kumar Sivaraman
+  - Kong Fah Tee
+  year: 2023
+  journal: Applied Soft Computing
+  doi: 10.1016/j.asoc.2022.109830
+  type: empirical
+  relevance: high
+  relevance_score: 4
+  keywords:
+  - lstm
+  - stock_forecasting
+  - adam_optimizer
+  - time_series
+  - multi_layer
+  ficha: articles/knowledge/papers/quadir2023_mls_lstm.yaml
+  notes: 'MLS-LSTM con secuencias normalizadas. R²=0.98, MAPE=2.18%. Futuro: sentiment + fundamentals.'
+
+- id: zhao2023_sa_dlstm
+  file: articles/scopus/1-s2.0-S156849462200970X-main.pdf
+  title: "Deep Learning-based Integrated Framework for stock price movement prediction (SA-DLSTM)"
+  authors: ["Zhao, Y.", "Yang, G."]
+  year: 2023
+  journal: "Applied Soft Computing"
+  doi: "10.1016/j.asoc.2022.109921"
+  type: empirical
+  relevance: high
+  relevance_score: 4
+  keywords: [lstm, sentiment, dae, ecnn, hybrid, simulation_trading]
+  ficha: articles/knowledge/papers/zhao2023_sa_dlstm.yaml
+  pages: 10
+  notes: "ECNN+DAE+LSTM. Sharpe 4.43, return 27.63%. Sentiment + mercado > solo mercado."
+
+- id: mukherjee2021_cnn_ann
+  file: articles/scopus/CAAI Trans on Intel Tech - 2021 - Mukherjee - Stock market prediction using deep learning algorithms.pdf
+  title: "Stock market prediction using deep learning algorithms"
+  authors: ["Mukherjee, S.", "Sadhukhan, B.", "Sarkar, N.", "Roy, D.", "De, S."]
+  year: 2021
+  journal: "CAAI Transactions on Intelligence Technology"
+  doi: "10.1049/cit2.12059"
+  type: empirical
+  relevance: partial
+  relevance_score: 3
+  keywords: [cnn, ann, nifty, histogram, visual]
+  ficha: articles/knowledge/papers/mukherjee2021_cnn_ann.yaml
+  pages: 13
+  notes: "CNN 98.92% en histogramas 2D NIFTY. Enfoque visual alternativo — prioridad baja."
+
+- id: leone2025_roberta_nhits
+  file: articles/scopus/leone2025_news_esg_nhits.pdf
+  title: "What's news with you: Price forecasting with global and ESG sentiment scores"
+  authors: ["Leone, F.", "Marazzina, D.", "Rosamilia, N."]
+  year: 2025
+  journal: "Finance Research Open"
+  type: empirical
+  relevance: high
+  relevance_score: 5
+  keywords: [roberta, nhits, esg, sentiment, news, djia]
+  ficha: articles/knowledge/papers/leone2025_roberta_nhits.yaml
+  pages: 13
+  notes: "DistilRoBERTa + N-HiTS. TF-IDF dedup. ESG útil en caídas. Extraído de zip Scopus."
+
+- id: sahu2023_qf_survey
+  file: articles/scopus/applsci-13-01956.pdf
+  title: "An Overview of Machine Learning, Deep Learning, and Reinforcement Learning-Based Techniques in Quantitative Finance"
+  authors: ["Sahu, S.K.", "Mokhade, A.", "Bokde, N.D."]
+  year: 2023
+  journal: "Applied Sciences (MDPI)"
+  doi: "10.3390/app13031956"
+  type: survey
+  relevance: high
+  relevance_score: 5
+  keywords: [machine_learning, deep_learning, reinforcement_learning, quantitative_finance, algorithmic_trading]
+  ficha: articles/knowledge/papers/sahu2023_qf_survey.yaml
+  pages: 27
+  notes: "Survey de 70+ papers 2017-2022. 39% usa RL, 25% híbridos, 20% solo DL."
+# Papers descargados de watchlist — mover a papers cuando se curan
+downloaded_from_watchlist:
+- id: ghosh2022_intraday_lstm_rf
+  source: web-of-science
+  note: "arXiv 2004.10178v2 — LSTM+RF cross-section S&P500"
+- id: kumbure2022_ml_data_review
+- id: dudukcu2023_tcn_rnn
+  source: web-of-science
+- id: ashtiani2023_news_slr
+  was_watchlist: false
+  note: "Nuevo en batch Scopus 2026-06-28"
+- id: zhao2023_sa_dlstm
+  was_watchlist: false
+- id: mukherjee2021_cnn_ann
+  was_watchlist: false
+- id: leone2025_roberta_nhits
+  was_watchlist: false
+
+watchlist:
+- id: jiang2021_dl_survey
+  title: 'Applications of deep learning in stock market prediction: Recent progress'
+  doi: 10.1016/j.eswa.2021.115537
+  priority: high
+  reason: Survey DL específico en mercados — complementa sahu2023
+- id: liu2021_finrl
+  title: 'FinRL: Deep Reinforcement Learning Framework to Automate Trading in Quantitative
+    Finance'
+  priority: high
+  reason: Framework DRL open-source — referencia para fase DRL
+- id: hoseinzade2019_cnnpred
+  title: 'CNNpred: CNN-based stock market prediction using a diverse set of variables'
+  doi: 10.1016/j.eswa.2019.03.022
+  priority: medium
+  reason: CNN sobre candlestick charts — input visual alternativo
+- id: carta2021_multi_layer_drl
+  title: A multi-layer and multi-ensemble stock trader using deep learning and deep
+    reinforcement learning
+  priority: medium
+  reason: Arquitectura multi-capa similar a SuperModel pero con DRL
+- id: ma2021_parallel_drl
+  title: A parallel multi-module deep reinforcement learning algorithm for stock trading
+  priority: medium
+  reason: Multi-módulo paralelo — patrón arquitectónico

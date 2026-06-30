@@ -10,6 +10,7 @@ const PAGES = [
   { icon: "🏆", name: "Ranking Mensual",   desc: "Señales multi-universo: 5 mercados × 4 horizontes. Motor principal de decisiones." },
   { icon: "📰", name: "Noticias & Gemini", desc: "Scraping en tiempo real + NLP sentiment por Gemini. Alerta de noticias negativas." },
   { icon: "🎯", name: "Señales de hoy",    desc: "Pipeline original BMV diario: WoE + LogReg + Kelly + ATR stops." },
+  { icon: "📊", name: "Research & Eval", desc: "Backtest top-K neto de costos, grid search, LSTM vs LGBM, agent KB — literatura → código." },
   { icon: "👀", name: "Monitor",           desc: "Polling cada 2 min durante horario BMV. Dispara alertas de STOP/T1/T2." },
   { icon: "📋", name: "Paper Trading",     desc: "Diario de trades simulados. P&L, Sharpe, drawdown, historial." },
   { icon: "🕹️", name: "Simulador",        desc: "Walk-forward interactivo: elige ticker, capital, fecha y ve el resultado semana a semana." },

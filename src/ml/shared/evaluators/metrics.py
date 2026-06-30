@@ -2,8 +2,12 @@
 Metrics - Suite completa de métricas para evaluación de modelos
 """
 import numpy as np
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 from loguru import logger
+
+# BMV defaults (KB-003) — ~0.55% round-trip per bmv_market_rules.yaml
+DEFAULT_COMMISSION_PCT = 0.0025
+DEFAULT_SLIPPAGE_PCT = 0.0005
 
 
 class Metrics:
@@ -21,7 +25,10 @@ class Metrics:
     - Calmar Ratio: Retorno anualizado / Max Drawdown
     - Sortino Ratio: Sharpe pero solo con downside volatility
     """
-    
+
+    DEFAULT_COMMISSION_PCT = DEFAULT_COMMISSION_PCT
+    DEFAULT_SLIPPAGE_PCT = DEFAULT_SLIPPAGE_PCT
+
     @staticmethod
     def rmse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """
@@ -137,20 +144,21 @@ class Metrics:
     def max_drawdown(cumulative_returns: np.ndarray) -> float:
         """
         Maximum Drawdown - Máxima caída desde pico
-        
+
         Args:
-            cumulative_returns: Retornos acumulados (curva de capital)
+            cumulative_returns: Curva de capital (índice de riqueza, ej. cumprod(1+r))
         """
         if len(cumulative_returns) == 0:
             return 0.0
-        
-        # Calcular picos acumulados
-        running_max = np.maximum.accumulate(cumulative_returns)
-        
-        # Calcular drawdown en cada punto
-        drawdown = (cumulative_returns - running_max) / running_max
-        
-        return np.min(drawdown)
+
+        wealth = np.asarray(cumulative_returns, dtype=float)
+        if np.all(wealth <= 0):
+            return -1.0
+
+        running_max = np.maximum.accumulate(wealth)
+        drawdown = (wealth - running_max) / running_max
+
+        return float(np.min(drawdown))
     
     @staticmethod
     def calmar_ratio(returns: np.ndarray, cumulative_returns: np.ndarray) -> float:
@@ -167,6 +175,139 @@ class Metrics:
         
         return annual_return / mdd
     
+    @staticmethod
+    def round_trip_cost(
+        commission_pct: float = DEFAULT_COMMISSION_PCT,
+        slippage_pct: float = DEFAULT_SLIPPAGE_PCT,
+    ) -> float:
+        """Costo round-trip: entrada + salida (comisión + slippage por lado)."""
+        return 2 * (commission_pct + slippage_pct)
+
+    @staticmethod
+    def net_return(
+        gross_return: float,
+        commission_pct: float = DEFAULT_COMMISSION_PCT,
+        slippage_pct: float = DEFAULT_SLIPPAGE_PCT,
+    ) -> float:
+        """Retorno neto tras restar costos de transacción BMV."""
+        return gross_return - Metrics.round_trip_cost(commission_pct, slippage_pct)
+
+    @staticmethod
+    def apply_costs_to_returns(
+        gross_returns: np.ndarray,
+        commission_pct: float = DEFAULT_COMMISSION_PCT,
+        slippage_pct: float = DEFAULT_SLIPPAGE_PCT,
+        trade_mask: Optional[np.ndarray] = None,
+    ) -> np.ndarray:
+        """
+        Resta costos round-trip en cada trade simulado.
+
+        Args:
+            gross_returns: Retornos brutos por período
+            trade_mask: True donde hubo trade; default = posiciones activas (≠ 0)
+        """
+        gross_returns = np.asarray(gross_returns, dtype=float)
+        if trade_mask is None:
+            trade_mask = gross_returns != 0
+        else:
+            trade_mask = np.asarray(trade_mask, dtype=bool)
+
+        net = gross_returns.copy()
+        cost = Metrics.round_trip_cost(commission_pct, slippage_pct)
+        net[trade_mask] -= cost
+        return net
+
+    @staticmethod
+    def win_rate_from_returns(returns: np.ndarray) -> float:
+        """Win rate neto: proporción de períodos con retorno positivo."""
+        returns = np.asarray(returns, dtype=float)
+        if len(returns) == 0:
+            return 0.0
+        return float(np.mean(returns > 0))
+
+    @staticmethod
+    def total_return(returns: np.ndarray) -> float:
+        """Retorno total compuesto de una serie de retornos periódicos."""
+        returns = np.asarray(returns, dtype=float)
+        if len(returns) == 0:
+            return 0.0
+        return float(np.prod(1 + returns) - 1)
+
+    @staticmethod
+    def portfolio_metrics_from_returns(
+        returns: np.ndarray,
+        periods_per_year: float = 252,
+    ) -> Dict[str, float]:
+        """
+        Métricas de portafolio a partir de retornos periódicos.
+
+        Returns:
+            sharpe_ratio, max_drawdown, calmar_ratio, win_rate, total_return
+        """
+        returns = np.asarray(returns, dtype=float)
+        if len(returns) == 0:
+            return {
+                "sharpe_ratio": 0.0,
+                "max_drawdown": 0.0,
+                "calmar_ratio": 0.0,
+                "win_rate": 0.0,
+                "total_return": 0.0,
+            }
+
+        wealth = np.cumprod(1 + returns)
+        return {
+            "sharpe_ratio": Metrics.sharpe_ratio(returns),
+            "max_drawdown": Metrics.max_drawdown(wealth),
+            "calmar_ratio": Metrics.calmar_ratio(returns, wealth),
+            "win_rate": Metrics.win_rate_from_returns(returns),
+            "total_return": Metrics.total_return(returns),
+        }
+
+    @staticmethod
+    def calculate_auc(y_true: np.ndarray, y_prob: np.ndarray) -> Optional[float]:
+        """AUC-ROC si hay variación en labels; None si no aplica."""
+        y_true = np.asarray(y_true)
+        y_prob = np.asarray(y_prob)
+        if len(y_true) < 2 or len(np.unique(y_true)) < 2:
+            return None
+        try:
+            from sklearn.metrics import roc_auc_score
+            return float(roc_auc_score(y_true, y_prob))
+        except Exception:
+            return None
+
+    @staticmethod
+    def calculate_dual_metrics(
+        returns_gross: np.ndarray,
+        returns_net: np.ndarray,
+        periods_per_year: float = 252,
+        y_true_binary: Optional[np.ndarray] = None,
+        y_prob: Optional[np.ndarray] = None,
+    ) -> Dict[str, float]:
+        """
+        Métricas duales KB-001: AUC + Sharpe bruto/neto + MDD + Calmar + win_rate neto.
+        """
+        gross = Metrics.portfolio_metrics_from_returns(returns_gross, periods_per_year)
+        net = Metrics.portfolio_metrics_from_returns(returns_net, periods_per_year)
+
+        dual: Dict[str, float] = {
+            "sharpe_gross": gross["sharpe_ratio"],
+            "sharpe_net": net["sharpe_ratio"],
+            "max_drawdown": net["max_drawdown"],
+            "calmar_ratio": net["calmar_ratio"],
+            "win_rate_net": net["win_rate"],
+            "total_return_gross": gross["total_return"],
+            "total_return_net": net["total_return"],
+        }
+
+        auc = None
+        if y_true_binary is not None and y_prob is not None:
+            auc = Metrics.calculate_auc(y_true_binary, y_prob)
+        if auc is not None:
+            dual["auc"] = auc
+
+        return dual
+
     @staticmethod
     def win_rate(y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """
@@ -264,5 +405,14 @@ class Metrics:
         for metric in risk_metrics:
             if metric in metrics:
                 logger.info(f"   {metric.replace('_', ' ').title()}: {metrics[metric]:.6f}")
+
+        if "sharpe_gross" in metrics and "sharpe_net" in metrics:
+            logger.info("\n💰 Costos BMV (bruto vs neto):")
+            logger.info(f"   Sharpe Bruto: {metrics['sharpe_gross']:.6f}")
+            logger.info(f"   Sharpe Neto:  {metrics['sharpe_net']:.6f}")
+            if "win_rate_net" in metrics:
+                logger.info(f"   Win Rate Neto: {metrics['win_rate_net']*100:.2f}%")
+            if "round_trip_cost" in metrics:
+                logger.info(f"   Round-trip: {metrics['round_trip_cost']*100:.3f}%")
         
         logger.info("=" * 50)
