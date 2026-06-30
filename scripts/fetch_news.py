@@ -18,19 +18,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from dotenv import load_dotenv
+
 load_dotenv(ROOT / ".env")
 
 from src.data.universes import UNIVERSES
 from src.ml.news import batch_news_features, NEWS_FEATURE_COLS, NEWS_DIR
+
+logger = logging.getLogger(__name__)
 
 UNIVERSE_SLUGS = {
     "bmv":    "🇲🇽 Acciones BMV",
@@ -39,6 +44,85 @@ UNIVERSE_SLUGS = {
     "crypto": "₿ Cripto (proxies GBM)",
     "fibra":  "🏢 FIBRAs (bienes raíces MX)",
 }
+
+
+def run_fetch_news(
+    *,
+    days_back: int = 7,
+    universe: str | None = None,
+    gdelt: bool = False,
+    save_cache: bool = True,
+    verbose: bool = True,
+) -> dict[str, Any]:
+    """
+    Descarga noticias y opcionalmente persiste cache.
+
+    universe: slug (bmv, usa, ...) o None para todos los universos.
+    """
+    selected = (
+        {universe: UNIVERSE_SLUGS[universe]}
+        if universe
+        else UNIVERSE_SLUGS
+    )
+
+    all_results: dict[str, list[dict]] = {}
+    ticker_counts: dict[str, int] = {}
+
+    for slug, uname in selected.items():
+        if uname not in UNIVERSES:
+            if verbose:
+                logger.warning("Universo no encontrado: %s", uname)
+            continue
+
+        tickers = UNIVERSES[uname]["tickers"]
+        if verbose:
+            logger.info("Noticias %s — %d tickers, %d días", uname, len(tickers), days_back)
+
+        df = batch_news_features(
+            tickers=tickers,
+            days_back=days_back,
+            use_gdelt=gdelt,
+            verbose=verbose,
+            save_cache=False,
+        )
+        records = df.reset_index().to_dict(orient="records")
+        all_results[slug] = records
+        ticker_counts[slug] = len(records)
+
+        if verbose:
+            sent_mean = df["news_sent_score"].mean() if len(df) else 0.0
+            n_total = int(df["n_articles"].sum()) if "n_articles" in df.columns else 0
+            logger.info(
+                "  %s: %d tickers, %d artículos, sent=%+.3f",
+                slug, len(records), n_total, sent_mean,
+            )
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    paths: dict[str, str] = {}
+
+    if save_cache and all_results:
+        NEWS_DIR.mkdir(parents=True, exist_ok=True)
+        for slug, records in all_results.items():
+            path = NEWS_DIR / f"{slug}_{today}.json"
+            path.write_text(json.dumps(records, ensure_ascii=False, indent=2))
+            paths[f"universe_{slug}"] = str(path)
+
+        all_records = [r for records in all_results.values() for r in records]
+        latest_path = NEWS_DIR / "latest.json"
+        dated_path = NEWS_DIR / f"{today}.json"
+        latest_path.write_text(json.dumps(all_records, ensure_ascii=False, indent=2))
+        dated_path.write_text(json.dumps(all_records, ensure_ascii=False, indent=2))
+        paths["latest"] = str(latest_path)
+        paths["dated"] = str(dated_path)
+
+    return {
+        "days_back": days_back,
+        "universe": universe or "all",
+        "gdelt": gdelt,
+        "tickers_by_universe": ticker_counts,
+        "total_tickers": sum(ticker_counts.values()),
+        "paths": paths,
+    }
 
 
 def main():
@@ -63,58 +147,17 @@ def main():
         print(f"  GDELT: activado (backfill histórico)")
     print(f"{'═'*62}\n")
 
-    selected = (
-        {args.universe: UNIVERSE_SLUGS[args.universe]}
-        if args.universe
-        else UNIVERSE_SLUGS
+    result = run_fetch_news(
+        days_back=args.days,
+        universe=args.universe,
+        gdelt=args.gdelt,
+        save_cache=not args.no_cache,
+        verbose=True,
     )
 
-    all_results = {}
-    for slug, uname in selected.items():
-        if uname not in UNIVERSES:
-            print(f"  ! Universo no encontrado: {uname}")
-            continue
-
-        tickers = UNIVERSES[uname]["tickers"]
-        print(f"── {uname} ({len(tickers)} tickers) {'─'*30}\n")
-
-        df = batch_news_features(
-            tickers=tickers,
-            days_back=args.days,
-            use_gdelt=args.gdelt,
-            verbose=True,
-            save_cache=False,  # guardamos el consolidado al final
-        )
-        all_results[slug] = df.reset_index().to_dict(orient="records")
-
-        # Resumen por universo
-        sent_mean = df["news_sent_score"].mean()
-        n_total   = df["n_articles"].sum() if "n_articles" in df.columns else 0
-        print(f"\n  Resumen {uname}:")
-        print(f"    Artículos totales: {int(n_total)}")
-        print(f"    Sentimiento promedio: {sent_mean:+.3f}")
-        top_pos = df["news_sent_score"].idxmax()
-        top_neg = df["news_sent_score"].idxmin()
-        print(f"    Más positivo: {top_pos} ({df.loc[top_pos, 'news_sent_score']:+.2f})")
-        print(f"    Más negativo: {top_neg} ({df.loc[top_neg, 'news_sent_score']:+.2f})")
-        print()
-
-    # Guardar cache consolidado
-    today = datetime.now().strftime("%Y-%m-%d")
-    if not args.no_cache:
-        # Por universo
-        for slug, records in all_results.items():
-            path = NEWS_DIR / f"{slug}_{today}.json"
-            path.write_text(json.dumps(records, ensure_ascii=False, indent=2))
-
-        # Consolidado (todos los tickers juntos)
-        all_records = [r for records in all_results.values() for r in records]
-        latest_path = NEWS_DIR / "latest.json"
-        dated_path  = NEWS_DIR / f"{today}.json"
-        latest_path.write_text(json.dumps(all_records, ensure_ascii=False, indent=2))
-        dated_path.write_text(json.dumps(all_records, ensure_ascii=False, indent=2))
-        print(f"  Guardado en: {dated_path}")
-        print(f"  Alias:       {latest_path}")
+    if result.get("paths"):
+        print(f"\n  Guardado en: {result['paths'].get('dated', '—')}")
+        print(f"  Alias:       {result['paths'].get('latest', '—')}")
 
     print(f"\n  Features disponibles: {NEWS_FEATURE_COLS}")
     print(f"  Próximo paso: estas features se integran automáticamente en")

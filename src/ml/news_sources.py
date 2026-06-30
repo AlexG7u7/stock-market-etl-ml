@@ -7,13 +7,17 @@ Each fetcher returns list[dict] with keys:
 """
 from __future__ import annotations
 
+import fcntl
+import json
 import logging
 import os
 import re
 import time
 import xml.etree.ElementTree as ET
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from pathlib import Path
 from typing import Any, Optional
 
 import requests
@@ -22,8 +26,14 @@ import yfinance as yf
 logger = logging.getLogger(__name__)
 
 REQUEST_TIMEOUT = 10
+GDELT_REQUEST_TIMEOUT = 45
 MAX_ARTICLES = 30
 RATE_LIMIT_SLEEP = 0.3
+GDELT_MIN_INTERVAL_S = float(os.environ.get("GDELT_INTERVAL_S", "60"))
+GDELT_MAX_RETRIES = 3
+GDELT_429_COOLDOWN_S = 180.0
+GDELT_LOCK_PATH = Path(__file__).resolve().parents[2] / "data" / "news" / "history" / ".gdelt.lock"
+GDELT_STATE_PATH = Path(__file__).resolve().parents[2] / "data" / "news" / "history" / ".gdelt_state.json"
 
 # ── Entity aliases: ticker → search terms for relevance beyond literal ticker ──
 
@@ -319,42 +329,12 @@ def fetch_databursatil_articles(
     aliases: Optional[list[str]] = None,
     max_items: int = MAX_ARTICLES,
 ) -> list[dict[str, Any]]:
-    """DataBursátil cables BMV — requires DATABURSATIL_API_TOKEN."""
-    token = os.getenv("DATABURSATIL_API_TOKEN")
-    if not token:
+    """DataBursátil V2 — noticias + cables (requiere DATABURSATIL_API_TOKEN)."""
+    if not os.getenv("DATABURSATIL_API_TOKEN"):
         return []
-
-    alias_list = aliases or get_entity_aliases(ticker)
     try:
-        resp = requests.get(
-            "https://api.databursatil.com/v2/cables",
-            params={"token": token, "categorias": "top,generales,flash"},
-            timeout=REQUEST_TIMEOUT,
-        )
-        if not resp.ok:
-            return []
-
-        data = resp.json()
-        all_news: list[dict[str, Any]] = []
-        for _cat, items in (data.items() if isinstance(data, dict) else []):
-            for it in (items if isinstance(items, list) else []):
-                title = it.get("titulo") or it.get("t") or it.get("headline") or ""
-                if not title:
-                    continue
-                title = re.sub(r"^\d{1,2}:\d{2}\s+", "", title.strip())
-                art = _article(
-                    title=title,
-                    summary=it.get("resumen") or it.get("summary") or "",
-                    url=it.get("url") or it.get("f") or "",
-                    published_ts=_parse_databursatil_date(it.get("fecha") or "", title),
-                    source="databursatil",
-                )
-                all_news.append(_with_relevance(art, ticker, alias_list))
-
-        all_news.sort(key=lambda x: x["relevance_score"], reverse=True)
-        # Solo cables con relevancia mínima (evita ruido macro genérico)
-        relevant = [a for a in all_news if a["relevance_score"] >= 0.35]
-        return (relevant or all_news[:3])[:max_items]
+        from src.ml.databursatil_news import fetch_databursatil_all_articles
+        return fetch_databursatil_all_articles(ticker, aliases, max_items=max_items)
     except Exception as e:
         logger.debug(f"DataBursátil {ticker}: {e}")
         return []
@@ -510,6 +490,86 @@ def fetch_expansion(
     return [_with_relevance(a, ticker, alias_list) for a in articles[:max_items]]
 
 
+@contextmanager
+def gdelt_request_lock():
+    """Un solo request GDELT a la vez (evita 429 por procesos paralelos)."""
+    GDELT_LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(GDELT_LOCK_PATH, "w") as lock_file:
+        fcntl.flock(lock_file, fcntl.LOCK_EX)
+        _gdelt_wait_turn()
+        try:
+            yield
+        finally:
+            pass
+
+
+def configure_gdelt_interval(seconds: float) -> None:
+    """Ajusta intervalo mínimo entre requests GDELT (CLI)."""
+    global GDELT_MIN_INTERVAL_S
+    GDELT_MIN_INTERVAL_S = max(30.0, float(seconds))
+
+
+def _gdelt_read_state() -> dict:
+    if not GDELT_STATE_PATH.exists():
+        return {}
+    try:
+        return json.loads(GDELT_STATE_PATH.read_text())
+    except Exception:
+        return {}
+
+
+def _gdelt_write_state(state: dict) -> None:
+    GDELT_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    GDELT_STATE_PATH.write_text(json.dumps(state))
+
+
+def _gdelt_wait_turn() -> None:
+    """Espera cooldown global + intervalo mínimo (persiste entre procesos)."""
+    state = _gdelt_read_state()
+    now = time.time()
+    cooldown_until = float(state.get("cooldown_until") or 0)
+    last_req = float(state.get("last_request") or 0)
+    wait_until = max(cooldown_until, last_req + GDELT_MIN_INTERVAL_S)
+    delay = wait_until - now
+    if delay > 0:
+        logger.info("GDELT throttle — esperando %.0fs", delay)
+        time.sleep(delay)
+
+
+def _gdelt_mark_request(*, cooldown_s: float = 0) -> None:
+    now = time.time()
+    state = _gdelt_read_state()
+    state["last_request"] = now
+    if cooldown_s > 0:
+        state["cooldown_until"] = now + cooldown_s
+    elif float(state.get("cooldown_until") or 0) <= now:
+        state.pop("cooldown_until", None)
+    _gdelt_write_state(state)
+
+
+def _gdelt_get(url: str) -> requests.Response | None:
+    """GET GDELT — un intento; 429 activa cooldown global sin retries encadenados."""
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; stock-market/1.0)"}
+    with gdelt_request_lock():
+        try:
+            resp = requests.get(url, timeout=GDELT_REQUEST_TIMEOUT, headers=headers)
+        except requests.RequestException as exc:
+            logger.warning("GDELT error: %s", exc)
+            _gdelt_mark_request(cooldown_s=GDELT_MIN_INTERVAL_S)
+            return None
+        _gdelt_mark_request()
+        if resp.status_code == 429:
+            logger.warning("GDELT 429 — cooldown %.0fs", GDELT_429_COOLDOWN_S)
+            _gdelt_mark_request(cooldown_s=GDELT_429_COOLDOWN_S)
+            return None
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError:
+            logger.warning("GDELT HTTP %s", resp.status_code)
+            return None
+        return resp
+
+
 def fetch_gdelt(
     query: str,
     ticker: str,
@@ -525,8 +585,9 @@ def fetch_gdelt(
             f"?query={encoded}&mode=artlist&maxrecords={max_items}"
             f"&format=json&timespan={days_back}d&sourcelang=spanish+english"
         )
-        resp = requests.get(url, timeout=REQUEST_TIMEOUT, headers={"User-Agent": "Mozilla/5.0"})
-        resp.raise_for_status()
+        resp = _gdelt_get(url)
+        if resp is None:
+            return []
         articles_raw = resp.json().get("articles") or []
         out: list[dict[str, Any]] = []
         for art in articles_raw:
@@ -549,6 +610,57 @@ def fetch_gdelt(
     except Exception as e:
         logger.debug(f"GDELT {query}: {e}")
         return []
+
+
+def fetch_gdelt_range(
+    query: str,
+    ticker: str,
+    start: datetime,
+    end: datetime,
+    max_items: int = MAX_ARTICLES,
+    aliases: Optional[list[str]] = None,
+) -> tuple[list[dict[str, Any]], bool]:
+    """GDELT doc API — rango de fechas. Retorna (artículos, ok). ok=False → no cachear."""
+    alias_list = aliases or get_entity_aliases(ticker)
+    if start.tzinfo is None:
+        start = start.replace(tzinfo=timezone.utc)
+    if end.tzinfo is None:
+        end = end.replace(tzinfo=timezone.utc)
+    try:
+        encoded = requests.utils.quote(query)
+        start_s = start.strftime("%Y%m%d%H%M%S")
+        end_s = end.strftime("%Y%m%d%H%M%S")
+        url = (
+            f"https://api.gdeltproject.org/api/v2/doc/doc"
+            f"?query={encoded}&mode=artlist&maxrecords={max_items}"
+            f"&format=json&startdatetime={start_s}&enddatetime={end_s}"
+            f"&sourcelang=spanish+english"
+        )
+        resp = _gdelt_get(url)
+        if resp is None:
+            return [], False
+        articles_raw = resp.json().get("articles") or []
+        out: list[dict[str, Any]] = []
+        for art in articles_raw:
+            title = art.get("title", "")
+            seen = art.get("seendate", "")
+            ts = 0
+            if seen:
+                try:
+                    dt = datetime.strptime(seen, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+                    ts = int(dt.timestamp())
+                except ValueError:
+                    pass
+            if title:
+                item = _article(
+                    title=title, summary="", url=art.get("url", ""),
+                    published_ts=ts, source="gdelt",
+                )
+                out.append(_with_relevance(item, ticker, alias_list))
+        return out, True
+    except Exception as e:
+        logger.debug(f"GDELT range {query} {start.date()}-{end.date()}: {e}")
+        return [], False
 
 
 def fetch_cryptopanic(

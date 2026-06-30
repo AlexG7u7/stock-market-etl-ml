@@ -30,6 +30,7 @@ from src.ml.bet_policy import (
 )
 from src.ml.features import compute_features
 from src.ml.gemini_validator import validate_ranking
+from src.ml.gemini_trader import advise_ranking
 from src.ml.pipeline import market_is_riskon
 from src.ml.regime import RegimeDetector
 from src.ml.risk_engine import (
@@ -40,6 +41,8 @@ from src.ml.risk_engine import (
     portfolio_summary,
 )
 from src.ml.super_model import SuperModel
+
+from src.ml.insights_bundle import build_insights_bundle, export_insights_bundle, INSIGHTS_OUT
 
 ROOT = Path(__file__).resolve().parents[2]
 BMV_SLUG = "bmv"
@@ -63,14 +66,25 @@ def bmv_ranking(master_ranking: list[dict]) -> list[dict]:
 
 
 def gemini_size_factor(gemini: dict | None) -> float:
-    """Multiplicador de tamaño según veredicto Gemini (step 4 protocolo)."""
+    """Multiplicador de tamaño según veredicto Gemini (validator o trader)."""
     if not gemini:
         return 0.75
     ver = gemini.get("veredicto", "")
+    # Modo validator (legacy)
     if ver == "CONFIRMA":
         return 1.0
     if ver == "DEGRADA":
         return 0.5
+    if ver == "VETA":
+        return 0.0
+    # Modo trader
+    if ver == "APOSTAR":
+        tam = (gemini.get("como_apostar") or {}).get("tamano", "HALF")
+        return {"FULL": 1.0, "HALF": 0.5, "TACTICAL": 0.35, "NONE": 0.0}.get(tam, 0.5)
+    if ver == "ESPERAR":
+        return 0.25
+    if ver == "EVITAR":
+        return 0.0
     return 0.0
 
 
@@ -118,6 +132,8 @@ def run_super_pipeline(
     use_gemini: bool = True,
     use_stacking: bool | None = None,
     verbose: bool = True,
+    agent_role: str = "trader",
+    skip_lstm: bool = False,
 ) -> dict:
     """
     Capas 1–4: SuperModel cross-universo + Gemini (global + BMV dedicado).
@@ -129,11 +145,13 @@ def run_super_pipeline(
         top_gemini=top_gemini_global,
         use_stacking=stacking,
         verbose=verbose,
+        skip_lstm=skip_lstm,
     )
     result = sm.run()
 
     if use_gemini:
-        result = validate_ranking(
+        advise_fn = advise_ranking if agent_role == "trader" else validate_ranking
+        result = advise_fn(
             result,
             tickers_map=tickers_map_all(),
             top_n=top_gemini_global,
@@ -142,14 +160,26 @@ def run_super_pipeline(
         bmv_items = bmv_ranking(result["master_ranking"])
         pending = [it for it in bmv_items[:top_gemini_bmv] if "gemini" not in it]
         if pending:
-            sub = {"master_ranking": pending, "top_gemini": len(pending)}
-            validate_ranking(sub, tickers_map=tickers_map_all(), top_n=len(pending))
+            sub = {"master_ranking": pending, "top_gemini": len(pending),
+                   "model_registry": result.get("model_registry"),
+                   "universe_metrics": result.get("universe_metrics")}
+            advise_fn(sub, tickers_map=tickers_map_all(), top_n=len(pending))
             by_ticker = {it["ticker"]: it.get("gemini") for it in pending if "gemini" in it}
             for r in result["master_ranking"]:
                 if r["ticker"] in by_ticker and by_ticker[r["ticker"]]:
                     r["gemini"] = by_ticker[r["ticker"]]
     else:
         result["gemini_summary"] = {"modo": "skip"}
+
+    from src.ml.gemini_trader import advise_portfolio, _fallback_portfolio
+    if use_gemini and not result.get("portfolio_brief"):
+        result["portfolio_brief"] = advise_portfolio(
+            result, top_n=min(top_gemini_global, 10),
+        )
+    elif not result.get("portfolio_brief"):
+        result["portfolio_brief"] = _fallback_portfolio(
+            result, top_n=min(top_gemini_global, 10),
+        )
 
     result["bet_policy"] = {
         "paper_only": PAPER_ONLY,
@@ -163,6 +193,12 @@ def run_super_pipeline(
     result["actionable_bets"] = filter_actionable_ranking(
         result["master_ranking"],
     )
+    bundle = build_insights_bundle(
+        result,
+        portfolio=result.get("portfolio_brief"),
+    )
+    export_insights_bundle(bundle)
+    result["insights_bundle_path"] = str(INSIGHTS_OUT)
     return result
 
 
@@ -429,5 +465,11 @@ def generate_bmv_signals(
 
     if write_super:
         SUPER_OUT.write_text(json.dumps(super_result, indent=2, ensure_ascii=False))
+        bundle = build_insights_bundle(
+            super_result,
+            bmv_actionable=actionable,
+            portfolio=super_result.get("portfolio_brief"),
+        )
+        export_insights_bundle(bundle)
 
     return output, SIGNALS_OUT

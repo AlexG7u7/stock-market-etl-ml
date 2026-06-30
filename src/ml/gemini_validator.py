@@ -25,12 +25,14 @@ import logging
 import os
 import time
 
+from src.ml.gemini_config import create_client, generate_json, get_model
 from src.ml.knowledge_loader import get_knowledge_prompt
+from src.ml.literature_rag import query_literature
+from src.ml.super_metrics import MODEL_LABELS, format_metrics_for_prompt
 from src.ml.verdict_tracker import log_verdict
 
 logger = logging.getLogger(__name__)
 
-_MODEL = "gemini-2.5-flash"
 _SYSTEM_PROMPT = (
     "Eres el comité de riesgo de un fondo cuantitativo BMV long-only. "
     "Validas recomendaciones del modelo cuantitativo; NO predices precios. "
@@ -69,17 +71,46 @@ def _fallback_verdict(item: dict) -> dict:
     }
 
 
-def _build_prompt(item: dict) -> str:
+def _build_prompt(item: dict, result: dict | None = None) -> str:
     signals_txt = "\n".join(
-        f"    - {m}: {v:.3f}  (AUC {item.get('model_auc', {}).get(m, 0.5):.3f})"
+        f"    - {MODEL_LABELS.get(m, m)} ({m}): {v:.3f}  "
+        f"(peso fusión {item.get('model_weights', {}).get(m, 0):.3f}, "
+        f"AUC OOS {item.get('model_auc', {}).get(m, 0.5):.3f})"
         for m, v in item.get("signals", {}).items()
     )
     headlines = item.get("headlines") or []
     news_txt = "\n".join(f"    • {h}" for h in headlines[:5]) or "    (sin titulares recientes)"
     news_sent = item.get("news_sent")
     news_sent_txt = f"{news_sent:+.2f}" if news_sent is not None else "n/d"
+    metrics_block = ""
+    if item.get("metrics"):
+        metrics_block = f"\nMÉTRICAS E INCERTIDUMBRES:\n{format_metrics_for_prompt(item)}\n"
+
+    slug = item.get("universe_slug", "")
+    um = ((result or {}).get("universe_metrics") or {}).get(slug, {})
+    fusion = um.get("fusion", {})
+    fusion_txt = (
+        f"  Modo: {item.get('fusion_mode', fusion.get('selected', '?'))}\n"
+        f"  Stack AUC holdout: {item.get('stack_auc', fusion.get('stack_auc', 'n/d'))}\n"
+        f"  AUC-weight holdout: {item.get('fusion_auc', fusion.get('auc_weight_auc', 'n/d'))}"
+    )
+
+    registry = (result or {}).get("model_registry", {})
+    active = [m["id"] for m in registry.get("core_models", []) if m.get("active")]
+    arch_txt = f"Modelos activos: {', '.join(active) or 'xs_lgbm, ensemble, heuristic, lstm_seq'}"
+
+    lit_ctx = query_literature(
+        f"stock prediction {item.get('universe_slug', '')} LSTM validation risk",
+        top_k=3,
+    )
+    literature_block = f"\nLITERATURA RAG:\n{lit_ctx}\n" if lit_ctx else ""
 
     return f"""Valida la recomendación del modelo para {item['ticker']} ({item.get('universe_slug','?')}, {item.get('moneda','?')}).
+{literature_block}
+{metrics_block}
+ARQUITECTURA: {arch_txt}
+FUSIÓN L2:
+{fusion_txt}
 
 PROTOCOLO (step 4 — validacion_gemini):
   - CONFIRMA → acciones COMPRA FUERTE / COMPRA → bet_action PROCEED
@@ -128,7 +159,7 @@ def _fetch_headlines(ticker: str, sym: str, slug: str, max_items: int = 5) -> li
         return []
 
 
-def validate_item(item: dict, client=None, genai_types=None) -> dict:
+def validate_item(item: dict, client=None, genai_types=None, result: dict | None = None) -> dict:
     """Valida un solo ticker con Gemini (o fallback)."""
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key or client is None:
@@ -137,19 +168,13 @@ def validate_item(item: dict, client=None, genai_types=None) -> dict:
         return verdict
 
     try:
-        prompt = _build_prompt(item)
-        resp = client.models.generate_content(
-            model=_MODEL,
-            contents=prompt,
-            config=genai_types.GenerateContentConfig(
-                system_instruction=_SYSTEM_PROMPT,
-                max_output_tokens=800, temperature=0.2,
-                # gemini-2.5-flash activa "thinking" por defecto y consume el
-                # presupuesto de tokens; lo desactivamos para obtener el JSON completo.
-                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
-            ),
+        prompt = _build_prompt(item, result)
+        txt = generate_json(
+            client, "validator", prompt, genai_types,
+            system_instruction=_SYSTEM_PROMPT,
+            max_output_tokens=900,
+            temperature=0.2,
         )
-        txt = (resp.text or "").strip()
         if txt.startswith("```"):
             txt = txt.split("```")[1]
             if txt.startswith("json"):
@@ -158,6 +183,7 @@ def validate_item(item: dict, client=None, genai_types=None) -> dict:
         if start >= 0 and end > start:
             verdict = json.loads(txt[start:end])
             verdict["_fallback"] = False
+            verdict["_model"] = get_model("validator")
             log_verdict(item["ticker"], item, verdict)
             return verdict
     except Exception as e:
@@ -194,17 +220,9 @@ def validate_ranking(
     n_total = len(ranking)
     tickers_map = tickers_map or {}
 
-    client = None
-    genai_types = None
-    api_key = os.getenv("GEMINI_API_KEY")
-    if api_key:
-        try:
-            from google import genai
-            from google.genai import types as gt
-            client = genai.Client(api_key=api_key)
-            genai_types = gt
-        except Exception as e:
-            logger.warning(f"Gemini init: {e}")
+    client, genai_types = create_client()
+    if client is None and os.getenv("GEMINI_API_KEY"):
+        logger.warning("Gemini init failed")
 
     n_confirma = n_degrada = n_veta = 0
 
@@ -214,7 +232,7 @@ def validate_ranking(
         if client is not None:
             item["headlines"] = _fetch_headlines(
                 item["ticker"], sym, item.get("universe_slug", ""))
-        verdict = validate_item(item, client, genai_types)
+        verdict = validate_item(item, client, genai_types, result=result)
         item["gemini"] = verdict
 
         v = verdict.get("veredicto", "")
@@ -231,5 +249,7 @@ def validate_ranking(
         "degrada": n_degrada,
         "veta": n_veta,
         "modo": "gemini" if client is not None else "fallback",
+        "agent": "gemini_validator",
+        "model": get_model("validator"),
     }
     return result

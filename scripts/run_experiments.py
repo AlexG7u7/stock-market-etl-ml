@@ -122,41 +122,73 @@ def _fit_ensemble_probs(
     return p_tr, p_te, auc
 
 
+def _merge_news_panel_historical(df: pd.DataFrame) -> pd.DataFrame:
+    from src.ml.news_history import load_daily_features, merge_news_history
+
+    return merge_news_history(df, load_daily_features())
+
+
 def experiment_news_ab(
     train: pd.DataFrame,
     test: pd.DataFrame,
     tickers: dict[str, str],
     skip_fetch: bool,
+    *,
+    use_historical: bool = True,
 ) -> dict:
     print("\n══ EXP 1 — News A/B (AUC OOS y_rel) ══")
-    news_df = _load_news_df(tickers, skip_fetch)
-    news_ok = news_df is not None and not news_df.empty
+    print(f"  Modo merge: {'historical PIT' if use_historical else 'snapshot (legacy)'}")
 
     _, p_base, auc_base = _fit_ensemble_probs(train, test, FEATURE_COLS)
+    news_ok = False
+    n_with = 0
+    p_news = p_base
+    auc_news = auc_base
 
-    if news_ok:
-        train_n = _merge_news_panel(train, news_df)
-        test_n = _merge_news_panel(test, news_df)
-        feat_news = get_all_feature_cols(include_news=True)
-        n_with = int((test_n["news_sent_score"].abs() > 1e-6).sum())
-        _, p_news, auc_news = _fit_ensemble_probs(train_n, test_n, feat_news)
+    if use_historical:
+        from src.ml.news_history import history_stats, load_daily_features
+
+        daily = load_daily_features()
+        stats = history_stats()
+        if daily is None or daily.empty:
+            print("  ⚠ Sin panel histórico — corre: python scripts/build_news_history.py")
+        else:
+            news_ok = True
+            print(f"  Panel: {stats.get('rows', 0):,} filas, "
+                  f"{stats.get('date_min')} → {stats.get('date_max')}, "
+                  f"{stats.get('pct_nonzero_sent', 0)}% sent≠0")
+            train_n = _merge_news_panel_historical(train)
+            test_n = _merge_news_panel_historical(test)
+            n_with = int((test_n["news_sent_score"].abs() > 1e-6).sum())
+            feat_news = get_all_feature_cols(include_news=True)
+            _, p_news, auc_news = _fit_ensemble_probs(train_n, test_n, feat_news)
     else:
-        auc_news = auc_base
-        p_news = p_base
-        n_with = 0
+        news_df = _load_news_df(tickers, skip_fetch)
+        news_ok = news_df is not None and not news_df.empty
+        if news_ok:
+            train_n = _merge_news_panel(train, news_df)
+            test_n = _merge_news_panel(test, news_df)
+            n_with = int((test_n["news_sent_score"].abs() > 1e-6).sum())
+            feat_news = get_all_feature_cols(include_news=True)
+            _, p_news, auc_news = _fit_ensemble_probs(train_n, test_n, feat_news)
 
     delta = round(auc_news - auc_base, 4)
+    pred_diff = float(np.abs(p_base - p_news).mean()) if len(p_base) else 0.0
+
     result = {
+        "mode": "historical_pit" if use_historical else "snapshot",
         "news_cache_available": news_ok,
-        "test_rows_with_news_score": n_with if news_ok else 0,
+        "test_rows_with_news_score": n_with,
         "baseline_auc": round(auc_base, 4),
         "with_news_auc": round(auc_news, 4),
         "delta_auc": delta,
+        "mean_pred_diff": round(pred_diff, 6),
         "pass_delta_ge_0.01": delta >= 0.01,
         "feature_cols_baseline": len(FEATURE_COLS),
         "feature_cols_with_news": len(get_all_feature_cols(include_news=True)),
     }
-    print(f"  Baseline AUC: {auc_base:.4f}  |  +News: {auc_news:.4f}  |  Δ={delta:+.4f}")
+    print(f"  Baseline AUC: {auc_base:.4f}  |  +News: {auc_news:.4f}  |  Δ={delta:+.4f}  "
+          f"| Δpred={pred_diff:.4f}")
     return result
 
 
@@ -353,6 +385,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--universe", default="bmv")
     parser.add_argument("--skip-news-fetch", action="store_true")
+    parser.add_argument("--snapshot-news", action="store_true", help="Legacy: usar latest.json")
     args = parser.parse_args()
 
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
@@ -362,7 +395,10 @@ def main() -> None:
     print(f"\nPanel: train={len(train):,} test={len(test):,} "
           f"({test.index.min().date()} → {test.index.max().date()})")
 
-    exp1 = experiment_news_ab(train, test, tickers, args.skip_news_fetch)
+    exp1 = experiment_news_ab(
+        train, test, tickers, args.skip_news_fetch,
+        use_historical=not args.snapshot_news,
+    )
     exp2 = experiment_stacking_ab(train, test)
     exp3 = experiment_threshold_grid(train, test)
 

@@ -1,43 +1,33 @@
-name: Refresh Market Data
+name: Refresh Market Data (legacy)
+
+# Preferir: .github/workflows/data-ingest.yml (cron automático)
 
 on:
-  schedule:
-    # 13:00 UTC ≈ 07:00 CST — antes de apertura BMV
-    - cron: '0 13 * * 1-5'
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Qué refrescar'
-        required: true
-        default: 'all'
+        description: 'Pipeline'
+        default: 'all-skip-sql'
         type: choice
         options:
-          - all
-          - news
-          - intraday
+          - all-skip-sql
+          - ohlcv-news-intraday
+          - news-only
 
 env:
   PYTHON_VERSION: '3.11'
 
 jobs:
   refresh:
-    name: Refresh news + intraday
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Refresh market data
+      - run: pip install -r requirements.txt
+      - name: Ingest
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_NEWS_ENABLED: 'true'
@@ -45,5 +35,9 @@ jobs:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
         run: |
-          MODE="${{ github.event.inputs.mode || 'all' }}"
-          python scripts/refresh_market_data.py --${MODE}
+          case "${{ github.event.inputs.mode }}" in
+            ohlcv-news-intraday) ARGS="--ohlcv --news --intraday" ;;
+            news-only) ARGS="--news" ;;
+            *) ARGS="--all --skip-sql" ;;
+          esac
+          python scripts/run_all_ingests.py $ARGS

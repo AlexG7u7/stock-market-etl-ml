@@ -21,6 +21,7 @@ LIVE_TRADING_ALLOWED: bool = False
 
 USE_STACKING_DEFAULT: bool = True
 USE_NEWS_FEATURES: bool = False  # ΔAUC=0 con cache estático por ticker
+MIN_NEWS_PANEL_TICKERS: int = 3  # activar panel temporal cuando backfill ≥ esto
 
 MAX_SIGNALS: int = 2
 MAX_OPEN_POSITIONS: int = 2
@@ -37,6 +38,36 @@ MAX_POSITION_PCT: float = 0.10
 
 BACKTEST_TOP_K: int = 2
 BACKTEST_MIN_P_UP: float = 0.56
+
+
+def news_features_enabled(stats: dict | None = None) -> bool:
+    """
+    News en features cuando hay panel temporal con cobertura suficiente (KB-004)
+    o cuando USE_NEWS_FEATURES=True explícitamente.
+    """
+    if USE_NEWS_FEATURES:
+        return True
+    if stats is None:
+        try:
+            from src.ml.news_history import history_stats
+
+            stats = history_stats()
+        except Exception:
+            return False
+    if stats.get("status") == "missing":
+        try:
+            from src.ml.databursatil_news import list_snapshot_dates
+
+            if len(list_snapshot_dates()) >= MIN_NEWS_PANEL_TICKERS:
+                return True
+        except Exception:
+            pass
+        return False
+    if int(stats.get("tickers") or 0) >= MIN_NEWS_PANEL_TICKERS:
+        return True
+    if int(stats.get("n_days") or stats.get("rows") or 0) >= MIN_NEWS_PANEL_TICKERS:
+        return True
+    return False
 
 
 def prob_thresh_for_regime(state: str | None) -> float:
@@ -73,9 +104,11 @@ def filter_actionable_ranking(
             continue
         g = item.get("gemini") or {}
         ver = g.get("veredicto", "")
-        if require_gemini_confirms and ver == "VETA":
+        if require_gemini_confirms and ver in ("VETA", "EVITAR"):
             continue
-        if require_gemini_confirms and ver and ver not in ("CONFIRMA", "DEGRADA"):
+        if require_gemini_confirms and ver and ver not in (
+            "CONFIRMA", "DEGRADA", "APOSTAR", "ESPERAR",
+        ):
             continue
         out.append(item)
     return out

@@ -236,7 +236,7 @@ def main():
 
     print_signals(output["signals"], output["summary"], args.capital, output["regime"])
     print(f"  Guardado: {path}")
-    print(f"  SuperModel: {ROOT / 'data' / 'super_signals.json'}\n")
+    print(f"  InsightsBundle: {ROOT / 'data' / 'insights_today.json'}\n")
 
 
 if __name__ == "__main__":

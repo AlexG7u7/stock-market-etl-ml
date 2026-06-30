@@ -22,9 +22,12 @@ Predicción direccional y ranking cross-seccional de tickers BMV (5 universos, ~
 
 ```
 articles/
-├── scopus/                    # Export ScienceDirect / Scopus
-├── web-of-science/            # Export Web of Science
+├── inbox/                     # ← DROP ZONE: PDFs nuevos aquí
+├── papers/                    # archivo permanente post-inbox
+├── scopus/
+├── web-of-science/
 └── knowledge/
+    ├── rag/                   # índice TF-IDF (chunks.jsonl + matrix.npz)
     ├── README.md
     ├── corpus.yaml            # Índice maestro (ambas fuentes)
     ├── stack_mapping.yaml
@@ -41,6 +44,16 @@ articles/
 ```
 
 ## Uso
+
+### 0. RAG — búsqueda sobre PDFs para agentes
+
+```bash
+# Drop PDF en articles/inbox/ y luego:
+python scripts/build_literature_rag.py
+
+# Vigilar inbox automáticamente:
+python scripts/build_literature_rag.py --watch
+```
 
 ### 1. Reconstruir el corpus desde PDFs
 
@@ -60,9 +73,9 @@ Muestra qué técnicas SOTA faltan en nuestro stack y su prioridad.
 
 ### 3. Añadir un paper nuevo
 
-1. Colocar el PDF en `articles/scopus/`
-2. Ejecutar `python scripts/build_knowledge_base.py --ingest`
-3. Crear ficha en `papers/<id>.yaml` si es relevante (usar plantilla de `papers/_template.yaml`)
+1. Colocar el PDF en `articles/inbox/` (o directamente en `scopus/`)
+2. Ejecutar `python scripts/build_literature_rag.py`
+3. Crear ficha en `papers/<id>.yaml` si es relevante (plantilla `_template.yaml`)
 
 ## Artículos clave (relevantes al proyecto)
 

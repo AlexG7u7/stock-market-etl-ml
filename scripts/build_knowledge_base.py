@@ -12,9 +12,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -22,31 +20,27 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).parent.parent
-ARTICLE_DIRS = [
-    ROOT / "articles" / "scopus",
-    ROOT / "articles" / "web-of-science",
-]
+sys.path.insert(0, str(ROOT))
+
+from src.ml.literature_corpus import (  # noqa: E402
+    ARTICLE_DIRS,
+    classify_relevance,
+    discover_pdfs,
+    extract_doi,
+    extract_pdf_text,
+    extract_year,
+    file_id,
+    guess_title,
+    pdf_page_count,
+    source_label,
+)
+
 KNOWLEDGE_DIR = ROOT / "articles" / "knowledge"
 CORPUS_PATH = KNOWLEDGE_DIR / "corpus.yaml"
 STACK_PATH = KNOWLEDGE_DIR / "stack_mapping.yaml"
 ROADMAP_PATH = KNOWLEDGE_DIR / "research_roadmap.yaml"
 
-# Keywords para clasificación automática de relevancia
-FINANCE_KW = re.compile(
-    r"stock|market|financ|trading|lstm|quantitative|portfolio|forecast|"
-    r"algorithmic|reinforcement learning|ohlcv|price prediction|bmv|equity",
-    re.I,
-)
-IRRELEVANT_KW = re.compile(
-    r"cancer|parkinson|solar chimney|organoid|drug discover|gliobla|"
-    r"spatial information|infrastructure optimization|electrocardiogram|arrhythmia|"
-    r"lorenz|rossler|chaotic time series prediction",
-    re.I,
-)
-FINANCE_PARTIAL_KW = re.compile(
-    r"stock market|financial market|quantitative|portfolio|trading|ohlcv|equity",
-    re.I,
-)
+# Keywords para clasificación automática de relevancia (en literature_corpus.py)
 
 
 def _load_yaml(path: Path) -> dict:
@@ -63,119 +57,30 @@ def _save_yaml(path: Path, data: dict) -> None:
 
 
 def _pdf_text_first_pages(pdf_path: Path, max_pages: int = 3) -> str:
-    try:
-        import pypdf
-    except ImportError:
-        print("  ⚠ pypdf no instalado — pip install pypdf")
-        return ""
-    try:
-        reader = pypdf.PdfReader(str(pdf_path))
-        chunks = []
-        for page in reader.pages[:max_pages]:
-            chunks.append(page.extract_text() or "")
-        return "\n".join(chunks)
-    except Exception as e:
-        print(f"  ⚠ Error leyendo {pdf_path.name}: {e}")
-        return ""
-
-
-def _extract_doi(text: str) -> str | None:
-    m = re.search(r"doi\.org/([\d./a-zA-Z-]+)", text, re.I)
-    if m:
-        return m.group(1).rstrip(".")
-    m = re.search(r"doi:\s*([\d./a-zA-Z-]+)", text, re.I)
-    return m.group(1).rstrip(".") if m else None
-
-
-def _extract_year(text: str) -> int | None:
-    m = re.search(r"(?:Received|Published|Accepted).*?(\d{4})", text, re.I | re.DOTALL)
-    if m:
-        y = int(m.group(1))
-        if 1990 <= y <= 2030:
-            return y
-    m = re.search(r"\b(20\d{2})\b", text)
-    return int(m.group(1)) if m else None
-
-
-def _guess_title(text: str) -> str:
-    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-    for ln in lines[:30]:
-        if len(ln) > 20 and not re.match(r"^(Contents|Applied|Citation|Article|Review|Abstract)", ln, re.I):
-            if not re.match(r"^[A-Z]{2,}\s+\d", ln):  # skip journal headers
-                return ln[:200]
-    return lines[0][:200] if lines else "Unknown"
-
-
-def _classify_relevance(text: str, filename: str) -> tuple[str, int]:
-    combined = f"{filename} {text}"
-    if IRRELEVANT_KW.search(combined) and not FINANCE_PARTIAL_KW.search(combined):
-        return "none", 0
-    if FINANCE_KW.search(combined):
-        hits = len(FINANCE_KW.findall(combined))
-        if hits >= 5:
-            return "high", min(5, 3 + hits // 10)
-        return "partial", 2
-    if FINANCE_PARTIAL_KW.search(combined):
-        return "partial", 2
-    return "none", 0
-
-
-def _source_label(pdf_path: Path) -> str:
-    parts = pdf_path.relative_to(ROOT).parts
-    return parts[1] if len(parts) > 1 else "unknown"
+    return extract_pdf_text(pdf_path, max_pages=max_pages)
 
 
 def scan_pdfs() -> list[dict]:
-    """Escanea articles/scopus/ y articles/web-of-science/."""
-    pdfs: list[Path] = []
-    for src_dir in ARTICLE_DIRS:
-        if src_dir.exists():
-            pdfs.extend(src_dir.rglob("*.pdf"))
-
-    # Ignorar duplicados en subcarpetas de exports ScienceDirect
-    pdfs = [p for p in pdfs if "ScienceDirect_articles_" not in str(p)]
-
-    # Deduplicar por tamaño (copias como "applsci (1).pdf")
-    seen_sizes: dict[int, Path] = {}
-    unique: list[Path] = []
-    for p in sorted(set(pdfs)):
-        size = p.stat().st_size
-        if size in seen_sizes:
-            continue
-        seen_sizes[size] = p
-        unique.append(p)
-
+    """Escanea todas las carpetas de artículos."""
     entries = []
-    for pdf in unique:
+    for pdf in discover_pdfs():
         rel = pdf.relative_to(ROOT)
         text = _pdf_text_first_pages(pdf)
-        relevance, score = _classify_relevance(text, pdf.name)
+        relevance, score = classify_relevance(text, pdf.name)
         entry = {
-            "id": _file_id(pdf),
+            "id": file_id(pdf),
             "file": str(rel),
-            "source": _source_label(pdf),
-            "title": _guess_title(text),
-            "year": _extract_year(text),
-            "doi": _extract_doi(text),
+            "source": source_label(pdf),
+            "title": guess_title(text),
+            "year": extract_year(text),
+            "doi": extract_doi(text),
             "relevance": relevance,
             "relevance_score": score,
-            "pages": None,
+            "pages": pdf_page_count(pdf),
             "auto_scanned": str(date.today()),
         }
-        try:
-            import pypdf
-            entry["pages"] = len(pypdf.PdfReader(str(pdf)).pages)
-        except Exception:
-            pass
         entries.append(entry)
     return entries
-
-
-def _file_id(pdf_path: Path) -> str:
-    stem = pdf_path.stem.lower()
-    stem = re.sub(r"[^a-z0-9]+", "_", stem)[:40].strip("_")
-    h = hashlib.md5(pdf_path.name.encode()).hexdigest()[:6]
-    return f"{stem}_{h}" if stem else h
 
 
 def update_corpus(dry_run: bool = False) -> None:

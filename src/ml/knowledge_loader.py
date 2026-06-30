@@ -39,14 +39,22 @@ def load_agent_knowledge() -> dict:
     return knowledge
 
 
+from src.ml.literature_rag import query_literature
+
+
 @lru_cache(maxsize=4)
 def _format_cached(role: str) -> str:
     return format_knowledge_for_prompt(load_agent_knowledge(), role=role)
 
 
-def get_knowledge_prompt(role: str = "validator") -> str:
+def get_knowledge_prompt(role: str = "validator", *, literature_query: str | None = None) -> str:
     """Cached knowledge prompt for Gemini system instructions."""
-    return _format_cached(role)
+    base = _format_cached(role)
+    if literature_query:
+        lit = query_literature(literature_query, top_k=4)
+        if lit:
+            base = f"{base}\n\n{lit}"
+    return base
 
 
 def format_knowledge_for_prompt(knowledge: dict, *, role: str = "validator") -> str:
@@ -65,8 +73,8 @@ def format_knowledge_for_prompt(knowledge: dict, *, role: str = "validator") -> 
     _append_risk_limits(knowledge, sections)
     _append_calibration(knowledge, sections)
     _append_failure_modes(knowledge, sections)
-    if role in ("analyst", "validator"):
-        _append_bmv_rules(knowledge, sections, full=(role == "analyst"))
+    if role in ("analyst", "validator", "trader"):
+        _append_bmv_rules(knowledge, sections, full=(role in ("analyst", "trader")))
 
     text = "\n\n".join(sections)
     if len(text) > MAX_PROMPT_CHARS:

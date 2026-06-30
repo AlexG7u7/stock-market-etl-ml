@@ -78,10 +78,22 @@ except ImportError:
     LSTM_AUC_THRESHOLD = 0.50
     _LSTM_AVAILABLE = False
 
+from src.ml.super_metrics import (
+    CORE_MODELS,
+    compute_fusion_metrics,
+    compute_universe_model_metrics,
+    enrich_ranking_item,
+    build_model_registry,
+)
+from src.ml.kb_enhance import (
+    apply_kb_modulators,
+    get_wti_ret5_pct,
+    load_horizon_consensus,
+    select_priority_features,
+    select_priority_rn_cols,
+)
 # Modelos base para fusión L2 / stacking (KB-012, KB-060)
-STACK_BASE_MODELS = ("xs_lgbm", "ensemble", "heuristic", "lstm_seq")
-
-# Conjunto extendido base (news se añade dinámicamente si hay cache)
+STACK_BASE_MODELS = CORE_MODELS
 EXTENDED_FEATURE_COLS = (
     FEATURE_COLS + LONG_MOMENTUM_COLS + FUNDAMENTAL_FEATURE_COLS + list(INTRADAY_FEATURE_COLS)
 )
@@ -118,6 +130,7 @@ class SuperModel:
         verbose: bool = True,
         use_stacking: bool = True,
         include_intraday: bool = True,
+        skip_lstm: bool = False,
     ):
         """
         Parameters
@@ -127,14 +140,20 @@ class SuperModel:
         use_stacking : si True, entrena meta-LR sobre preds base y la usa cuando
                        supere AUC-weight en holdout temporal (KB-060).
         include_intraday : añade microestructura 5m→diario cuando hay parquet cache.
+        skip_lstm    : omitir lstm_seq (modo --fast, ~20 min más rápido).
         """
         self.top_gemini = top_gemini
         self.verbose = verbose
         self.use_stacking = use_stacking
         self.include_intraday = include_intraday and _INTRADAY_AVAILABLE
+        self.skip_lstm = skip_lstm
         self._macro: dict[str, pd.DataFrame] = {}
         self._regime_cache: dict[str, dict] = {}
         self._news: pd.DataFrame | None = None
+        self._news_daily: pd.DataFrame | None = None
+        self._horizon_consensus: dict[str, int] = {}
+        self._wti_ret5_pct: float | None = None
+        self._universe_metrics: dict[str, dict] = {}
 
     # ── Carga de datos ──────────────────────────────────────────────────────
 
@@ -149,16 +168,44 @@ class SuperModel:
                 self._macro[key] = df
 
     def _load_news(self) -> None:
-        from src.ml.bet_policy import USE_NEWS_FEATURES
-        if not USE_NEWS_FEATURES:
-            self._news = None
-            return
+        """Cache estático (hoy) + panel temporal point-in-time (KB-004)."""
+        from src.ml.bet_policy import news_features_enabled
+        from src.ml.news_history import history_stats, load_daily_features
+
+        stats = history_stats()
+        self._news_daily = load_daily_features()
+
+        # Panel DataBursátil desde snapshots acumulados (preferido BMV)
+        try:
+            from src.ml.databursatil_news import list_snapshot_dates, build_daily_panel_from_snapshots
+            from src.data.universes import UNIVERSES
+
+            if len(list_snapshot_dates()) >= 1:
+                bmv_cfg = UNIVERSES.get("🇲🇽 Acciones BMV", {})
+                bmv = list(bmv_cfg.get("tickers", {}).keys())
+                db_panel = build_daily_panel_from_snapshots(bmv, verbose=False)
+                if db_panel is not None and not db_panel.empty:
+                    if self._news_daily is None or self._news_daily.empty:
+                        self._news_daily = db_panel
+                    else:
+                        self._news_daily = pd.concat(
+                            [self._news_daily, db_panel], ignore_index=True,
+                        ).drop_duplicates(subset=["date", "ticker"], keep="last")
+        except Exception as e:
+            logger.debug(f"databursatil panel: {e}")
+
         try:
             from src.ml.news import load_cached_news_features
+
             self._news = load_cached_news_features()
         except Exception as e:
-            logger.debug(f"news no disponible: {e}")
+            logger.debug(f"news cache no disponible: {e}")
             self._news = None
+
+        if not news_features_enabled(stats) and self._news is None:
+            if self._news_daily is None or self._news_daily.empty:
+                self._news = None
+                return
 
     # ── Régimen de mercado ─────────────────────────────────────────────────
 
@@ -242,8 +289,15 @@ class SuperModel:
                     feat = add_intraday_features(feat, name)
                 feat["ticker"] = name
                 feat["fwd_ret"] = compute_target(df, horizon=horizon)
-                if self._news is not None:
+                if self._news_daily is not None and name in self._news_daily["ticker"].values:
+                    from src.ml.news_history import merge_news_history
+
+                    feat = merge_news_history(feat, self._news_daily)
+                elif self._news is not None:
                     feat = add_news_features(feat, self._news, ticker_col="ticker")
+                else:
+                    for col in NEWS_FEATURE_COLS:
+                        feat[col] = 0.0
                 frames[name] = feat
             except Exception as e:
                 logger.debug(f"{name}: {e}")
@@ -268,6 +322,13 @@ class SuperModel:
             return []
 
         feat_cols = self._extended_cols(set(next(iter(frames.values())).columns))
+        from src.ml.bet_policy import news_features_enabled
+
+        include_news = news_features_enabled() or any(
+            c in feat_cols for c in NEWS_FEATURE_COLS
+        )
+        priority_feats = select_priority_features(feat_cols, include_news=include_news)
+        ens_feats = priority_feats if len(priority_feats) >= 8 else feat_cols
 
         # Imputar fundamentales (yfinance/trimestral) para no perder filas
         for name in list(frames.keys()):
@@ -297,6 +358,7 @@ class SuperModel:
         full["y_abs"] = (full["fwd_ret"] > 0).astype(int)
 
         rn_avail = [f"rn_{c}" for c in feat_cols]
+        xs_rn = select_priority_rn_cols(rn_avail)
         full = full.dropna(subset=rn_avail + ["pct_fwd"])
         if len(full) < 200:
             return []
@@ -317,13 +379,13 @@ class SuperModel:
         try:
             import lightgbm as lgb
             reg = lgb.LGBMRegressor(**_LGBM_BASE)
-            reg.fit(train[rn_avail].values, train["pct_fwd"].values)
-            p_val = reg.predict(valid[rn_avail].values)
+            reg.fit(train[xs_rn].values, train["pct_fwd"].values)
+            p_val = reg.predict(valid[xs_rn].values)
             auc["xs_lgbm"] = self._safe_auc(valid["y_rel"].values, p_val)
             valid_preds["xs_lgbm"] = p_val
             today = self._today_rn(frames, feat_cols)
             if today is not None and not today.empty:
-                preds = reg.predict(today[rn_avail].fillna(0.5).values)
+                preds = reg.predict(today[xs_rn].fillna(0.5).values)
                 signals_by_model["xs_lgbm"] = dict(zip(today["ticker"], _minmax(preds)))
         except Exception as e:
             logger.debug(f"xs_lgbm {uname}: {e}")
@@ -331,14 +393,14 @@ class SuperModel:
         # ── Modelo 2: EnsembleModel ─────────────────────────────────────────
         try:
             from src.ml.ensemble import EnsembleModel
-            ens = EnsembleModel(top_features=min(12, len(feat_cols)), calibrate=True)
-            ens.fit(train, feature_cols=feat_cols, target_col="y_rel")
-            p_val = ens.predict_proba(valid, feat_cols)
+            ens = EnsembleModel(top_features=min(12, len(ens_feats)), calibrate=True)
+            ens.fit(train, feature_cols=ens_feats, target_col="y_rel")
+            p_val = ens.predict_proba(valid, ens_feats)
             auc["ensemble"] = self._safe_auc(valid["y_rel"].values, p_val)
             valid_preds["ensemble"] = p_val
-            today = self._today_rows(frames, feat_cols)
+            today = self._today_rows(frames, ens_feats)
             if today is not None and not today.empty:
-                preds = ens.predict_proba(today, feat_cols)
+                preds = ens.predict_proba(today, ens_feats)
                 signals_by_model["ensemble"] = dict(zip(today["ticker"], preds))
         except Exception as e:
             logger.debug(f"ensemble {uname}: {e}")
@@ -372,7 +434,7 @@ class SuperModel:
 
         # ── Modelo 4: lstm_seq (KB-012) ─────────────────────────────────────
         lstm_predictor = None
-        if _LSTM_AVAILABLE and LSTMSeqPredictor is not None:
+        if not self.skip_lstm and _LSTM_AVAILABLE and LSTMSeqPredictor is not None:
             try:
                 lstm_predictor = LSTMSeqPredictor(sequence_length=30, epochs=12)
                 lstm_predictor.fit(train, feature_cols=feat_cols, target_col="y_rel")
@@ -448,8 +510,39 @@ class SuperModel:
                     f"{'stacking' if use_stack_fusion else 'AUC-weight'}"
                 )
 
-        # ── Fusión por ticker ────────────────────────────────────────────────
         regime_factor, regime_info = self._regime_factor(currency)
+
+        # ── Métricas OOS + incertidumbre por universo ───────────────────────
+        y_valid = valid["y_rel"].values
+        model_metrics = compute_universe_model_metrics(
+            valid_preds, y_valid, auc, models=list(valid_preds.keys())
+        )
+        stack_scores_arr: np.ndarray | None = None
+        if meta_lr is not None and len(stack_models) >= 2:
+            X_all = np.column_stack([valid_preds[m] for m in stack_models])
+            mask_all = np.all(np.isfinite(X_all), axis=1)
+            if mask_all.sum() >= 30:
+                stack_scores_arr = meta_lr.predict_proba(X_all[mask_all])[:, 1]
+                y_valid = y_valid[mask_all]
+        fusion_meta = compute_fusion_metrics(
+            stack_auc=stack_auc,
+            fusion_auc=fusion_auc,
+            use_stacking=use_stack_fusion,
+            y_rel=y_valid,
+            stack_scores=stack_scores_arr,
+        )
+        slug = cfg["slug"]
+        self._universe_metrics[slug] = {
+            "universe": uname,
+            "slug": slug,
+            "n_tickers": len(frames),
+            "models": model_metrics,
+            "fusion": fusion_meta,
+            "regime_proba": regime_info.get("proba", {}),
+            "horizon_d": horizon,
+        }
+
+        # ── Fusión por ticker ────────────────────────────────────────────────
         all_tickers = set().union(*[set(d.keys()) for d in signals_by_model.values()])
 
         results = []
@@ -486,9 +579,24 @@ class SuperModel:
             conviction_adj = conviction * regime_factor
 
             news_sent = self._news_sent(tk)
+            news_delta = self._news_delta(tk)
             news_alerta = news_sent is not None and news_sent < -0.3
             if news_alerta:
                 conviction_adj *= 0.5
+
+            n_hz = self._horizon_consensus.get(tk, 0)
+            conviction_kb, kb_flags, kb_meta = apply_kb_modulators(
+                ticker=tk,
+                universe_slug=cfg["slug"],
+                conviction=conviction_adj,
+                disagreement=disagreement,
+                signals=stack_sigs,
+                news_sent=news_sent,
+                news_sent_delta=news_delta,
+                regime=regime_info["estado"],
+                n_horizontes=n_hz,
+                wti_ret5_pct=self._wti_ret5_pct,
+            )
 
             price = self._last_price(frames.get(tk))
             results.append({
@@ -498,7 +606,7 @@ class SuperModel:
                 "moneda": currency,
                 "precio": round(price, 2) if price else None,
                 "conviction_raw": round(conviction, 4),
-                "conviction": round(float(np.clip(conviction_adj, 0, 1.5)), 4),
+                "conviction": round(float(np.clip(conviction_kb, 0, 1.5)), 4),
                 "disagreement": round(disagreement, 4),
                 "signals": {m: round(v, 4) for m, v in sigs.items()},
                 "model_weights": {m: round(weights.get(m, 0) / max(wsum, 1), 3) for m in sigs},
@@ -507,6 +615,9 @@ class SuperModel:
                 "regime_factor": regime_factor,
                 "news_sent": round(news_sent, 3) if news_sent is not None else None,
                 "news_alerta": news_alerta,
+                "n_horizontes": n_hz,
+                "kb_flags": kb_flags,
+                "kb_meta": kb_meta,
                 "horizonte_d": horizon,
             })
 
@@ -515,6 +626,8 @@ class SuperModel:
             if self.use_stacking:
                 r["stack_auc"] = round(stack_auc, 4)
                 r["fusion_auc"] = round(fusion_auc, 4)
+
+        self._universe_metrics[slug]["n_scored"] = len(results)
 
         auc_log = {k: round(v, 3) for k, v in auc.items()}
         lstm_tag = " +lstm" if "lstm_seq" in auc else ""
@@ -596,6 +709,15 @@ class SuperModel:
         except Exception:
             return None
 
+    def _news_delta(self, ticker: str) -> float | None:
+        if self._news is None or ticker not in self._news.index:
+            return None
+        try:
+            val = self._news.loc[ticker, "news_sent_delta"]
+            return float(val) if pd.notna(val) else None
+        except Exception:
+            return None
+
     # ── Insights cross-universo ─────────────────────────────────────────────
 
     def _build_insights(self, ranking: list[dict]) -> list[dict]:
@@ -665,6 +787,8 @@ class SuperModel:
 
         self._load_macro()
         self._load_news()
+        self._horizon_consensus = load_horizon_consensus()
+        self._wti_ret5_pct = get_wti_ret5_pct(self._macro)
 
         all_results: list[dict] = []
         for uname, cfg in UNIVERSES.items():
@@ -674,6 +798,12 @@ class SuperModel:
         all_results.sort(key=lambda r: r["conviction"], reverse=True)
         for i, r in enumerate(all_results):
             r["rank_global"] = i + 1
+            slug = r.get("universe_slug", "")
+            enrich_ranking_item(r, self._universe_metrics)
+
+        active_models: set[str] = set()
+        for um in self._universe_metrics.values():
+            active_models.update(um.get("models", {}).keys())
 
         insights = self._build_insights(all_results)
 
@@ -690,4 +820,6 @@ class SuperModel:
             "master_ranking": all_results,
             "insights": insights,
             "top_gemini": self.top_gemini,
+            "model_registry": build_model_registry(active_models),
+            "universe_metrics": self._universe_metrics,
         }

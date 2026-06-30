@@ -156,16 +156,18 @@ def score_news_sentiment(news: list[dict]) -> dict | None:
         return _json.loads(txt[start:end])
 
     try:
-        from google import genai                        # type: ignore[import]
-        from google.genai import types as genai_types   # type: ignore[import]
-        client = genai.Client(api_key=api_key)
+        from src.ml.gemini_config import content_config, create_client, get_model
+
+        client, genai_types = create_client()
+        if client is None:
+            return None
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=get_model("market"),
             contents=prompt,
-            config=genai_types.GenerateContentConfig(
+            config=content_config(
+                genai_types,
                 max_output_tokens=1024,
                 temperature=0.2,
-                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
             ),
         )
         res = _parse_json(response.text or "")

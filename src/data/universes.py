@@ -9,20 +9,7 @@ Cada universo define:
 """
 from __future__ import annotations
 
-# ─── 1. Acciones BMV (mercado local) ──────────────────────────────────────────
-BMV_ACCIONES = {
-    "WALMEX": "WALMEX.MX",   "FEMSAUBD": "FEMSAUBD.MX", "GMEXICOB": "GMEXICOB.MX",
-    "CEMEXCPO": "CEMEXCPO.MX","GFNORTEO": "GFNORTEO.MX", "BIMBOA": "BIMBOA.MX",
-    "ALSEA":  "ALSEA.MX",    "KIMBERA": "KIMBERA.MX",   "PINFRA": "PINFRA.MX",
-    "ORBIA":  "ORBIA.MX",    "GRUMAB":  "GRUMAB.MX",    "ASURB":  "ASURB.MX",
-    "OMAB":   "OMAB.MX",     "GAPB":    "GAPB.MX",      "GCARSOA1":"GCARSOA1.MX",
-    "MEGACPO":"MEGACPO.MX",  "LABB":    "LABB.MX",      "VOLARA": "VOLARA.MX",
-    "CUERVO": "CUERVO.MX",   "AC":      "AC.MX",        "VESTA":  "VESTA.MX",
-    "VISTA":  "VISTAA.MX",   "BOLSAA":  "BOLSAA.MX",    "GCC":    "GCC.MX",
-    "HOTEL":  "HOTEL.MX",    "POSADAS": "POSADASA.MX",  "TLEVISA":"TLEVISACPO.MX",
-    "HERDEZ": "HERDEZ.MX",   "GENTERA": "GENTERA.MX",   "FUNO11": "FUNO11.MX",
-    "Q":      "Q.MX",
-}
+from src.data.bmv_catalog import BMV_YFINANCE as BMV_ACCIONES
 
 # ─── 2. Acciones USA (SIC / Trading USA) ──────────────────────────────────────
 # Las más populares en GBM. Cotizan en MXN via SIC o en USD via Trading USA.
@@ -103,7 +90,7 @@ UNIVERSES = {
     "🇲🇽 Acciones BMV": {
         "slug": "bmv",
         "tickers": BMV_ACCIONES,
-        "descripcion": "Las 31 acciones más líquidas de la Bolsa Mexicana de Valores",
+        "descripcion": "36 acciones líquidas BMV (IPC + extensión)",
         "moneda": "MXN",
         "horizonte": 20,
         "macro_benchmark": "NAFTRAC.MX",

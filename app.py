@@ -117,6 +117,7 @@ if page.startswith("🦾"):
     st.caption("Fusiona 4 modelos base (LGBM + ensemble + heurístico + LSTM) + régimen + noticias · KB operativa en Gemini · ranking maestro ~87 tickers")
 
     sm_path = ROOT / "data" / "super_signals.json"
+    insights_path = ROOT / "data" / "insights_today.json"
 
     col_a, col_b = st.columns([3, 1])
     with col_b:
@@ -145,22 +146,61 @@ if page.startswith("🦾"):
         st.stop()
 
     @st.cache_data(ttl=120)
+    def _load_insights() -> dict | None:
+        if insights_path.exists():
+            return json.loads(insights_path.read_text())
+        return None
+
+    @st.cache_data(ttl=120)
     def _load_super() -> dict:
         return json.loads(sm_path.read_text())
 
+    bundle = _load_insights()
     sm = _load_super()
     ranking = sm.get("master_ranking", [])
     gs = sm.get("gemini_summary", {})
+    if bundle:
+        gs = bundle.get("gemini_summary") or gs
+        pb = bundle.get("portfolio") or {}
+    else:
+        pb = sm.get("portfolio_brief") or {}
 
     with col_a:
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Tickers rankeados", sm.get("n_tickers", 0))
-        c2.metric("Validados Gemini", gs.get("validados", 0))
-        c3.metric("Confirmados", gs.get("confirma", 0))
-        c4.metric("Vetados", gs.get("veta", 0))
+        if gs.get("agent") == "gemini_trader":
+            c2.metric("APOSTAR", gs.get("apostar", 0))
+            c3.metric("ESPERAR", gs.get("esperar", 0))
+            c4.metric("EVITAR", gs.get("evitar", 0))
+        else:
+            c2.metric("Validados Gemini", gs.get("validados", 0))
+            c3.metric("Confirmados", gs.get("confirma", 0))
+            c4.metric("Vetados", gs.get("veta", 0))
         modo = gs.get("modo", "?")
         st.caption(f"Generado: {sm.get('generated_at','?')[:16]} · "
                    f"Gemini: {modo} · {sm.get('elapsed_sec','?')}s")
+        if bundle:
+            st.caption(f"📦 InsightsBundle v{bundle.get('schema_version','?')} · "
+                       f"{'paper only' if bundle.get('bet_policy',{}).get('paper_only') else 'live'}")
+
+    if pb.get("resumen_ejecutivo"):
+        st.subheader("📋 Brief de portafolio (trader agent)")
+        st.info(pb["resumen_ejecutivo"])
+        pc1, pc2, pc3 = st.columns(3)
+        if pb.get("apostar"):
+            pc1.markdown("**Apostar:** " + ", ".join(pb["apostar"]))
+        if pb.get("esperar"):
+            pc2.markdown("**Esperar:** " + ", ".join(pb["esperar"][:8]))
+        if pb.get("evitar"):
+            pc3.markdown("**Evitar:** " + ", ".join(pb["evitar"][:8]))
+        if pb.get("incertidumbres_globales"):
+            with st.expander("Incertidumbres globales"):
+                for u in pb["incertidumbres_globales"]:
+                    st.markdown(f"- {u}")
+
+    eval_s = (bundle or {}).get("eval_summary") or {}
+    if eval_s.get("message"):
+        st.warning(f"Eval: {eval_s.get('verdict')} — {eval_s.get('message')}")
 
     # ── Insights cross-universo ──────────────────────────────────────────────
     insights = sm.get("insights", [])
@@ -175,7 +215,7 @@ if page.startswith("🦾"):
     st.divider()
 
     # ── Top validado por Gemini ──────────────────────────────────────────────
-    st.subheader("🎯 Top — decisión del modelo + veredicto Gemini")
+    st.subheader("🎯 Top — SuperModel + perspectiva del trader (Gemini)")
     top_items = [r for r in ranking if "gemini" in r][:int(top_g)]
     if not top_items:
         top_items = ranking[:10]
@@ -183,8 +223,11 @@ if page.startswith("🦾"):
     for item in top_items:
         g = item.get("gemini", {})
         ver = g.get("veredicto", "—")
-        ver_color = {"CONFIRMA": "🟢", "DEGRADA": "🟡", "VETA": "🔴"}.get(ver, "⚪")
-        accion = g.get("accion_final", "—")
+        ver_color = {
+            "CONFIRMA": "🟢", "DEGRADA": "🟡", "VETA": "🔴",
+            "APOSTAR": "🟢", "ESPERAR": "🟡", "EVITAR": "🔴",
+        }.get(ver, "⚪")
+        accion = g.get("accion_final") or (g.get("como_apostar") or {}).get("tamano", "—")
 
         with st.container(border=True):
             h1, h2, h3, h4 = st.columns([2, 1, 1, 1])
@@ -200,6 +243,8 @@ if page.startswith("🦾"):
                        f"(×{item.get('regime_factor',1)})"
                        + (f"  ·  **News:** {item['news_sent']:+.2f}" if item.get("news_sent") is not None else ""))
 
+            if g.get("perspectiva_trader"):
+                st.markdown(f"**Trader:** _{g['perspectiva_trader']}_")
             if g.get("tesis"):
                 st.markdown(f"**Tesis:** {g['tesis']}")
             cev, crf = st.columns(2)
@@ -211,6 +256,14 @@ if page.startswith("🦾"):
                 crf.markdown("**Red flags:**")
                 for r in g["red_flags"][:4]:
                     crf.markdown(f"- ⚠️ {r}")
+            if g.get("incertidumbres_clave"):
+                with st.expander("Incertidumbres"):
+                    for u in g["incertidumbres_clave"][:5]:
+                        st.markdown(f"- {u}")
+            m = item.get("metrics") or {}
+            ci = (m.get("conviction") or {}).get("ci_90")
+            if ci:
+                st.caption(f"Convicción IC90: [{ci[0]}, {ci[1]}]")
             st.markdown(f"**Acción sugerida: {accion}**")
 
     st.divider()

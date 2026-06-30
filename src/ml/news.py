@@ -32,6 +32,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from src.ml.gemini_config import content_config, create_client, get_model
 from src.ml.news_sources import (
     fetch_alpha_vantage_articles,
     fetch_cryptopanic as _fetch_cryptopanic_source,
@@ -242,10 +243,9 @@ def score_with_gemini(articles: list[Article], company_name: str) -> list[Articl
         return articles
 
     try:
-        from google import genai
-        from google.genai import types as genai_types
-
-        client = genai.Client(api_key=api_key)
+        client, genai_types = create_client()
+        if client is None:
+            return articles
 
         for i in range(0, len(articles), GEMINI_BATCH):
             batch = articles[i : i + GEMINI_BATCH]
@@ -259,11 +259,12 @@ Titulares:
 {headlines}"""
 
             resp = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=get_model("news"),
                 contents=prompt,
-                config=genai_types.GenerateContentConfig(
-                    max_output_tokens=256, temperature=0.1,
-                    thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
+                config=content_config(
+                    genai_types,
+                    max_output_tokens=256,
+                    temperature=0.1,
                 ),
             )
             text = (resp.text or "").strip()
@@ -340,10 +341,9 @@ def batch_score_gemini(
         return {}
 
     try:
-        from google import genai
-        from google.genai import types as genai_types
-
-        client = genai.Client(api_key=api_key)
+        client, genai_types = create_client()
+        if client is None:
+            return {}
 
         # Un solo prompt con todos los tickers
         lines = []
@@ -362,11 +362,12 @@ Noticias:
 {content}"""
 
         resp = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=get_model("news"),
             contents=prompt,
-            config=genai_types.GenerateContentConfig(
-                max_output_tokens=512, temperature=0.1,
-                thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
+            config=content_config(
+                genai_types,
+                max_output_tokens=512,
+                temperature=0.1,
             ),
         )
         text = (resp.text or "").strip()
@@ -495,29 +496,33 @@ def _compute_features_from_articles(
     days_back: int = 7,
     lambda_decay: float = TEMPORAL_DECAY_LAMBDA,
     apply_dedup: bool = True,
+    as_of: datetime | None = None,
 ) -> dict[str, float]:
     """
-    Calcula las 4 features de noticias a partir de una lista de artículos
-    con .sentiment ya asignado.
+    Calcula features de noticias a partir de artículos con .sentiment asignado.
 
-    KB-041: deduplicación TF-IDF antes de agregar (peso *= 0.5^n_dup).
-    KB-043: decay temporal weight = exp(-lambda * days_ago) en agregación.
+    as_of: fecha de corte (point-in-time). Default = ahora UTC.
     """
-    now     = datetime.now(tz=timezone.utc)
+    now = as_of or datetime.now(tz=timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
     cutoff  = now - timedelta(days=days_back)
     cutoff2 = now - timedelta(days=days_back * 2)
 
-    for art in articles:
+    end_of_day = now.replace(hour=23, minute=59, second=59, microsecond=0)
+    pit_articles = [a for a in articles if a.published_dt <= end_of_day]
+
+    for art in pit_articles:
         art.weight = 1.0
         if art.relevance_score < LOW_RELEVANCE_THRESHOLD:
             art.weight *= LOW_RELEVANCE_WEIGHT
     if apply_dedup:
-        _deduplicate_tfidf(articles)
-    for art in articles:
-        art.weight *= _temporal_weight(art, now, lambda_decay)
+        _deduplicate_tfidf(pit_articles)
+    for art in pit_articles:
+        art.weight *= _temporal_weight(art, end_of_day, lambda_decay)
 
-    recent  = [a for a in articles if a.published_dt >= cutoff]
-    prior   = [a for a in articles if cutoff2 <= a.published_dt < cutoff]
+    recent = [a for a in pit_articles if cutoff <= a.published_dt <= end_of_day]
+    prior = [a for a in pit_articles if cutoff2 <= a.published_dt < cutoff]
 
     w_recent = [a.weight for a in recent]
     w_prior  = [a.weight for a in prior]

@@ -1,0 +1,108 @@
+name: Data Ingest Pipeline
+
+on:
+  schedule:
+    # 13:00 UTC ≈ 07:00 CST — pre-apertura BMV
+    - cron: '0 13 * * 1-5'
+    # 00:30 UTC ≈ 18:30 CST — post-cierre (OHLCV + news)
+    - cron: '30 0 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Pipeline a ejecutar'
+        required: true
+        default: 'all-full'
+        type: choice
+        options:
+          - all-full
+          - all-skip-sql
+          - all-with-sql
+          - ohlcv-news-intraday
+          - ohlcv-only
+          - news-only
+          - fundamentals
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  ingest:
+    name: Run ingest pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run ingest pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_NEWS_ENABLED: 'true'
+          DATABURSATIL_API_TOKEN: ${{ secrets.DATABURSATIL_API_TOKEN }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+          SQL_SERVER: ${{ secrets.SQL_SERVER }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: |
+          MODE="${{ github.event.inputs.mode }}"
+          if [ -z "$MODE" ]; then
+            # cron pre-market vs post-close por hora UTC
+            HOUR=$(date -u +%H)
+            if [ "$HOUR" = "00" ]; then
+              MODE="ohlcv-news"
+            else
+              MODE="all-full"
+            fi
+          fi
+
+          case "$MODE" in
+            all-skip-sql)
+              python scripts/run_all_ingests.py --all --skip-sql
+              ;;
+            all-full)
+              python scripts/run_all_ingests.py --all
+              ;;
+            all-with-sql)
+              python scripts/run_all_ingests.py --all
+              ;;
+            ohlcv-news-intraday)
+              python scripts/run_all_ingests.py --ohlcv --news --intraday
+              ;;
+            ohlcv-news)
+              python scripts/run_all_ingests.py --ohlcv --news
+              ;;
+            ohlcv-only)
+              python scripts/run_all_ingests.py --ohlcv
+              ;;
+            news-only)
+              python scripts/run_all_ingests.py --news
+              ;;
+            fundamentals)
+              python scripts/run_all_ingests.py --fundamentals --force-fundamentals
+              ;;
+            *)
+              echo "Modo desconocido: $MODE"
+              exit 1
+              ;;
+          esac
+
+      - name: Upload ingest report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ingest-report-${{ github.run_id }}
+          path: |
+            data/ingest/last_run.json
+            data/ingest/audit.json
+          if-no-files-found: ignore

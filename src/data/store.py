@@ -34,32 +34,7 @@ import yfinance as yf
 
 MARKET_DIR = Path(__file__).parent.parent.parent / "data" / "market"
 
-BMV_TICKERS: dict[str, str] = {
-    # ── IPC Core (originales, alta liquidez) ──────────────────────────────────
-    "WALMEX":   "WALMEX.MX",   "FEMSAUBD": "FEMSAUBD.MX",
-    "GMEXICOB": "GMEXICOB.MX", "CEMEXCPO": "CEMEXCPO.MX",
-    "GFNORTEO": "GFNORTEO.MX", "BIMBOA":   "BIMBOA.MX",
-    "ALSEA":    "ALSEA.MX",    "KIMBERA":  "KIMBERA.MX",
-    "PINFRA":   "PINFRA.MX",   "ORBIA":    "ORBIA.MX",
-    "GRUMAB":   "GRUMAB.MX",   "ASURB":    "ASURB.MX",
-    "OMAB":     "OMAB.MX",     "GAPB":     "GAPB.MX",
-    "GCARSOA1": "GCARSOA1.MX", "MEGACPO":  "MEGACPO.MX",
-    "LABB":     "LABB.MX",     "Q":        "Q.MX",
-    "VOLARA":   "VOLARA.MX",
-    # ── Expansión (verificados en yfinance) ───────────────────────────────────
-    "CUERVO":      "CUERVO.MX",     # José Cuervo — bebidas / tequila
-    "AC":          "AC.MX",         # Arca Continental — Coca-Cola México
-    "VESTA":       "VESTA.MX",      # Vesta — REIT industrial (parques logísticos)
-    "VISTA":       "VISTAA.MX",     # Vista Energy — petróleo E&P
-    "BOLSAA":      "BOLSAA.MX",     # Bolsa Mexicana — financiero
-    "GCC":         "GCC.MX",        # GCC — cemento norte / EUA
-    "HOTEL":       "HOTEL.MX",      # Hoteles City — turismo / hotelería
-    "POSADAS":     "POSADASA.MX",   # Posadas — hotelería nacional
-    "TLEVISA":     "TLEVISACPO.MX", # Televisa — media / telecomunicaciones
-    "HERDEZ":      "HERDEZ.MX",     # Herdez — alimentos procesados
-    "GENTERA":     "GENTERA.MX",    # Gentera — microfinanzas / bancarización
-    "FUNO11":      "FUNO11.MX",     # FUNO — FIBRA retail (REIT)
-}
+from src.data.bmv_catalog import BMV_YFINANCE as BMV_TICKERS  # noqa: E402
 
 USA_TICKERS: dict[str, str] = {
     # ── Tecnología ────────────────────────────────────────────────────────────

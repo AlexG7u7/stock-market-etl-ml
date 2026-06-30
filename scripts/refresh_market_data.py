@@ -1,22 +1,14 @@
 """
-Punto de entrada único para refrescar datos auxiliares del modelo (noticias + intradía).
+Punto de entrada legacy — delega en run_all_ingests.py.
 
-Uso:
-    python scripts/refresh_market_data.py --all
-    python scripts/refresh_market_data.py --news
-    python scripts/refresh_market_data.py --intraday
-    python scripts/refresh_market_data.py --news --days 14
-
-Cron (ejemplo, antes del mercado MX):
-    0 7 * * 1-5 cd /path/stock-market && python scripts/refresh_market_data.py --all
+Preferir:
+    python scripts/run_all_ingests.py --all
 """
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import sys
-from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
@@ -26,11 +18,6 @@ from dotenv import load_dotenv
 
 load_dotenv(ROOT / ".env")
 
-from src.data.universes import UNIVERSES  # noqa: E402
-from src.ml.news import NEWS_DIR, batch_news_features  # noqa: E402
-
-BMV_UNIVERSE = "🇲🇽 Acciones BMV"
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -39,47 +26,32 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def _publish_latest(records: list[dict], dated_path: Path) -> Path:
-    """Escribe dated JSON y copia a data/news/latest.json."""
-    NEWS_DIR.mkdir(parents=True, exist_ok=True)
-    dated_path.write_text(json.dumps(records, ensure_ascii=False, indent=2))
-    latest_path = NEWS_DIR / "latest.json"
-    latest_path.write_text(json.dumps(records, ensure_ascii=False, indent=2))
-    return latest_path
+def refresh_news(
+    days_back: int = 7,
+    universe: str | None = None,
+    gdelt: bool = False,
+) -> None:
+    """Descarga noticias — todos los universos por default."""
+    from scripts.fetch_news import run_fetch_news
 
-
-def refresh_news(days_back: int = 7) -> None:
-    """Descarga y procesa noticias para todo el universo BMV."""
-    cfg = UNIVERSES.get(BMV_UNIVERSE)
-    if cfg is None:
-        raise RuntimeError(f"Universo no encontrado: {BMV_UNIVERSE}")
-
-    tickers = cfg["tickers"]
-    logger.info("Noticias BMV — %d tickers, ventana %d días", len(tickers), days_back)
-
-    df = batch_news_features(
-        tickers=tickers,
+    result = run_fetch_news(
         days_back=days_back,
+        universe=universe,
+        gdelt=gdelt,
+        save_cache=True,
         verbose=True,
-        save_cache=False,
     )
-    records = df.reset_index().to_dict(orient="records")
-    today = datetime.now().strftime("%Y-%m-%d")
-    dated_path = NEWS_DIR / f"{today}.json"
-    latest_path = _publish_latest(records, dated_path)
-
-    sent_mean = df["news_sent_score"].mean() if "news_sent_score" in df.columns else 0.0
     logger.info(
-        "Noticias listas — %d tickers, sent medio %+.3f",
-        len(df),
-        sent_mean,
+        "Noticias listas — %d tickers (%s)",
+        result["total_tickers"],
+        result["universe"],
     )
-    logger.info("Guardado: %s", dated_path)
-    logger.info("Alias:    %s", latest_path)
+    if result.get("paths", {}).get("latest"):
+        logger.info("Alias: %s", result["paths"]["latest"])
 
 
 def refresh_intraday(full: bool = False) -> None:
-    """Descarga barras intradía 5m vía DataBursátil (scripts/fetch_intraday)."""
+    """Descarga barras intradía 5m vía DataBursátil."""
     logger.info("Intradía — iniciando fetch DataBursátil (full=%s)", full)
     from scripts.fetch_intraday import main as fetch_intraday_main
 
@@ -88,27 +60,32 @@ def refresh_intraday(full: bool = False) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Refrescar datos de mercado (news + intradía)")
-    parser.add_argument("--news", action="store_true", help="Refrescar noticias BMV")
-    parser.add_argument("--intraday", action="store_true", help="Refrescar barras intradía 5m")
-    parser.add_argument("--all", action="store_true", help="Ejecutar news + intraday")
-    parser.add_argument("--days", type=int, default=7, help="Ventana de noticias (días)")
+    parser = argparse.ArgumentParser(description="Refrescar news + intradía (wrapper legacy)")
+    parser.add_argument("--news", action="store_true")
+    parser.add_argument("--intraday", action="store_true")
+    parser.add_argument("--all", action="store_true", help="news + intraday")
+    parser.add_argument("--days", type=int, default=7, help="Ventana noticias")
+    parser.add_argument("--universe", choices=["bmv", "usa", "etf", "crypto", "fibra"],
+                        help="Solo un universo de noticias")
     args = parser.parse_args()
 
     if not (args.news or args.intraday or args.all):
         parser.error("Indica --news, --intraday o --all")
 
-    logger.info("═" * 50)
-    logger.info("REFRESH MARKET DATA — %s", datetime.now().strftime("%Y-%m-%d %H:%M"))
-    logger.info("═" * 50)
+    from scripts.run_all_ingests import run_ingests
 
-    if args.all or args.news:
-        refresh_news(days_back=args.days)
-
-    if args.all or args.intraday:
-        refresh_intraday()
-
-    logger.info("Refresh completado")
+    report = run_ingests(
+        ohlcv=False,
+        news=args.all or args.news,
+        intraday=args.all or args.intraday,
+        fundamentals=False,
+        sql=False,
+        audit=False,
+        news_days=args.days,
+        news_universe=args.universe,
+        intraday_full=False,
+    )
+    sys.exit(0 if report["success"] else 1)
 
 
 if __name__ == "__main__":

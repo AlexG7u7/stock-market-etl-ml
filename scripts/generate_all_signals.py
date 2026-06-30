@@ -538,9 +538,9 @@ def main(
 
     if refresh_data:
         import subprocess
-        print("\n  Refrescando datos de mercado (news + intradía)...")
+        print("\n  Ejecutando pipeline de ingestas (OHLCV + news + intradía + audit)...")
         subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "refresh_market_data.py"), "--all"],
+            [sys.executable, str(ROOT / "scripts" / "run_all_ingests.py"), "--all"],
             check=True,
             cwd=str(ROOT),
         )

@@ -34,24 +34,7 @@ OUT_DIR = ROOT / "data" / "intraday"
 INTERVAL = "5m"
 START = "2024-11-01"
 
-# Ticker interno → emisora_serie (formato intradía, con sufijo de serie)
-INTRADAY_MAP: dict[str, str] = {
-    # ── original 18 ──
-    "WALMEX": "WALMEX*",   "FEMSAUBD": "FEMSAUBD", "GMEXICOB": "GMEXICOB",
-    "CEMEXCPO": "CEMEXCPO","GFNORTEO": "GFNORTEO", "BIMBOA": "BIMBOA",
-    "ALSEA": "ALSEA*",     "KIMBERA": "KIMBERA",   "GRUMAB": "GRUMAB",
-    "ASURB": "ASURB",      "GAPB": "GAPB",         "ORBIA": "ORBIA*",
-    "AC": "AC*",           "VESTA": "VESTA*",      "PINFRA": "PINFRA*",
-    "OMAB": "OMAB",        "MEGACPO": "MEGACPO",   "TLEVISA": "TLEVISACPO",
-    # ── +17 líquidos BMV (~35 total) ──
-    "BOLSAA": "BOLSAA",    "GCARSOA1": "GCARSOA1", "LABB": "LABB",
-    "CUERVO": "CUERVO*",   "HERDEZ": "HERDEZ*",     "GENTERA": "GENTERA*",
-    "VOLARA": "VOLARA",    "Q": "Q*",               "FUNO11": "FUNO11",
-    "GCC": "GCC*",         "AMXL": "AMXB",         "CHDRAUIB": "CHDRAUIB",
-    "GFINBURO": "GFINBURO","VISTA": "VISTAA",      "ALFAA": "ALFAA",
-    "KOFUBL": "KOFUBL",    "HOTEL": "HOTEL*",
-    "POSADAS": "POSADASA",
-}
+from src.data.bmv_catalog import INTRADAY_MAP  # noqa: E402
 
 
 def month_ranges(start: str, end: pd.Timestamp):

@@ -26,20 +26,7 @@ logger = logging.getLogger(__name__)
 BASE_URL = "https://api.databursatil.com"
 PUBLICATION_LAG_DAYS = 70   # días tras cierre de trimestre hasta disponibilidad pública
 
-# Mapeo: ticker interno → emisora DataBursátil (sin serie)
-EMISORA_MAP: dict[str, str] = {
-    "WALMEX": "WALMEX",   "FEMSAUBD": "FEMSA",   "GMEXICOB": "GMEXICO",
-    "CEMEXCPO": "CEMEX",  "GFNORTEO": "GFNORTE", "BIMBOA": "BIMBO",
-    "ALSEA": "ALSEA",     "KIMBERA": "KIMBER",   "PINFRA": "PINFRA",
-    "ORBIA": "ORBIA",     "GRUMAB": "GRUMA",     "ASURB": "ASUR",
-    "OMAB": "OMA",        "GAPB": "GAP",         "GCARSOA1": "GCARSO",
-    "MEGACPO": "MEGA",    "LABB": "LAB",         "Q": "Q",
-    "VOLARA": "VOLAR",    "CUERVO": "CUERVO",    "AC": "AC",
-    "VESTA": "VESTA",     "VISTA": "VISTA",      "BOLSAA": "BOLSA",
-    "GCC": "GCC",         "HOTEL": "HOTEL",      "POSADAS": "POSADAS",
-    "TLEVISA": "TLEVISA", "HERDEZ": "HERDEZ",    "GENTERA": "GENTERA",
-    "FUNO11": "FUNO",
-}
+from src.data.bmv_catalog import BMV_EMISORA_FUNDAMENTALS as EMISORA_MAP
 
 # Columnas de features fundamentales que produce este módulo
 FUNDAMENTAL_COLS = [

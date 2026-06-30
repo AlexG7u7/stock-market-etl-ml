@@ -38,8 +38,12 @@ def main():
                         help="Cuántos tickers del top valida Gemini (default 10)")
     parser.add_argument("--no-gemini", action="store_true",
                         help="Saltar la validación Gemini (solo cuantitativo)")
+    parser.add_argument("--validator", action="store_true",
+                        help="Usar comité de riesgo (legacy) en lugar de trader agent")
     parser.add_argument("--no-stacking", action="store_true",
-                        help="Desactivar meta-LR stacking (default: ON, KB-060)")
+                        help="Desactivar meta-LR stacking (default: ON)")
+    parser.add_argument("--fast", action="store_true",
+                        help="Omitir LSTM (~20 min más rápido)")
     args = parser.parse_args()
 
     t0 = datetime.now()
@@ -50,28 +54,37 @@ def main():
         use_gemini=not args.no_gemini,
         use_stacking=not args.no_stacking,
         verbose=True,
+        agent_role="validator" if args.validator else "trader",
+        skip_lstm=args.fast,
     )
     result["generated_at"] = datetime.now().isoformat()
     result["elapsed_sec"] = round((datetime.now() - t0).total_seconds(), 1)
 
     gs = result.get("gemini_summary", {})
-    if gs.get("modo") != "skip":
+    if gs.get("modo") not in ("skip", None):
         print("\n" + "═" * 62)
-        print("  CAPA 4 — Gemini validador")
+        agent = gs.get("agent", "gemini")
+        print(f"  CAPA 4 — {agent}")
         print("═" * 62)
-        print(f"  CONFIRMA {gs.get('confirma',0)} · DEGRADA {gs.get('degrada',0)} · VETA {gs.get('veta',0)}")
-        print("\n  Veredictos del top global:")
+        if gs.get("agent") == "gemini_trader":
+            print(f"  APOSTAR {gs.get('apostar',0)} · ESPERAR {gs.get('esperar',0)} · EVITAR {gs.get('evitar',0)}")
+        else:
+            print(f"  CONFIRMA {gs.get('confirma',0)} · DEGRADA {gs.get('degrada',0)} · VETA {gs.get('veta',0)}")
+        print("\n  Top global:")
         for item in result["master_ranking"][:args.top_gemini]:
             g = item.get("gemini", {})
             if not g:
                 continue
+            extra = g.get("accion_final") or g.get("como_apostar", {}).get("tamano", "")
             print(f"    #{item['rank_global']:<2} {item['ticker']:<10} "
-                  f"{g.get('veredicto','?'):<9} → {g.get('accion_final','?')}")
+                  f"{g.get('veredicto','?'):<9} → {extra}")
     OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2))
 
     print(f"\n  Apuestas paper BMV (K=2, conv≥0.56): {len(result.get('actionable_bets_bmv', []))}")
     print(f"  Apuestas paper global: {len(result.get('actionable_bets', []))}")
     print(f"  Guardado en: {OUT}")
+    ib = result.get("insights_bundle_path", "data/insights_today.json")
+    print(f"  InsightsBundle: {ib}")
     print(f"  Tiempo total: {result['elapsed_sec']}s\n")
 
 

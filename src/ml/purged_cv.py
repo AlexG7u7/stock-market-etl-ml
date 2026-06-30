@@ -363,3 +363,206 @@ def compare_lstm_vs_lgbm(
         },
     }
 
+
+def _eval_xs_lgbm(train_df, test_ticker, rn_avail) -> tuple[float, str]:
+    try:
+        import lightgbm as lgb
+        reg = lgb.LGBMRegressor(**_LGBM_BASE)
+        reg.fit(train_df[rn_avail].values, train_df["pct_fwd"].values)
+        p_te = reg.predict(test_ticker[rn_avail].values)
+        return _safe_auc(test_ticker["y_rel"].values, p_te), ""
+    except Exception as exc:
+        return 0.5, str(exc)
+
+
+def _eval_seq_model(
+    predictor,
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    test_ticker: pd.DataFrame,
+    avail: list[str],
+    ticker: str,
+    max_samples: int | None,
+) -> tuple[float, str]:
+    try:
+        predictor.fit(
+            train_df, feature_cols=avail, target_col="target_up", max_samples=max_samples,
+        )
+        if not predictor.is_fitted:
+            return 0.5, predictor._last_metrics.get("error", "not_fitted")
+        eval_df = pd.concat([train_df, test_df]).sort_index()
+        auc = predictor.evaluate_auc(
+            eval_df, avail, target_col="target_up",
+            ticker_filter=ticker, eval_dates=test_ticker.index,
+        )
+        return auc, ""
+    except Exception as exc:
+        return 0.5, str(exc)
+
+
+def compare_seq_models(
+    ticker: str,
+    universe: dict[str, str],
+    feature_cols: list[str] | None = None,
+    n_splits: int = 6,
+    horizon: int = 5,
+    embargo: int = 10,
+    sequence_length: int = 30,
+    epochs: int = 40,
+    max_samples: int | None = None,
+    lstm_num_layers: int = 2,
+    lstm_hidden_units: int = 64,
+    lstm_batch_size: int = 32,
+    tcn_filters: int = 64,
+    tcn_blocks: int = 3,
+    include_lstm: bool = True,
+    include_tcn: bool = True,
+) -> dict:
+    """
+    Walk-forward purged: xs_lgbm vs lstm_seq vs tcn_seq (A/B/C).
+    """
+    from src.ml.features import FEATURE_COLS
+    from src.ml.lstm_seq import LSTMSeqPredictor
+    from src.ml.tcn_seq import TCNSeqPredictor
+
+    if ticker not in universe:
+        raise ValueError(f"Ticker {ticker!r} no está en el universo")
+
+    feat_cols = feature_cols or FEATURE_COLS
+    panel = build_universe_panel(universe, feat_cols, horizon=horizon)
+    avail = [c for c in feat_cols if c in panel.columns]
+    rn_avail = [f"rn_{c}" for c in avail]
+    df_reset = panel.reset_index()
+    fold_results: list[dict] = []
+
+    for fold_i, (tr_idx, te_idx) in enumerate(
+        purged_walk_forward_splits(df_reset, n_splits=n_splits, horizon=horizon, embargo=embargo)
+    ):
+        train_df = panel.iloc[tr_idx].copy()
+        test_df = panel.iloc[te_idx].copy()
+        test_ticker = test_df[test_df["ticker"] == ticker]
+        if len(test_ticker) < 5 or test_ticker["y_rel"].nunique() < 2:
+            continue
+
+        xs_auc, xs_err = _eval_xs_lgbm(train_df, test_ticker, rn_avail)
+        row: dict = {
+            "fold": fold_i + 1,
+            "test_start": str(test_ticker.index.min())[:10],
+            "test_end": str(test_ticker.index.max())[:10],
+            "n_test_ticker": int(len(test_ticker)),
+            "xs_lgbm_auc": round(xs_auc, 4),
+        }
+
+        if include_lstm:
+            lstm = LSTMSeqPredictor(
+                sequence_length=sequence_length,
+                num_layers=lstm_num_layers,
+                hidden_units=lstm_hidden_units,
+                batch_size=lstm_batch_size,
+                epochs=epochs,
+            )
+            lstm_auc, lstm_err = _eval_seq_model(
+                lstm, train_df, test_df, test_ticker, avail, ticker, max_samples,
+            )
+            row["lstm_seq_auc"] = round(lstm_auc, 4)
+            row["lstm_error"] = lstm_err or None
+
+        if include_tcn:
+            tcn = TCNSeqPredictor(
+                sequence_length=sequence_length,
+                filters=tcn_filters,
+                num_tcn_blocks=tcn_blocks,
+                lstm_units=lstm_hidden_units,
+                batch_size=lstm_batch_size,
+                epochs=epochs,
+            )
+            tcn_auc, tcn_err = _eval_seq_model(
+                tcn, train_df, test_df, test_ticker, avail, ticker, max_samples,
+            )
+            row["tcn_seq_auc"] = round(tcn_auc, 4)
+            row["tcn_error"] = tcn_err or None
+
+        row["xs_lgbm_error"] = xs_err or None
+        fold_results.append(row)
+
+    if not fold_results:
+        return {"ticker": ticker, "error": "Sin folds válidos", "folds": []}
+
+    agg: dict = {"n_folds": len(fold_results)}
+    xs_aucs = [f["xs_lgbm_auc"] for f in fold_results]
+    agg["xs_lgbm_mean_auc"] = round(float(np.mean(xs_aucs)), 4)
+    agg["xs_lgbm_std_auc"] = round(float(np.std(xs_aucs)), 4)
+
+    if include_lstm:
+        lstm_aucs = [f["lstm_seq_auc"] for f in fold_results]
+        agg["lstm_seq_mean_auc"] = round(float(np.mean(lstm_aucs)), 4)
+        agg["lstm_seq_std_auc"] = round(float(np.std(lstm_aucs)), 4)
+        agg["lstm_wins_vs_lgbm"] = int(sum(l > x for l, x in zip(lstm_aucs, xs_aucs)))
+
+    if include_tcn:
+        tcn_aucs = [f["tcn_seq_auc"] for f in fold_results]
+        agg["tcn_seq_mean_auc"] = round(float(np.mean(tcn_aucs)), 4)
+        agg["tcn_seq_std_auc"] = round(float(np.std(tcn_aucs)), 4)
+        agg["tcn_wins_vs_lgbm"] = int(sum(t > x for t, x in zip(tcn_aucs, xs_aucs)))
+        if include_lstm:
+            lstm_aucs = [f["lstm_seq_auc"] for f in fold_results]
+            agg["tcn_wins_vs_lstm"] = int(sum(t > l for t, l in zip(tcn_aucs, lstm_aucs)))
+
+    seq_keys = [k for k in ("lstm_seq_mean_auc", "tcn_seq_mean_auc") if k in agg]
+    if seq_keys:
+        best = max(seq_keys, key=lambda k: agg[k])
+        agg["best_seq_model"] = best.replace("_mean_auc", "")
+
+    return {
+        "ticker": ticker,
+        "meta": {
+            "n_splits": n_splits,
+            "horizon": horizon,
+            "embargo": embargo,
+            "sequence_length": sequence_length,
+            "epochs": epochs,
+            "n_features": len(avail),
+        },
+        "folds": fold_results,
+        "aggregate": agg,
+    }
+
+
+def grid_lstm_walkforward(
+    ticker: str,
+    universe: dict[str, str],
+    grid: list[dict],
+    n_splits: int = 4,
+    horizon: int = 5,
+    embargo: int = 10,
+    max_samples: int | None = 8000,
+) -> dict:
+    """Grid search LSTM hyperparams con purged walk-forward (solo lstm vs baseline implícito)."""
+    results: list[dict] = []
+    for cfg in grid:
+        res = compare_lstm_vs_lgbm(
+            ticker=ticker,
+            universe=universe,
+            n_splits=n_splits,
+            horizon=horizon,
+            embargo=embargo,
+            sequence_length=cfg.get("sequence_length", 30),
+            lstm_epochs=cfg.get("epochs", 40),
+            lstm_max_samples=max_samples,
+            lstm_num_layers=cfg.get("num_layers", 2),
+            lstm_hidden_units=cfg.get("hidden_units", 64),
+            lstm_batch_size=cfg.get("batch_size", 32),
+        )
+        agg = res.get("aggregate", {})
+        results.append({
+            **cfg,
+            "lstm_mean_auc": agg.get("lstm_seq_mean_auc"),
+            "lgbm_mean_auc": agg.get("xs_lgbm_mean_auc"),
+            "lstm_wins": agg.get("lstm_wins"),
+            "n_folds": agg.get("n_folds"),
+        })
+
+    valid = [r for r in results if r.get("lstm_mean_auc") is not None]
+    best = max(valid, key=lambda r: r["lstm_mean_auc"]) if valid else None
+    return {"ticker": ticker, "grid": results, "best": best}
+

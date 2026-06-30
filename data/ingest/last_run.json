@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-06-30T01:01:12.018518+00:00",
+  "steps": {
+    "news": {
+      "status": "ok",
+      "elapsed_s": 129.9,
+      "days_back": 7
+    }
+  },
+  "success": true,
+  "finished_at": "2026-06-30T01:03:21.921498+00:00",
+  "elapsed_s": 129.9
+}
