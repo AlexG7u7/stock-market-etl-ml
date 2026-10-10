@@ -9,4 +9,3 @@ steps:
       - .
 images:
   - us-central1-docker.pkg.dev/domesticospro/mercado/daily-job:latest
-timeout: 3600s

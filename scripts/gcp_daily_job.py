@@ -894,13 +894,13 @@ def _parse_json_obj(text: str) -> dict:
     return json.loads(raw[start : end + 1])
 
 
-def _call_xai(context: dict) -> tuple[dict, str] | None:
-    key = os.environ.get("XAI_API_KEY")
+def _call_llm(context: dict) -> tuple[dict, str] | None:
+    key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         return None
     import httpx
 
-    model = os.environ.get("XAI_MODEL", "grok-3")
+    model = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-5-5")
     user = (
         "Reparte el libro para el siguiente día hábil. Long only. "
         "Máximo 3 nombres con dólares. Cada nombre lleva 0, o entre 10 y 25. "
@@ -910,23 +910,27 @@ def _call_xai(context: dict) -> tuple[dict, str] | None:
         + json.dumps(context, ensure_ascii=False, default=_json_default)
     )
     response = httpx.post(
-        XAI_URL,
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+        "https://api.anthropic.com/v1/messages",
+        headers={
+            "x-api-key": key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
         json={
             "model": model,
-            "temperature": 0,
-            "messages": [
-                {"role": "system", "content": "Eres el agente inversor. Respondes únicamente JSON."},
-                {"role": "user", "content": user},
-            ],
+            "max_tokens": 800,
+            "system": "Eres el agente inversor. Respondes únicamente JSON.",
+            "messages": [{"role": "user", "content": user}],
         },
         timeout=90,
     )
     if response.status_code >= 400:
-        raise RuntimeError(f"xAI respondió {response.status_code}")
+        raise RuntimeError(f"Anthropic respondió {response.status_code}")
     body = response.json()
-    content = body["choices"][0]["message"]["content"]
-    return _parse_json_obj(content), model
+    content = "".join(
+        block.get("text", "") for block in body.get("content") or [] if block.get("type") == "text"
+    )
+    return _parse_json_obj(content), body.get("model") or model
 
 
 def _with_open_positions(book, candidates: list[dict], session: date) -> list[dict]:
@@ -966,7 +970,7 @@ def _attach_p_sube(rows: list[dict], limit: int = 8) -> None:
 
 
 def _plan_from_llm(book, candidates: list[dict], enter_on: date) -> tuple[list[dict], str, float, str] | None:
-    if not os.environ.get("XAI_API_KEY"):
+    if not os.environ.get("ANTHROPIC_API_KEY"):
         return None
     by_ticker = {c["ticker"]: c for c in candidates}
     held = []
@@ -995,7 +999,7 @@ def _plan_from_llm(book, candidates: list[dict], enter_on: date) -> tuple[list[d
         ],
     }
     try:
-        parsed = _call_xai(context)
+        parsed = _call_llm(context)
     except Exception as exc:
         logger.warning("xAI no respondió: %s", _redact(str(exc)))
         return None
@@ -1088,7 +1092,7 @@ def _plan_from_rules(book, candidates: list[dict], enter_on: date) -> tuple[list
         cash = round(cash - usd, 2)
         slots -= 1
         held.add(cand["ticker"])
-    motivo = "sin XAI_API_KEY; plan por libro y ranking, sin LLM"
+    motivo = "sin ANTHROPIC_API_KEY; plan por libro y ranking, sin LLM"
     return rows, motivo, cash
 
 
@@ -1110,10 +1114,10 @@ def run_decide(session: date | None = None) -> int:
     _attach_p_sube(candidates)
     llm_used = False
     model = None
-    if os.environ.get("XAI_API_KEY"):
+    if os.environ.get("ANTHROPIC_API_KEY"):
         built = _plan_from_llm(book, candidates, enter_on)
     else:
-        logger.info("sin XAI_API_KEY; no se llama al LLM")
+        logger.info("sin ANTHROPIC_API_KEY; no se llama al LLM")
         built = None
     if built is None:
         plans, motivo, cash = _plan_from_rules(book, candidates, enter_on)

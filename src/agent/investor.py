@@ -1,4 +1,4 @@
-"""Agente inversor: una conversación con tools. Grok pide la tool y los parámetros."""
+"""Agente inversor: una conversación con tools. Claude pide la tool y los parámetros."""
 from __future__ import annotations
 
 import json
@@ -11,7 +11,7 @@ from src.agent.chat import chat_with_tools, function_tool
 from src.agent.policy import PoliticaInversor
 from src.agent.tools import asignacion_schema, build_tools, price_usd
 
-DEFAULT_MODEL = "grok-4"
+DEFAULT_MODEL = "claude-haiku-5-5"
 MAX_ROUNDS = 8
 
 
@@ -21,7 +21,7 @@ class AgenteInversor(Agent):
     def __init__(self, book: Book, policy: PoliticaInversor | None = None, model: str | None = None):
         self.book = book
         self.policy = policy or PoliticaInversor()
-        self.model = model or os.getenv("XAI_MODEL", DEFAULT_MODEL)
+        self.model = model or os.getenv("ANTHROPIC_MODEL", DEFAULT_MODEL)
         self.tools = build_tools(book)
 
     def observe(self, **params) -> dict:
@@ -48,10 +48,10 @@ class AgenteInversor(Agent):
 
     def act(self, observation: dict | None = None, apply: bool = False) -> dict:
         pregunta = observation or self.observe()
-        if not os.getenv("XAI_API_KEY"):
+        if not os.getenv("ANTHROPIC_API_KEY"):
             return {
                 "ok": False,
-                "error": "Falta XAI_API_KEY en el entorno. La pregunta ya está armada.",
+                "error": "Falta ANTHROPIC_API_KEY en el entorno. La pregunta ya está armada.",
                 "pregunta": pregunta,
             }
 
