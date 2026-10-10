@@ -13,14 +13,14 @@ El script es `scripts/gcp_daily_job.py` (`--mode ingest|decide|score`).
 | lun–vie 19:15 | plan de entrada del siguiente día hábil | `mercado-daily-decide` |
 | lun–vie 20:00 | score de planes cuyo horizonte ya cumplió | `mercado-daily-score` |
 
-Cloud Scheduler ya está activado en `domesticospro`. Los comandos de jobs de abajo todavía no se han ejecutado.
+Cloud Scheduler ya está activado en `domesticospro`. Los jobs y los disparos de abajo ya están creados en `us-central1`.
 
 ## Secretos
 
 No van en el repo ni en esta página.
 
 - `mercado-database-url`: URL de Postgres de la base `mercado` por el socket `/cloudsql/domesticospro:us-central1:domesticos-pg`. El job la recibe como `LAB_DATABASE_URL` (`src/db/lab_store.py`). Si solo existe `DATABASE_URL`, el script la copia a ese nombre.
-- `xai-api-key`: solo el job `decide`. Sin `XAI_API_KEY` el script no llama al LLM y arma el plan con el libro y el ranking.
+- No hay secreto `xai-api-key`. El job `decide` se crea sin `XAI_API_KEY`. Sin esa variable el script no llama al LLM y arma el plan con el libro y el ranking.
 
 ## Build y jobs
 
@@ -53,8 +53,7 @@ gcloud projects add-iam-policy-binding domesticospro \
 gcloud builds submit \
   --project=domesticospro \
   --region=us-central1 \
-  --tag=us-central1-docker.pkg.dev/domesticospro/mercado/daily-job:latest \
-  --file=deploy/cloudrun/Dockerfile \
+  --config=deploy/cloudrun/cloudbuild.yaml \
   .
 
 gcloud run jobs create mercado-daily-ingest \
@@ -78,7 +77,7 @@ gcloud run jobs create mercado-daily-decide \
   --image=us-central1-docker.pkg.dev/domesticospro/mercado/daily-job:latest \
   --service-account=mercado-daily@domesticospro.iam.gserviceaccount.com \
   --set-cloudsql-instances=domesticospro:us-central1:domesticos-pg \
-  --set-secrets=LAB_DATABASE_URL=mercado-database-url:latest,XAI_API_KEY=xai-api-key:latest \
+  --set-secrets=LAB_DATABASE_URL=mercado-database-url:latest \
   --set-env-vars=DB_NAME=mercado,DB_SCHEMA=lab \
   --command=python \
   --args=scripts/gcp_daily_job.py,--mode,decide \
@@ -171,7 +170,7 @@ gcloud scheduler jobs create http mercado-score-lv \
 
 ## Contrato con lab_store
 
-`src/db/lab_store.py` habla con `sql/03_lab_schema.sql`. `psycopg[binary]` está en `requirements.txt`. El esquema `lab` ya existe en la base `mercado`.
+`src/db/lab_store.py` habla con `sql/03_lab_schema.sql`. `psycopg[binary]` está en `deploy/cloudrun/requirements-job.txt` (la imagen no instala TensorFlow). El esquema `lab` ya existe en la base `mercado`.
 
 - `upsert_prices` → `lab.price_daily`
 - `insert_news` → `lab.news_daily` (título, fuente, sentimiento, url del día)

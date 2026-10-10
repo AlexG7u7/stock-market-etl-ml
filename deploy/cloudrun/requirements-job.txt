@@ -1,0 +1,13 @@
+# Dependencias del job diario (scripts/gcp_daily_job.py).
+# Sin TensorFlow ni el requirements.txt completo.
+pandas>=2.1.0
+numpy>=1.24.0
+yfinance>=0.2.28
+python-dotenv>=1.0.0
+httpx>=0.25.0
+requests>=2.31.0
+feedparser>=6.0.0
+psycopg[binary]>=3.2.0
+pyyaml>=6.0
+google-genai>=2.0.0
+pyarrow>=14.0.0

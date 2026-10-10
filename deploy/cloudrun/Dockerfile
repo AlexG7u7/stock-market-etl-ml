@@ -11,9 +11,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends tzdata gcc libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir "psycopg[binary]>=3.2"
+COPY deploy/cloudrun/requirements-job.txt requirements-job.txt
+RUN pip install --no-cache-dir -r requirements-job.txt
 
 COPY src ./src
 COPY scripts ./scripts

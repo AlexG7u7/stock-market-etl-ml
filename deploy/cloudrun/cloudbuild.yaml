@@ -1,0 +1,12 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - deploy/cloudrun/Dockerfile
+      - -t
+      - us-central1-docker.pkg.dev/domesticospro/mercado/daily-job:latest
+      - .
+images:
+  - us-central1-docker.pkg.dev/domesticospro/mercado/daily-job:latest
+timeout: 3600s
