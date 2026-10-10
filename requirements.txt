@@ -58,6 +58,9 @@ keras>=3.0.0               # High-level neural networks API (if not using TF's k
 
 # Financial data
 yfinance>=0.2.28           # Yahoo Finance API
+psycopg[binary]>=3.2.0     # Cloud SQL Postgres, esquema lab
+lightgbm>=4.0.0            # Gradient boosting (xs_lgbm, ensemble, eval A/B)
+py7zr>=1.0.0               # Descompresión de hechos BMV (/v2/descargas)
 
 # Google AI (mismo patrón que TrabajadoresDomesticos — API key directa, sin Vertex AI)
 google-genai>=2.0.0        # Gemini 2.5-flash para análisis de sentimiento de noticias

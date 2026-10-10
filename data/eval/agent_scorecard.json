@@ -1,0 +1,214 @@
+{
+  "generated_at": "2026-10-10T04:54:36.696083+00:00",
+  "universo": "bmv",
+  "n_tickers_con_precio": 35,
+  "n_tickers_universo": 36,
+  "faltantes": [
+    "ALFAA (ALFAA.MX) parquet vacío"
+  ],
+  "agentes": {
+    "ranking": {
+      "ok": true,
+      "definicion": "Cada viernes, emisoras BMV con al menos 60 cierres. Se ordenan por el retorno de los 20 días previos y se compara el retorno de los siguientes 20 días hábiles del top-5 contra el promedio igual-ponderado de las emisoras elegibles ese viernes.",
+      "n": 1326,
+      "viernes_saltados": 21,
+      "emisoras_elegibles_media": 24.13,
+      "media_top5": 0.0088,
+      "media_universo": 0.0119,
+      "media_top5_pct": 0.881,
+      "media_universo_pct": 1.187,
+      "exceso_top5_pct": -0.306,
+      "hit_rate": 0.4638,
+      "fecha_inicio": "2000-03-24",
+      "fecha_fin": "2026-09-04",
+      "veredicto": "No aporta: el top-5 rinde 0.88% a 20 días contra 1.19% del universo (hit rate 46%)."
+    },
+    "woe": {
+      "ok": true,
+      "definicion": "En el último 20% de fechas con features y cierre a 5 días, p = sigmoide(logit(event_rate) + suma de WoE) usando solo variables con IV>=0.02. El evento es que el cierre suba en 5 días hábiles.",
+      "variables": [
+        {
+          "feature": "sp500_ret5",
+          "iv": 0.03134
+        },
+        {
+          "feature": "mkt_trend",
+          "iv": 0.03124
+        },
+        {
+          "feature": "mkt_ret10",
+          "iv": 0.0298
+        },
+        {
+          "feature": "williams_r",
+          "iv": 0.02193
+        }
+      ],
+      "event_rate_scorecard": 0.492,
+      "n": 40414,
+      "n_fechas": 1174,
+      "n_tickers": 35,
+      "fecha_inicio": "2022-02-01",
+      "fecha_fin": "2026-10-02",
+      "brier": 0.2568,
+      "brier_tasa_base": 0.2498,
+      "skill_brier": -0.0282,
+      "tasa_base": 0.4854,
+      "p_promedio": 0.5054,
+      "p_promedio_cuando_sube": 0.5107,
+      "p_promedio_cuando_no_sube": 0.5004,
+      "brecha_p": 0.0102,
+      "notas": [
+        "Los bins salen de data/woe_results.json (fecha 2026-06-27 19:21, n_obs 9716). Ese ajuste puede solaparse con el último 20% de fechas, así que esto no es una prueba fuera de muestra pura."
+      ],
+      "veredicto": "No aporta: p es 0.511 cuando el cierre sube y 0.500 cuando no, y el Brier 0.257 no mejora el 0.250 de la tasa base."
+    },
+    "clima": {
+      "ok": true,
+      "definicion": "Con NAFTRACISHRS.MX, alcista si el retorno de 10 días es mayor a 1%, bajista si es menor a -1%, y lateral en el resto. El retorno es el del cierre de cada emisora BMV a 5 días hábiles.",
+      "benchmark": "NAFTRACISHRS.MX",
+      "por_estado": {
+        "alcista": {
+          "n": 63611,
+          "n_fechas": 2476,
+          "retorno_medio_5d": 0.0046,
+          "retorno_medio_5d_pct": 0.461
+        },
+        "bajista": {
+          "n": 48594,
+          "n_fechas": 1732,
+          "retorno_medio_5d": 0.0019,
+          "retorno_medio_5d_pct": 0.191
+        },
+        "lateral": {
+          "n": 41049,
+          "n_fechas": 1452,
+          "retorno_medio_5d": 0.0018,
+          "retorno_medio_5d_pct": 0.177
+        }
+      },
+      "veredicto": "Aporta poco: a 5 días la BMV rinde 0.46% en alcista, 0.19% en bajista y 0.18% en lateral. El lateral no queda entre los otros dos."
+    },
+    "noticias": {
+      "ok": true,
+      "definicion": "Foto única en data/news/latest.json. Hay news_sent_score por ticker, pero no un panel histórico diario de sentimiento, así que no se calcula correlación con precios.",
+      "hay_news_sent_score": true,
+      "panel_historico_diario": false,
+      "cobertura": {
+        "n_tickers": 96,
+        "n_tickers_con_articulos": 36,
+        "fraccion_con_articulos": 0.375,
+        "sentimiento_medio": 0.0578,
+        "n_scores_distintos": 17
+      },
+      "veredicto": "No aporta evidencia sobre retornos: no hay panel diario de sentimiento, solo cobertura de una foto."
+    },
+    "salida": {
+      "ok": true,
+      "definicion": "Último año, el calendario común de la BMV cada 20 días hábiles. Stop = cierre - 1.5 * ATR(14). Se mira si el mínimo de los 5 días siguientes de cada emisora toca ese stop. ATR es la media móvil de 14 días del true range.",
+      "fecha_inicio": "2025-10-09",
+      "fecha_fin": "2026-10-09",
+      "n": 452,
+      "n_fechas": 13,
+      "n_sin_high_low": 0,
+      "frecuencia_toca_stop": 0.2633,
+      "n_toca_stop": 119,
+      "n_no_toca_stop": 333,
+      "retorno_medio_si_no_toca": 0.0082,
+      "retorno_medio_si_no_toca_pct": 0.818,
+      "veredicto": "Aporta como freno: el mínimo de 5 días toca el stop en 26% de los casos. El 0.82% es el retorno de las que no lo tocan, no la ganancia de la regla."
+    }
+  },
+  "tabla": [
+    {
+      "agente": "Ranking",
+      "metrica": "n viernes",
+      "numero": 1326,
+      "frase": "No aporta: el top-5 rinde 0.88% a 20 días contra 1.19% del universo (hit rate 46%)."
+    },
+    {
+      "agente": "Ranking",
+      "metrica": "media top5, 20d (%)",
+      "numero": 0.881,
+      "frase": "No aporta: el top-5 rinde 0.88% a 20 días contra 1.19% del universo (hit rate 46%)."
+    },
+    {
+      "agente": "Ranking",
+      "metrica": "media universo, 20d (%)",
+      "numero": 1.187,
+      "frase": "No aporta: el top-5 rinde 0.88% a 20 días contra 1.19% del universo (hit rate 46%)."
+    },
+    {
+      "agente": "Ranking",
+      "metrica": "hit rate top5 > universo",
+      "numero": 0.4638,
+      "frase": "No aporta: el top-5 rinde 0.88% a 20 días contra 1.19% del universo (hit rate 46%)."
+    },
+    {
+      "agente": "WoE",
+      "metrica": "Brier",
+      "numero": 0.2568,
+      "frase": "No aporta: p es 0.511 cuando el cierre sube y 0.500 cuando no, y el Brier 0.257 no mejora el 0.250 de la tasa base."
+    },
+    {
+      "agente": "WoE",
+      "metrica": "tasa base",
+      "numero": 0.4854,
+      "frase": "No aporta: p es 0.511 cuando el cierre sube y 0.500 cuando no, y el Brier 0.257 no mejora el 0.250 de la tasa base."
+    },
+    {
+      "agente": "WoE",
+      "metrica": "p promedio cuando sube",
+      "numero": 0.5107,
+      "frase": "No aporta: p es 0.511 cuando el cierre sube y 0.500 cuando no, y el Brier 0.257 no mejora el 0.250 de la tasa base."
+    },
+    {
+      "agente": "WoE",
+      "metrica": "p promedio cuando no sube",
+      "numero": 0.5004,
+      "frase": "No aporta: p es 0.511 cuando el cierre sube y 0.500 cuando no, y el Brier 0.257 no mejora el 0.250 de la tasa base."
+    },
+    {
+      "agente": "Clima",
+      "metrica": "retorno medio 5d, alcista (%)",
+      "numero": 0.461,
+      "frase": "Aporta poco: a 5 días la BMV rinde 0.46% en alcista, 0.19% en bajista y 0.18% en lateral. El lateral no queda entre los otros dos."
+    },
+    {
+      "agente": "Clima",
+      "metrica": "retorno medio 5d, bajista (%)",
+      "numero": 0.191,
+      "frase": "Aporta poco: a 5 días la BMV rinde 0.46% en alcista, 0.19% en bajista y 0.18% en lateral. El lateral no queda entre los otros dos."
+    },
+    {
+      "agente": "Clima",
+      "metrica": "retorno medio 5d, lateral (%)",
+      "numero": 0.177,
+      "frase": "Aporta poco: a 5 días la BMV rinde 0.46% en alcista, 0.19% en bajista y 0.18% en lateral. El lateral no queda entre los otros dos."
+    },
+    {
+      "agente": "Noticias",
+      "metrica": "tickers con n_articles>0",
+      "numero": 36,
+      "frase": "No aporta evidencia sobre retornos: no hay panel diario de sentimiento, solo cobertura de una foto."
+    },
+    {
+      "agente": "Noticias",
+      "metrica": "sentimiento medio",
+      "numero": 0.0578,
+      "frase": "No aporta evidencia sobre retornos: no hay panel diario de sentimiento, solo cobertura de una foto."
+    },
+    {
+      "agente": "Salida",
+      "metrica": "frecuencia toca stop 5d",
+      "numero": 0.2633,
+      "frase": "Aporta como freno: el mínimo de 5 días toca el stop en 26% de los casos. El 0.82% es el retorno de las que no lo tocan, no la ganancia de la regla."
+    },
+    {
+      "agente": "Salida",
+      "metrica": "retorno medio si no toca (%)",
+      "numero": 0.818,
+      "frase": "Aporta como freno: el mínimo de 5 días toca el stop en 26% de los casos. El 0.82% es el retorno de las que no lo tocan, no la ganancia de la regla."
+    }
+  ]
+}
