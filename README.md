@@ -111,18 +111,18 @@ SQL_SERVER_USER=sa
 SQL_SERVER_PASSWORD=tu_password
 
 # SSH Tunnel (Cloudflare)
-SSH_HOSTNAME=ssh.rod-b-op.com
-SSH_USER=rodri
+SSH_HOSTNAME=ssh.tu-dominio.com
+SSH_USER=tu_usuario
 SSH_LOCAL_PORT=1433
 SSH_REMOTE_PORT=1433
-CLOUDFLARE_TUNNEL_ID=5a5dd112-9705-4f62-b97f-c7723daf5afc
+CLOUDFLARE_TUNNEL_ID=tu-tunnel-id
 ```
 
 ### 4. Inicializar Base de Datos
 
 ```bash
 # Conectar vía SSH (Cloudflare Tunnel)
-cloudflared access ssh --hostname ssh.rod-b-op.com --user rodri
+cloudflared access ssh --hostname ssh.tu-dominio.com --user tu_usuario
 
 # Ejecutar scripts SQL
 python scripts/setup_database.py
