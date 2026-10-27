@@ -71,3 +71,6 @@ htmlcov/
 temp/
 tmp/
 backfill.pid
+
+# Salida local de la ingesta temática
+data/news/noticias_trump.csv
