@@ -13,6 +13,7 @@ sqlalchemy>=2.0.0          # ORM and database toolkit
 requests>=2.31.0
 urllib3>=2.0.0
 httpx>=0.25.0              # Modern HTTP client
+feedparser>=6.0.10         # RSS/Atom feed parser
 
 # Data validation
 jsonschema>=4.19.0

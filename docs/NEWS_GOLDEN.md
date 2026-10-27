@@ -62,3 +62,51 @@ El esquema `lab` mantiene una separación rigurosa entre datos no estructurados 
    Inyección directa de `NEWS_FEATURE_COLS` en el ensamble de Machine Learning (LightGBM, WoE y Regresión Logística) para generar señales multi-horizonte.
 3. **Agentes de Validación y Riesgo (`Gemini Validator`):**
    Detección de condiciones de veto (ej. regla `LR-003: noticias contradicen momentum técnico` cuando `news_sent_score < -0.25` o `news_alerta = True`).
+
+---
+
+## 6. Ingesta temática de noticias sobre Donald Trump
+
+### Propósito y Alcance
+La ingesta temática implementada en [scripts/ingesta_trump.py](file:///home/alexis/proyectosFinalMineria/stock-market-etl-ml/scripts/ingesta_trump.py) es un proceso experimental especializado en monitorear el flujo de noticias internacionales y macroeconómicas relacionadas con **Donald Trump**, aranceles, política comercial, mercados y economía.
+
+A diferencia del pipeline general de noticias que indexa por ticker o activo individual, este proceso extrae información temática agregada utilizando el servicio público de **Google News RSS** parametrizado con consultas booleanas y filtros geográficos y de idioma para México (`hl=es-419`, `gl=MX`, `ceid=MX:es-419`).
+
+### Ejecución
+El script se ejecuta directamente desde la raíz del proyecto mediante el entorno virtual:
+
+```bash
+python scripts/ingesta_trump.py
+```
+
+### Salida Local y Esquema de Datos
+El resultado de la extracción se persiste localmente en la ruta:
+
+`data/news/noticias_trump.csv`
+
+> [!IMPORTANT]
+> El archivo `data/news/noticias_trump.csv` es un artefacto local de exploración y depuración, por lo que **no debe versionarse** ni incluirse en los commits del repositorio.
+
+El dataset exportado contiene las siguientes columnas:
+- `titulo`: Titular completo de la nota de prensa según lo entrega el feed RSS.
+- `fecha`: Fecha y hora de publicación original en formato RFC 822 (ej. `Mon, 26 Oct 2026 14:23:56 GMT`).
+- `url`: Enlace directo del artículo en Google News RSS.
+- `fuente`: Identificador de la fuente temática (`"Google News (Trump)"`).
+- `texto`: Cuerpo textual para procesamiento preliminar. Reutiliza el titular (`titulo`) debido a que Google News RSS no entrega necesariamente el cuerpo completo de los artículos.
+
+### Estado dentro de la Arquitectura Golden
+- **Nivel de madurez:** Esta ingesta es de carácter **temático y experimental**.
+- **Persistencia en base de datos:** Actualmente **no** carga directamente en `lab.news_daily` ni en `lab.news_feature_daily`.
+- **Criterio de integración:** No debe presentarse como parte completa del producto Golden hasta que sea formalmente integrada al pipeline diario, asociada a tickers afectados (o un identificador macroeconómico transversal), normalizada léxicamente y deduplicada mediante TF-IDF y decaimiento temporal.
+
+### Métricas de Ejecución en Vivo
+Durante la ejecución de validación en vivo se obtuvieron:
+- **Artículos descargados:** **100 noticias** (este número puede variar en futuras ejecuciones debido a que la fuente consulta noticias en vivo).
+- **Cobertura temporal observada:** Desde `2026-07-20 07:00:00+00:00` hasta `2026-10-27 00:28:47+00:00`.
+- **Calidad de campos:** 0 títulos vacíos, 0 URLs vacías y 0 duplicados exactos por URL.
+
+### Limitaciones Conocidas
+1. **Dependencia de Red y Rate Limiting:** Requiere conexión a Internet saliente y está sujeta a la disponibilidad y límites de tasa del endpoint RSS de Google News.
+2. **Contenido Dinámico y Volátil:** El conjunto de notas cambia dinámicamente según la actualidad política y comercial.
+3. **Profundidad de Contenido:** El canal RSS provee titulares y resúmenes fragmentados, no el artículo periodístico completo.
+4. **Duplicación de Narrativas:** Diferentes agencias y medios pueden reportar el mismo evento con redacciones ligeramente distintas (sindicación de prensa), requiriendo deduplicación semántica previa a su uso como señal predictiva.
