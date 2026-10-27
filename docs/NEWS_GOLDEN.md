@@ -2,7 +2,7 @@
 
 ## 1. Propósito
 
-El producto **Golden diario de noticias segmentadas** (`lab.news_feature_daily`) almacena en la base de datos `mercado` (esquema `lab` de PostgreSQL 16) las características cuantitativas (*features*) agregadas del flujo noticioso para todos los universos de inversión disponibles en GBM (BMV, USA SIC, ETFs, Cripto proxies y FIBRAs).
+El producto **Golden diario de noticias segmentadas** (`lab.news_feature_daily`) almacena en la base de datos `mercado` (esquema `lab` de PostgreSQL 16) las características cuantitativas (*features*) agregadas del flujo noticioso para los universos de inversión configurados en el proyecto (BMV, USA SIC, ETFs, Cripto proxies y FIBRAs).
 
 Este dataset sintetiza el análisis de procesamiento de lenguaje natural (NLP), deduplicación léxica y descuento temporal sobre noticias financieras, proporcionando una fotografía estandarizada y normalizada de cada activo por día de operación bursátil.
 
@@ -29,7 +29,7 @@ Este dataset sintetiza el análisis de procesamiento de lenguaje natural (NLP), 
 | `universe` | `text` | Slug del universo al que pertenece el activo (`"bmv"`, `"usa"`, `"etfs"`, `"cripto"`, `"fibras"`). |
 | `news_sent_score` | `double precision` | Puntuación agregada de sentimiento ponderado en escala $[-1.0, +1.0]$. Descuenta artículos repetidos y noticias antiguas. |
 | `news_count_7d` | `double precision` | Volumen mediático efectivo en la ventana móvil de 7 días, comprimido logarítmicamente: $\ln(1 + \sum w_i)$. Evita distorsiones por coberturas sindicadas masivas. |
-| `news_sent_delta` | `double precision` | Cambio del sentimiento respecto a la ventana de 7 días previa ($\text{sent}_{t} - \text{sent}_{t-7d}$). Detecta giros o quiebres repentinos de narrativa. |
+| `news_sent_delta` | `double precision` | Cambio del sentimiento respecto a la ventana de 7 días previa ($\mathrm{sent}_{t} - \mathrm{sent}_{t-7d}$). Detecta giros o quiebres repentinos de narrativa. |
 | `news_sent_vol` | `double precision` | Desviación estándar ponderada del sentimiento de los artículos recientes. Mide incertidumbre o desacuerdo entre medios de prensa. |
 | `news_relevance_avg` | `double precision` | Puntuación media ponderada de relevancia léxica de los titulares frente a los alias corporativos de la empresa $[0.0, 1.0]$. |
 | `news_esg_score` | `double precision` | Puntuación de sentimiento restringida a artículos con temática ambiental, social o de gobernanza corporativa (ASG / ESG). |
@@ -68,7 +68,7 @@ El esquema `lab` mantiene una separación rigurosa entre datos no estructurados 
 ## 6. Ingesta temática de noticias sobre Donald Trump
 
 ### Propósito y Alcance
-La ingesta temática implementada en [scripts/ingesta_trump.py](file:///home/alexis/proyectosFinalMineria/stock-market-etl-ml/scripts/ingesta_trump.py) es un proceso experimental especializado en monitorear el flujo de noticias internacionales y macroeconómicas relacionadas con **Donald Trump**, aranceles, política comercial, mercados y economía.
+La ingesta temática implementada en [scripts/ingesta_trump.py](../scripts/ingesta_trump.py) es un proceso experimental especializado en monitorear el flujo de noticias internacionales y macroeconómicas relacionadas con **Donald Trump**, aranceles, política comercial, mercados y economía.
 
 A diferencia del pipeline general de noticias que indexa por ticker o activo individual, este proceso extrae información temática agregada utilizando el servicio público de **Google News RSS** parametrizado con consultas booleanas y filtros geográficos y de idioma para México (`hl=es-419`, `gl=MX`, `ceid=MX:es-419`).
 
@@ -90,7 +90,7 @@ El resultado de la extracción se persiste localmente en la ruta:
 El dataset exportado contiene las siguientes columnas:
 - `titulo`: Titular completo de la nota de prensa según lo entrega el feed RSS.
 - `fecha`: Fecha y hora de publicación original en formato RFC 822 (ej. `Mon, 26 Oct 2026 14:23:56 GMT`).
-- `url`: Enlace directo del artículo en Google News RSS.
+- `url`: Enlace proporcionado por Google News RSS (puede redirigir al medio original).
 - `fuente`: Identificador de la fuente temática (`"Google News (Trump)"`).
 - `texto`: Cuerpo textual para procesamiento preliminar. Reutiliza el titular (`titulo`) debido a que Google News RSS no entrega necesariamente el cuerpo completo de los artículos.
 
@@ -100,9 +100,9 @@ El dataset exportado contiene las siguientes columnas:
 - **Criterio de integración:** No debe presentarse como parte completa del producto Golden hasta que sea formalmente integrada al pipeline diario, asociada a tickers afectados (o un identificador macroeconómico transversal), normalizada léxicamente y deduplicada mediante TF-IDF y decaimiento temporal.
 
 ### Métricas de Ejecución en Vivo
-Durante la ejecución de validación en vivo se obtuvieron:
-- **Artículos descargados:** **100 noticias** (este número puede variar en futuras ejecuciones debido a que la fuente consulta noticias en vivo).
-- **Cobertura temporal observada:** Desde `2026-07-20 07:00:00+00:00` hasta `2026-10-27 00:28:47+00:00`.
+Durante una ejecución en vivo específica de validación se obtuvieron las siguientes métricas (cabe señalar que tanto los 100 artículos como la cobertura temporal corresponden a dicha corrida puntual y pueden cambiar en ejecuciones posteriores al tratarse de una fuente en vivo):
+- **Artículos descargados:** **100 noticias** (muestra de la ejecución en vivo puntual; puede cambiar en futuras consultas).
+- **Cobertura temporal observada:** Desde `2026-07-20 07:00:00+00:00` hasta `2026-10-27 00:28:47+00:00` (específica de esta ejecución; variable según las notas disponibles en vivo).
 - **Calidad de campos:** 0 títulos vacíos, 0 URLs vacías y 0 duplicados exactos por URL.
 
 ### Limitaciones Conocidas
