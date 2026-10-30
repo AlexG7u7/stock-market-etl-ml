@@ -23,7 +23,7 @@ data/news/
 └── latest.json                     # Indicadores del flujo anterior
 ```
 
-Los archivos generados en las tres capas y el bloqueo de escritura están excluidos de Git. No se incluyen credenciales en los sobres de captura. La fecha de partición bronce es la fecha UTC de captura, no la fecha de publicación.
+Los JSON, CSV y Parquet de las tres capas, el CSV temático de Trump y los registros de importación se versionan en Git. El bloqueo de escritura permanece excluido. No se incluyen credenciales en los sobres de captura. La fecha de partición bronce es la fecha UTC de captura, no la fecha de publicación.
 
 ## Bronce: capturas inmutables
 

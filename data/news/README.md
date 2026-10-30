@@ -8,7 +8,7 @@ La arquitectura medallion se organiza en tres capas:
 | [Silver](silver/README.md) | Artículos normalizados y observaciones auditables. | Parquet |
 | [Gold](gold/README.md) | Indicadores diarios por emisora o tema con evidencia. | Parquet y JSON |
 
-Los datos de estas capas se generan localmente y no se versionan. Los README permiten ver la estructura en GitHub. `history/` y los JSON anteriores se conservan por compatibilidad; no representan las nuevas capas.
+Los datos de estas capas se generan localmente y se versionan: las capturas JSON, el CSV de Trump y los Parquet están disponibles en GitHub junto con los README. `history/` y los JSON anteriores se conservan por compatibilidad; no representan las nuevas capas.
 
 ## Ejecución
 

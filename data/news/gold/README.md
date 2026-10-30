@@ -9,6 +9,6 @@ Incluyen sentimiento, volumen ponderado, cambio de sentimiento, dispersión, rel
 
 El cálculo excluye información conocida después del corte y evita contar varias veces un artículo por capturas repetidas.
 
-Los datos se generan localmente y están excluidos de Git; este README hace visible la capa en el repositorio.
+Los datos se generan localmente y se versionan en Git junto con este README.
 
 Ver [arquitectura completa](../../../docs/NEWS_MEDALLION.md).

@@ -87,7 +87,7 @@ El resultado de la extracción se persiste localmente en la ruta:
 `data/news/noticias_trump.csv`
 
 > [!IMPORTANT]
-> El archivo `data/news/noticias_trump.csv` es un artefacto local de exploración y depuración, por lo que **no debe versionarse** ni incluirse en los commits del repositorio.
+> El archivo `data/news/noticias_trump.csv` se versiona junto con los datos de las capas medallion para conservar en el repositorio la información descargada.
 
 El dataset exportado contiene las siguientes columnas:
 - `titulo`: Titular completo de la nota de prensa según lo entrega el feed RSS.
