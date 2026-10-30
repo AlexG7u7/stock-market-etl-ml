@@ -74,3 +74,9 @@ backfill.pid
 
 # Salida local de la ingesta temática
 data/news/noticias_trump.csv
+
+# News medallion runtime data
+data/news/bronze/
+data/news/silver/
+data/news/gold/
+data/news/.medallion.lock

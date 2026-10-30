@@ -1,5 +1,7 @@
 # Golden Diario de Noticias Segmentadas (`lab.news_feature_daily`)
 
+La arquitectura local bronce/silver/gold y la integración actual de Trump se describen en [NEWS_MEDALLION.md](NEWS_MEDALLION.md). Las secciones siguientes sobre tablas SQL mantienen su alcance independiente.
+
 ## 1. Propósito
 
 El producto **Golden diario de noticias segmentadas** (`lab.news_feature_daily`) almacena en la base de datos `mercado` (esquema `lab` de PostgreSQL 16) las características cuantitativas (*features*) agregadas del flujo noticioso para los universos de inversión configurados en el proyecto (BMV, USA SIC, ETFs, Cripto proxies y FIBRAs).
@@ -95,6 +97,8 @@ El dataset exportado contiene las siguientes columnas:
 - `texto`: Cuerpo textual para procesamiento preliminar. Reutiliza el titular (`titulo`) debido a que Google News RSS no entrega necesariamente el cuerpo completo de los artículos.
 
 ### Estado dentro de la Arquitectura Golden
+
+La ingesta ya escribe las capas locales bronce y silver y calcula indicadores temáticos en gold; véase [NEWS_MEDALLION.md](NEWS_MEDALLION.md). Esto no implica una carga en las tablas SQL descritas aquí.
 - **Nivel de madurez:** Esta ingesta es de carácter **temático y experimental**.
 - **Persistencia en base de datos:** Actualmente **no** carga directamente en `lab.news_daily` ni en `lab.news_feature_daily`.
 - **Criterio de integración:** No debe presentarse como parte completa del producto Golden hasta que sea formalmente integrada al pipeline diario, asociada a tickers afectados (o un identificador macroeconómico transversal), normalizada léxicamente y deduplicada mediante TF-IDF y decaimiento temporal.

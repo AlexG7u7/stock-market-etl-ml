@@ -1,6 +1,11 @@
 import feedparser
 import pandas as pd
 import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 def buscar_noticias_trump():
     print("🇺🇸 Iniciando ingesta de noticias de Donald Trump (Impacto en mercados)...")
@@ -23,6 +28,9 @@ def buscar_noticias_trump():
             "texto": entry.title # Google News RSS no da el resumen completo, usamos el título como texto base
         })
 
+    from src.data.news_medallion import ingest, build_gold
+    ingest("trump", noticias, representation="rss_extract")
+
     if not noticias:
         print("No se encontraron noticias de Trump hoy.")
         return
@@ -31,11 +39,13 @@ def buscar_noticias_trump():
     df = pd.DataFrame(noticias)
 
     # Crear la carpeta data/news si no existe (Cumpliendo con el guardado en local)
-    os.makedirs("data/news", exist_ok=True)
-    ruta_csv = "data/news/noticias_trump.csv"
+    (ROOT / "data/news").mkdir(parents=True, exist_ok=True)
+    ruta_csv = ROOT / "data/news/noticias_trump.csv"
 
     # Guardar la tabla local
     df.to_csv(ruta_csv, index=False, encoding="utf-8")
+
+    build_gold()
 
     print(f"¡Éxito! Se descargaron {len(df)} noticias de Trump.")
     print(f"Guardado en: {ruta_csv}")
