@@ -2,13 +2,14 @@ import feedparser
 import pandas as pd
 import os
 import sys
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 def buscar_noticias_trump():
-    print("🇺🇸 Iniciando ingesta de noticias de Donald Trump (Impacto en mercados)...")
+    print("Iniciando ingesta de noticias de Donald Trump (Impacto en mercados)...")
 
     # DECISIÓN DE ARQUITECTURA:
     # Usamos Google News RSS con URLs parametrizadas en lugar de la API de X (Twitter).
@@ -20,37 +21,45 @@ def buscar_noticias_trump():
 
     noticias = []
     for entry in feed.entries:
+        # Limpiamos el HTML que trae el resumen de Google News por defecto
+        texto_limpio = re.sub('<[^>]+>', '', entry.get("summary", entry.title))
+        
         noticias.append({
             "titulo": entry.title,
             "fecha": entry.published,
             "url": entry.link,
             "fuente": "Google News (Trump)",
-            "texto": entry.title # Google News RSS no da el resumen completo, usamos el título como texto base
+            "texto": texto_limpio
         })
-
-    from src.data.news_medallion import ingest, build_gold
-    ingest("trump", noticias, representation="rss_extract")
 
     if not noticias:
         print("No se encontraron noticias de Trump hoy.")
         return
 
-    # Convertir a DataFrame de Pandas
+    # Convertir a DataFrame de Pandas (Este df conserva 'texto' para el motor Medallion)
     df = pd.DataFrame(noticias)
 
-    # Crear la carpeta data/news si no existe (Cumpliendo con el guardado en local)
+    # Crear la carpeta data/news si no existe
     (ROOT / "data/news").mkdir(parents=True, exist_ok=True)
     ruta_csv = ROOT / "data/news/noticias_trump.csv"
 
-    # Guardar la tabla local
-    df.to_csv(ruta_csv, index=False, encoding="utf-8")
+    # Crear una copia del DataFrame SIN la columna 'texto' para exportar el CSV limpio
+    df_csv = df.drop(columns=['texto'], errors='ignore')
 
+    # Guardar la tabla local limpia
+    df_csv.to_csv(ruta_csv, index=False, encoding="utf-8")
+
+    # --- ESTO ES LO NUEVO DEL PROFE (La Arquitectura Medallion) ---
+    # Enviamos los datos (con la columna texto intacta) al motor del profesor
+    from src.data.news_medallion import ingest, build_gold
+    ingest("trump", noticias, representation="rss_extract")
     build_gold()
+    # -------------------------------------------------------------
 
-    print(f"¡Éxito! Se descargaron {len(df)} noticias de Trump.")
+    print(f"Exito! Se descargaron {len(df)} noticias de Trump.")
     print(f"Guardado en: {ruta_csv}")
-    print("\nVista previa de los datos:")
-    print(df.head(3))
+    print("\nVista previa de los datos (sin columna de texto):")
+    print(df_csv.head(3))
 
 if __name__ == "__main__":
     buscar_noticias_trump()
