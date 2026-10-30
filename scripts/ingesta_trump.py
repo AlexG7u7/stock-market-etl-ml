@@ -24,7 +24,7 @@ def buscar_noticias_trump():
         })
 
     if not noticias:
-        print("❌ No se encontraron noticias de Trump hoy.")
+        print("No se encontraron noticias de Trump hoy.")
         return
 
     # Convertir a DataFrame de Pandas
@@ -37,8 +37,8 @@ def buscar_noticias_trump():
     # Guardar la tabla local
     df.to_csv(ruta_csv, index=False, encoding="utf-8")
 
-    print(f"✅ ¡Éxito! Se descargaron {len(df)} noticias de Trump.")
-    print(f"📁 Guardado en: {ruta_csv}")
+    print(f"¡Éxito! Se descargaron {len(df)} noticias de Trump.")
+    print(f"Guardado en: {ruta_csv}")
     print("\nVista previa de los datos:")
     print(df.head(3))
 
