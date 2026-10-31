@@ -37,6 +37,22 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
         version="1.0.0",
     )
 
+    @server.tool(name="consultar_tema_noticias", description="Consulta indicadores de un tema como trump o market, sin atribuirlos a una empresa. Fecha opcional YYYY-MM-DD.")
+    def consultar_tema_noticias(topic: str, fecha: str | None = None) -> dict[str, Any]:
+        return service.consultar_tema(topic, fecha=fecha)
+
+    @server.tool(name="consultar_evidencia_noticias", description="Recupera titulares, enlaces y procedencia que respaldan un resultado. entity_type es ticker o topic; fecha es YYYY-MM-DD. Consultar antes de explicar eventos.")
+    def consultar_evidencia_noticias(
+        entity_type: str, entity_id: str, fecha: str, limit: int = 10, offset: int = 0,
+    ) -> dict[str, Any]:
+        return service.consultar_evidencia(entity_type, entity_id, fecha, limit=limit, offset=offset)
+
+    @server.tool(name="consultar_historial_noticias", description="Serie diaria para una empresa o un tema. entity_type: ticker o topic. inicio y fin: YYYY-MM-DD. Conserva huecos y ventanas de cálculo.")
+    def consultar_historial_noticias(
+        entity_type: str, entity_id: str, inicio: str, fin: str,
+    ) -> dict[str, Any]:
+        return service.consultar_historial(entity_type, entity_id, inicio, fin)
+
     @server.tool(
         name="ver_noticias",
         description=(
@@ -81,6 +97,8 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                 "status": status,
                 "ticker": ticker_clean,
                 "fecha_utc": data.get("date_utc"),
+                "window_days": data.get("window_days"),
+                "scoring_method": data.get("scoring_method"),
                 "metricas": {
                     "sentimiento_general": metrics.get("sentimiento_general"),
                     "volumen_informativo_ponderado": metrics.get("volumen_informativo_ponderado"),
@@ -161,6 +179,7 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                 entity_id=ticker_clean,
                 inicio=ini,
                 fin=fin,
+                incluir_conteo_unico=True,
             )
         except Exception as exc:
             logger.exception("Error al consultar historial para %s: %s", ticker_clean, exc)
@@ -183,21 +202,23 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                     "advertencias": res.get("warnings", []),
                 })
 
+            contracts = {(r.get("window_days"), r.get("scoring_method")) for r in results}
+            if len(contracts) != 1:
+                return json_safe({
+                    "ok": False, "status": "incompatible_metrics", "ticker": ticker_clean,
+                    "error": "El historial combina ventanas o métodos distintos; no se agregaron las métricas.",
+                })
             scores: list[float] = []
             volumenes: list[float] = []
-            articulos: list[int] = []
 
             for item in results:
                 m = item.get("metrics") or {}
                 s = m.get("sentimiento_general")
                 v = m.get("volumen_informativo_ponderado")
-                a = m.get("cantidad_articulos")
                 if s is not None and isinstance(s, (int, float)):
                     scores.append(float(s))
                 if v is not None and isinstance(v, (int, float)):
                     volumenes.append(float(v))
-                if a is not None and isinstance(a, int):
-                    articulos.append(a)
 
             delta = 0.0
             tendencia = "insuficientes_datos"
@@ -214,7 +235,7 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
 
             avg_score = round(sum(scores) / len(scores), 4) if scores else None
             avg_vol = round(sum(volumenes) / len(volumenes), 4) if volumenes else 0.0
-            total_articulos = sum(articulos) if articulos else 0
+            total_articulos = (res.get("data") or {}).get("unique_recent_articles")
 
             serie = [
                 {
@@ -246,6 +267,7 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                 "resumen_volumen": {
                     "promedio_volumen_ponderado": avg_vol,
                     "articulos_totales_observados": total_articulos,
+                    "criterio_conteo": "Artículos únicos de las ventanas recientes de las fechas observadas; no suma diaria ni publicaciones estrictamente dentro del periodo.",
                 },
                 "serie_temporal": serie,
                 "advertencias": res.get("warnings", []),
@@ -307,6 +329,8 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                         "ticker": ticker,
                         "status": status,
                         "fecha_utc": data.get("date_utc"),
+                        "window_days": data.get("window_days"),
+                        "scoring_method": data.get("scoring_method"),
                         "sentimiento_general": m.get("sentimiento_general"),
                         "volumen_informativo_ponderado": m.get("volumen_informativo_ponderado"),
                         "cantidad_articulos": m.get("cantidad_articulos"),
@@ -329,7 +353,17 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
                     "motivo": f"Fallo al consultar: {exc}",
                 })
 
-        # Rankings
+        contracts = {(r["fecha_utc"], r["window_days"], r["scoring_method"])
+                     for r in comparativas}
+        if len(contracts) > 1 or any(None in contract for contract in contracts):
+            return json_safe({
+                "ok": False, "status": "incompatible_metrics",
+                "error": "No se pueden comparar fechas, ventanas o métodos distintos o desconocidos.",
+                "comparativa": comparativas, "no_disponibles": no_disponibles,
+                "ranking_por_sentimiento": [], "ranking_por_volumen": [],
+            })
+
+        # Rankings only after validating the metric contracts.
         def _score_key(item: dict[str, Any]) -> float:
             val = item.get("sentimiento_general")
             return float(val) if val is not None else -999.0

@@ -197,6 +197,7 @@ class NewsSemanticService:
         fin: str,
         *,
         window_days: int | None = None,
+        incluir_conteo_unico: bool = False,
     ) -> dict[str, Any]:
         query = {"entity_type": entity_type, "entity_id": entity_id, "mode": "history"}
         try:
@@ -245,6 +246,25 @@ class NewsSemanticService:
                     provenance={"dataset": "gold/historical_features.parquet"},
                 )
             results = [self._history_item(row) for _, row in frame.iterrows()]
+            unique_count = None
+            count_warnings = []
+            if incluir_conteo_unico:
+                try:
+                    silver = self.repository.read_silver()
+                    article_ids = set()
+                    for _, row in frame.iterrows():
+                        evidence, missing_articles, missing_batches = self._resolve_evidence(row, silver)
+                        if missing_articles or missing_batches:
+                            raise SemanticError("data_integrity_error", "La evidencia histórica está incompleta.")
+                        recent = evidence[evidence["_period"] == "reciente"]
+                        if len(recent) != int(row["n_articles"]):
+                            raise SemanticError("data_integrity_error", "La evidencia no coincide con el conteo gold.")
+                        article_ids.update(recent.article_id)
+                    unique_count = len(article_ids)
+                except SemanticError as exc:
+                    count_warnings.append(
+                        f"No se calculó el total único de artículos: {exc.message}"
+                    )
             return response(
                 "ok",
                 query,
@@ -253,6 +273,7 @@ class NewsSemanticService:
                     "observed_dates_utc": [item["date_utc"] for item in results],
                     "window_days_filter": window_days,
                     "dates_with_other_windows": window_mismatches,
+                    "unique_recent_articles": unique_count,
                 },
                 warnings=[
                     "Los días sin fila se conservan como huecos; n_articles no se suma "
@@ -262,6 +283,7 @@ class NewsSemanticService:
                         if window_mismatches
                         else []
                     ),
+                    *count_warnings,
                 ],
                 provenance={"dataset": "gold/historical_features.parquet"},
             )
@@ -609,6 +631,7 @@ class NewsSemanticService:
             (silver.ticker == row["ticker"])
             & (silver.topic == row["topic"])
             & (silver.article_id.isin(expected_articles))
+            & (silver.batch_id.isin(expected_batches))
             & (silver.available_at <= row["as_of"])
         ].copy()
         association["event_at"] = association.published_at.fillna(association.fetched_at)

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -35,7 +36,10 @@ def business_metrics(row: dict[str, Any], recent_article_count: int) -> dict[str
 
     if recent_article_count:
         score = metrics["sentimiento_general"]
-        if score > 0:
+        if score is None or not math.isfinite(score):
+            metrics["sentimiento_general"] = None
+            interpretation = "Sentimiento no disponible: no hay una evaluación válida."
+        elif score > 0:
             interpretation = "Balance positivo según el método de palabras clave."
         elif score < 0:
             interpretation = "Balance negativo según el método de palabras clave."

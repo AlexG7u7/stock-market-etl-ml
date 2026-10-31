@@ -80,6 +80,12 @@ Resume la evolución temporal de las métricas de noticias para un ticker durant
     *   `fecha_fin` (`str`, *opcional*): Fecha final en formato `YYYY-MM-DD`. Si se omite, se infiere del rango de cobertura disponible.
 
 ### 3. `comparar_noticias`
+
+Antes de generar rankings, valida que las filas compartan fecha UTC, `window_days`
+y `scoring_method`. Si difieren o no se conocen, responde `incompatible_metrics`
+sin rankings. Las filas de la comparativa y `ver_noticias` incluyen ventana y
+método. El resumen histórico también rechaza agregaciones de ventanas o métodos
+mezclados.
 Compara métricas de dos o más activos en una fecha específica, ordenándolos por sentimiento y volumen ponderado.
 
 *   **Parámetros:**
@@ -135,6 +141,13 @@ Informa el universo de cobertura actual: tickers disponibles, temas, rango de fe
 
 ### Ejemplo 2: `resumen_noticias`
 
+El total de artículos se resuelve desde silver y se deduplica por `article_id` entre
+las ventanas recientes de las fechas observadas. No es la suma de los conteos
+diarios ni exige que la publicación caiga dentro del rango de fechas solicitado.
+Si no se puede resolver toda la evidencia, se devuelve `null` con advertencia.
+El ejemplo de abajo es ilustrativo; el total anterior obtenido sumando días ya no
+es válido y debe recalcularse con la evidencia disponible.
+
 **Entrada:**
 ```json
 {
@@ -164,7 +177,8 @@ Informa el universo de cobertura actual: tickers disponibles, temas, rango de fe
   },
   "resumen_volumen": {
     "promedio_volumen_ponderado": 1.842,
-    "articulos_totales_observados": 248
+    "articulos_totales_observados": null,
+    "criterio_conteo": "Artículos únicos de las ventanas recientes de las fechas observadas; no suma diaria ni publicaciones estrictamente dentro del periodo."
   },
   "serie_temporal": [
     {
@@ -353,3 +367,17 @@ PYTHONPATH=. .venv/bin/pytest tests/test_news_mcp.py -v
 4. **Ventana temporal:** El historial soporta consultas de hasta 366 días continuos por solicitud.
 5. **Compatibilidad offline:** La lectura se realiza directamente sobre Parquet Gold local, por lo que no requiere conectividad activa a la base remota PostgreSQL para funcionar en entornos de desarrollo o pruebas.
 
+
+## 9. Herramientas del dashboard y agente de noticias
+
+El Observatorio descrito en [NEWS_DASHBOARD.md](NEWS_DASHBOARD.md) consume además:
+
+- `consultar_tema_noticias(topic, fecha=None)`: consulta temas sin asignarlos a empresas.
+- `consultar_evidencia_noticias(entity_type, entity_id, fecha, limit=10, offset=0)`:
+  recupera artículos, enlaces y procedencia del resultado solicitado.
+- `consultar_historial_noticias(entity_type, entity_id, inicio, fin)`: serie de una
+  empresa o tema, preservando los estados y reglas del servicio semántico.
+
+Estas herramientas delegan directamente en `NewsSemanticService`. El agente del
+chat abre una sesión MCP real por stdio para invocarlas; las gráficas del panel
+usan directamente la misma capa semántica a través de Flask.

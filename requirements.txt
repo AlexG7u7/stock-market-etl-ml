@@ -74,3 +74,9 @@ pypdf>=4.0.0               # PDF text extraction for articles/knowledge/
 black>=23.7.0              # Code formatter
 flake8>=6.1.0              # Linter
 isort>=5.12.0              # Import sorter
+
+# Model Context Protocol: servidor de noticias
+mcp>=2.3.0,<3
+
+# News dashboard
+flask>=3.1,<4

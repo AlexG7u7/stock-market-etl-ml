@@ -36,10 +36,10 @@ archivos/esquemas no disponibles o inconsistentes.
 - Las respuestas muestran `window_days` junto al volumen informativo ponderado.
   Los conteos de días distintos no se suman, porque sus ventanas pueden
   superponerse.
-- Un resultado con cero artículos recientes no se describe como neutralidad.
+- Un resultado con cero artículos recientes no se describe como neutralidad. Un score nulo tampoco se interpreta como neutral: indica sentimiento no disponible.
   Los scores ESG se mantienen nulos hasta verificar cobertura en los titulares.
 - La evidencia filtra por asociación, IDs y disponibilidad al corte, y selecciona
-  la última observación por artículo. Informa explícitamente IDs/lotes ausentes.
+  la última observación por artículo entre los lotes declarados por gold. Nunca sustituye evidencia con capturas ajenas. Informa explícitamente IDs/lotes ausentes.
 - `news_sent_delta` conserva la fórmula de gold; la respuesta advierte cuando no
   se verificó la evidencia de ambas ventanas. No es la diferencia entre filas
   diarias.
@@ -92,3 +92,16 @@ venv/bin/python scripts/query_news_semantic.py historial --ticker WALMEX --inici
 La respuesta incluyó las filas observadas en ambas fechas y 7 artículos por fila.
 Los conteos se presentan por día y no se suman, porque las ventanas de siete días
 se superponen.
+
+## Conteo histórico único
+
+`consultar_historial(..., incluir_conteo_unico=True)` añade `data.unique_recent_articles`.
+Resuelve la evidencia de cada fila histórica y cuenta una sola vez cada `article_id`
+presente en sus ventanas recientes. Comprueba que el número resuelto por fila
+coincida con `n_articles`. No suma conteos diarios.
+
+El total comprende las ventanas recientes de las fechas observadas: puede incluir
+publicaciones anteriores al inicio del rango consultado. No representa únicamente
+artículos publicados dentro de ese rango. Si falta silver, la evidencia está
+incompleta o los conteos no coinciden, el total es `null` y se incluye una
+advertencia; las métricas históricas siguen disponibles.
