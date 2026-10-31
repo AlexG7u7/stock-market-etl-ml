@@ -1,14 +1,29 @@
-# Gold: indicadores de noticias
+# Gold: tabla histórica y tabla del día
 
-Archivos generados:
+| Tabla | Archivo | Grano |
+|---|---|---|
+| Histórica | `historical_features.parquet` | Una fila por fecha UTC, emisora y tema con evidencia disponible. |
+| Del día | `today_features.parquet` | Una fila por emisora y tema para la fecha UTC actual. |
 
-- `daily_features.parquet`: resultados por fecha UTC, emisora y tema.
-- `latest.json`: resultado de la última invocación.
+Ambas contienen sentimiento, volumen ponderado, cambio de sentimiento, dispersión, relevancia, sentimiento ESG y trazabilidad (`article_ids`, `batch_ids`, fuentes, fecha de corte y ventana).
 
-Incluyen sentimiento, volumen ponderado, cambio de sentimiento, dispersión, relevancia y sentimiento ESG, además del corte temporal, ventana y referencias a los artículos y capturas utilizados.
+La histórica conserva fechas anteriores y actualiza las filas de la fecha recalculada. La tabla del día se reemplaza al calcular hoy. Calcular un día histórico no sustituye los resultados actuales. La próxima ejecución después de un cambio de día elimina de la tabla del día los registros de ayer.
 
-El cálculo excluye información conocida después del corte y evita contar varias veces un artículo por capturas repetidas.
+**Del día significa calculado hoy**, con ventana de siete días por defecto, no únicamente artículos publicados hoy. Las fechas se determinan en UTC.
 
-Los datos se generan localmente y se versionan en Git junto con este README.
+Salidas compatibles:
 
-Ver [arquitectura completa](../../../docs/NEWS_MEDALLION.md).
+- `daily_features.parquet`: copia de la tabla histórica para consumidores anteriores.
+- `latest.json`: exportación de la tabla del día; puede ser una lista vacía.
+
+Desde la raíz del proyecto:
+
+```bash
+# Actualizar los resultados con los datos disponibles.
+venv/bin/python scripts/build_news_medallion.py
+
+# Reconstruir los cortes diarios desde la primera disponibilidad conocida.
+venv/bin/python scripts/build_news_medallion.py --rebuild-gold-history
+```
+
+Los datos se versionan en Git. Ver [arquitectura completa](../../../docs/NEWS_MEDALLION.md).

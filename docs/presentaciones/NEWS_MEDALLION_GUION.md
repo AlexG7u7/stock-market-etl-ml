@@ -32,7 +32,7 @@ La clave lógica es date, ticker y topic. Gold selecciona la última observació
 
 ## 8. Trump y DataBursátil: reglas diferentes
 
-Trump entra desde scripts/ingesta_trump.py. titulo se transforma en title, fecha en published_at y texto en text. Como texto repite el título, se marca headline. No se asigna automáticamente una emisora. DataBursátil se vincula por alias con límites de palabra; sin coincidencias se conserva como market. Esa relación es léxica y no prueba exposición económica.
+Trump entra desde scripts/ingesta_trump.py. titulo se transforma en title, fecha en published_at y texto en text. El CSV tiene cuatro columnas y omite texto; los resúmenes RSS se conservan en bronce y silver. Se marca excerpt si el resumen limpio difiere del titular, o headline si solo hay titular. No se asigna automáticamente una emisora. DataBursátil se vincula por alias con límites de palabra; sin coincidencias se conserva como market. Esa relación es léxica y no prueba exposición económica.
 
 ## 9. Dónde vive cada conjunto de datos
 

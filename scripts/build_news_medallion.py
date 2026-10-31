@@ -11,7 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import pandas as pd
-from src.data.news_medallion import DEFAULT_ROOT, build_gold, capture, normalize
+from src.data.news_medallion import (
+    DEFAULT_ROOT, build_gold, capture, normalize, rebuild_bronze, rebuild_gold_history,
+)
 from src.ml.news_sources import ENTITY_ALIASES
 
 
@@ -52,13 +54,22 @@ def main():
     parser.add_argument('--as-of', help='UTC cutoff; default now')
     parser.add_argument('--days', type=int, default=7)
     parser.add_argument('--replay', action='store_true', help='Rebuild silver from all bronze captures')
+    parser.add_argument('--bronze-only', action='store_true',
+                        help='Build bronze/news.parquet from JSON captures without rebuilding silver/gold')
+    parser.add_argument('--rebuild-gold-history', action='store_true',
+                        help='Recalculate historical daily cuts from the first known observation')
     args = parser.parse_args()
     if args.migrate:
         print('Imported:', migrate(args.root))
+    if args.bronze_only:
+        result = rebuild_bronze(root=args.root)
+        print(f'Bronze: {len(result)} records → {args.root / "bronze/news.parquet"}')
+        return
     if args.replay:
         for path in sorted((args.root / 'bronze').glob('*/*/*.json')):
             normalize(path, root=args.root, tickers=ENTITY_ALIASES)
-    result = build_gold(root=args.root, as_of=args.as_of, days_back=args.days)
+    builder = rebuild_gold_history if args.rebuild_gold_history else build_gold
+    result = builder(root=args.root, as_of=args.as_of, days_back=args.days)
     print(f'Gold: {len(result)} groups → {args.root / "gold"}')
 
 

@@ -94,7 +94,7 @@ El dataset exportado contiene las siguientes columnas:
 - `fecha`: Fecha y hora de publicación original en formato RFC 822 (ej. `Mon, 26 Oct 2026 14:23:56 GMT`).
 - `url`: Enlace proporcionado por Google News RSS (puede redirigir al medio original).
 - `fuente`: Identificador de la fuente temática (`"Google News (Trump)"`).
-- `texto`: Cuerpo textual para procesamiento preliminar. Reutiliza el titular (`titulo`) debido a que Google News RSS no entrega necesariamente el cuerpo completo de los artículos.
+El CSV ya no contiene `texto`. El resumen RSS limpio de HTML se conserva en bronce y silver; cuando falta, se usa el titular como respaldo. Los artículos con resumen distinto al titular se clasifican como `excerpt`, y los demás como `headline`.
 
 ### Estado dentro de la Arquitectura Golden
 

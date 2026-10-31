@@ -693,7 +693,8 @@ def _scrape_articles(
     # Preserve connector output before local deduplication; not a raw HTTP response.
     from src.data.news_medallion import ingest
     for source in sorted({a.source for a in articles}):
-        ingest(source, [asdict(a) for a in articles if a.source == source])
+        ingest(source, [dict(asdict(a), sentiment=a.av_sentiment)
+                        for a in articles if a.source == source])
 
     # Deduplicar por URL/título
     seen: set[str] = set()

@@ -1,5 +1,11 @@
 import pandas as pd
 import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT))
+from src.data.news_medallion import clean_news_text
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 
@@ -7,7 +13,6 @@ from email.utils import parsedate_to_datetime
 from src.ml.news import (
     Article,
     _score_keywords,
-    apply_dedup_and_decay,
     _scrape_articles,
     _compute_features_from_articles
 )
@@ -16,12 +21,22 @@ def integrar_noticias():
     print("🧠 Iniciando integración de Sentimiento y TF-IDF...")
     
     # 1. Cargar noticias de Trump desde tu CSV
-    ruta_csv = "data/news/noticias_trump.csv"
+    ruta_csv = ROOT / "data/news/noticias_trump.csv"
     if not os.path.exists(ruta_csv):
         print("❌ No se encontró noticias_trump.csv")
         return
         
-    df_trump = pd.read_csv(ruta_csv)
+    df_trump = pd.read_csv(ruta_csv).fillna('')
+    # The public CSV intentionally has no text column. Silver retains RSS excerpts.
+    silver_path = ROOT / "data/news/silver/articles.parquet"
+    excerpts = {}
+    if silver_path.exists():
+        silver = pd.read_parquet(silver_path)
+        silver = silver[(silver.source == 'trump') &
+                        (silver.available_at <= pd.Timestamp.now(tz='UTC'))]
+        latest = silver.sort_values('fetched_at').drop_duplicates('url', keep='last')
+        excerpts = latest[latest.text.notna()].set_index('url').text.to_dict()
+
     
     # 2. Convertir el CSV a objetos Article (lo que espera el profesor)
     articulos_trump = []
@@ -29,14 +44,21 @@ def integrar_noticias():
         try:
             # Convertir la fecha del RSS a timestamp
             dt = parsedate_to_datetime(row['fecha'])
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
             ts = int(dt.timestamp())
-        except:
-            ts = int(datetime.now(timezone.utc).timestamp())
+        except (TypeError, ValueError, OverflowError):
+            # A missing publication is not replaced by a made-up publication time.
+            continue
             
+        title = clean_news_text(row['titulo'])
+        summary = clean_news_text(excerpts.get(row['url']) or row.get('texto') or '')
+        if summary.casefold() == title.casefold():
+            summary = ''
         articulos_trump.append(Article(
             ticker="WALMEX", # Asignamos las noticias de Trump a WALMEX para este ejemplo
-            title=str(row['titulo']),
-            summary=str(row['texto']),
+            title=title,
+            summary=summary,
             url=str(row['url']),
             published_ts=ts,
             source="Trump_RSS"
@@ -60,7 +82,7 @@ def integrar_noticias():
         
     # 6. Aplicar Deduplicación (TF-IDF) y Decaimiento Temporal
     print("🧹 Aplicando Deduplicación (TF-IDF) y Decaimiento Temporal...")
-    apply_dedup_and_decay(todos_los_articulos)
+    # _compute_features_from_articles applies deduplication and decay itself.
     
     # 7. Calcular las Features finales (Capa Golden)
     features = _compute_features_from_articles(todos_los_articulos)
@@ -72,8 +94,8 @@ def integrar_noticias():
     
     # Guardar el resultado para tu Pull Request
     import json
-    os.makedirs("data/golden", exist_ok=True)
-    with open("data/golden/walmex_integrado.json", "w", encoding="utf-8") as f:
+    (ROOT / "data/golden").mkdir(parents=True, exist_ok=True)
+    with open(ROOT / "data/golden/walmex_integrado.json", "w", encoding="utf-8") as f:
         json.dump(features, f, indent=4, ensure_ascii=False)
     print("📁 Guardado en: data/golden/walmex_integrado.json")
 

@@ -2,11 +2,12 @@ import feedparser
 import pandas as pd
 import os
 import sys
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
+from src.data.news_medallion import clean_news_text
 
 def buscar_noticias_trump():
     print("Iniciando ingesta de noticias de Donald Trump (Impacto en mercados)...")
@@ -22,10 +23,11 @@ def buscar_noticias_trump():
     noticias = []
     for entry in feed.entries:
         # Limpiamos el HTML que trae el resumen de Google News por defecto
-        texto_limpio = re.sub('<[^>]+>', '', entry.get("summary", entry.title))
+        texto_limpio = clean_news_text(entry.get("summary") or entry.title)
+        titulo_limpio = clean_news_text(entry.title)
         
         noticias.append({
-            "titulo": entry.title,
+            "titulo": titulo_limpio,
             "fecha": entry.published,
             "url": entry.link,
             "fuente": "Google News (Trump)",
