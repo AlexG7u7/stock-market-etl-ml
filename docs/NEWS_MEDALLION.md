@@ -2,6 +2,9 @@
 
 El proyecto mantiene un lago local en `data/news/bronze`, `silver` y `gold`. Su implementación está en `src/data/news_medallion.py`. Los JSON, CSV y Parquet anteriores se conservan para los consumidores existentes. Este cambio no ejecuta cargas en PostgreSQL ni altera las tablas `lab`.
 
+Las consultas de negocio de solo lectura sobre gold/silver están descritas en
+[NEWS_SEMANTIC.md](NEWS_SEMANTIC.md).
+
 ## Estructura física
 
 ```text
