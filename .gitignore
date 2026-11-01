@@ -76,3 +76,5 @@ backfill.pid
 #   python -m productos.fundamentales_pit.capas todo
 data/fundamentals/
 data/dashboard_fundamentales.html
+# Librería de gráficas del dashboard: build_dashboard.py la descarga sola
+vendor/apexcharts.min.js
