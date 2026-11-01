@@ -23,6 +23,7 @@ if sys.platform == "win32" and "fcntl" not in sys.modules:
 from productos.fundamentales_pit import capas  # noqa: E402
 from productos.fundamentales_pit.calidad import revisar  # noqa: E402
 from productos.fundamentales_pit.pit import dividendos_al, fundamentales_al  # noqa: E402
+from src.etl.bronze.fundamentales_pit import capa as bronze_fund  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SEMANTICA = ROOT / "productos" / "fundamentales_pit" / "capa_semantica.yaml"
@@ -145,7 +146,8 @@ def test_banco_sin_revenue_se_marca_en_vez_de_desaparecer():
 
 
 def test_bronze_no_guarda_el_token_y_no_repite_llamadas(tmp_path, monkeypatch):
-    monkeypatch.setattr(capas, "_mapa_emisoras", lambda: {"AAA": "AAA"})
+    # bajar_bronze vive en src/etl/bronze/fundamentales_pit: se parcha ahí, no en capas
+    monkeypatch.setattr(bronze_fund, "_mapa_emisoras", lambda: {"AAA": "AAA"})
     llamadas = []
 
     class Resp:

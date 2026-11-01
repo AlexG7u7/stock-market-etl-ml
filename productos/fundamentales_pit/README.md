@@ -45,7 +45,10 @@ Todo `data/fundamentals/` está en `.gitignore`: se regenera con un comando.
 | `contrato.yaml` | El contrato de datos: columnas, tipos, llave, regla PIT, SLO, dueño y consumidores. Lo lee `calidad.py`, así que no es decorativo. |
 | `capa_semantica.yaml` | Las definiciones de negocio (margen neto, YoY, UPA, dividendo), las reglas y las consultas de ejemplo. Se la pasa la herramienta al agente. |
 | `pit.py` | `fundamentales_al(fecha, ticker)` y `dividendos_al(...)`: el único lugar donde vive la regla PIT. |
-| `capas.py` | Bronze → silver → golden. |
+| `capas.py` | Orquestador: corre bronze → silver → golden → calidad. El código de cada capa está en `src/etl/` (ver abajo). |
+| `../../src/etl/bronze/fundamentales_pit/capa.py` | Bronze: baja la API y guarda cada respuesta tal cual. |
+| `../../src/etl/silver/fundamentales_pit/capa.py` | Silver: una fila por emisora y trimestre; gana la cifra original. |
+| `../../src/etl/golden/fundamentales_pit/capa.py` | Golden: available_date, márgenes, YoY por fecha y UPA. |
 | `calidad.py` | Revisión de golden contra el contrato. |
 | `../../src/agent/fundamentales.py` | Herramienta del agente `ver_fundamentales`. |
 | `../../sql/04_fundamentales_schema.sql` | Las mismas tablas para SQL Server, más la función `golden.fn_fundamentales_al(@fecha)`. |
