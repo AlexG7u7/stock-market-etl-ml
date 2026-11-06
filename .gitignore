@@ -74,7 +74,9 @@ backfill.pid
 
 # Producto Fundamentales PIT (Equipo Rojo): capas generadas, se regeneran con
 #   python -m productos.fundamentales_pit.capas todo
-data/fundamentals/
+data/fundamentals/bronze/
+data/fundamentals/silver/
+# golden SÍ se versiona (pesa KB): lo copian las imágenes del MCP y del job diario.
 data/dashboard_fundamentales.html
 # Librería de gráficas del dashboard: build_dashboard.py la descarga sola
 vendor/apexcharts.min.js
