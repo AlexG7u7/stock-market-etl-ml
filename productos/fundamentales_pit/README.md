@@ -20,7 +20,7 @@ corte y `available_date` el día en que ya se puede ver.
 python -m productos.fundamentales_pit.capas todo            # silver + golden + calidad
 python -m productos.fundamentales_pit.capas todo --bronze   # además baja la API (necesita token)
 python build_dashboard.py                                   # dashboard desde golden
-python -m pytest tests/test_fundamentales_pit.py -q         # 25 tests
+python -m pytest tests/test_fundamentales_pit.py tests/test_agents_mcp_fundamentales.py -q   # 28 tests
 ```
 
 Sin token, `todo` construye silver desde `data/fundamentals.parquet`, que solo
@@ -76,6 +76,8 @@ DROP, ATTACH, PRAGMA…), las consultas que tardan más de 5 s se cortan, y una
    posiciones atrás. Si falta un trimestre, compara contra el equivocado. En
    `data/fundamentals.parquet` pasa en **35 de 833** filas, incluidas **las 28 de
    2026T1** (todas las emisoras): comparaban contra 2024T2, no contra 2025T1.
+   (Medido el 26-oct. Con el refresh del 6-nov del archivo del repo son **63 de
+   1,146**: 31 en 2026T1, 31 en 2026T2 y 1 en 2026T3; todas con hueco real.)
    Golden lo calcula **por fecha** y deja NaN si no existe el mismo trimestre
    del año anterior. Nunca inventa un valor.
 2. **Posible fuga por reexpresión.** Para ahorrar llamadas, la ingesta original
@@ -105,7 +107,8 @@ DROP, ATTACH, PRAGMA…), las consultas que tardan más de 5 s se cortan, y una
 7. **El rezago de 70 días es fijo y conservador.** Según la corrida del equipo
    (no la reproduje: no tengo el token), GAPB entregó su 2026T3 el 2026-10-24,
    24 días después del cierre. No hay fuga (el dato se usa hasta el
-   2026-12-09), pero llega tarde. Al 30-oct ya son 20 emisoras con 2026T3.
+   2026-12-09), pero llega tarde. Al 6-nov ya son 31 de 32 emisoras con 2026T3
+   (la que falta es ALFAA, que no pasa de 2025T3).
 8. **Cruce con Mercado.** Su ticker de Yahoo **no es** `ticker || '.MX'` en 4
    emisoras: TLEVISA → TLEVISACPO.MX, AMXL → AMXB.MX, VISTA → VISTAA.MX,
    POSADAS → POSADASA.MX. La tabla `mapa_tickers` lo resuelve.
@@ -117,10 +120,12 @@ DROP, ATTACH, PRAGMA…), las consultas que tardan más de 5 s se cortan, y una
 
 | Pieza | Estado |
 |---|---|
-| Capas, contrato, capa semántica, herramienta | **Probado**: 25 tests, y detectan 5 bugs metidos a propósito |
+| Capas, contrato, capa semántica, herramienta | **Probado**: 28 tests (25 del producto y 3 de la herramienta del agente de dominio); los del producto detectan 5 bugs metidos a propósito |
 | Tests del profe con la herramienta registrada | **Probado**: `tests/test_investor_agent.py` sigue pasando (8 de 8) |
-| Golden y dashboard con datos reales | **Probado** con la ingesta real por capas: 1,357 filas, 32 de 36 emisoras (30-oct) |
-| Bronze contra la API real | **Probado**: 1,440 llamadas (26-oct) y reintento de trimestres recientes no publicados (30-oct, 67 llamadas) |
+| Golden y dashboard con datos reales | **Probado** con la ingesta real por capas: 1,368 filas, 32 de 36 emisoras (6-nov) |
+| Bronze contra la API real | **Probado**: 1,440 llamadas (26-oct), reintento de trimestres recientes no publicados (30-oct, 67 llamadas) y refresh del 6-nov (67 llamadas, 0 errores, +11 filas) |
+| Paso diario `fundamentales_pit` en `scripts/run_all_ingests.py` | **Probado** con datos de ejemplo y a mano con la API real. **No corrido en GitHub Actions**: su entorno empieza vacío (sin bronze) y no versiona datos |
+| `query_fundamentales` del agente de dominio (`src/agents_mcp`) | **Probado** con golden de ejemplo (3 tests). **No probado de punta a punta** con el orquestador (requiere `ANTHROPIC_API_KEY`) |
 | UPA desde la API | **Verificado**: viene como `basicearningslosspershare`; presente en el 100% de las filas |
 | `sql/04_fundamentales_schema.sql` | Revisión de sintaxis; **no ejecutado** en SQL Server |
 
