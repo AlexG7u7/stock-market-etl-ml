@@ -106,11 +106,22 @@ def test_yoy_legacy_se_anula_si_pct_change_comparo_mal(tmp_path):
 
 def test_en_el_parquet_del_repo_se_anulan_los_yoy_mal_calculados(golden_real):
     g = pd.read_parquet(golden_real)
-    # Medido el 2026-10-26: 35 YoY de ingresos comparados contra el trimestre equivocado,
-    # 28 de ellos en 2026T1 (todas las emisoras).
+    # 2026T1: pct_change(4) comparaba contra el trimestre equivocado en todas las emisoras.
     assert g.loc[g["quarter_end"] == "2026-03-31", "fund_revenue_yoy"].isna().all()
+
+    # La regla, no un conteo: el parquet del repo se refresca a diario, así que el número
+    # de filas afectadas cambia (35 el 2026-10-26, 63 tras el refresh del 2026-11-06).
     legacy = pd.read_parquet(LEGACY)
-    assert legacy["fund_revenue_yoy"].notna().sum() - g["fund_revenue_yoy"].notna().sum() == 35
+    legacy["quarter_end"] = pd.to_datetime(legacy["quarter_end"])
+    m = legacy.merge(g[["ticker", "quarter_end", "fund_revenue_yoy"]],
+                     on=["ticker", "quarter_end"], suffixes=("_leg", "_gold"))
+    m = m.sort_values(["ticker", "quarter_end"])
+    m["k"] = m["quarter_end"].dt.year * 4 + m["quarter_end"].dt.quarter
+    m["salto4"] = m["k"] - m.groupby("ticker")["k"].shift(4)
+    anulados = m[m["fund_revenue_yoy_leg"].notna() & m["fund_revenue_yoy_gold"].isna()]
+    assert len(anulados) > 0
+    # Todo YoY anulado comparaba contra una fila que NO es el mismo trimestre del año anterior.
+    assert (anulados["salto4"] != 4).all()
 
 
 def _registro(periodo: str, datos: dict, fetched="2026-10-24T12:00:00+00:00") -> dict:
