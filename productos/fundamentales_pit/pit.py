@@ -33,6 +33,12 @@ def a_fecha(valor: FechaLike | None) -> pd.Timestamp:
     return ts.normalize()
 
 
+# El agente consulta el golden en cada pregunta; leer el parquet de disco cada vez
+# es lo más lento. Se guarda en memoria y se recarga solo si el archivo cambia
+# (fecha de modificación o tamaño), así que una corrida nueva de la ingesta se ve sola.
+_CACHE: dict[Path, tuple[tuple[int, int], pd.DataFrame]] = {}
+
+
 def cargar_golden(path: Path | None = None) -> pd.DataFrame:
     path = Path(path or GOLDEN)
     if not path.exists():
@@ -40,10 +46,16 @@ def cargar_golden(path: Path | None = None) -> pd.DataFrame:
             f"No existe {path}. Genera la capa con: "
             "python -m productos.fundamentales_pit.capas todo"
         )
-    df = pd.read_parquet(path)
-    for c in ("quarter_end", "available_date"):
-        df[c] = pd.to_datetime(df[c])
-    return df
+    stat = path.stat()
+    huella = (stat.st_mtime_ns, stat.st_size)
+    hit = _CACHE.get(path)
+    if hit is None or hit[0] != huella:
+        df = pd.read_parquet(path)
+        for c in ("quarter_end", "available_date"):
+            df[c] = pd.to_datetime(df[c])
+        hit = _CACHE[path] = (huella, df)
+    # Copia: quien consulte puede modificar el resultado sin contaminar la caché.
+    return hit[1].copy()
 
 
 def fundamentales_al(
