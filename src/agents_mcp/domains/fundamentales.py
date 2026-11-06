@@ -131,14 +131,14 @@ async def query_fundamentales(args: dict) -> dict:
                 }]
             }
 
-        token = os.environ.get("DATABURSATIL_TOKEN")
+        token = os.environ.get("DATABURSATIL_API_TOKEN") or os.environ.get("DATABURSATIL_TOKEN")
         if not token:
             return {
                 "content": [{
                     "type": "text",
                     "text": (
                         f"No pude obtener fundamentales en vivo de {ticker}: falta "
-                        "DATABURSATIL_TOKEN y no hay dato cacheado para este ticker. "
+                        "DATABURSATIL_API_TOKEN y no hay dato cacheado para este ticker. "
                         "No tengo ese dato disponible."
                     ),
                 }]

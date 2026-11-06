@@ -62,7 +62,8 @@ def test_sin_golden_cae_al_archivo_de_siempre(monkeypatch, tmp_path):
         raise FileNotFoundError("no hay golden")
     monkeypatch.setattr(agente, "cargar_golden", sin_golden)
     monkeypatch.setattr(dom, "FUNDAMENTALS_PARQUET", tmp_path / "no_existe.parquet")
+    monkeypatch.delenv("DATABURSATIL_API_TOKEN", raising=False)
     monkeypatch.delenv("DATABURSATIL_TOKEN", raising=False)
     herramienta = getattr(dom.query_fundamentales, "handler", dom.query_fundamentales)
     texto = asyncio.run(herramienta({"ticker": "WALMEX"}))["content"][0]["text"]
-    assert "DATABURSATIL_TOKEN" in texto and "No tengo" in texto   # respaldo, no un error técnico
+    assert "DATABURSATIL_API_TOKEN" in texto and "No tengo" in texto   # respaldo, no un error técnico
