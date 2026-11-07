@@ -2,16 +2,16 @@
 
 La arquitectura publicada en `origin/main` (`f9a9899`) agrega agentes de
 dominio con `DomainAgent.ask()` y herramientas MCP del Claude Agent SDK.
-Esta rama incorpora sin cambios su base (`domain_agent.py` y los inicializadores)
-y adapta únicamente el dominio Noticias. El orquestador y el supervisor de main
+Esta rama integra esa arquitectura y conserva su base (`domain_agent.py` y los inicializadores)
+sin cambios; la adaptación específica corresponde al dominio Noticias. El orquestador y el supervisor de main
 ya importan `src.agents_mcp.domains.noticias.noticias_agent`; ese contrato se conserva.
-No hace falta modificar sus llamadas cuando se integren las ramas.
+La integración de `main` ya conserva esas llamadas sin modificaciones.
 
 El agente consulta nuestro medallion mediante `NewsSemanticService`, en vez de
 leer únicamente los snapshots `data/news/YYYY-MM-DD.json`. Reutiliza validaciones,
 estados de datos antiguos/ausentes, integridad de evidencia y cortes temporales.
 La base del agente conserva el loop del SDK de main y solo permite las tools de
-su propio dominio. Los otros dominios y el orquestador permanecen en main.
+su propio dominio. Los otros dominios y el orquestador de main también están disponibles en esta rama.
 
 Herramientas disponibles:
 

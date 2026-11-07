@@ -34,7 +34,8 @@ adaptador que permite consultar el trabajo existente desde el nuevo agente.
 
 La rama de esta entrega es `feature/noticias-agente-dominio` y el commit de
 integración es `04c9b91`. La arquitectura de referencia está en `origin/main`,
-commit `f9a9899`. Crear y subir esta rama no equivale a fusionarla con `main`.
+commit `f9a9899`. Esta rama incorpora ahora los cambios de ese `main` mediante una fusión con conflictos resueltos.
+Eso no publica nuestros cambios en el `main` del repositorio original; sigue haciendo falta el PR.
 
 ## 3. Cómo viaja una pregunta
 
@@ -68,11 +69,11 @@ El orquestador de `main` ya utiliza este import, que conservamos:
 from src.agents_mcp.domains.noticias import noticias_agent
 ```
 
-Luego llama a `await noticias_agent.ask(pregunta)`. En esta rama se incorporaron
-la base del agente y el dominio Noticias; el orquestador completo y los otros
-dominios siguen en `main`. La demostración local de abajo prueba el dominio y sus
-herramientas. El recorrido completo con el orquestador queda sujeto a integrar
-las ramas y disponer de acceso al modelo.
+Luego llama a `await noticias_agent.ask(pregunta)`. Esta rama ya incluye
+la base del agente, el dominio Noticias, el orquestador y los otros dominios
+procedentes de `main`. La demostración local de abajo prueba el dominio y sus
+herramientas. El recorrido completo con llamadas al modelo requiere acceso
+y autenticación para los modelos configurados.
 
 ## 4. Archivos que conviene enseñar en el editor
 
@@ -284,9 +285,16 @@ print(asyncio.run(agent.ask(question)))
 PY
 ```
 
-Esta parte demuestra el agente de Noticias conversando por sí mismo. Para mostrar
-al coordinador llamándolo hace falta disponer también del orquestador y sus
-dominios de `main`, resolver la integración de ramas y configurar su entorno.
+Esta parte demuestra el agente de Noticias conversando por sí mismo. El
+orquestador y sus dominios ya están integrados. Con autenticación y modelos
+accesibles, el coordinador se puede ejecutar desde la raíz:
+
+```bash
+python -m src.agents_mcp.orchestrator "Consulta las noticias y fuentes de WALMEX"
+```
+
+El registro y la delegación hacia Noticias también se verifican sin llamadas al
+modelo en `tests/test_news_orchestrator_integration.py`.
 
 ## 10. Preguntas que podría hacer el profesor
 
@@ -322,13 +330,14 @@ original que recibió el modelo.
 
 **¿Qué falta para verlo dentro del sistema completo?**
 
-Integrar la rama con `main` y probar el recorrido completo con el orquestador,
-los demás dominios y un modelo accesible. La interfaz `noticias_agent.ask()`
-ya coincide con la que utiliza esa arquitectura.
+La arquitectura de `main` ya está integrada en esta rama. Falta probar el
+recorrido completo con llamadas a modelos accesibles en la cuenta y aprobar
+el PR para publicar los cambios en el repositorio original. La interfaz
+`noticias_agent.ask()` coincide con la que utiliza el orquestador.
 
 ## 11. Frase para cerrar la presentación
 
 > Integramos nuestro sistema de noticias como un especialista de la arquitectura
 > de agentes. Reutilizamos los datos y validaciones existentes, agregamos
 > herramientas de consulta y comprobamos sus fechas, evidencia y anonimización.
-> La entrega deja preparada la interfaz que utiliza el coordinador de main.
+> La entrega conserva la interfaz que utiliza el coordinador integrado desde main.

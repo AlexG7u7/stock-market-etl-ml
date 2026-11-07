@@ -75,11 +75,12 @@ black>=23.7.0              # Code formatter
 flake8>=6.1.0              # Linter
 isort>=5.12.0              # Import sorter
 
-# Model Context Protocol: servidor de noticias
-mcp>=2.3.0,<3
+# Multi-agent (orquestador + agentes de dominio, src/agents_mcp/)
+claude-agent-sdk>=0.1.0    # Agent loop + MCP tools in-process, por Anthropic
+anthropic>=0.40.0         # Cliente directo de la API de Messages
+
+# MCP 2: servidor de noticias y servidor HTTP standalone (mcp_server/)
+mcp[cli]>=2.3.0,<3
 
 # News dashboard
 flask>=3.1,<4
-
-# Agente de dominio compatible con src/agents_mcp de main
-claude-agent-sdk>=0.1.0

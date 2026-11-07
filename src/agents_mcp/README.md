@@ -73,5 +73,4 @@ agentes de dominio completos, no funciones de datos.
 ## Noticias conectado al medallion
 
 La adaptación de Noticias, sus tools y sus pruebas se describen en [NOTICIAS.md](NOTICIAS.md).
-En esta rama se incorpora la base y el dominio Noticias; el orquestador y los otros
-dominios están en `origin/main`.
+Esta rama integra también el orquestador y los otros dominios de `origin/main`.
