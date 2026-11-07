@@ -80,3 +80,8 @@ data/fundamentals/silver/
 data/dashboard_fundamentales.html
 # Librería de gráficas del dashboard: build_dashboard.py la descarga sola
 vendor/apexcharts.min.js
+
+# News runtime locks (news JSON, CSV and Parquet are versioned)
+data/news/.medallion.lock
+# Office editor temporary lock files
+~$*
