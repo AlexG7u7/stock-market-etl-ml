@@ -71,3 +71,8 @@ htmlcov/
 temp/
 tmp/
 backfill.pid
+
+# News runtime locks (news JSON, CSV and Parquet are versioned)
+data/news/.medallion.lock
+# Office editor temporary lock files
+~$*
