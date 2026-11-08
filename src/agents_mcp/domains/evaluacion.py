@@ -24,7 +24,10 @@ from pathlib import Path
 from claude_agent_sdk import tool
 
 from src.agents_mcp.domain_agent import DomainAgent
-from src.agents_mcp.domains.evaluacion_consultas import consultar_resultado
+from src.agents_mcp.domains.evaluacion_consultas import (
+    ARCHIVOS,
+    consultar_resultado,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
 TRIAL_LOG = ROOT / "data" / "eval" / "trial_log.jsonl"
@@ -173,11 +176,18 @@ async def consultar_metricas_evaluacion(args: dict) -> dict:
 
     resultado = consultar_resultado(tipo)
 
+    nombre_archivo = ARCHIVOS.get(tipo)
+
+    if nombre_archivo:
+        fuente = f"data/eval/{nombre_archivo}"
+    else:
+        fuente = "Consulta no reconocida"
+
     return {
         "content": [{
             "type": "text",
             "text": (
-                f"Fuente: data/eval/{tipo}\n"
+                f"Fuente: {fuente}\n"
                 f"{resultado}\n\n"
                 f"{DISCIPLINA}"
             ),

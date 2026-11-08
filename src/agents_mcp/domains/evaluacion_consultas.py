@@ -15,6 +15,20 @@ ARCHIVOS = {
     "validacion": "strategy_validation.json",
 }
 
+def obtener_seccion(datos: dict, clave: str) -> dict:
+    """Obtiene una sección del JSON de forma segura."""
+    seccion = datos.get(clave)
+    return seccion if isinstance(seccion, dict) else {}
+
+
+def mostrar_valor(datos: dict, clave: str) -> str:
+    """Muestra un valor o indica que no está disponible."""
+    valor = datos.get(clave)
+
+    if valor is None:
+        return "No disponible"
+
+    return str(valor)
 
 def cargar_resultado(tipo: str) -> dict:
     """Lee un JSON de evaluación sin modificarlo."""
@@ -48,62 +62,64 @@ def consultar_resultado(tipo: str) -> str:
         return datos["error"]
 
     if tipo == "portafolio":
-        metricas = datos.get("portfolio_dual", {})
-        benchmark = datos.get("benchmark_naftrac", {})
+        metricas = obtener_seccion(datos, "portfolio_dual")
+        benchmark = obtener_seccion(datos, "benchmark_naftrac")
 
         return (
             "Evaluación del portafolio:\n"
-            f"Sharpe neto: {metricas.get('sharpe_net')}\n"
-            f"Drawdown máximo: {metricas.get('max_drawdown')}\n"
-            f"Rendimiento neto: {metricas.get('total_return_net')}\n"
-            f"Sharpe NAFTRAC: {benchmark.get('sharpe_ratio')}\n"
-            f"Generado: {datos.get('generated_at')}"
+            f"Sharpe neto: {mostrar_valor(metricas, 'sharpe_net')}\n"
+            f"Drawdown máximo: {mostrar_valor(metricas, 'max_drawdown')}\n"
+            f"Rendimiento neto: {mostrar_valor(metricas, 'total_return_net')}\n"
+            f"Sharpe NAFTRAC: {mostrar_valor(benchmark, 'sharpe_ratio')}\n"
+            f"Generado: {mostrar_valor(datos, 'generated_at')}"
         )
 
     if tipo == "backtest":
-        estrategia = datos.get("strategy", {})
-        benchmark = datos.get("benchmark_naftrac", {})
+        estrategia = obtener_seccion(datos, "strategy")
+        benchmark = obtener_seccion(datos, "benchmark_naftrac")
 
         return (
             "Backtest Top-K:\n"
-            f"Sharpe neto: {estrategia.get('sharpe_net')}\n"
-            f"Drawdown máximo: {estrategia.get('max_drawdown')}\n"
-            f"Rendimiento neto: {estrategia.get('total_return_net')}\n"
-            f"Rendimiento NAFTRAC: {benchmark.get('total_return')}\n"
-            f"Periodos: {estrategia.get('n_periods')}"
+            f"Sharpe neto: {mostrar_valor(estrategia, 'sharpe_net')}\n"
+            f"Drawdown máximo: {mostrar_valor(estrategia, 'max_drawdown')}\n"
+            f"Rendimiento neto: {mostrar_valor(estrategia, 'total_return_net')}\n"
+            f"Rendimiento NAFTRAC: {mostrar_valor(benchmark, 'total_return')}\n"
+            f"Periodos: {mostrar_valor(estrategia, 'n_periods')}"
         )
 
     if tipo == "experimentos":
-        resumen = datos.get("summary", {})
+        resumen = obtener_seccion(datos, "summary")
 
         return (
             "Experimentos:\n"
-            f"Noticias ayudan: {resumen.get('news_helps')}\n"
+            f"Noticias ayudan: {mostrar_valor(resumen, 'news_helps')}\n"
             f"Stacking supera AUC ponderado: "
-            f"{resumen.get('stacking_beats_auc_weight')}\n"
+            f"{mostrar_valor(resumen, 'stacking_beats_auc_weight')}\n"
             f"Sharpe positivo encontrado: "
-            f"{resumen.get('positive_sharpe_found')}\n"
+            f"{mostrar_valor(resumen, 'positive_sharpe_found')}\n"
             f"Advertencia de pocas observaciones: "
-            f"{resumen.get('low_n_warning')}"
+            f"{mostrar_valor(resumen, 'low_n_warning')}"
         )
 
     if tipo == "estrategias":
         return (
             "Comparación de estrategias:\n"
-            f"Total: {datos.get('total_estrategias')}\n"
-            f"Aprobadas: {datos.get('aprobadas')}\n"
-            f"Generado: {datos.get('generated_at')}"
+            f"Total: {mostrar_valor(datos, 'total_estrategias')}\n"
+            f"Aprobadas: {mostrar_valor(datos, 'aprobadas')}\n"
+            f"Generado: {mostrar_valor(datos, 'generated_at')}"
         )
 
     if tipo == "validacion":
-        ia = datos.get("validacion_ia", {})
+        ia = obtener_seccion(datos, "validacion_ia")
 
         return (
             "Validación de estrategia:\n"
-            f"Estrategia: {datos.get('estrategia')}\n"
-            f"Aprobada: {datos.get('aprobada')}\n"
-            f"Resumen: {datos.get('resumen')}\n"
-            f"Estado IA: {ia.get('estado')}"
+            f"Estrategia: {mostrar_valor(datos, 'estrategia')}\n"
+            f"Aprobada: {mostrar_valor(datos, 'aprobada')}\n"
+            f"Resumen: {mostrar_valor(datos, 'resumen')}\n"
+            f"Estado IA: {mostrar_valor(ia, 'estado')}"
         )
+
+    return "Consulta no disponible."
 
     return "Consulta no disponible."
