@@ -24,6 +24,7 @@ from pathlib import Path
 from claude_agent_sdk import tool
 
 from src.agents_mcp.domain_agent import DomainAgent
+from src.agents_mcp.domains.evaluacion_consultas import consultar_resultado
 
 ROOT = Path(__file__).resolve().parents[3]
 TRIAL_LOG = ROOT / "data" / "eval" / "trial_log.jsonl"
@@ -159,8 +160,37 @@ async def query_evaluacion(args: dict) -> dict:
     return {"content": [{"type": "text", "text": "\n\n".join(partes)}]}
 
 
+@tool(
+    "consultar_metricas_evaluacion",
+    "Consulta métricas reales de evaluación, portafolio, backtest, "
+    "experimentos, comparación y validación de estrategias.",
+    {"tipo": str},
+)
+async def consultar_metricas_evaluacion(args: dict) -> dict:
+    """Consulta resultados JSON del dominio Evaluación/Riesgo."""
+
+    tipo = (args.get("tipo") or "").strip().lower()
+
+    resultado = consultar_resultado(tipo)
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": (
+                f"Fuente: data/eval/{tipo}\n"
+                f"{resultado}\n\n"
+                f"{DISCIPLINA}"
+            ),
+        }]
+    }
+
+
 evaluacion_agent = DomainAgent(
     name="evaluacion",
     system_prompt=SYSTEM_PROMPT,
-    tools=[schema_evaluacion, query_evaluacion],
+    tools=[
+    schema_evaluacion,
+    query_evaluacion,
+    consultar_metricas_evaluacion,
+],
 )
