@@ -1,7 +1,8 @@
 # Revisión: lectura de evaluaciones y P&L de los agentes
 
-- **Rama:** `test-evaluations`, sobre `main` en `f9a9899`
-- **Fecha:** 2026-11-07
+- **Rama:** `test-evaluations`
+- **Primera revisión:** 2026-11-07, sobre `main` en `f9a9899`
+- **Segunda revisión:** 2026-11-12, después de traer el `main` de `NoSoyRo/stock-market-etl-ml` en `913f03b` (ver [Segunda revisión](#segunda-revisión-2026-11-12))
 - **Alcance:** comprobar que los agentes de dominio `evaluacion` y `lab` (`src/agents_mcp/domains/`) leen bien sus archivos y muestran ganancias y pérdidas, y señalar archivos faltantes o con datos incorrectos.
 
 ## Cómo se probó
@@ -73,3 +74,42 @@ Los archivos de simulación son consistentes por dentro, y el agente `evaluacion
 4. Calcular el Deflated Sharpe del texto de `schema_evaluacion` a partir de los datos, o quitarlo.
 5. Etiquetar las simulaciones como simulaciones.
 6. Decidir si `entry_plans.jsonl` y `book.json` deben estar en el repo o generarse en local.
+
+## Segunda revisión (2026-11-12)
+
+Se repitió la misma prueba después de hacer merge del `main` del repo original (`913f03b`, 41 commits nuevos) en esta rama. Se usó el mismo entorno: contenedor con Python 3.11 y `requirements.txt` (pandas 3.1.1, numpy 2.4.6).
+
+### Evaluaciones y P&L: sin cambios
+
+El merge no tocó `src/agents_mcp/domains/evaluacion.py`, `lab.py` ni los archivos de `data/eval/` y `data/lab/`. Las salidas de las herramientas y los números recalculados son iguales a los de la primera revisión:
+
+| Simulación | Retorno | Max DD | Sharpe | Capital final | Suma `atribucion_usd` | DSR |
+|---|---|---|---|---|---|---|
+| 1m | +2.57% | -1.62% | 2.584 | $51.28 | +1.28 | 0.161 |
+| 2m | -3.16% | -4.40% | -1.909 (guardado -1.908) | $48.42 | -1.58 | 0.005 |
+| 3m | -0.17% | -3.80% | -0.030 | $49.92 | -0.09 | 0.038 |
+
+Los problemas 1 a 9 siguen abiertos:
+
+- `ganancias` y `pnl` siguen devolviendo solo el conteo de la bitácora.
+- `book.json` sigue faltando.
+- `query_evaluacion` sigue contando 4 filas en lugar de 2 hashes.
+- El Deflated Sharpe de 0.32 sigue escrito a mano.
+- Las simulaciones se siguen presentando como resultados reales.
+- La posición de PINFRA de un día sigue en la simulación 3m.
+
+### Tests
+
+230 pasan, 13 fallan y 1 se omite. La primera revisión tenía 122 pasando y 8 fallando; el merge agregó tests nuevos.
+
+- **Siguen los 8 fallos anteriores:** 7 en `tests/test_graph_ising.py` (array de solo lectura con pandas 3) y 1 en `tests/test_lstm_seq.py:80` (`NaN` en `predict_proba`).
+- **4 nuevos en `tests/test_news_mcp.py`, que dependen de la fecha:**
+  - `test_ver_noticias_nonexistent_ticker`
+  - `test_comparar_noticias_multiple_tickers`
+  - `test_comparar_noticias_comma_separated_and_missing`
+  - `test_server_with_isolated_mock_gold`
+  - **Causa:** `src/semantic/service.py:98` responde `stale` sin datos cuando la tabla Gold del día no es de la fecha UTC actual. Los datos del repo son del 2026-10-30, y el mock del test usa 2026-10-31.
+  - **Efecto:** `ver_noticias` responde `ok: true` con todas las métricas en `null`, incluso para un ticker que no existe (`src/mcp/server.py:92` trata `stale` como éxito). `comparar_noticias` responde `incompatible_metrics` porque la fecha y la ventana vienen vacías.
+  - Esto es un error del servidor, no solo de los tests: un `stale` sin datos no debería reportarse como éxito. Los tests deberían fijar el reloj en lugar de depender del día en que se corren.
+- **1 nuevo en `tests/test_news_medallion.py:224` (`test_empty_bronze_has_stable_schema`):** al leer el parquet, `fetched_at` regresa como `datetime64[ms, UTC]`, pero el frame esperado es `datetime64[ns, UTC]`. Viene del cambio de resolución de fechas en pandas 3. Se arregla igual que `graph_ising`, fijando `pandas<3` o normalizando la resolución en el test.
+- **Omitido:** `tests/test_news_pyspark.py`, porque `pyspark` está en `requirements-spark.txt` y no en `requirements.txt`.
