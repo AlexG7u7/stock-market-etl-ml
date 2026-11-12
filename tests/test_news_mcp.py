@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -10,7 +11,15 @@ import pandas as pd
 import pytest
 
 from src.data.news_medallion import GOLD_COLUMNS
-from src.mcp.server import create_news_mcp_server
+from src.mcp.server import create_news_mcp_server as _create_server
+
+# Los datos Gold del repo y el mock aislado son del 2026-10-31. Se fija el
+# reloj para que los tests no dependan del día en que se corren.
+FIXED_NOW = datetime(2026, 10, 31, 2, 0, tzinfo=timezone.utc)
+
+
+def create_news_mcp_server(news_root=None, clock=lambda: FIXED_NOW):
+    return _create_server(news_root=news_root, clock=clock)
 
 
 def _call_tool(server, name: str, args: dict) -> dict:
@@ -288,3 +297,17 @@ def test_all_tool_responses_strictly_json_serializable():
         deserialized = json.loads(serialized)
         assert isinstance(deserialized, dict)
 
+
+
+# ── 7. Tabla del día desactualizada ──────────────────────────────────────────
+
+def test_ver_noticias_stale_sin_datos_no_es_exito():
+    """Si Gold no es del día UTC actual, no se responde ok con métricas vacías."""
+    server = create_news_mcp_server(
+        clock=lambda: datetime(2026, 11, 12, 12, 0, tzinfo=timezone.utc)
+    )
+    res = _call_tool(server, "ver_noticias", {"ticker": "AC"})
+
+    assert res["ok"] is False
+    assert res["status"] == "stale"
+    assert "error" in res

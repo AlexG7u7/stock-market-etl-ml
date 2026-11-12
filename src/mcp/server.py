@@ -8,9 +8,10 @@ from __future__ import annotations
 
 import argparse
 import logging
+from datetime import datetime
 from pathlib import Path
 import sys
-from typing import Any
+from typing import Any, Callable
 
 from mcp.server.mcpserver import MCPServer
 
@@ -21,10 +22,26 @@ from src.semantic.service import NewsSemanticService
 logger = logging.getLogger(__name__)
 
 
-def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
-    """Crea y configura el servidor MCP de Noticias Segmentadas."""
+def _tiene_metricas(res: dict[str, Any]) -> bool:
+    """Un estado ok/stale/no_recent_articles solo es útil si trae métricas.
+    Cuando la tabla Gold del día no es de hoy, la capa semántica responde
+    "stale" sin datos, y eso no debe reportarse como éxito."""
+    if res.get("status") not in {"ok", "stale", "no_recent_articles"}:
+        return False
+    return bool((res.get("data") or {}).get("metrics"))
+
+
+def create_news_mcp_server(
+    news_root: Path | None = None,
+    *,
+    clock: Callable[[], datetime] | None = None,
+) -> MCPServer:
+    """Crea y configura el servidor MCP de Noticias Segmentadas.
+
+    clock permite fijar la hora UTC (tests); por defecto es la hora actual.
+    """
     root_path = Path(news_root) if news_root is not None else DEFAULT_NEWS_ROOT
-    service = NewsSemanticService(news_root=root_path)
+    service = NewsSemanticService(news_root=root_path, clock=clock)
 
     server = MCPServer(
         name="noticias-segmentadas",
@@ -89,7 +106,7 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
             }
 
         status = res.get("status", "unknown")
-        if status in {"ok", "stale", "no_recent_articles"}:
+        if _tiene_metricas(res):
             data = res.get("data") or {}
             metrics = data.get("metrics") or {}
             payload: dict[str, Any] = {
@@ -322,7 +339,7 @@ def create_news_mcp_server(news_root: Path | None = None) -> MCPServer:
             try:
                 res = service.consultar_empresa(ticker=ticker, fecha=fecha_clean)
                 status = res.get("status")
-                if status in {"ok", "stale", "no_recent_articles"}:
+                if _tiene_metricas(res):
                     data = res.get("data") or {}
                     m = data.get("metrics") or {}
                     comparativas.append({

@@ -192,7 +192,7 @@ def materialize_bronze(path, *, root=DEFAULT_ROOT):
         if col not in {'record_index', 'fetched_at'}:
             frame[col] = frame[col].astype('string')
     frame['record_index'] = frame.record_index.astype('int64')
-    frame['fetched_at'] = pd.to_datetime(frame.fetched_at, utc=True)
+    frame['fetched_at'] = pd.to_datetime(frame.fetched_at, utc=True).astype('datetime64[ns, UTC]')
     target = root / 'bronze' / 'news.parquet'
     with lock(root):
         old = pd.read_parquet(target) if target.exists() else frame.iloc[:0]
