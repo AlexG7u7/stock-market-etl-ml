@@ -32,6 +32,8 @@ class TestStrategyComparator(unittest.TestCase):
                 "train_end": "2022-12-31",
                 "test_start": "2023-01-01",
                 "test_end": "2024-12-31",
+                "test_start": "2023-01-01",
+                "test_end": "2024-12-31",
             },
         }
 

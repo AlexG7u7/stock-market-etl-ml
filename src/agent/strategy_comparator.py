@@ -41,13 +41,20 @@ class StrategyComparator:
                     "cumple": resultado["resumen"]["cumple"],
                     "no_cumple": resultado["resumen"]["no_cumple"],
                     "pendiente": resultado["resumen"]["pendiente"],
+                    "no_aplica": resultado["resumen"]["no_aplica"],
+                    "aplicables": resultado["resumen"]["aplicables"],
+                    "proporcion_cumplimiento": (
+                        resultado["resumen"]["proporcion_cumplimiento"]
+                    ),
+                    "sin_operaciones": resultado["sin_operaciones"],
+                    "exploratoria": resultado["exploratoria"],
                     "aprobada": resultado["aprobada"],
                 }
                 for nombre, resultado in resultados.items()
             ],
             key=lambda item: (
                 -int(item["aprobada"]),
-                -item["cumple"],
+                -item["proporcion_cumplimiento"],
                 item["no_cumple"],
                 item["pendiente"],
                 item["estrategia"],

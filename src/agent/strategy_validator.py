@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from datetime import date
 from typing import Any
 
 from src.agent.base import Agent
@@ -73,6 +74,11 @@ class StrategyValidator(Agent):
         config = observation.get("config") or {}
         modelo = observation.get("model") or {}
 
+        contexto = observation.get("evaluation_context") or {}
+        tipo = observation.get("strategy_type")
+
+        tradicional = tipo == "rule_based"
+
         resultados = []
 
         def agregar(pregunta, valor, condicion, explicacion):
@@ -141,12 +147,35 @@ class StrategyValidator(Agent):
             for fecha in fechas
         )
 
+        separacion_temporal = None
+
+        if fechas_disponibles:
+            try:
+                inicio, fin, prueba_inicio, prueba_fin = [
+                    date.fromisoformat(fecha)
+                    for fecha in fechas
+                ]
+
+                separacion_temporal = (
+                    inicio <= fin < prueba_inicio <= prueba_fin
+                )
+
+                ultima_salida = modelo.get("train_last_exit")
+
+                if ultima_salida is not None:
+                    salida = date.fromisoformat(ultima_salida)
+
+                    separacion_temporal = (
+                        separacion_temporal
+                        and fin <= salida < prueba_inicio
+                    )
+
+            except (TypeError, ValueError):
+                separacion_temporal = False
+
         resultados.append(self._resultado(
             "¿Existe un periodo de evaluacion fuera del entrenamiento?",
-            (
-                inicio_entrenamiento <= fin_entrenamiento
-                < inicio_prueba <= fin_prueba
-            ) if fechas_disponibles else None,
+            separacion_temporal,
             {
                 "train_start": inicio_entrenamiento,
                 "train_end": fin_entrenamiento,
@@ -170,20 +199,57 @@ class StrategyValidator(Agent):
         agregar(
             "¿Se cuenta con una metrica AUC valida?",
             auc,
-            lambda x: 0 <= x <= 1,
-            "El AUC reportado debe estar entre cero y uno.",
+            lambda x: 0.5 < x <= 1,
+            "El AUC debe ser superior a 0.5 y no superar uno.",
         )
+
+        if tradicional:
+            for indice in (5, 7):
+                resultados[indice]["estado"] = "no_aplica"
+                resultados[indice]["explicacion"] = (
+                    "La estrategia utiliza reglas deterministas "
+                    "y no requiere entrenamiento supervisado."
+                )
+
+        if contexto.get("no_trades") is True:
+            resultados[0]["estado"] = "no_cumple"
+            resultados[0]["explicacion"] = (
+                "No hubo operaciones. El Sharpe cero es una "
+                "convencion y no demuestra rendimiento ajustado al riesgo."
+            )
 
         resumen = {
             "cumple": sum(r["estado"] == "cumple" for r in resultados),
             "no_cumple": sum(r["estado"] == "no_cumple" for r in resultados),
             "pendiente": sum(r["estado"] == "pendiente" for r in resultados),
+            "no_aplica": sum(r["estado"] == "no_aplica" for r in resultados),
         }
+
+        aplicables = len(resultados) - resumen["no_aplica"]
+
+        resumen["aplicables"] = aplicables
+
+        resumen["proporcion_cumplimiento"] = (
+            resumen["cumple"] / aplicables
+            if aplicables else 0.0
+        )
 
         return {
             "agente": self.name,
-            "estrategia": observation.get("universe", "desconocida"),
+            "estrategia": observation.get(
+                "strategy_name",
+                observation.get("universe", "desconocida")
+            ),
+            "tipo_estrategia": tipo or "no_especificado",
+            "sin_operaciones": contexto.get("no_trades"),
+            "exploratoria": contexto.get("exploratory", False),
             "preguntas": resultados,
             "resumen": resumen,
-            "aprobada": resumen["no_cumple"] == 0 and resumen["pendiente"] == 0,
+            "aprobada": (
+                aplicables > 0
+                and resumen["no_cumple"] == 0
+                and resumen["pendiente"] == 0
+                and contexto.get("no_trades") is not True
+                and not contexto.get("exploratory", False)
+            ),
         }

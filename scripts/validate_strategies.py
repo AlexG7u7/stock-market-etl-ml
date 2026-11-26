@@ -54,33 +54,77 @@ def main():
         help="Modelo de Gemini para validar estrategias",
     )
 
+    parser.add_argument(
+        "--catalog",
+        type=Path,
+        default=None,
+        help="Catalogo JSON de estrategias homologadas",
+    )
+
     args = parser.parse_args()
 
-    if args.input_dir is not None:
+    if args.catalog is not None and args.input_dir is not None:
+        parser.error(
+            "--catalog y --input-dir son mutuamente excluyentes"
+        )
+
+    if args.input_dir is not None or args.catalog is not None:
         from src.agent.strategy_comparator import StrategyComparator
 
         try:
-            if not args.input_dir.is_dir():
-                raise ValueError(
-                    f"No existe la carpeta: {args.input_dir}"
+            if args.catalog is not None:
+
+                estrategias = json.loads(
+                    args.catalog.read_text(encoding="utf-8")
                 )
 
-            archivos = sorted(args.input_dir.glob("*.json"))
-            if not archivos:
-                raise ValueError(
-                    "La carpeta no contiene archivos JSON"
-                )
-
-            estrategias = {}
-            for archivo in archivos:
-                datos = json.loads(
-                    archivo.read_text(encoding="utf-8")
-                )
-                if not isinstance(datos, dict):
+                if not isinstance(estrategias, dict) or not estrategias:
                     raise ValueError(
-                        f"{archivo.name} no contiene un objeto JSON"
+                        "El catalogo debe contener estrategias"
                     )
-                estrategias[archivo.stem] = datos
+
+                for nombre, datos in estrategias.items():
+
+                    if not isinstance(datos, dict):
+                        raise ValueError(
+                            f"Estrategia invalida: {nombre}"
+                        )
+
+                    if not isinstance(datos.get("strategy"), dict):
+                        raise ValueError(
+                            f"Metricas ausentes: {nombre}"
+                        )
+
+                    if datos.get("strategy_type") not in (
+                        "machine_learning", "rule_based"
+                    ):
+                        raise ValueError(
+                            f"Tipo de estrategia invalido: {nombre}"
+                        )
+
+            else:
+                if not args.input_dir.is_dir():
+                    raise ValueError(
+                        f"No existe la carpeta: {args.input_dir}"
+                    )
+
+                archivos = sorted(args.input_dir.glob("*.json"))
+                if not archivos:
+                    raise ValueError(
+                        "La carpeta no contiene archivos JSON"
+                    )
+
+                estrategias = {}
+                for archivo in archivos:
+                    datos = json.loads(
+                        archivo.read_text(encoding="utf-8")
+                    )
+                    if not isinstance(datos, dict):
+                        raise ValueError(
+                            f"{archivo.name} no contiene un objeto JSON"
+                        )
+                    estrategias[archivo.stem] = datos
+
 
             comparador = StrategyComparator(
                 max_drawdown_limit=args.max_drawdown
@@ -99,7 +143,17 @@ def main():
             resultado["generated_at"] = datetime.now(
                 timezone.utc
             ).isoformat()
-            resultado["source"] = str(args.input_dir)
+            resultado["source"] = str(
+                args.catalog
+                if args.catalog is not None
+                else args.input_dir
+            )
+
+            resultado["source_type"] = (
+                "homologated_catalog"
+                if args.catalog is not None
+                else "directory"
+            )
 
             salida = args.output
             if salida == ROOT / "data/eval/strategy_validation.json":
@@ -129,6 +183,8 @@ def main():
                 f'cumple={item["cumple"]}, '
                 f'no_cumple={item["no_cumple"]}, '
                 f'pendiente={item["pendiente"]}, '
+                f'no_aplica={item["no_aplica"]}, '
+                f'cumplimiento={item["proporcion_cumplimiento"]:.2%}, '
                 f'aprobada={item["aprobada"]}'
             )
 

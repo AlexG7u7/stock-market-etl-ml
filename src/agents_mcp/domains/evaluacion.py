@@ -24,6 +24,7 @@ from pathlib import Path
 from claude_agent_sdk import tool
 
 from src.agents_mcp.domain_agent import DomainAgent
+from src.agents_mcp.domains.evaluacion_tools import TOOLS_ESTRATEGIAS
 from src.agents_mcp.domains.evaluacion_consultas import (
     ARCHIVOS,
     consultar_resultado,
@@ -52,7 +53,34 @@ SYSTEM_PROMPT = """Eres el agente de dominio de Evaluación/Riesgo:
 backtests, Deflated Sharpe, bitácora de pruebas. Nunca recomiendes ajustar
 un parámetro basado solo en el backtest — esa disciplina está documentada
 y es intencional (ver trial_stats.py). Si preguntan por una métrica,
-siempre aclara sobre cuántas pruebas (N) se calculó el Deflated Sharpe."""
+siempre aclara sobre cuántas pruebas (N) se calculó el Deflated Sharpe.
+
+Para consultas sobre las seis estrategias homologadas,
+utiliza prioritariamente las herramientas del producto Gold:
+
+- resumen_estrategias: resumen general y estrategias disponibles.
+- consultar_estrategia: metricas y configuracion individual.
+- comparar_estrategias: rankings de rendimiento, Sharpe y cumplimiento.
+- consultar_benchmark: referencia NAFTRAC Buy and Hold.
+- consultar_validacion: criterios y motivos de rechazo.
+- consultar_calidad: fuentes, trazabilidad y limitaciones.
+- consultar_decision: decision global de evaluacion.
+
+No mezcles los resultados Gold con los backtests anteriores.
+Distingue Sharpe ordinario de Deflated Sharpe.
+No inventes metricas que no esten disponibles.
+Indica el periodo evaluado, moneda, costos y fuente.
+Los rendimientos expresados como fracciones deben convertirse
+a porcentajes cuando se presenten al usuario.
+Distingue estrategias sin operaciones de estrategias rentables.
+Una estrategia exploratoria no constituye evidencia independiente.
+Un producto de datos valido no implica una estrategia aprobada.
+Si ninguna estrategia supera los criterios, respeta NO_BET_LIVE.
+No presentes simulaciones historicas como ganancias reales.
+No proporciones asesoramiento financiero personalizado.
+Si Gold no esta disponible, informa el error y no sustituyas
+silenciosamente sus resultados por archivos anteriores.
+"""
 
 
 @tool(
@@ -263,8 +291,9 @@ evaluacion_agent = DomainAgent(
     name="evaluacion",
     system_prompt=SYSTEM_PROMPT,
     tools=[
-    schema_evaluacion,
-    query_evaluacion,
-    consultar_metricas_evaluacion,
-],
+        schema_evaluacion,
+        query_evaluacion,
+        consultar_metricas_evaluacion,
+        *TOOLS_ESTRATEGIAS,
+    ],
 )
