@@ -386,3 +386,195 @@ originales. Esto garantiza la integridad de la copia, pero no
 constituye una auditoria independiente de los valores publicados.
 
 No se incluyen tokens ni credenciales de acceso a la API.
+
+---
+
+## Evidencia de reproducción histórica e integración con upstream
+
+### Identificación de la versión reproducida
+
+- Commit histórico: `2afeb12b00e08e39fc94d15c72b950b806f50409`.
+- Commit de upstream integrado: `f5fbbb81371c42a9c29f4850e4361c25691682f8`.
+- Rama de entrega: `entrega/multiples-estrategias`.
+- Entorno utilizado: WSL y Python 3.14.4.
+
+La reproducción se realizó en un worktree independiente del
+repositorio principal, utilizando el commit histórico de la
+entrega y el entorno Python previamente configurado.
+
+### Restauración de fuentes históricas
+
+Se utilizaron los 95 archivos Parquet de mercado correspondientes
+al commit histórico y se restauraron los datos de Banxico desde
+el archivo versionado:
+
+`data/rates/banxico_historico.zip`
+
+Resultados de la restauración:
+
+- Archivos JSON restaurados: 6799.
+- Archivos JSON inválidos: 0.
+- Archivos JSON vacíos: 0.
+- Fecha inicial: 2008-01-02.
+- Fecha final: 2026-11-23.
+- SHA-256 del ZIP:
+
+  `aa4b85ad115993809025f59cdf4bfb5607c5ee44f93fc776a50eb7a38b1f47ab`
+
+### Reproducción de simulaciones financieras
+
+| Simulación | Resultado |
+|---|---|
+| SMA 50/200 | Idéntico |
+| RSI 14 | Idéntico |
+| Benchmark NAFTRAC | Idéntico |
+| Top-K 2 | Idéntico |
+| Top-K 5 | Idéntico |
+| Top-K 10 | Idéntico |
+| Top-K Ranking | Idéntico |
+
+Las siete simulaciones fueron ejecutadas nuevamente y sus
+resultados JSON comparados contra los archivos del commit
+histórico.
+
+La comparación excluyó únicamente el campo generated_at.
+No se aplicaron tolerancias numéricas para obtener coincidencias.
+
+### Homologación y consolidación
+
+Se reconstruyeron las cuatro variantes Top-K y el catálogo
+consolidado de seis estrategias.
+
+Condiciones financieras comunes:
+
+- Capital inicial: 100000 MXN.
+- Inicio: 2023-05-10.
+- Fin: 2026-10-30.
+- Sesiones bursátiles: 876.
+- Puntos de valoración: 877.
+- Frecuencia de evaluación: diaria.
+- Periodos por año: 252.
+- Comisión por lado: 0.25%.
+- Slippage por lado: 0.05%.
+
+Los nueve archivos homologados fueron verificados.
+
+El catálogo presentó seis diferencias correspondientes
+exclusivamente a campos generated_at anidados.
+No se encontraron otras diferencias.
+
+### Resultados financieros reproducidos
+
+| Estrategia | Retorno neto | Sharpe diario | Capital final MXN |
+|---|---:|---:|---:|
+| NAFTRAC | 24.54% | 0.4803 | 124535.33 |
+| SMA 50/200 | 12.46% | 0.4213 | 112463.84 |
+| RSI 14 | 11.03% | 0.5008 | 111029.44 |
+| Top-K 2 | 0.00% | 0.0000 | 100000.00 |
+| Top-K 5 | 0.00% | 0.0000 | 100000.00 |
+| Top-K 10 | 0.00% | 0.0000 | 100000.00 |
+| Top-K Ranking | -45.25% | -0.8734 | 54745.13 |
+
+### Validación financiera reproducida
+
+Se reconstruyó el reporte strategies_comparison_real.json.
+
+La única diferencia detectada fue generated_at.
+
+- Estrategias evaluadas: 6.
+- Estrategias aprobadas: 0.
+- Estrategias no aprobadas: 6.
+- Diferencias adicionales: 0.
+
+En total se verificaron 17 archivos de resultados:
+
+- 7 resultados de simulaciones.
+- 9 archivos homologados y consolidados.
+- 1 reporte de validación.
+
+Todos coincidieron con los originales, excluyendo únicamente
+las marcas temporales de generación.
+
+### Reconstrucción de Medallion
+
+Bronze:
+
+- Archivos incorporados: 10.
+
+Silver:
+
+- Estado: VALIDO.
+- Estrategias validadas: 6.
+- Errores: 0.
+- Advertencias: 9.
+
+Gold:
+
+- Producto: evaluacion_multiples_estrategias.
+- Calidad: VALIDO.
+- Estrategias aprobadas: 0.
+- Estrategias no aprobadas: 6.
+- Decisión: NO_BET_LIVE.
+
+Las advertencias de calidad se conservaron y no fueron
+eliminadas para obtener una validación artificial.
+
+### Verificación de la capa semántica
+
+Se ejecutaron directamente las siguientes funciones Python
+contra el producto Gold reconstruido:
+
+| Consulta | Resultado |
+|---|---|
+| resumen_estrategias | OK |
+| consultar_estrategia | OK |
+| comparar_estrategias | OK |
+| consultar_benchmark | OK |
+| consultar_validacion | OK |
+| consultar_calidad | OK |
+| consultar_decision | OK |
+
+Las siete consultas utilizaron el producto
+evaluacion_multiples_estrategias, versión 1.0.0.
+
+### Integración de datos con upstream
+
+Durante la integración se identificaron 31 conflictos:
+
+- 30 archivos Parquet.
+- 1 documento Markdown.
+
+En los 30 archivos Parquet en conflicto se conservaron
+las 32 correcciones históricas de nuestra entrega y las
+211 filas adicionales provenientes de upstream.
+
+La auditoría general de los 95 archivos Parquet identificó:
+
+- 92 archivos sin diferencias hasta el corte histórico.
+- 3 archivos con registros históricos adicionales.
+- 712 registros posteriores al corte histórico.
+- 715 registros adicionales en total.
+- 0 registros históricos modificados.
+- 0 registros históricos eliminados.
+
+Los tres registros históricos adicionales corresponden a
+NAFTRAC.MX, POSADASA.MX y VISTAA.MX.
+
+Por este motivo, para reproducir exactamente los resultados
+originales se utilizó el commit histórico completo, en lugar
+de limitar únicamente las fechas de los datos integrados.
+
+### Alcance y limitaciones
+
+- La reproducción utilizó un entorno Python existente.
+- No constituye una certificación de instalación desde cero.
+- Los archivos Gold se reconstruyeron y verificaron mediante
+  sus controles de consistencia y consultas semánticas.
+- No se afirma igualdad binaria de los productos Medallion.
+- Las pruebas directas de funciones semánticas no sustituyen
+  las pruebas de integración del protocolo MCP.
+- Los resultados corresponden a simulaciones históricas.
+- Top-K Ranking es una variante exploratoria.
+- Ninguna estrategia fue aprobada para operar con dinero real.
+- La integración final con upstream requiere sus propias
+  pruebas antes de completar el commit.

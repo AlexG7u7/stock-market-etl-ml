@@ -272,3 +272,35 @@ positivos, ninguna supera el rendimiento del benchmark.
 
 Por lo tanto, se conserva la decisión NO_BET_LIVE hasta disponer
 de evidencia suficiente para justificar una estrategia de inversión.
+
+## 15. Integración con el primer avance de Evaluación y Riesgo
+
+El desarrollo de múltiples estrategias complementa el producto
+de datos presentado en el primer avance del equipo.
+
+Se conservan los siguientes componentes:
+
+- Esquema SQL: `sql/04_eval_schema.sql`.
+- Contrato de datos: `contracts/evaluacion_riesgo.yaml`.
+- Exportador inicial: `scripts/export_evaluacion.py`.
+- Pruebas del exportador: `tests/test_evaluacion.py`.
+
+La documentación original se conserva íntegramente en:
+
+[evaluacion_riesgo_primer_avance.md](evaluacion_riesgo_primer_avance.md).
+
+El exportador inicial procesa los resultados históricos del
+backtest original. Sus métricas no deben confundirse con las
+obtenidas en la evaluación de múltiples estrategias.
+
+El producto Gold de múltiples estrategias constituye una
+ampliación del alcance de evaluación mediante condiciones
+homogéneas, controles de calidad y consultas semánticas MCP.
+
+La integración directa del nuevo producto Gold con el esquema
+SQL Server no ha sido implementada ni validada.
+
+Para reproducir los resultados de múltiples estrategias,
+consultar:
+
+[REPRODUCIBILIDAD_EVALUACION.md](REPRODUCIBILIDAD_EVALUACION.md).
