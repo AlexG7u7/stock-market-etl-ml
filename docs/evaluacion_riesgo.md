@@ -304,3 +304,43 @@ Para reproducir los resultados de múltiples estrategias,
 consultar:
 
 [REPRODUCIBILIDAD_EVALUACION.md](REPRODUCIBILIDAD_EVALUACION.md).
+
+## 16. Verificación final de integración
+
+La versión integrada del proyecto fue verificada sobre el
+commit `237df46` en dos entornos de ejecución independientes.
+
+| Verificación | Resultado |
+|---|---|
+| Pruebas automatizadas seleccionadas | 144/144 |
+| Capas Medallion de Evaluación | 3/3 |
+| Entradas Bronze verificadas mediante SHA-256 | 10/10 |
+| Estrategias evaluadas | 6 |
+| Errores de calidad | 0 |
+| Advertencias de calidad | 9 |
+| Benchmark validado | Sí |
+| Funciones semánticas verificadas | 7/7 |
+| Herramientas MCP registradas | 14/14 |
+| Herramientas de Evaluación verificadas mediante HTTP | 7/7 |
+| Igualdad entre respuestas HTTP y directas | 7/7 |
+| Integridad de Gold después de las consultas | Verificada |
+
+Adicionalmente, se ejecutó y auditó el ETL de Mercado en
+una copia aislada, incluyendo Bronze, Silver, Gold y
+la base de datos SQLite.
+
+Las pruebas HTTP comprobaron la autenticación Bearer,
+la inicialización del protocolo MCP y la ejecución de
+las siete herramientas de Evaluación.
+
+La verificación corresponde al alcance seleccionado
+de Evaluación e integración. No constituye una validación
+completa de todos los dominios del repositorio ni de un
+despliegue en producción.
+
+La decisión financiera permanece en `NO_BET_LIVE`.
+
+Los procedimientos, resultados detallados y limitaciones
+se encuentran en:
+
+[REPRODUCIBILIDAD_EVALUACION.md](REPRODUCIBILIDAD_EVALUACION.md).
